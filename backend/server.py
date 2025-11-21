@@ -90,43 +90,82 @@ async def seed_database():
     except Exception as e:
         return {"error": str(e)}
 
-# Middleware to inject db into request state
-@app.middleware("http")
-async def add_db_to_request(request: Request, call_next):
-    request.state.db = db
-    response = await call_next(request)
-    return response
+# Define API endpoints for categories
+@api_router.get("/categories")
+async def get_categories():
+    """Get all earning categories"""
+    try:
+        categories = await db.categories.find({}, {"_id": 0}).to_list(100)
+        return {"categories": categories}
+    except Exception as e:
+        return {"error": str(e)}
 
-# Include routers
-categories.router.add_api_route(
-    "/categories",
-    lambda request: categories.get_categories(request.state.db),
-    methods=["GET"]
-)
+# Define API endpoints for platforms
+@api_router.get("/platforms")
+async def get_platforms(
+    category: str = None,
+    search: str = None,
+    featured: bool = None
+):
+    """Get all platforms with optional filtering"""
+    try:
+        query = {}
+        
+        if category and category != "All":
+            query["category"] = category
+        
+        if featured is not None:
+            query["featured"] = featured
+        
+        platforms = await db.platforms.find(query, {"_id": 0}).to_list(1000)
+        
+        # Apply search filter
+        if search:
+            search_lower = search.lower()
+            platforms = [
+                p for p in platforms
+                if search_lower in p['name'].lower() or search_lower in p['description'].lower()
+            ]
+        
+        return {
+            "platforms": platforms,
+            "total": len(platforms)
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
-platforms.router.add_api_route(
-    "/platforms",
-    lambda request, category=None, search=None, featured=None: platforms.get_platforms(
-        request.state.db, category, search, featured
-    ),
-    methods=["GET"]
-)
+@api_router.get("/platforms/{platform_id}")
+async def get_platform_by_id(platform_id: int):
+    """Get a specific platform by ID"""
+    try:
+        platform = await db.platforms.find_one({"id": platform_id}, {"_id": 0})
+        if not platform:
+            return {"error": "Platform not found"}
+        return platform
+    except Exception as e:
+        return {"error": str(e)}
 
-platforms.router.add_api_route(
-    "/platforms/{platform_id}",
-    lambda request, platform_id: platforms.get_platform_by_id(platform_id, request.state.db),
-    methods=["GET"]
-)
-
-stats.router.add_api_route(
-    "/stats",
-    lambda request: stats.get_stats(request.state.db),
-    methods=["GET"]
-)
-
-api_router.include_router(categories.router)
-api_router.include_router(platforms.router)
-api_router.include_router(stats.router)
+# Define API endpoints for stats
+@api_router.get("/stats")
+async def get_stats():
+    """Get aggregate statistics"""
+    try:
+        # Count total platforms
+        total_platforms = await db.platforms.count_documents({})
+        
+        # Count total categories
+        total_categories = await db.categories.count_documents({})
+        
+        stats = [
+            {"label": "Total Platforms", "value": f"{total_platforms}+"},
+            {"label": "Categories", "value": str(total_categories)},
+            {"label": "Avg. Monthly Earning", "value": "$2,500"},
+            {"label": "Success Stories", "value": "50K+"}
+        ]
+        
+        return {"stats": stats}
+    except Exception as e:
+        return {"error": str(e)}
 
 # Include the router in the main app
 app.include_router(api_router)
