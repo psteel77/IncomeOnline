@@ -68,6 +68,66 @@ async def get_status_checks():
     
     return status_checks
 
+@api_router.post("/seed")
+async def seed_database():
+    """Seed database with initial data"""
+    try:
+        # Clear existing data
+        await db.categories.delete_many({})
+        await db.platforms.delete_many({})
+        
+        # Insert categories
+        await db.categories.insert_many(categories_data)
+        
+        # Insert platforms
+        await db.platforms.insert_many(platforms_data)
+        
+        return {
+            "message": "Database seeded successfully",
+            "categories_added": len(categories_data),
+            "platforms_added": len(platforms_data)
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+# Middleware to inject db into request state
+@app.middleware("http")
+async def add_db_to_request(request: Request, call_next):
+    request.state.db = db
+    response = await call_next(request)
+    return response
+
+# Include routers
+categories.router.add_api_route(
+    "/categories",
+    lambda request: categories.get_categories(request.state.db),
+    methods=["GET"]
+)
+
+platforms.router.add_api_route(
+    "/platforms",
+    lambda request, category=None, search=None, featured=None: platforms.get_platforms(
+        request.state.db, category, search, featured
+    ),
+    methods=["GET"]
+)
+
+platforms.router.add_api_route(
+    "/platforms/{platform_id}",
+    lambda request, platform_id: platforms.get_platform_by_id(platform_id, request.state.db),
+    methods=["GET"]
+)
+
+stats.router.add_api_route(
+    "/stats",
+    lambda request: stats.get_stats(request.state.db),
+    methods=["GET"]
+)
+
+api_router.include_router(categories.router)
+api_router.include_router(platforms.router)
+api_router.include_router(stats.router)
+
 # Include the router in the main app
 app.include_router(api_router)
 
