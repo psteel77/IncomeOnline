@@ -1,14 +1,45 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter } from 'lucide-react';
-import { categories, platforms, stats } from '../mock';
+import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2 } from 'lucide-react';
+import { categoriesAPI, platformsAPI, statsAPI } from '../services/api';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const [categoriesData, platformsData, statsData] = await Promise.all([
+        categoriesAPI.getAll(),
+        platformsAPI.getAll(),
+        statsAPI.get()
+      ]);
+      
+      setCategories(categoriesData);
+      setPlatforms(platformsData.platforms);
+      setStats(statsData);
+    } catch (err) {
+      setError('Failed to load data. Please try again later.');
+      console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredPlatforms = useMemo(() => {
     return platforms.filter(platform => {
@@ -17,9 +48,33 @@ const Home = () => {
       const matchesCategory = selectedCategory === 'All' || platform.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, platforms]);
 
   const featuredPlatforms = platforms.filter(p => p.featured);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
+          <p className="text-slate-600">Loading earning opportunities...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={fetchData} className="bg-emerald-600 hover:bg-emerald-700">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
