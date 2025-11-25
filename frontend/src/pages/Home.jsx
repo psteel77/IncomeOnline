@@ -102,7 +102,7 @@ const Home = () => {
       <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-            Discover <span className="text-emerald-600">277+ Ways</span> to<br />Earn Money Online
+            Discover the Best Ways to<br />Earn Money Online
           </h1>
           <p className="text-xl text-slate-600 mb-12 max-w-3xl mx-auto">
             Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.
