@@ -268,5 +268,57 @@ platforms_data = [
         "paymentMethods": ["PayPal", "Gift Cards", "Vouchers"],
         "featured": False,
         "link": "https://www.surveyspotter.com"
+    },
+    {
+        "id": 16,
+        "name": "Ipsos iSay",
+        "category": "Surveys & Research",
+        "description": "Earn points for sharing opinions. 100 points = $1. Redeem for cash or gift cards",
+        "earningsPotential": "$50 - $200/month",
+        "difficulty": "Easy",
+        "rating": 4.2,
+        "minPayout": "$5",
+        "paymentMethods": ["PayPal", "Amazon", "Walmart", "Starbucks Gift Cards"],
+        "featured": False,
+        "link": "https://www.ipsosisay.com"
+    },
+    {
+        "id": 17,
+        "name": "YouGov",
+        "category": "Surveys & Research",
+        "description": "Leading international survey panel. Earn points redeemable for cash and gift cards",
+        "earningsPotential": "$30 - $150/month",
+        "difficulty": "Easy",
+        "rating": 4.3,
+        "minPayout": "$15",
+        "paymentMethods": ["PayPal", "Bank Transfer", "Gift Cards", "Prepaid VISA"],
+        "featured": True,
+        "link": "https://account.yougov.com/gb-en/join/main"
+    },
+    {
+        "id": 18,
+        "name": "Y Live Community",
+        "category": "Surveys & Research",
+        "description": "UK survey panel paying £1 per 5 minutes. Focus on business, culture, and politics",
+        "earningsPotential": "$60 - $250/month",
+        "difficulty": "Easy",
+        "rating": 4.0,
+        "minPayout": "£50",
+        "paymentMethods": ["Bank Transfer"],
+        "featured": False,
+        "link": "https://www.ylive-community.com"
+    },
+    {
+        "id": 19,
+        "name": "Google Opinion Rewards",
+        "category": "Surveys & Research",
+        "description": "Mobile app for quick surveys. Earn $0.10-$1 per survey. Android: Play credit, iOS: PayPal cash",
+        "earningsPotential": "$30 - $100/year",
+        "difficulty": "Easy",
+        "rating": 4.4,
+        "minPayout": "$2",
+        "paymentMethods": ["PayPal (iOS)", "Google Play Credit (Android)"],
+        "featured": False,
+        "link": "https://surveys.google.com/google-opinion-rewards/"
     }
 ]
