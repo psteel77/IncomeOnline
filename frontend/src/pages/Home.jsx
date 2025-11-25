@@ -303,24 +303,36 @@ const Home = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="h-8 w-8 text-emerald-600" />
+              <div className="mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1629184510982-cf91280c1d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
+                  alt="Browse and search"
+                  className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
+                />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">1. Browse & Search</h3>
-              <p className="text-slate-600">Explore our comprehensive directory of 277+ platforms and find opportunities that match your skills and interests.</p>
+              <p className="text-slate-600">Explore our comprehensive directory and find opportunities that match your skills and interests.</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="h-8 w-8 text-emerald-600" />
+              <div className="mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1758611971587-ddc6656822d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
+                  alt="Choose platforms"
+                  className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
+                />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">2. Choose Verified Platforms</h3>
               <p className="text-slate-600">Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="h-8 w-8 text-emerald-600" />
+              <div className="mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHN1Y2Nlc3NmdWx8ZW58MHx8fHwxNzY0MDczMTE3fDA&ixlib=rb-4.1.0&q=85"
+                  alt="Start earning"
+                  className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
+                />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">3. Start Earning</h3>
               <p className="text-slate-600">Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.</p>
