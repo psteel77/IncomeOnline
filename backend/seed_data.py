@@ -57,7 +57,7 @@ categories_data = [
         "id": 7,
         "name": "Remote Jobs",
         "description": "Find full-time or part-time remote employment",
-        "count": 1,
+        "count": 3,
         "color": "from-slate-50 to-gray-50",
         "borderColor": "border-slate-200",
         "textColor": "text-slate-700"
