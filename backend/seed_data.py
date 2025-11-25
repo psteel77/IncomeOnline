@@ -255,5 +255,18 @@ platforms_data = [
         "paymentMethods": ["Direct Deposit"],
         "featured": True,
         "link": "https://www.indeed.com/q-remote-jobs.html"
+    },
+    {
+        "id": 15,
+        "name": "SurveySpotter",
+        "category": "Surveys & Research",
+        "description": "UK platform matching users with top survey companies. Earn up to £25 per survey",
+        "earningsPotential": "$100 - $400/month",
+        "difficulty": "Easy",
+        "rating": 4.1,
+        "minPayout": "Varies by survey panel",
+        "paymentMethods": ["PayPal", "Gift Cards", "Vouchers"],
+        "featured": False,
+        "link": "https://www.surveyspotter.com"
     }
 ]
