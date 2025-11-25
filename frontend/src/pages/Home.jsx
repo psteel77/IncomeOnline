@@ -173,12 +173,19 @@ const Home = () => {
             {categories.map((category) => (
               <Card 
                 key={category.id} 
-                className={`cursor-pointer hover:shadow-lg transition-all duration-300 border-2 ${category.borderColor} bg-gradient-to-br ${category.color} hover:scale-105`}
+                className={`cursor-pointer hover:shadow-lg transition-all duration-300 border-2 ${category.borderColor} bg-gradient-to-br ${category.color} hover:scale-105 overflow-hidden`}
                 onClick={() => {
                   setSelectedCategory(category.name);
                   document.getElementById('platforms').scrollIntoView({ behavior: 'smooth' });
                 }}
               >
+                <div className="relative h-32 overflow-hidden">
+                  <img 
+                    src={categoryImages[category.name]}
+                    alt={category.name}
+                    className="w-full h-full object-cover opacity-60"
+                  />
+                </div>
                 <CardHeader>
                   <CardTitle className={`${category.textColor} text-xl`}>{category.name}</CardTitle>
                   <CardDescription className="text-slate-600">{category.description}</CardDescription>
