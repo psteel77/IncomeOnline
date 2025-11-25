@@ -229,5 +229,31 @@ platforms_data = [
         "paymentMethods": ["PayPal", "Payoneer"],
         "featured": False,
         "link": "https://udemy.com"
+    },
+    {
+        "id": 13,
+        "name": "Reed.co.uk",
+        "category": "Remote Jobs",
+        "description": "UK's leading job board featuring thousands of remote and work from home opportunities",
+        "earningsPotential": "$1,500 - $8,000+/month",
+        "difficulty": "Medium",
+        "rating": 4.5,
+        "minPayout": "Varies by employer",
+        "paymentMethods": ["Direct Deposit"],
+        "featured": True,
+        "link": "https://www.reed.co.uk/jobs/remote-jobs"
+    },
+    {
+        "id": 14,
+        "name": "Indeed",
+        "category": "Remote Jobs",
+        "description": "World's largest job site with extensive remote work listings across all industries",
+        "earningsPotential": "$2,000 - $10,000+/month",
+        "difficulty": "Medium",
+        "rating": 4.6,
+        "minPayout": "Varies by employer",
+        "paymentMethods": ["Direct Deposit"],
+        "featured": True,
+        "link": "https://www.indeed.com/q-remote-jobs.html"
     }
 ]
