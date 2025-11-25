@@ -360,6 +360,62 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Success Stories Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Success Stories</h2>
+            <p className="text-lg text-slate-600">Real people earning real money online</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-1/3">
+                  <img 
+                    src="https://images.unsplash.com/photo-1758518731027-78a22c8852ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxzdWNjZXNzJTIwY2VsZWJyYXRpb258ZW58MHx8fHwxNzY0MDczMTg4fDA&ixlib=rb-4.1.0&q=85"
+                    alt="Success story"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <CardContent className="md:w-2/3 p-6">
+                  <div className="flex items-center mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 mb-4 italic">"I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!"</p>
+                  <p className="font-semibold text-slate-900">- Freelance Designer</p>
+                  <Badge className="mt-2 bg-emerald-100 text-emerald-700">Freelancing</Badge>
+                </CardContent>
+              </div>
+            </Card>
+
+            <Card className="overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-1/3">
+                  <img 
+                    src="https://images.unsplash.com/photo-1758519290801-c07424a5142a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHw0fHxhY2hpZXZlbWVudCUyMGJ1c2luZXNzfGVufDB8fHx8MTc2NDA3MzE5NHww&ixlib=rb-4.1.0&q=85"
+                    alt="Success story"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <CardContent className="md:w-2/3 p-6">
+                  <div className="flex items-center mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 mb-4 italic">"Teaching online changed my life! I now reach students worldwide and earn consistently while working from home. The flexibility is incredible!"</p>
+                  <p className="font-semibold text-slate-900">- Online Educator</p>
+                  <Badge className="mt-2 bg-green-100 text-green-700">Teaching & Tutoring</Badge>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-emerald-600 to-teal-600 relative overflow-hidden">
         {/* Background Image */}
