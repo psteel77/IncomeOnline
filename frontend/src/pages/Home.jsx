@@ -99,8 +99,23 @@ const Home = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Background Images */}
+        <div className="absolute inset-0 z-0 opacity-10">
+          <div className="grid grid-cols-2 gap-4 h-full">
+            <img 
+              src="https://images.unsplash.com/photo-1586227740560-8cf2732c1531?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc2NDA3MzA2OXww&ixlib=rb-4.1.0&q=85"
+              alt="Remote work"
+              className="w-full h-full object-cover"
+            />
+            <img 
+              src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc2NDA3MzA2OXww&ixlib=rb-4.1.0&q=85"
+              alt="Online collaboration"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
             Discover the Best Ways to<br />Earn Money Online
           </h1>
