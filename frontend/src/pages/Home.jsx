@@ -94,8 +94,18 @@ const Home = () => {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50 backdrop-blur-sm bg-white/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-emerald-600" />
+            <div className="flex items-center space-x-3">
+              {/* Logo - Replace the src with your custom logo URL */}
+              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-white" />
+              </div>
+              {/* Uncomment below and add your logo URL when ready:
+              <img 
+                src="/path-to-your-logo.png" 
+                alt="EarnHub Logo" 
+                className="h-10 w-auto"
+              />
+              */}
               <span className="text-2xl font-bold text-slate-900">EarnHub</span>
             </div>
             <nav className="hidden md:flex space-x-8">
