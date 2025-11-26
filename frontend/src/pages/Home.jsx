@@ -107,7 +107,7 @@ const Home = () => {
               <a href="#platforms" className="text-slate-600 hover:text-slate-900 transition-colors">Platforms</a>
               <a href="#how-it-works" className="text-slate-600 hover:text-slate-900 transition-colors">How It Works</a>
             </nav>
-            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-300 hover:scale-105">
+            <Button className="bg-teal-600 hover:bg-cyan-700 text-white transition-all duration-300 hover:scale-105">
               Get Started
             </Button>
           </div>
