@@ -13,7 +13,7 @@ categories_data = [
         "id": 2,
         "name": "Surveys & Research",
         "description": "Share your opinions and get paid for your time",
-        "count": 6,
+        "count": 7,
         "totalOpportunities": "10K+ surveys",
         "color": "from-blue-50 to-cyan-50",
         "borderColor": "border-blue-200",
