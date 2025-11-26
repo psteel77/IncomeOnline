@@ -103,9 +103,9 @@ const Home = () => {
               />
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#categories" className="text-slate-600 hover:text-slate-900 transition-colors">Categories</a>
-              <a href="#platforms" className="text-slate-600 hover:text-slate-900 transition-colors">Platforms</a>
-              <a href="#how-it-works" className="text-slate-600 hover:text-slate-900 transition-colors">How It Works</a>
+              <a href="#categories" className="text-white hover:text-yellow-300 transition-colors font-medium">Categories</a>
+              <a href="#platforms" className="text-white hover:text-yellow-300 transition-colors font-medium">Platforms</a>
+              <a href="#how-it-works" className="text-white hover:text-yellow-300 transition-colors font-medium">How It Works</a>
             </nav>
             <Button className="bg-teal-600 hover:bg-cyan-700 text-white transition-all duration-300 hover:scale-105">
               Get Started
