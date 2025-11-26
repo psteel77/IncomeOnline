@@ -166,7 +166,7 @@ const Home = () => {
       </section>
 
       {/* Categories Section */}
-      <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 via-cyan-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-slate-900 mb-4">Browse by Category</h2>
