@@ -261,7 +261,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-4xl font-bold text-slate-900 mb-2">All Platforms</h2>
+              <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">All Platforms</h2>
               <p className="text-lg text-slate-600">Showing {filteredPlatforms.length} platforms</p>
             </div>
             <div className="flex items-center space-x-3">
