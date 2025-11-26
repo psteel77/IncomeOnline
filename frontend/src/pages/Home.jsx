@@ -358,7 +358,7 @@ const Home = () => {
                   className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
                 />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">3. Start Earning</h3>
+              <h3 className="text-xl font-bold text-yellow-700 mb-3">3. Start Earning</h3>
               <p className="text-slate-600">Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.</p>
             </div>
           </div>
