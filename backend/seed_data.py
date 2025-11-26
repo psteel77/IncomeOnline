@@ -4,6 +4,7 @@ categories_data = [
         "name": "Freelancing",
         "description": "Offer your skills and services to clients worldwide",
         "count": 2,
+        "totalOpportunities": "3M+ jobs",
         "color": "from-emerald-50 to-teal-50",
         "borderColor": "border-emerald-200",
         "textColor": "text-emerald-700"
@@ -13,6 +14,7 @@ categories_data = [
         "name": "Surveys & Research",
         "description": "Share your opinions and get paid for your time",
         "count": 6,
+        "totalOpportunities": "10K+ surveys",
         "color": "from-blue-50 to-cyan-50",
         "borderColor": "border-blue-200",
         "textColor": "text-blue-700"
@@ -22,6 +24,7 @@ categories_data = [
         "name": "Content Creation",
         "description": "Create videos, blogs, and content for income",
         "count": 2,
+        "totalOpportunities": "Unlimited opportunities",
         "color": "from-orange-50 to-amber-50",
         "borderColor": "border-orange-200",
         "textColor": "text-orange-700"
@@ -31,6 +34,7 @@ categories_data = [
         "name": "Trading & Investing",
         "description": "Grow your wealth through stocks, crypto, and forex",
         "count": 1,
+        "totalOpportunities": "1000+ assets",
         "color": "from-indigo-50 to-violet-50",
         "borderColor": "border-indigo-200",
         "textColor": "text-indigo-700"
@@ -40,6 +44,7 @@ categories_data = [
         "name": "E-commerce",
         "description": "Sell products online through various platforms",
         "count": 2,
+        "totalOpportunities": "500M+ customers",
         "color": "from-rose-50 to-pink-50",
         "borderColor": "border-rose-200",
         "textColor": "text-rose-700"
@@ -49,6 +54,7 @@ categories_data = [
         "name": "Teaching & Tutoring",
         "description": "Share your knowledge and teach students online",
         "count": 2,
+        "totalOpportunities": "50K+ courses",
         "color": "from-green-50 to-lime-50",
         "borderColor": "border-green-200",
         "textColor": "text-green-700"
@@ -58,6 +64,7 @@ categories_data = [
         "name": "Remote Jobs",
         "description": "Find full-time or part-time remote employment",
         "count": 3,
+        "totalOpportunities": "2M+ jobs",
         "color": "from-slate-50 to-gray-50",
         "borderColor": "border-slate-200",
         "textColor": "text-slate-700"
@@ -67,6 +74,7 @@ categories_data = [
         "name": "Gig Economy",
         "description": "Complete short tasks and micro-jobs for quick cash",
         "count": 1,
+        "totalOpportunities": "100K+ tasks",
         "color": "from-yellow-50 to-amber-50",
         "borderColor": "border-yellow-200",
         "textColor": "text-yellow-700"
