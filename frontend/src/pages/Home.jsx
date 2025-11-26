@@ -334,7 +334,7 @@ const Home = () => {
                   className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
                 />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">1. Browse & Search</h3>
+              <h3 className="text-xl font-bold text-yellow-700 mb-3">1. Browse & Search</h3>
               <p className="text-slate-600">Explore our comprehensive directory and find opportunities that match your skills and interests.</p>
             </div>
             
