@@ -328,5 +328,18 @@ platforms_data = [
         "paymentMethods": ["PayPal (iOS)", "Google Play Credit (Android)"],
         "featured": False,
         "link": "https://surveys.google.com/google-opinion-rewards/"
+    },
+    {
+        "id": 20,
+        "name": "Qmee",
+        "category": "Surveys & Research",
+        "description": "Earn cash from surveys, shopping cashback, and search rewards. Instant payout with no minimum",
+        "earningsPotential": "$50 - $150/month",
+        "difficulty": "Easy",
+        "rating": 4.3,
+        "minPayout": "No minimum",
+        "paymentMethods": ["PayPal", "Venmo", "Gift Cards"],
+        "featured": True,
+        "link": "https://www.qmee.com/en-gb"
     }
 ]
