@@ -190,8 +190,9 @@ const Home = () => {
                   <CardTitle className={`${category.textColor} text-xl`}>{category.name}</CardTitle>
                   <CardDescription className="text-slate-600">{category.description}</CardDescription>
                 </CardHeader>
-                <CardFooter>
+                <CardFooter className="flex flex-col items-start space-y-2">
                   <Badge variant="secondary" className="bg-white">{category.count} platforms</Badge>
+                  <p className="text-xs text-slate-500 font-medium">{category.totalOpportunities}</p>
                 </CardFooter>
               </Card>
             ))}
