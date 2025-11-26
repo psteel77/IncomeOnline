@@ -457,7 +457,16 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <TrendingUp className="h-6 w-6 text-emerald-500" />
+                <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg">
+                  <TrendingUp className="h-5 w-5 text-white" />
+                </div>
+                {/* Uncomment below and add your logo URL when ready:
+                <img 
+                  src="/path-to-your-logo.png" 
+                  alt="EarnHub Logo" 
+                  className="h-8 w-auto"
+                />
+                */}
                 <span className="text-xl font-bold">EarnHub</span>
               </div>
               <p className="text-slate-400 text-sm">Your trusted directory for online earning opportunities.</p>
