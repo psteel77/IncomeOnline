@@ -346,7 +346,7 @@ const Home = () => {
                   className="w-full h-48 object-cover rounded-xl shadow-md mx-auto"
                 />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">2. Choose Verified Platforms</h3>
+              <h3 className="text-xl font-bold text-yellow-700 mb-3">2. Choose Verified Platforms</h3>
               <p className="text-slate-600">Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.</p>
             </div>
             
