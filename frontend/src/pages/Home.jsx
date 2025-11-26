@@ -99,7 +99,7 @@ const Home = () => {
               <img 
                 src="/earnhub-logo.jpeg" 
                 alt="Income Online - Your Earning Hub" 
-                className="h-12 w-auto"
+                className="h-36 w-auto"
               />
             </div>
             <nav className="hidden md:flex space-x-8">
