@@ -106,6 +106,7 @@ const Home = () => {
               <a href="#categories" className="text-white hover:text-yellow-300 transition-colors font-medium">Categories</a>
               <a href="#platforms" className="text-white hover:text-yellow-300 transition-colors font-medium">Platforms</a>
               <a href="#how-it-works" className="text-white hover:text-yellow-300 transition-colors font-medium">How It Works</a>
+              <a href="/donate" className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold">Support Us</a>
             </nav>
             <Button className="bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105">
               Get Started
