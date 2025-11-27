@@ -91,7 +91,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       {/* Header */}
-      <header className="bg-teal-500 border-b border-teal-600 sticky top-0 z-50 shadow-md">
+      <header className="border-b border-teal-600 sticky top-0 z-50 shadow-md" style={{backgroundColor: '#43ADD8'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
