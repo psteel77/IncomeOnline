@@ -4,28 +4,43 @@ import { TrendingUp, Heart, Gift, Star } from 'lucide-react';
 
 const Donate = () => {
   useEffect(() => {
+    // Check if script already loaded
+    if (document.querySelector('script[src*="paypal.com/sdk"]')) {
+      // Script already exists, just render button
+      if (window.paypal && window.paypal.HostedButtons) {
+        window.paypal.HostedButtons({
+          hostedButtonId: "8M5AKKB9LJW3S",
+        }).render("#paypal-container-8M5AKKB9LJW3S").catch((error) => {
+          console.log('PayPal button render error:', error);
+        });
+      }
+      return;
+    }
+
     // Load PayPal SDK script
     const script = document.createElement('script');
     script.src = 'https://www.paypal.com/sdk/js?client-id=BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY&components=hosted-buttons&disable-funding=venmo&currency=GBP';
     script.async = true;
+    script.id = 'paypal-sdk';
     
     script.onload = () => {
       // Render PayPal button after SDK loads
-      if (window.paypal) {
-        window.paypal.HostedButtons({
-          hostedButtonId: "8M5AKKB9LJW3S",
-        }).render("#paypal-container-8M5AKKB9LJW3S");
-      }
+      setTimeout(() => {
+        if (window.paypal && window.paypal.HostedButtons) {
+          window.paypal.HostedButtons({
+            hostedButtonId: "8M5AKKB9LJW3S",
+          }).render("#paypal-container-8M5AKKB9LJW3S").catch((error) => {
+            console.log('PayPal button render error:', error);
+          });
+        }
+      }, 100);
     };
     
-    document.body.appendChild(script);
-    
-    // Cleanup
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
+    script.onerror = () => {
+      console.error('Failed to load PayPal SDK');
     };
+    
+    document.head.appendChild(script);
   }, []);
 
   return (
