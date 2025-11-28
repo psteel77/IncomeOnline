@@ -217,8 +217,8 @@ const Home = () => {
       <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 via-cyan-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse by Category</h2>
-            <p className="text-lg text-slate-600">Choose your preferred way to earn money online</p>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">{content.categories?.title || 'Browse by Category'}</h2>
+            <p className="text-lg text-slate-600">{content.categories?.subtitle || 'Choose your preferred way to earn money online'}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
