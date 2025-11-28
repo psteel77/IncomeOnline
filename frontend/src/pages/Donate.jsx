@@ -164,11 +164,11 @@ const Donate = () => {
         {/* Thank You Message */}
         <div className="mt-12 text-center bg-white rounded-lg p-8 border-2 border-teal-200">
           <h3 className="text-2xl font-bold text-yellow-700 mb-4">Thank You! 🙏</h3>
+          <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
+            Your action today not only sets you on the path to fulfilling your income potential...
+          </p>
           <p className="text-slate-700 text-lg mb-4 leading-relaxed">
             Your generosity helps thousands of people discover legitimate online earning opportunities.
-          </p>
-          <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
-            Your action today not only sets you on the path to fulfilling your income potential additionally...
           </p>
           <p className="text-slate-600 leading-relaxed">
             Together, we&apos;re making online earning accessible to everyone, everywhere.
