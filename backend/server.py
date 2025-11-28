@@ -174,6 +174,21 @@ async def get_platform_by_id(platform_id: int):
     except Exception as e:
         return {"error": str(e)}
 
+@api_router.get("/content")
+async def get_public_content():
+    """Get all content sections for public display"""
+    try:
+        content_sections = await db.content.find({}, {"_id": 0}).to_list(100)
+        
+        # Convert to dictionary for easier frontend access
+        content_dict = {}
+        for section in content_sections:
+            content_dict[section['section_id']] = section['content']
+        
+        return {"success": True, "content": content_dict}
+    except Exception as e:
+        return {"error": str(e)}
+
 # Define API endpoints for stats
 @api_router.get("/stats")
 async def get_stats():
