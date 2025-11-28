@@ -485,7 +485,7 @@ const Home = () => {
                   <div className="flex items-center mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    )}
+                    ))}
                   </div>
                   <p className="text-slate-700 mb-4 italic">"I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!"</p>
                   <p className="font-semibold text-slate-900">- Freelance Designer</p>
@@ -507,7 +507,7 @@ const Home = () => {
                   <div className="flex items-center mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    )}
+                    ))}
                   </div>
                   <p className="text-slate-700 mb-4 italic">"Teaching online changed my life! I now reach students worldwide and earn consistently while working from home. The flexibility is incredible!"</p>
                   <p className="font-semibold text-slate-900">- Online Educator</p>
