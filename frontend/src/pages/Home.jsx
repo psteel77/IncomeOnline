@@ -358,7 +358,27 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPlatforms.map((platform) => (
+            {!authLoading && !isAuthenticated ? (
+              // Show locked message
+              <div className="col-span-full">
+                <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
+                  <CardContent className="py-16 text-center">
+                    <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
+                    <h3 className="text-3xl font-bold text-yellow-700 mb-4">Content Locked</h3>
+                    <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
+                      Donate to access full platform directory with search, filters, and detailed information.
+                    </p>
+                    <Button 
+                      onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
+                      size="lg"
+                      className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+                    >
+                      Donate Now
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : filteredPlatforms.map((platform) => (
               <Card key={platform.id} className="hover:shadow-lg transition-all duration-300 border border-slate-200">
                 <CardHeader>
                   <div className="flex items-start justify-between">
