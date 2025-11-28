@@ -60,3 +60,15 @@ export const seedAPI = {
     }
   }
 };
+
+export const contentAPI = {
+  getAll: async () => {
+    try {
+      const response = await axios.get(`${API}/content`);
+      return response.data.content || {};
+    } catch (error) {
+      console.error('Error fetching content:', error);
+      throw error;
+    }
+  }
+};
