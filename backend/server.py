@@ -338,8 +338,9 @@ async def add_donor(request: LoginRequest):
         logging.error(f"Error in add_donor: {str(e)}")
         return {"success": False, "message": str(e)}
 
-# Include the router in the main app
+# Include the routers in the main app
 app.include_router(api_router)
+app.include_router(cms_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
