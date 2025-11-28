@@ -168,7 +168,7 @@ const Donate = () => {
             Your generosity helps thousands of people discover legitimate online earning opportunities.
           </p>
           <p className="text-slate-600">
-            Together, we're making online earning accessible to everyone, everywhere.
+            Together, we&apos;re making online earning accessible to everyone, everywhere.
           </p>
         </div>
       </div>
