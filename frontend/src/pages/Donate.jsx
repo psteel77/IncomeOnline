@@ -3,6 +3,31 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { TrendingUp, Heart, Gift, Star } from 'lucide-react';
 
 const Donate = () => {
+  useEffect(() => {
+    // Load PayPal SDK script
+    const script = document.createElement('script');
+    script.src = 'https://www.paypal.com/sdk/js?client-id=BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY&components=hosted-buttons&disable-funding=venmo&currency=GBP';
+    script.async = true;
+    
+    script.onload = () => {
+      // Render PayPal button after SDK loads
+      if (window.paypal) {
+        window.paypal.HostedButtons({
+          hostedButtonId: "8M5AKKB9LJW3S",
+        }).render("#paypal-container-8M5AKKB9LJW3S");
+      }
+    };
+    
+    document.body.appendChild(script);
+    
+    // Cleanup
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       {/* Header */}
