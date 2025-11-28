@@ -482,9 +482,9 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
               <CardHeader className="pb-4">
-                <CardTitle className="text-yellow-700 text-xl mb-3">Keep It Free</CardTitle>
+                <CardTitle className="text-yellow-700 text-xl mb-3">Keep it relevant</CardTitle>
                 <CardDescription className="text-base leading-relaxed">
-                  Your support helps us keep the platform 100% free for all users
+                  Your support helps us keep the platform live and relevant
                 </CardDescription>
               </CardHeader>
             </Card>
