@@ -99,24 +99,24 @@ const Donate = () => {
           </Card>
 
           <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
-            <CardHeader>
+            <CardHeader className="pb-4">
               <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
                 <Gift className="h-6 w-6 text-teal-600" />
               </div>
-              <CardTitle className="text-yellow-700">More Platforms</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-yellow-700 text-xl mb-3">More Platforms</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
                 We can add more verified earning opportunities and update existing ones
               </CardDescription>
             </CardHeader>
           </Card>
 
           <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
-            <CardHeader>
+            <CardHeader className="pb-4">
               <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-teal-600" />
               </div>
-              <CardTitle className="text-yellow-700">Better Features</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-yellow-700 text-xl mb-3">Better Features</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
                 Your donations fund new features like reviews, comparisons, and earnings calculators
               </CardDescription>
             </CardHeader>
