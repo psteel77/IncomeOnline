@@ -167,6 +167,181 @@ async def get_stats():
     except Exception as e:
         return {"error": str(e)}
 
+# Authentication endpoints
+from auth_models import LoginRequest, VerifyRequest, AuthResponse, User
+from datetime import timedelta
+import jwt as pyjwt
+
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production-2024')
+ALGORITHM = "HS256"
+TOKEN_EXPIRE_HOURS = 720  # 30 days
+
+def create_access_token(email: str):
+    """Create JWT token for authenticated user"""
+    expire = datetime.utcnow() + timedelta(hours=TOKEN_EXPIRE_HOURS)
+    to_encode = {"email": email, "exp": expire}
+    encoded_jwt = pyjwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def verify_token(token: str):
+    """Verify JWT token and return email"""
+    try:
+        payload = pyjwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("email")
+        return email
+    except pyjwt.ExpiredSignatureError:
+        return None
+    except pyjwt.JWTError:
+        return None
+
+@api_router.post("/auth/request-access")
+async def request_access(request: LoginRequest):
+    """Request access - sends verification email"""
+    try:
+        email = request.email.lower()
+        
+        # Check if user exists
+        existing_user = await db.users.find_one({"email": email})
+        
+        if existing_user:
+            # User exists, check if verified
+            if existing_user.get('verified'):
+                # User already has access, send new verification link
+                verification_token = str(uuid.uuid4())
+                await db.users.update_one(
+                    {"email": email},
+                    {"$set": {"verification_token": verification_token}}
+                )
+                
+                verification_link = f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/verify?token={verification_token}"
+                
+                logging.info(f"\n=== VERIFICATION EMAIL ===")
+                logging.info(f"To: {email}")
+                logging.info(f"Subject: Access Your Income Online Account")
+                logging.info(f"Link: {verification_link}")
+                logging.info(f"=========================\n")
+                
+                return {
+                    "success": True,
+                    "message": "Verification link sent to your email. Check your inbox!",
+                    "token": None
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": "Your email is not authorized. Please make a donation first.",
+                    "token": None
+                }
+        else:
+            return {
+                "success": False,
+                "message": "Email not found. Please donate first to get access.",
+                "token": None
+            }
+            
+    except Exception as e:
+        logging.error(f"Error in request_access: {str(e)}")
+        return {"success": False, "message": str(e)}
+
+@api_router.get("/auth/verify/{token}")
+async def verify_email(token: str):
+    """Verify email token and return JWT"""
+    try:
+        # Find user with this verification token
+        user = await db.users.find_one({"verification_token": token})
+        
+        if not user:
+            return {"success": False, "message": "Invalid or expired verification link"}
+        
+        # Update user's last login
+        await db.users.update_one(
+            {"email": user['email']},
+            {
+                "$set": {
+                    "last_login": datetime.utcnow(),
+                    "verification_token": None
+                }
+            }
+        )
+        
+        # Create JWT token
+        access_token = create_access_token(user['email'])
+        
+        return {
+            "success": True,
+            "message": "Email verified! You now have access.",
+            "token": access_token
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in verify_email: {str(e)}")
+        return {"success": False, "message": str(e)}
+
+@api_router.get("/auth/check")
+async def check_auth(authorization: str = Header(None)):
+    """Check if user is authenticated"""
+    try:
+        if not authorization or not authorization.startswith("Bearer "):
+            return {"authenticated": False, "email": None}
+        
+        token = authorization.replace("Bearer ", "")
+        email = verify_token(token)
+        
+        if not email:
+            return {"authenticated": False, "email": None}
+        
+        # Check if user exists and is verified
+        user = await db.users.find_one({"email": email})
+        
+        if not user or not user.get('verified'):
+            return {"authenticated": False, "email": None}
+        
+        return {"authenticated": True, "email": email}
+        
+    except Exception as e:
+        logging.error(f"Error in check_auth: {str(e)}")
+        return {"authenticated": False, "email": None}
+
+@api_router.post("/auth/add-donor")
+async def add_donor(request: LoginRequest):
+    """Add a donor email after PayPal payment"""
+    try:
+        email = request.email.lower()
+        
+        existing_user = await db.users.find_one({"email": email})
+        
+        if existing_user:
+            await db.users.update_one(
+                {"email": email},
+                {"$set": {"verified": True}}
+            )
+            return {"success": True, "message": "Donor updated"}
+        else:
+            verification_token = str(uuid.uuid4())
+            new_user = {
+                "email": email,
+                "verified": True,
+                "verification_token": verification_token,
+                "created_at": datetime.utcnow(),
+                "last_login": None
+            }
+            
+            await db.users.insert_one(new_user)
+            
+            verification_link = f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/verify?token={verification_token}"
+            
+            logging.info(f"\n=== WELCOME EMAIL TO DONOR ===")
+            logging.info(f"To: {email}")
+            logging.info(f"Subject: Thank You for Your Donation!")
+            logging.info(f"Link: {verification_link}")
+            logging.info(f"==============================\n")
+            
+            return {"success": True, "message": "Donor added successfully"}
+            
+    except Exception as e:
+        logging.error(f"Error in add_donor: {str(e)}")
+        return {"success": False, "message": str(e)}
+
 # Include the router in the main app
 app.include_router(api_router)
 
