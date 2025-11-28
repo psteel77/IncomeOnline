@@ -81,15 +81,17 @@ const Home = () => {
       setLoading(true);
       setError(null);
       
-      const [categoriesData, platformsData, statsData] = await Promise.all([
+      const [categoriesData, platformsData, statsData, contentData] = await Promise.all([
         categoriesAPI.getAll(),
         platformsAPI.getAll(),
-        statsAPI.get()
+        statsAPI.get(),
+        contentAPI.getAll()
       ]);
       
       setCategories(categoriesData);
       setPlatforms(platformsData.platforms);
       setStats(statsData);
+      setContent(contentData);
     } catch (err) {
       setError('Failed to load data. Please try again later.');
       console.error('Error fetching data:', err);
