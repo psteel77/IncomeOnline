@@ -85,15 +85,15 @@ const Donate = () => {
         </div>
 
         {/* Benefits Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
-            <CardHeader>
+            <CardHeader className="pb-4">
               <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
                 <Heart className="h-6 w-6 text-teal-600" />
               </div>
-              <CardTitle className="text-yellow-700">Keep It Free</CardTitle>
-              <CardDescription>
-                Your support helps us keep the platform 100% free for all users
+              <CardTitle className="text-yellow-700 text-xl mb-3">Keep it relevant</CardTitle>
+              <CardDescription className="text-base leading-relaxed">
+                Your support helps us keep the platform live and relevant
               </CardDescription>
             </CardHeader>
           </Card>
