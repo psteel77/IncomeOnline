@@ -124,41 +124,42 @@ const Donate = () => {
         </div>
 
         {/* PayPal Button Section */}
-        <Card className="bg-white shadow-xl border-2 border-teal-300">
-          <CardHeader className="text-center bg-gradient-to-r from-teal-50 to-cyan-50">
-            <CardTitle className="text-3xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">
-              Make a Donation
-            </CardTitle>
-            <CardDescription className="text-lg text-slate-700">
-              Every contribution helps us grow and improve
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="py-8">
-            {/* PayPal Button Container */}
-            <div className="bg-gradient-to-br from-slate-50 to-teal-50 rounded-lg p-8 border-2 border-teal-200">
-              <div className="text-center mb-6">
-                <p className="text-slate-700 font-medium mb-4">
-                  Click the button below to donate securely via PayPal
+        <div className="max-w-3xl mx-auto">
+          <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
+            <CardHeader className="text-center px-8 py-8">
+              <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
+                Make a Donation
+              </CardTitle>
+              <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
+                Every contribution helps us grow and improve
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="px-8 py-8">
+              <div className="bg-white rounded-xl p-8 border-2 border-teal-200">
+                <div className="text-center mb-6">
+                  <p className="text-slate-700 font-medium text-lg leading-relaxed">
+                    Click the button below to donate securely via PayPal
+                  </p>
+                </div>
+                
+                {/* PayPal Button */}
+                <div className="flex justify-center items-center min-h-[60px]">
+                  <div id="paypal-container-8M5AKKB9LJW3S" className="w-full max-w-md"></div>
+                </div>
+              </div>
+
+              {/* Security Notice */}
+              <div className="mt-6 text-center px-4">
+                <p className="text-base text-slate-600 mb-2">
+                  🔒 Secure payment processing by PayPal
+                </p>
+                <p className="text-sm text-slate-500">
+                  We never see or store your payment information
                 </p>
               </div>
-              
-              {/* PayPal Button */}
-              <div className="flex justify-center">
-                <div id="paypal-container-8M5AKKB9LJW3S"></div>
-              </div>
-            </div>
-
-            {/* Security Notice */}
-            <div className="mt-6 text-center">
-              <p className="text-sm text-slate-600">
-                🔒 Secure payment processing by PayPal
-              </p>
-              <p className="text-xs text-slate-500 mt-2">
-                We never see or store your payment information
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Thank You Message */}
         <div className="mt-12 text-center bg-white rounded-lg p-8 border-2 border-teal-200">
