@@ -32,6 +32,46 @@ const Home = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Load PayPal SDK for donation button
+    if (paypalLoaded.current) return;
+    
+    const existingScript = document.querySelector('script[src*="paypal.com/sdk"]');
+    if (existingScript) {
+      paypalLoaded.current = true;
+      if (window.paypal && window.paypal.HostedButtons) {
+        setTimeout(() => {
+          window.paypal.HostedButtons({
+            hostedButtonId: "8M5AKKB9LJW3S",
+          }).render("#paypal-container-homepage").catch((error) => {
+            console.log('PayPal button render error:', error);
+          });
+        }, 100);
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://www.paypal.com/sdk/js?client-id=BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY&components=hosted-buttons&disable-funding=venmo&currency=GBP';
+    script.async = true;
+    script.id = 'paypal-sdk-homepage';
+    
+    script.onload = () => {
+      paypalLoaded.current = true;
+      setTimeout(() => {
+        if (window.paypal && window.paypal.HostedButtons) {
+          window.paypal.HostedButtons({
+            hostedButtonId: "8M5AKKB9LJW3S",
+          }).render("#paypal-container-homepage").catch((error) => {
+            console.log('PayPal button render error:', error);
+          });
+        }
+      }, 100);
+    };
+    
+    document.head.appendChild(script);
+  }, []);
+
   const fetchData = async () => {
     try {
       setLoading(true);
