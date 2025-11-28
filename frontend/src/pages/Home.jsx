@@ -410,7 +410,7 @@ const Home = () => {
                   </Button>
                 </CardFooter>
               </Card>
-            ))}
+            )))}
           </div>
         </div>
       </section>
