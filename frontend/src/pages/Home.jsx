@@ -14,6 +14,7 @@ const Home = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const paypalLoaded = useRef(false);
 
   // Category images mapping
   const categoryImages = {
