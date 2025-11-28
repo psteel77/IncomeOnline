@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
 from datetime import datetime, timezone
-from routes import categories, platforms, stats
+from routes import categories, platforms, stats, auth
 from seed_data import categories_data, platforms_data
 
 
