@@ -696,7 +696,7 @@ const Home = () => {
           </div>
           
           <div className="border-t border-slate-800 pt-8 text-center text-sm text-slate-400">
-            <p>© 2025 EarnHub. All rights reserved.</p>
+            <p>{content.footer?.copyright || '© 2025 Income Online. All rights reserved.'}</p>
           </div>
         </div>
       </footer>
