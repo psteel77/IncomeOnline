@@ -181,10 +181,10 @@ const Home = () => {
         </div>
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-500 mb-6 leading-tight">
-            Discover the Best Ways to<br />Earn Money Online
+            {content.hero?.title || 'Discover the Best Ways to Earn Money Online'}
           </h1>
           <p className="text-xl text-slate-600 mb-12 max-w-3xl mx-auto">
-            Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.
+            {content.hero?.subtitle || 'Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.'}
           </p>
           
           {/* Search Bar */}
