@@ -465,41 +465,43 @@ const Home = () => {
 
       {/* Donation Section */}
       <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Support Income Online</h2>
-            <p className="text-xl text-slate-700 mb-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-6">
+              Support Income Online
+            </h2>
+            <p className="text-xl md:text-2xl text-slate-700 mb-6 max-w-3xl mx-auto leading-relaxed">
               Help us keep this directory free and up-to-date for everyone
             </p>
-            <p className="text-lg text-slate-600">
+            <p className="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
               Your donation helps us maintain and expand our platform, bringing more earning opportunities to people worldwide.
             </p>
           </div>
 
           {/* Benefits Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-yellow-700 text-lg">Keep It Free</CardTitle>
-                <CardDescription>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-yellow-700 text-xl mb-3">Keep It Free</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
                   Your support helps us keep the platform 100% free for all users
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-yellow-700 text-lg">More Platforms</CardTitle>
-                <CardDescription>
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-yellow-700 text-xl mb-3">More Platforms</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
                   We can add more verified earning opportunities and update existing ones
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-yellow-700 text-lg">Better Features</CardTitle>
-                <CardDescription>
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-yellow-700 text-xl mb-3">Better Features</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
                   Your donations fund new features like reviews, comparisons, and earnings calculators
                 </CardDescription>
               </CardHeader>
@@ -507,45 +509,47 @@ const Home = () => {
           </div>
 
           {/* PayPal Button Card */}
-          <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">
-                Make a Donation
-              </CardTitle>
-              <CardDescription className="text-base text-slate-700">
-                Every contribution helps us grow and improve
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="py-6">
-              <div className="bg-white rounded-lg p-6 border border-teal-200">
-                <div className="text-center mb-4">
-                  <p className="text-slate-700 font-medium">
-                    Click the button below to donate securely via PayPal
+          <div className="max-w-3xl mx-auto">
+            <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
+              <CardHeader className="text-center px-8 py-8">
+                <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
+                  Make a Donation
+                </CardTitle>
+                <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
+                  Every contribution helps us grow and improve
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-8 py-8">
+                <div className="bg-white rounded-xl p-8 border-2 border-teal-200">
+                  <div className="text-center mb-6">
+                    <p className="text-slate-700 font-medium text-lg leading-relaxed">
+                      Click the button below to donate securely via PayPal
+                    </p>
+                  </div>
+                  
+                  {/* PayPal Button */}
+                  <div className="flex justify-center items-center min-h-[60px]">
+                    <div id="paypal-container-homepage" className="w-full max-w-md"></div>
+                  </div>
+                </div>
+
+                {/* Security Notice */}
+                <div className="mt-6 text-center px-4">
+                  <p className="text-base text-slate-600 mb-2">
+                    🔒 Secure payment processing by PayPal
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    We never see or store your payment information
                   </p>
                 </div>
-                
-                {/* PayPal Button */}
-                <div className="flex justify-center">
-                  <div id="paypal-container-homepage"></div>
-                </div>
-              </div>
-
-              {/* Security Notice */}
-              <div className="mt-4 text-center">
-                <p className="text-sm text-slate-600">
-                  🔒 Secure payment processing by PayPal
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  We never see or store your payment information
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Thank You Message */}
-          <div className="mt-8 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-lg p-6 border border-teal-200">
-            <p className="text-slate-700 text-base">
-              <span className="font-bold text-yellow-700">Thank you!</span> Your generosity helps thousands discover legitimate online earning opportunities.
+          <div className="mt-12 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-8 border-2 border-teal-200 max-w-4xl mx-auto">
+            <p className="text-slate-700 text-lg md:text-xl leading-relaxed">
+              <span className="font-bold text-yellow-700 text-xl md:text-2xl">Thank you!</span> Your generosity helps thousands discover legitimate online earning opportunities.
             </p>
           </div>
         </div>
