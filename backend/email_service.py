@@ -16,7 +16,7 @@ def load_email_template(template_name):
 def prepare_verification_email(email, verification_token):
     """Prepare the verification email content"""
     # Get the frontend URL from environment
-    frontend_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://earninghub.preview.emergentagent.com')
     verification_link = f"{frontend_url}/verify?token={verification_token}"
     
     # Load the template
