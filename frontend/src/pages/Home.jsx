@@ -244,7 +244,7 @@ const Home = () => {
                   <p className="text-xs text-slate-500 font-medium">{category.totalOpportunities}</p>
                 </CardFooter>
               </Card>
-            )}
+            ))}
           </div>
         </div>
       </section>
