@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock } from 'lucide-react';
-import { categoriesAPI, platformsAPI, statsAPI } from '../services/api';
+import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import LoginBox from '../components/LoginBox';
 
@@ -14,6 +14,7 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [platforms, setPlatforms] = useState([]);
   const [stats, setStats] = useState([]);
+  const [content, setContent] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const paypalLoaded = useRef(false);
