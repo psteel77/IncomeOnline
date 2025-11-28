@@ -353,10 +353,17 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Authentication Context Implementation"
+    - "Magic Link Login System"
+    - "Email Verification Page"
+    - "Paywall System Integration"
+    - "Authentication API Endpoints"
+    - "User Management System"
+    - "Email Service System"
   stuck_tasks: []
   test_all: false
-  test_priority: "completed"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
