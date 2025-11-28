@@ -127,29 +127,9 @@ const Donate = () => {
                 </p>
               </div>
               
-              {/* PLACEHOLDER - Replace with your actual PayPal button code */}
+              {/* PayPal Button */}
               <div className="flex justify-center">
-                <div className="bg-white border-2 border-dashed border-teal-400 rounded-lg p-8 text-center">
-                  <p className="text-yellow-700 font-bold text-lg mb-2">PayPal Button Goes Here</p>
-                  <p className="text-slate-600 text-sm">
-                    Replace this section with your PayPal button code
-                  </p>
-                  <p className="text-slate-500 text-xs mt-2">
-                    Instructions provided by your developer
-                  </p>
-                </div>
-              </div>
-              
-              {/* Instructions for adding PayPal button - Remove after adding actual button */}
-              <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-800 font-semibold mb-2">📝 To Add Your PayPal Button:</p>
-                <ol className="text-sm text-yellow-700 space-y-1 list-decimal list-inside">
-                  <li>Log in to your PayPal Business account</li>
-                  <li>Go to "Tools" → "PayPal Buttons"</li>
-                  <li>Create a "Buy Now" button</li>
-                  <li>Copy the button code</li>
-                  <li>Share the code with your developer</li>
-                </ol>
+                <div id="paypal-container-8M5AKKB9LJW3S"></div>
               </div>
             </div>
 
