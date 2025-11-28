@@ -266,7 +266,32 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredPlatforms.map((platform) => (
+            {!authLoading && !isAuthenticated ? (
+              // Show locked message
+              <div className="col-span-full">
+                <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
+                  <CardContent className="py-16 text-center">
+                    <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
+                    <h3 className="text-3xl font-bold text-yellow-700 mb-4">Platforms Locked</h3>
+                    <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
+                      Make a donation to unlock access to all {platforms.length} earning platforms with detailed information, ratings, and direct links.
+                    </p>
+                    <div className="space-y-4">
+                      <Button 
+                        onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
+                        size="lg"
+                        className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+                      >
+                        Donate to Unlock
+                      </Button>
+                      <p className="text-sm text-slate-600">
+                        Already donated? Check your email for the verification link
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : featuredPlatforms.map((platform) => (
               <Card key={platform.id} className="hover:shadow-xl transition-all duration-300 border border-slate-200 hover:border-emerald-300">
                 <CardHeader>
                   <div className="flex items-start justify-between">
