@@ -256,8 +256,8 @@ const Home = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Featured Platforms</h2>
-            <p className="text-lg text-slate-600">Top-rated and most popular earning opportunities</p>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">{content.platforms_featured?.title || 'Featured Platforms'}</h2>
+            <p className="text-lg text-slate-600">{content.platforms_featured?.subtitle || 'Top-rated and most popular earning opportunities'}</p>
             {!authLoading && !isAuthenticated && (
               <div className="mt-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 max-w-2xl mx-auto">
                 <p className="text-yellow-800 font-semibold flex items-center justify-center">
