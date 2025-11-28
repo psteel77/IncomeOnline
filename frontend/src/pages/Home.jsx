@@ -548,8 +548,12 @@ const Home = () => {
 
           {/* Thank You Message */}
           <div className="mt-12 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-8 border-2 border-teal-200 max-w-4xl mx-auto">
-            <p className="text-slate-700 text-lg md:text-xl leading-relaxed">
-              <span className="font-bold text-yellow-700 text-xl md:text-2xl">Thank you!</span> Your generosity helps thousands discover legitimate online earning opportunities.
+            <h3 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-4">Thank You! 🙏</h3>
+            <p className="text-slate-700 text-lg md:text-xl leading-relaxed mb-4">
+              Your generosity helps thousands discover legitimate online earning opportunities.
+            </p>
+            <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+              Your action today not only sets you on the path to fulfilling your income potential additionally...
             </p>
           </div>
         </div>
