@@ -205,7 +205,7 @@ const Home = () => {
                 <div className="text-3xl font-bold text-yellow-600 mb-2">{stat.value}</div>
                 <div className="text-sm text-slate-600">{stat.label}</div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
