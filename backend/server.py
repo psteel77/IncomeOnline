@@ -327,13 +327,8 @@ async def add_donor(request: LoginRequest):
             
             await db.users.insert_one(new_user)
             
-            verification_link = f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/verify?token={verification_token}"
-            
-            logging.info(f"\n=== WELCOME EMAIL TO DONOR ===")
-            logging.info(f"To: {email}")
-            logging.info(f"Subject: Thank You for Your Donation!")
-            logging.info(f"Link: {verification_link}")
-            logging.info(f"==============================\n")
+            # Send welcome email to donor with verification link
+            send_verification_email(email, verification_token)
             
             return {"success": True, "message": "Donor added successfully"}
             
