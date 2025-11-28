@@ -559,6 +559,13 @@ const Home = () => {
               Your generosity helps thousands discover legitimate online earning opportunities.
             </p>
           </div>
+
+          {/* Login Box */}
+          {!authLoading && !isAuthenticated && (
+            <div className="mt-12">
+              <LoginBox />
+            </div>
+          )}
         </div>
       </section>
 
