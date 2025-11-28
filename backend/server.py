@@ -11,6 +11,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
+from email_service import send_verification_email
 
 
 ROOT_DIR = Path(__file__).parent
