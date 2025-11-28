@@ -352,7 +352,7 @@ const Home = () => {
                 <option value="All">All Categories</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.name}>{cat.name}</option>
-                )}
+                ))}
               </select>
             </div>
           </div>
