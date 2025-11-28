@@ -12,6 +12,8 @@ from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
 from email_service import send_verification_email
+from cms_routes import router as cms_router
+from seed_content import content_sections
 
 
 ROOT_DIR = Path(__file__).parent
