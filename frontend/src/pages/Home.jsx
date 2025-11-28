@@ -463,6 +463,94 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Donation Section */}
+      <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Support Income Online</h2>
+            <p className="text-xl text-slate-700 mb-4">
+              Help us keep this directory free and up-to-date for everyone
+            </p>
+            <p className="text-lg text-slate-600">
+              Your donation helps us maintain and expand our platform, bringing more earning opportunities to people worldwide.
+            </p>
+          </div>
+
+          {/* Benefits Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-yellow-700 text-lg">Keep It Free</CardTitle>
+                <CardDescription>
+                  Your support helps us keep the platform 100% free for all users
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-yellow-700 text-lg">More Platforms</CardTitle>
+                <CardDescription>
+                  We can add more verified earning opportunities and update existing ones
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-yellow-700 text-lg">Better Features</CardTitle>
+                <CardDescription>
+                  Your donations fund new features like reviews, comparisons, and earnings calculators
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+
+          {/* PayPal Button Card */}
+          <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">
+                Make a Donation
+              </CardTitle>
+              <CardDescription className="text-base text-slate-700">
+                Every contribution helps us grow and improve
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="py-6">
+              <div className="bg-white rounded-lg p-6 border border-teal-200">
+                <div className="text-center mb-4">
+                  <p className="text-slate-700 font-medium">
+                    Click the button below to donate securely via PayPal
+                  </p>
+                </div>
+                
+                {/* PayPal Button */}
+                <div className="flex justify-center">
+                  <div id="paypal-container-homepage"></div>
+                </div>
+              </div>
+
+              {/* Security Notice */}
+              <div className="mt-4 text-center">
+                <p className="text-sm text-slate-600">
+                  🔒 Secure payment processing by PayPal
+                </p>
+                <p className="text-xs text-slate-500 mt-1">
+                  We never see or store your payment information
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Thank You Message */}
+          <div className="mt-8 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-lg p-6 border border-teal-200">
+            <p className="text-slate-700 text-base">
+              <span className="font-bold text-yellow-700">Thank you!</span> Your generosity helps thousands discover legitimate online earning opportunities.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(to right, #43ADD8, #3b9fcc)'}}>
         {/* Background Image */}
