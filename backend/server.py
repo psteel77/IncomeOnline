@@ -217,13 +217,8 @@ async def request_access(request: LoginRequest):
                     {"$set": {"verification_token": verification_token}}
                 )
                 
-                verification_link = f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:3000')}/verify?token={verification_token}"
-                
-                logging.info(f"\n=== VERIFICATION EMAIL ===")
-                logging.info(f"To: {email}")
-                logging.info(f"Subject: Access Your Income Online Account")
-                logging.info(f"Link: {verification_link}")
-                logging.info(f"=========================\n")
+                # Send verification email with template
+                send_verification_email(email, verification_token)
                 
                 return {
                     "success": True,
