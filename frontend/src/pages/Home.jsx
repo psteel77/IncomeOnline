@@ -661,7 +661,7 @@ const Home = () => {
                   className="h-30 w-auto"
                 />
               </div>
-              <p className="text-slate-400 text-sm">Your trusted directory for online earning opportunities.</p>
+              <p className="text-slate-400 text-sm">{content.footer?.tagline || 'Your trusted guide to legitimate online earning opportunities'}</p>
             </div>
             
             <div>
