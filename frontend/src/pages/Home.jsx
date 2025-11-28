@@ -17,6 +17,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const paypalLoaded = useRef(false);
+  const { isAuthenticated, loading: authLoading } = useAuth();
 
   // Category images mapping
   const categoryImages = {
