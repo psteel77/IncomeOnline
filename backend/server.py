@@ -96,6 +96,29 @@ async def seed_database():
     except Exception as e:
         return {"error": str(e)}
 
+@api_router.post("/seed-content")
+async def seed_content():
+    """Seed CMS content with initial data"""
+    try:
+        # Check if content already exists
+        existing_count = await db.content.count_documents({})
+        
+        if existing_count > 0:
+            return {
+                "message": "Content already seeded",
+                "content_sections": existing_count
+            }
+        
+        # Insert content sections
+        await db.content.insert_many(content_sections)
+        
+        return {
+            "message": "Content seeded successfully",
+            "content_sections_added": len(content_sections)
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
 # Define API endpoints for categories
 @api_router.get("/categories")
 async def get_categories():
