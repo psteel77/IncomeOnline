@@ -650,7 +650,7 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-slate-800 via-teal-900 to-cyan-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="text-white py-12 px-4 sm:px-6 lg:px-8" style={{backgroundColor: '#165e84'}}>
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -658,10 +658,10 @@ const Home = () => {
                 <img 
                   src="/earnhub-logo.jpeg" 
                   alt="Income Online - Your Earning Hub" 
-                  className="h-30 w-auto"
+                  className="h-20 w-auto"
                 />
               </div>
-              <p className="text-slate-400 text-sm">{content.footer?.tagline || 'Your trusted guide to legitimate online earning opportunities'}</p>
+              <p className="text-slate-200 text-sm">{content.footer?.tagline || 'Your trusted guide to legitimate online earning opportunities'}</p>
             </div>
             
             <div>
