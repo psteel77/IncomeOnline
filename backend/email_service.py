@@ -1,6 +1,10 @@
 import os
 import logging
+import requests
+import json
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 def load_email_template(template_name):
     """Load an email template from the email_templates directory"""
@@ -10,7 +14,7 @@ def load_email_template(template_name):
         with open(template_path, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
-        logging.error(f"Email template not found: {template_path}")
+        logger.error(f"Email template not found: {template_path}")
         return None
 
 def prepare_verification_email(email, verification_token):
@@ -66,39 +70,63 @@ Questions? Contact us at welcome@incomeonline.info
 
 def send_verification_email(email, verification_token):
     """
-    Send verification email to user
-    
-    For development: Logs email to console
-    For production: Integrate with SendGrid, AWS SES, or other email service
+    Send verification email to user using Brevo API
     """
+    # Get Brevo credentials from environment
+    brevo_api_key = os.environ.get('BREVO_API_KEY')
+    sender_email = os.environ.get('BREVO_SENDER_EMAIL', 'noreply@earninghub.preview.emergentagent.com')
+    sender_name = os.environ.get('BREVO_SENDER_NAME', 'Income Online')
+    
+    if not brevo_api_key:
+        logger.error("BREVO_API_KEY not set in environment")
+        return False
+    
+    # Prepare email content
     email_data = prepare_verification_email(email, verification_token)
     
-    # For now, log the email to console
-    logging.info("\n" + "="*60)
-    logging.info("📧 VERIFICATION EMAIL")
-    logging.info("="*60)
-    logging.info(f"From: welcome@incomeonline.info")
-    logging.info(f"To: {email}")
-    logging.info(f"Subject: {email_data['subject']}")
-    logging.info("-"*60)
-    logging.info("TEXT VERSION:")
-    logging.info(email_data['text'])
-    logging.info("-"*60)
-    logging.info("HTML VERSION: Check /app/backend/email_templates/verify_email.html")
-    logging.info("="*60 + "\n")
+    # Brevo API endpoint
+    api_url = "https://api.brevo.com/v3/smtp/email"
     
-    # TODO: In production, use a real email service
-    # Example with SendGrid:
-    # import sendgrid
-    # from sendgrid.helpers.mail import Mail
-    # 
-    # sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
-    # message = Mail(
-    #     from_email='welcome@incomeonline.info',
-    #     to_emails=email,
-    #     subject=email_data['subject'],
-    #     html_content=email_data['html']
-    # )
-    # response = sg.send(message)
+    # Prepare headers
+    headers = {
+        "accept": "application/json",
+        "api-key": brevo_api_key,
+        "content-type": "application/json"
+    }
     
-    return True
+    # Prepare payload
+    payload = {
+        "sender": {
+            "name": sender_name,
+            "email": sender_email
+        },
+        "to": [{"email": email}],
+        "subject": email_data['subject'],
+        "htmlContent": email_data['html'],
+        "textContent": email_data['text']
+    }
+    
+    try:
+        # Send email via Brevo API
+        response = requests.post(
+            api_url,
+            headers=headers,
+            data=json.dumps(payload),
+            timeout=10
+        )
+        response.raise_for_status()
+        
+        result = response.json()
+        message_id = result.get('messageId', 'unknown')
+        
+        logger.info(f"✅ Verification email sent successfully to {email}. Message ID: {message_id}")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        logger.error(f"❌ Failed to send email via Brevo: {str(e)}")
+        if hasattr(e.response, 'text'):
+            logger.error(f"Response: {e.response.text}")
+        return False
+    except Exception as e:
+        logger.error(f"❌ Unexpected error sending email: {str(e)}")
+        return False
