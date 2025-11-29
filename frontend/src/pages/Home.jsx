@@ -514,7 +514,7 @@ const Home = () => {
                   </div>
                   <p className="text-slate-700 mb-4 italic">"Teaching online changed my life! I now reach students worldwide and earn consistently while working from home. The flexibility is incredible!"</p>
                   <p className="font-semibold text-slate-900">- Online Educator</p>
-                  <Badge className="mt-2 bg-green-100 text-green-700">Teaching & Tutoring</Badge>
+                  <Badge className="mt-2 bg-teal-100 text-teal-700">Teaching & Tutoring</Badge>
                 </CardContent>
               </div>
             </Card>
