@@ -127,7 +127,7 @@ const Home = () => {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={fetchData} className="bg-emerald-600 hover:bg-emerald-700">
+          <Button onClick={fetchData} className="bg-teal-600 hover:bg-teal-700">
             Try Again
           </Button>
         </div>
