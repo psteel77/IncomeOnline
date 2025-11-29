@@ -138,15 +138,15 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       {/* Header */}
-      <header className="border-b border-teal-600 sticky top-0 z-50 shadow-md" style={{backgroundColor: '#43ADD8'}}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="border-b border-teal-800 sticky top-0 z-50 shadow-md" style={{backgroundColor: '#165e84'}}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              {/* Custom Logo */}
+            {/* Logo on the left */}
+            <div className="flex items-center">
               <img 
                 src="/earnhub-logo.jpeg" 
                 alt="Income Online - Your Earning Hub" 
-                className="h-36 w-auto"
+                className="h-16 w-auto"
               />
             </div>
             <nav className="hidden md:flex space-x-8">
