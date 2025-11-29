@@ -407,7 +407,7 @@ const Home = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" className="w-full border-emerald-600 text-emerald-600 hover:bg-emerald-50" onClick={() => window.open(platform.link, '_blank')}>
+                  <Button variant="outline" className="w-full border-teal-600 text-teal-600 hover:bg-teal-50" onClick={() => window.open(platform.link, '_blank')}>
                     Learn More
                     <ExternalLink className="ml-2 h-3 w-3" />
                   </Button>
