@@ -658,7 +658,7 @@ const Home = () => {
                 <img 
                   src="/earnhub-logo.jpeg" 
                   alt="Income Online - Your Earning Hub" 
-                  className="h-24 w-auto"
+                  className="h-28 w-auto"
                 />
               </div>
               <p className="text-slate-200 text-sm">{content.footer?.tagline || 'Your trusted guide to legitimate online earning opportunities'}</p>
