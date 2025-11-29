@@ -492,7 +492,7 @@ const Home = () => {
                   </div>
                   <p className="text-slate-700 mb-4 italic">"I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!"</p>
                   <p className="font-semibold text-slate-900">- Freelance Designer</p>
-                  <Badge className="mt-2 bg-emerald-100 text-emerald-700">Freelancing</Badge>
+                  <Badge className="mt-2 bg-teal-100 text-teal-700">Freelancing</Badge>
                 </CardContent>
               </div>
             </Card>
