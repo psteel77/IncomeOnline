@@ -522,7 +522,7 @@ const Home = () => {
               Support Income Online
             </h2>
             <p className="text-xl md:text-2xl text-slate-700 mb-6 max-w-3xl mx-auto leading-relaxed">
-              Help us keep this directory free and up-to-date for everyone
+              Help us keep this directory up-to-date for everyone
             </p>
             <p className="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
               Your donation helps us maintain and expand our platform, bringing more earning opportunities to people worldwide.
