@@ -78,12 +78,14 @@ def send_verification_email(email, verification_token):
     """
     Send verification email to user using Resend API
     """
-    # Get Resend credentials from environment
-    sender_email = os.environ.get('RESEND_SENDER_EMAIL', 'onboarding@resend.dev')
-    
-    if not resend.api_key:
+    # Configure Resend API key
+    api_key = _configure_resend()
+    if not api_key:
         logger.error("RESEND_API_KEY not set in environment")
         return False
+    
+    # Get sender email from environment
+    sender_email = os.environ.get('RESEND_SENDER_EMAIL', 'onboarding@resend.dev')
     
     # Prepare email content
     email_data = prepare_verification_email(email, verification_token)
