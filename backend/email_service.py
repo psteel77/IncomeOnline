@@ -72,63 +72,41 @@ Questions? Contact us at welcome@incomeonline.info
 
 def send_verification_email(email, verification_token):
     """
-    Send verification email to user using Brevo API
+    Send verification email to user using Resend API
     """
-    # Get Brevo credentials from environment
-    brevo_api_key = os.environ.get('BREVO_API_KEY')
-    sender_email = os.environ.get('BREVO_SENDER_EMAIL', 'noreply@earninghub.preview.emergentagent.com')
-    sender_name = os.environ.get('BREVO_SENDER_NAME', 'Income Online')
+    # Get Resend credentials from environment
+    sender_email = os.environ.get('RESEND_SENDER_EMAIL', 'onboarding@resend.dev')
     
-    if not brevo_api_key:
-        logger.error("BREVO_API_KEY not set in environment")
+    if not resend.api_key:
+        logger.error("RESEND_API_KEY not set in environment")
         return False
     
     # Prepare email content
     email_data = prepare_verification_email(email, verification_token)
     
-    # Brevo API endpoint
-    api_url = "https://api.brevo.com/v3/smtp/email"
-    
-    # Prepare headers
-    headers = {
-        "accept": "application/json",
-        "api-key": brevo_api_key,
-        "content-type": "application/json"
-    }
-    
-    # Prepare payload
-    payload = {
-        "sender": {
-            "name": sender_name,
-            "email": sender_email
-        },
-        "to": [{"email": email}],
-        "subject": email_data['subject'],
-        "htmlContent": email_data['html'],
-        "textContent": email_data['text']
-    }
-    
     try:
-        # Send email via Brevo API
-        response = requests.post(
-            api_url,
-            headers=headers,
-            data=json.dumps(payload),
-            timeout=10
-        )
-        response.raise_for_status()
+        # Send email via Resend API
+        params = {
+            "from": f"Income Online <{sender_email}>",
+            "to": [email],
+            "subject": email_data['subject'],
+            "html": email_data['html'],
+            "text": email_data['text']
+        }
         
-        result = response.json()
-        message_id = result.get('messageId', 'unknown')
+        response = resend.Emails.send(params)
+        
+        # Get message ID from response
+        if hasattr(response, 'get') and response.get('id'):
+            message_id = response.get('id')
+        elif hasattr(response, 'id'):
+            message_id = response.id
+        else:
+            message_id = 'unknown'
         
         logger.info(f"✅ Verification email sent successfully to {email}. Message ID: {message_id}")
         return True
         
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send email via Brevo: {str(e)}")
-        if hasattr(e.response, 'text'):
-            logger.error(f"Response: {e.response.text}")
-        return False
     except Exception as e:
-        logger.error(f"❌ Unexpected error sending email: {str(e)}")
+        logger.error(f"❌ Failed to send email via Resend: {str(e)}")
         return False
