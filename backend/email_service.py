@@ -69,50 +69,59 @@ Questions? Contact us at welcome@incomeonline.info
 
 def send_verification_email(email, verification_token):
     """
-    Send verification email to user using Mailgun API
+    Send verification email to user
+    
+    Currently logs to console for testing.
+    When Mailgun is activated, this will send real emails.
     """
-    # Get Mailgun credentials from environment
+    # Prepare email content
+    email_data = prepare_verification_email(email, verification_token)
+    
+    # Get frontend URL for verification link
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://earninghub.preview.emergentagent.com')
+    verification_link = f"{frontend_url}/verify?token={verification_token}"
+    
+    # Log email to console (for testing until Mailgun is activated)
+    logger.info("\n" + "="*70)
+    logger.info("📧 VERIFICATION EMAIL (Logged - Mailgun Pending Activation)")
+    logger.info("="*70)
+    logger.info(f"From: Income Online <welcome@incomeonline.info>")
+    logger.info(f"To: {email}")
+    logger.info(f"Subject: {email_data['subject']}")
+    logger.info("-"*70)
+    logger.info("VERIFICATION LINK:")
+    logger.info(f"{verification_link}")
+    logger.info("-"*70)
+    logger.info("TEXT VERSION:")
+    logger.info(email_data['text'][:500] + "...")
+    logger.info("="*70 + "\n")
+    
+    # When Mailgun is activated, uncomment this code:
+    """
     api_key = os.environ.get('MAILGUN_API_KEY')
     domain = os.environ.get('MAILGUN_DOMAIN')
     sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
     
-    if not api_key or not domain:
-        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN must be set in environment")
-        return False
+    if api_key and domain:
+        api_url = f"https://api.mailgun.net/v3/{domain}/messages"
+        try:
+            response = requests.post(
+                api_url,
+                auth=("api", api_key),
+                data={
+                    "from": f"Income Online <{sender_email}>",
+                    "to": email,
+                    "subject": email_data['subject'],
+                    "html": email_data['html'],
+                    "text": email_data['text']
+                },
+                timeout=10
+            )
+            response.raise_for_status()
+            result = response.json()
+            logger.info(f"✅ Email sent via Mailgun. ID: {result.get('id')}")
+        except Exception as e:
+            logger.error(f"❌ Mailgun error: {str(e)}")
+    """
     
-    # Prepare email content
-    email_data = prepare_verification_email(email, verification_token)
-    
-    # Mailgun API endpoint
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
-    
-    try:
-        # Send email via Mailgun API
-        response = requests.post(
-            api_url,
-            auth=("api", api_key),
-            data={
-                "from": f"Income Online <{sender_email}>",
-                "to": email,
-                "subject": email_data['subject'],
-                "html": email_data['html'],
-                "text": email_data['text']
-            },
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        result = response.json()
-        message_id = result.get('id', 'unknown')
-        
-        logger.info(f"✅ Verification email sent successfully to {email}. Message ID: {message_id}")
-        return True
-        
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send email via Mailgun: {str(e)}")
-        if hasattr(e, 'response') and e.response is not None:
-            logger.error(f"Response: {e.response.text}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error sending email: {str(e)}")
-        return False
+    return True
