@@ -1,16 +1,9 @@
 import os
 import logging
-import resend
+import requests
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
-
-def _configure_resend():
-    """Configure Resend API key from environment"""
-    api_key = os.environ.get('RESEND_API_KEY')
-    if api_key:
-        resend.api_key = api_key
-    return api_key
 
 def load_email_template(template_name):
     """Load an email template from the email_templates directory"""
