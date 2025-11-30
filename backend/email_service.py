@@ -69,43 +69,50 @@ Questions? Contact us at welcome@incomeonline.info
 
 def send_verification_email(email, verification_token):
     """
-    Send verification email to user using Resend API
+    Send verification email to user using Mailgun API
     """
-    # Configure Resend API key
-    api_key = _configure_resend()
-    if not api_key:
-        logger.error("RESEND_API_KEY not set in environment")
-        return False
+    # Get Mailgun credentials from environment
+    api_key = os.environ.get('MAILGUN_API_KEY')
+    domain = os.environ.get('MAILGUN_DOMAIN')
+    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
     
-    # Get sender email from environment
-    sender_email = os.environ.get('RESEND_SENDER_EMAIL', 'onboarding@resend.dev')
+    if not api_key or not domain:
+        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN must be set in environment")
+        return False
     
     # Prepare email content
     email_data = prepare_verification_email(email, verification_token)
     
+    # Mailgun API endpoint
+    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
+    
     try:
-        # Send email via Resend API
-        params = {
-            "from": f"Income Online <{sender_email}>",
-            "to": [email],
-            "subject": email_data['subject'],
-            "html": email_data['html'],
-            "text": email_data['text']
-        }
+        # Send email via Mailgun API
+        response = requests.post(
+            api_url,
+            auth=("api", api_key),
+            data={
+                "from": f"Income Online <{sender_email}>",
+                "to": email,
+                "subject": email_data['subject'],
+                "html": email_data['html'],
+                "text": email_data['text']
+            },
+            timeout=10
+        )
+        response.raise_for_status()
         
-        response = resend.Emails.send(params)
-        
-        # Get message ID from response
-        if hasattr(response, 'get') and response.get('id'):
-            message_id = response.get('id')
-        elif hasattr(response, 'id'):
-            message_id = response.id
-        else:
-            message_id = 'unknown'
+        result = response.json()
+        message_id = result.get('id', 'unknown')
         
         logger.info(f"✅ Verification email sent successfully to {email}. Message ID: {message_id}")
         return True
         
+    except requests.exceptions.RequestException as e:
+        logger.error(f"❌ Failed to send email via Mailgun: {str(e)}")
+        if hasattr(e, 'response') and e.response is not None:
+            logger.error(f"Response: {e.response.text}")
+        return False
     except Exception as e:
-        logger.error(f"❌ Failed to send email via Resend: {str(e)}")
+        logger.error(f"❌ Unexpected error sending email: {str(e)}")
         return False
