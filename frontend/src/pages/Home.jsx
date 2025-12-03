@@ -224,7 +224,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Categories Section - Only show when authenticated */}
+      {!authLoading && isAuthenticated && (
       <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 via-cyan-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
