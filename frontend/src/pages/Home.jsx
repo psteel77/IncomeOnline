@@ -425,6 +425,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* How It Works */}
       <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8">
