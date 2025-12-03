@@ -1,0 +1,199 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { UserPlus, Mail, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
+const AccessGate = () => {
+  const [userType, setUserType] = useState(null); // 'new' or 'returning'
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleNewUser = () => {
+    // Scroll to donation section
+    const donationSection = document.getElementById('support');
+    if (donationSection) {
+      donationSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleReturningUser = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage('');
+    setError('');
+
+    try {
+      const response = await axios.post(`${API}/auth/request-access`, {
+        email: email.toLowerCase()
+      });
+
+      if (response.data.success) {
+        setMessage('✅ Access link sent! Check your email inbox (and spam folder) for your "Access All Areas" link.');
+        setEmail('');
+      } else {
+        // Email not found in database
+        setError(
+          <div>
+            <p className="font-semibold mb-2">Email not found in our database.</p>
+            <p className="text-sm mb-2">Please:</p>
+            <ol className="text-sm list-decimal list-inside space-y-1 ml-2">
+              <li>Check you entered the email address you used when joining</li>
+              <li>Or visit the donation section below to gain access</li>
+            </ol>
+          </div>
+        );
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      console.error('Access request error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!userType) {
+    return (
+      <Card className="max-w-2xl mx-auto bg-white border-2 border-teal-300 shadow-xl">
+        <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white">
+          <CardTitle className="text-3xl text-teal-800 mb-2">
+            Access the Income Online Community
+          </CardTitle>
+          <CardDescription className="text-lg text-slate-700">
+            Choose your access type below
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-8">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* New User Card */}
+            <div 
+              className="border-2 border-teal-200 rounded-xl p-6 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-teal-50"
+              onClick={handleNewUser}
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center">
+                  <UserPlus className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-teal-800">New User</h3>
+                <p className="text-slate-600 text-sm">
+                  Join the Income Online community and get access to 20+ verified earning platforms
+                </p>
+                <Button className="w-full bg-teal-600 hover:bg-teal-700">
+                  Make a Donation
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Returning User Card */}
+            <div 
+              className="border-2 border-amber-200 rounded-xl p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
+              onClick={() => setUserType('returning')}
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center">
+                  <Mail className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-amber-800">Returning User</h3>
+                <p className="text-slate-600 text-sm">
+                  Already a member? Enter your email to receive your access link
+                </p>
+                <Button className="w-full bg-amber-600 hover:bg-amber-700">
+                  Request Access Link
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Returning User Form
+  return (
+    <Card className="max-w-md mx-auto bg-white border-2 border-teal-300 shadow-xl">
+      <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white">
+        <CardTitle className="text-2xl text-teal-800">
+          Welcome Back!
+        </CardTitle>
+        <CardDescription className="text-slate-700">
+          Enter your email to receive your access link
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-6">
+        <form onSubmit={handleReturningUser} className="space-y-4">
+          <div>
+            <Input
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="text-base py-6"
+              disabled={loading}
+            />
+          </div>
+
+          {message && (
+            <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4 flex items-start gap-3">
+              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <p className="text-green-800 text-sm">{message}</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-50 border-2 border-red-300 rounded-lg p-4 flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="text-red-800 text-sm">{error}</div>
+            </div>
+          )}
+
+          <Button
+            type="submit"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white py-6"
+            disabled={loading}
+          >
+            {loading ? 'Sending...' : 'Send Access Link'}
+          </Button>
+
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setUserType(null);
+                setMessage('');
+                setError('');
+                setEmail('');
+              }}
+              className="text-sm text-teal-600 hover:text-teal-700"
+            >
+              ← Back to options
+            </button>
+          </div>
+
+          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-sm text-amber-800 text-center">
+              Not a member yet?{' '}
+              <button
+                type="button"
+                onClick={handleNewUser}
+                className="font-semibold text-amber-900 hover:underline"
+              >
+                Donate to join →
+              </button>
+            </p>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default AccessGate;
