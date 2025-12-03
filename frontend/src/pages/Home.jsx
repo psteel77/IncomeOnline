@@ -17,6 +17,7 @@ const Home = () => {
   const [content, setContent] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const paypalLoaded = useRef(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
 
