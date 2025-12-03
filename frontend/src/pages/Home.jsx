@@ -474,7 +474,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      )}
 
       {/* Success Stories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
