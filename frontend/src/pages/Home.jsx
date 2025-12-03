@@ -586,10 +586,50 @@ const Home = () => {
                   Make a Donation
                 </CardTitle>
                 <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
-                  Every contribution helps us grow and improve
+                  Your contribution helps us grow and improve
                 </CardDescription>
               </CardHeader>
               <CardContent className="px-8 py-8">
+                {/* Why Donate Section */}
+                <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-6 md:p-8 mb-6 border-2 border-teal-200">
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-4">
+                    There are websites that offer Income Online opportunities that are "free" but in my experience very few things on the Internet are genuinely "free". 
+                    Many of the 'free' websites accept commissions/fees from other Platforms and direct you towards these out of their own financial interest.
+                  </p>
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed mb-4">
+                    By making a donation to access the online income opportunities via our web portal you have <span className="font-bold text-teal-800">3 Factor peace of mind</span>:
+                  </p>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">
+                        1
+                      </div>
+                      <p className="text-slate-700 text-base md:text-lg leading-relaxed pt-1">
+                        We do not accept commissions/fees from any of the Platforms on our site.
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">
+                        2
+                      </div>
+                      <p className="text-slate-700 text-base md:text-lg leading-relaxed pt-1">
+                        We are completely independent with no commercial link to any Platform.
+                      </p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold">
+                        3
+                      </div>
+                      <p className="text-slate-700 text-base md:text-lg leading-relaxed pt-1">
+                        We will never sell or release your data.
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed font-medium">
+                    We believe that the donation we ask you to make in return for unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
+                  </p>
+                </div>
+
                 <div className="bg-white rounded-xl p-8 border-2 border-teal-200">
                   <div className="text-center mb-6">
                     <p className="text-slate-700 font-medium text-lg leading-relaxed">
