@@ -6,7 +6,7 @@ import { Badge } from '../components/ui/badge';
 import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock } from 'lucide-react';
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
-import LoginBox from '../components/LoginBox';
+import AccessGate from '../components/AccessGate';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
