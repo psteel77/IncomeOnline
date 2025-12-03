@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock } from 'lucide-react';
+import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X } from 'lucide-react';
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import AccessGate from '../components/AccessGate';
