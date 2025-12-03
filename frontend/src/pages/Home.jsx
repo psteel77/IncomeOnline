@@ -154,7 +154,7 @@ const Home = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-6 lg:space-x-8">
+            <nav className="flex space-x-6 lg:space-x-8 max-md:hidden">
               <a 
                 href="#categories" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' }); }}
