@@ -187,8 +187,16 @@ const Home = () => {
             {content.hero?.subtitle || 'Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.'}
           </p>
           
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-16">
+          {/* Access Gate - Show only when NOT authenticated */}
+          {!authLoading && !isAuthenticated && (
+            <div className="mb-16">
+              <AccessGate />
+            </div>
+          )}
+          
+          {/* Search Bar - Show only when authenticated */}
+          {!authLoading && isAuthenticated && (
+            <div className="max-w-2xl mx-auto mb-16">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
               <Input
