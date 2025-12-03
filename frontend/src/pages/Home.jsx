@@ -208,9 +208,11 @@ const Home = () => {
               />
             </div>
           </div>
+          )}
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          {/* Stats - Show only when authenticated */}
+          {!authLoading && isAuthenticated && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
                 <div className="text-3xl font-bold text-yellow-600 mb-2">{stat.value}</div>
