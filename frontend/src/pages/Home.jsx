@@ -187,7 +187,7 @@ const Home = () => {
 
             {/* Desktop Get Started Button */}
             <Button 
-              className="hidden md:block bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
+              className="max-md:hidden bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
               onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get Started
