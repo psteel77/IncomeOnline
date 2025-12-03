@@ -627,12 +627,6 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Login Box */}
-          {!authLoading && !isAuthenticated && (
-            <div className="mt-12">
-              <LoginBox />
-            </div>
-          )}
         </div>
       </section>
 
