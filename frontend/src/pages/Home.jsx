@@ -143,19 +143,48 @@ const Home = () => {
           <div className="flex items-center justify-between">
             {/* Logo on the left */}
             <div className="flex items-center">
-              <img 
-                src="/earnhub-logo.jpeg" 
-                alt="Income Online - Your Earning Hub" 
-                className="h-24 w-auto"
-              />
+              <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                <img 
+                  src="/earnhub-logo.jpeg" 
+                  alt="Income Online - Your Earning Hub" 
+                  className="h-24 w-auto cursor-pointer"
+                />
+              </a>
             </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="#categories" className="text-white hover:text-yellow-300 transition-colors font-medium">Categories</a>
-              <a href="#platforms" className="text-white hover:text-yellow-300 transition-colors font-medium">Platforms</a>
-              <a href="#how-it-works" className="text-white hover:text-yellow-300 transition-colors font-medium">How It Works</a>
-              <a href="#support" className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold">Support Us</a>
+            <nav className="hidden md:flex space-x-6 lg:space-x-8">
+              <a 
+                href="#categories" 
+                onClick={(e) => { e.preventDefault(); document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+              >
+                Categories
+              </a>
+              <a 
+                href="#platforms" 
+                onClick={(e) => { e.preventDefault(); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+              >
+                Platforms
+              </a>
+              <a 
+                href="#how-it-works" 
+                onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+              >
+                How It Works
+              </a>
+              <a 
+                href="#support" 
+                onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold cursor-pointer"
+              >
+                Donate
+              </a>
             </nav>
-            <Button className="bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105">
+            <Button 
+              className="bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
+              onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Get Started
             </Button>
           </div>
