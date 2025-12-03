@@ -473,8 +473,10 @@ const Home = () => {
           </div>
         </div>
       </section>
+      )}
 
-      {/* Success Stories Section */}
+      {/* Success Stories Section - Only show when authenticated */}
+      {!authLoading && isAuthenticated && (
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 to-cyan-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
