@@ -630,6 +630,13 @@ const Home = () => {
                   </p>
                 </div>
 
+                {/* ROI Section */}
+                <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-6 md:p-8 mb-6 border-2 border-amber-200">
+                  <p className="text-slate-700 text-base md:text-lg leading-relaxed">
+                    Once you join <span className="font-bold text-teal-800">incomeOnline</span> You might be overwhelmed by the sheer number of possibilities available to you so while you are considering your best way forward or you simply can't decide what really excites you (our Freelancers platform alone has more than 20,000 opportunities!), you could devote just 1 hour of your time to one of the many Survey and Research opportunities available on incomeOnline and earn more than the cost of your 'online income' fee so you could be showing a positive return on your investment within the hour!
+                  </p>
+                </div>
+
                 <div className="bg-white rounded-xl p-8 border-2 border-teal-200">
                   <div className="text-center mb-6">
                     <p className="text-slate-700 font-medium text-lg leading-relaxed">
