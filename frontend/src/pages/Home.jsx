@@ -148,10 +148,12 @@ const Home = () => {
                 <img 
                   src="/earnhub-logo.jpeg" 
                   alt="Income Online - Your Earning Hub" 
-                  className="h-24 w-auto cursor-pointer"
+                  className="h-20 md:h-24 w-auto cursor-pointer"
                 />
               </a>
             </div>
+            
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-6 lg:space-x-8">
               <a 
                 href="#categories" 
@@ -182,13 +184,83 @@ const Home = () => {
                 Donate
               </a>
             </nav>
+
+            {/* Desktop Get Started Button */}
             <Button 
-              className="bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
+              className="hidden md:block bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
               onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get Started
             </Button>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-white p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <nav className="md:hidden mt-4 pb-4 space-y-3">
+              <a 
+                href="#categories" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                Categories
+              </a>
+              <a 
+                href="#platforms" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                Platforms
+              </a>
+              <a 
+                href="#how-it-works" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                How It Works
+              </a>
+              <a 
+                href="#support" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-yellow-300 hover:text-yellow-200 transition-colors font-bold py-2"
+              >
+                Donate
+              </a>
+              <Button 
+                className="w-full bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold"
+                onClick={() => {
+                  document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Get Started
+              </Button>
+            </nav>
+          )}
         </div>
       </header>
 
