@@ -19,7 +19,7 @@ def load_email_template(template_name):
 def prepare_verification_email(email, verification_token):
     """Prepare the verification email content"""
     # Get the frontend URL from environment
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://earninghub.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://workfinder-50.preview.emergentagent.com')
     verification_link = f"{frontend_url}/verify?token={verification_token}"
     
     # Load the template
@@ -84,7 +84,7 @@ def send_verification_email(email, verification_token):
     email_data = prepare_verification_email(email, verification_token)
     
     # Get frontend URL for verification link
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://earninghub.preview.emergentagent.com')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://workfinder-50.preview.emergentagent.com')
     verification_link = f"{frontend_url}/verify?token={verification_token}"
     
     # Mailgun API endpoint
