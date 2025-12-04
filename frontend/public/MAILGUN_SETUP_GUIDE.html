@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mailgun Template Setup Guide - Income Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #165e84;
+            border-bottom: 4px solid #165e84;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #0891b2;
+            margin-top: 30px;
+            border-bottom: 2px solid #0891b2;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #165e84;
+            margin-top: 25px;
+        }
+        .step-box {
+            background: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .warning-box {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .success-box {
+            background: #d1fae5;
+            border-left: 5px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .template-card {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        .template-card h4 {
+            color: #165e84;
+            margin-top: 0;
+        }
+        .download-link {
+            display: inline-block;
+            background: #165e84;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 10px 10px 0;
+            transition: background 0.3s;
+        }
+        .download-link:hover {
+            background: #0891b2;
+        }
+        .code-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        ol {
+            padding-left: 25px;
+        }
+        ol li {
+            margin: 10px 0;
+        }
+        .preview-link {
+            display: inline-block;
+            color: #0891b2;
+            text-decoration: none;
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .preview-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Mailgun Email Templates Setup Guide</h1>
+        <p style="font-size: 18px; color: #666;">Step-by-step instructions to add your email templates to Mailgun</p>
+
+        <!-- Overview -->
+        <div class="success-box">
+            <h3 style="margin-top: 0;">✅ What You'll Get</h3>
+            <p>Professional, branded email templates for your Income Online verification emails. These templates are:</p>
+            <ul>
+                <li>Mobile-responsive</li>
+                <li>Professionally designed with your brand colors</li>
+                <li>Include all necessary content and calls-to-action</li>
+                <li>Ready to use with Mailgun's template system</li>
+            </ul>
+        </div>
+
+        <!-- Available Templates -->
+        <h2>📋 Available Templates</h2>
+        
+        <div class="template-card">
+            <h4>Template 1: Current Verification Email (RECOMMENDED)</h4>
+            <p><strong>Use Case:</strong> Primary verification email for all users</p>
+            <p><strong>Features:</strong></p>
+            <ul>
+                <li>Welcome message with large friendly greeting</li>
+                <li>Ghost button "Take me to Income Online"</li>
+                <li>Benefits section highlighting 5 key features</li>
+                <li>Security note and contact information</li>
+            </ul>
+            <a href="MAILGUN_TEMPLATE_CURRENT.html" class="download-link" target="_blank">📄 Open Template</a>
+            <a href="MAILGUN_TEMPLATE_CURRENT.html" class="preview-link" target="_blank">👁️ Preview in Browser</a>
+        </div>
+
+        <div class="template-card">
+            <h4>Template 2: New User Welcome Email</h4>
+            <p><strong>Use Case:</strong> First-time users after donation</p>
+            <p><strong>Features:</strong> Similar to Template 1 with emphasis on new user journey</p>
+            <a href="MAILGUN_TEMPLATE_1_NEW_USER.html" class="download-link" target="_blank">📄 Open Template</a>
+            <a href="MAILGUN_TEMPLATE_1_NEW_USER.html" class="preview-link" target="_blank">👁️ Preview in Browser</a>
+        </div>
+
+        <div class="template-card">
+            <h4>Template 3: Returning User Email</h4>
+            <p><strong>Use Case:</strong> Returning users requesting new access link</p>
+            <p><strong>Features:</strong> Welcome back message with quick access</p>
+            <a href="MAILGUN_TEMPLATE_2_RETURNING_USER.html" class="download-link" target="_blank">📄 Open Template</a>
+            <a href="MAILGUN_TEMPLATE_2_RETURNING_USER.html" class="preview-link" target="_blank">👁️ Preview in Browser</a>
+        </div>
+
+        <!-- Step-by-Step Instructions -->
+        <h2>🚀 How to Add Templates to Mailgun</h2>
+
+        <div class="step-box">
+            <h3>Step 1: Access Mailgun Dashboard</h3>
+            <ol>
+                <li>Go to: <a href="https://app.mailgun.com/" target="_blank">https://app.mailgun.com/</a></li>
+                <li>Log in with your Mailgun credentials</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 2: Navigate to Templates</h3>
+            <ol>
+                <li>In the left sidebar, click on <strong>"Sending"</strong></li>
+                <li>Click on <strong>"Templates"</strong></li>
+                <li>You should see the Templates management page</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 3: Create New Template</h3>
+            <ol>
+                <li>Click the <strong>"Create Template"</strong> button (usually top-right)</li>
+                <li>You'll see a form with fields:
+                    <ul>
+                        <li><strong>Template Name:</strong> Enter a name (e.g., "Income Online Verification")</li>
+                        <li><strong>Description:</strong> Optional description</li>
+                        <li><strong>Template Tag:</strong> Optional tag for organization</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 4: Add Template HTML</h3>
+            <ol>
+                <li><strong>Open one of the template links above</strong> (click the "📄 Open Template" button)</li>
+                <li>Once the template opens in your browser, press <strong>Ctrl+A</strong> (Windows) or <strong>Cmd+A</strong> (Mac) to select all</li>
+                <li>Press <strong>Ctrl+C</strong> or <strong>Cmd+C</strong> to copy</li>
+                <li>Go back to Mailgun's "Create Template" page</li>
+                <li>Find the <strong>"Template Content"</strong> or <strong>"HTML"</strong> section</li>
+                <li>Click in the HTML editor</li>
+                <li>Press <strong>Ctrl+V</strong> or <strong>Cmd+V</strong> to paste</li>
+            </ol>
+        </div>
+
+        <div class="warning-box">
+            <h3>⚠️ Important: Template Variables</h3>
+            <p>Your templates use the following variable that Mailgun will replace:</p>
+            <div class="code-box">
+                {{VERIFICATION_LINK}}
+            </div>
+            <p style="margin-top: 10px;"><strong>Make sure this variable remains in the template!</strong> This is where your magic link URL will be inserted.</p>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 5: Preview and Test</h3>
+            <ol>
+                <li>Mailgun usually has a <strong>"Preview"</strong> button - click it to see how your email looks</li>
+                <li>You can send a test email to yourself:
+                    <ul>
+                        <li>Enter your email address</li>
+                        <li>Click "Send Test"</li>
+                        <li>Check your inbox to verify it looks correct</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 6: Save Template</h3>
+            <ol>
+                <li>Review everything one more time</li>
+                <li>Click <strong>"Create Template"</strong> or <strong>"Save"</strong></li>
+                <li>Your template is now saved and ready to use!</li>
+            </ol>
+        </div>
+
+        <!-- Recommended Template Names -->
+        <h2>💡 Recommended Template Names</h2>
+        <div class="success-box">
+            <p>For easy organization in Mailgun, use these names:</p>
+            <ul>
+                <li><strong>Template 1:</strong> "Income Online - Email Verification"</li>
+                <li><strong>Template 2:</strong> "Income Online - New User Welcome"</li>
+                <li><strong>Template 3:</strong> "Income Online - Returning User"</li>
+            </ul>
+        </div>
+
+        <!-- Using Templates -->
+        <h2>🔧 Using Templates in Your Code</h2>
+        <p>Once saved, you can reference templates in your backend code. Here's an example:</p>
+        
+        <div class="code-box">
+# Using Mailgun API to send with template
+requests.post(
+    f"https://api.mailgun.net/v3/{domain}/messages",
+    auth=("api", api_key),
+    data={
+        "from": "Income Online &lt;noreply@yourdomain.com&gt;",
+        "to": user_email,
+        "subject": "Welcome to Income Online",
+        "template": "Income Online - Email Verification",
+        "v:verification_link": actual_verification_url
+    }
+)
+        </div>
+
+        <!-- Current Setup -->
+        <h2>📌 Your Current Setup</h2>
+        <div class="warning-box">
+            <p><strong>Mailgun Domain:</strong> sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org</p>
+            <p><strong>Mode:</strong> Sandbox (testing mode)</p>
+            <p><strong>Authorized Recipients:</strong></p>
+            <ul>
+                <li>paul-steel@outlook.com</li>
+                <li>avatarps1977@gmail.com</li>
+                <li>welcome@incomeonline.info</li>
+            </ul>
+            <p style="margin-top: 15px;"><strong>Note:</strong> In sandbox mode, you can only send to these authorized email addresses. To send to anyone, you'll need to verify your domain or upgrade your Mailgun account.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <h2>🔗 Quick Links</h2>
+        <div style="margin: 20px 0;">
+            <a href="https://app.mailgun.com/" class="download-link" target="_blank">Go to Mailgun Dashboard</a>
+            <a href="https://documentation.mailgun.com/en/latest/user_manual.html#templates" class="download-link" target="_blank">Mailgun Templates Documentation</a>
+        </div>
+
+        <!-- Troubleshooting -->
+        <h2>❓ Troubleshooting</h2>
+        
+        <h3>Problem: Templates menu not showing</h3>
+        <p><strong>Solution:</strong> Make sure you're logged into the correct Mailgun account. Templates should be under "Sending" → "Templates"</p>
+
+        <h3>Problem: Can't save template</h3>
+        <p><strong>Solution:</strong> Check that:
+            <ul>
+                <li>Template has a name</li>
+                <li>HTML content is valid</li>
+                <li>You have proper permissions in your Mailgun account</li>
+            </ul>
+        </p>
+
+        <h3>Problem: Email looks broken</h3>
+        <p><strong>Solution:</strong> Make sure you copied the ENTIRE HTML file including the opening &lt;!DOCTYPE html&gt; and closing &lt;/html&gt; tags</p>
+
+        <h3>Problem: Test email not arriving</h3>
+        <p><strong>Solution:</strong> In sandbox mode, you can only send to authorized recipients. Add your email to the authorized list in Mailgun settings.</p>
+
+        <!-- Footer -->
+        <div style="margin-top: 50px; padding: 30px; background: #165e84; color: white; text-align: center; border-radius: 8px;">
+            <h3 style="color: white; margin-top: 0;">Need Help?</h3>
+            <p>If you have any questions or run into issues, you can:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li>📧 Contact Mailgun Support: <a href="https://help.mailgun.com/" style="color: #fef3c7;">help.mailgun.com</a></li>
+                <li>📖 Read Mailgun Documentation: <a href="https://documentation.mailgun.com/" style="color: #fef3c7;">documentation.mailgun.com</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
