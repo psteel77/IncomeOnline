@@ -935,15 +935,16 @@ const Home = () => {
 
           {/* CTA to unlock */}
           <div className="mt-12 text-center">
-            <Card className="bg-gradient-to-br from-teal-50 to-cyan-100 border-2 border-teal-300 shadow-lg max-w-2xl mx-auto">
+            <Card className="shadow-lg max-w-2xl mx-auto border-2" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
               <CardContent className="py-8">
-                <Lock className="h-12 w-12 text-teal-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-teal-800 mb-3">Unlock All 20+ Platforms</h3>
+                <Lock className="h-12 w-12 mx-auto mb-4" style={{ color: '#43ADD8' }} />
+                <h3 className="text-2xl font-bold mb-3" style={{ color: '#43ADD8' }}>Unlock All 20+ Platforms</h3>
                 <p className="text-slate-700 mb-6">
                   Get instant access to detailed information, direct links, ratings, reviews, and earning potential for every platform
                 </p>
                 <Button 
-                  className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg px-8 py-6"
+                  className="font-bold text-lg px-8 py-6"
+                  style={{ backgroundColor: '#43ADD8', color: 'white' }}
                   onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   Make a Donation to Unlock
