@@ -211,10 +211,11 @@ const Home = () => {
           {mobileMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 space-y-3">
               <a 
-                href="#categories" 
+                href="#categories-preview" 
                 onClick={(e) => { 
                   e.preventDefault(); 
-                  document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
+                  const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                  target?.scrollIntoView({ behavior: 'smooth' });
                   setMobileMenuOpen(false);
                 }}
                 className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
@@ -222,10 +223,11 @@ const Home = () => {
                 Categories
               </a>
               <a 
-                href="#platforms" 
+                href="#platforms-preview" 
                 onClick={(e) => { 
                   e.preventDefault(); 
-                  document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                  const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
+                  target?.scrollIntoView({ behavior: 'smooth' });
                   setMobileMenuOpen(false);
                 }}
                 className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
@@ -250,19 +252,10 @@ const Home = () => {
                   document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
                   setMobileMenuOpen(false);
                 }}
-                className="block text-yellow-300 hover:text-yellow-200 transition-colors font-bold py-2"
+                className="block text-yellow-300 hover:text-yellow-200 transition-colors font-bold py-2 text-lg"
               >
-                Donate
+                Get Started NOW
               </a>
-              <Button 
-                className="w-full bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold"
-                onClick={() => {
-                  document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
-                  setMobileMenuOpen(false);
-                }}
-              >
-                Get Started
-              </Button>
             </nav>
           )}
         </div>
