@@ -84,9 +84,9 @@ const AccessGate = () => {
                 <p className="text-slate-600 text-sm">
                   Join the Income Online community and get access to 20+ verified earning platforms
                 </p>
-                <Button className="w-full bg-teal-600 hover:bg-teal-700">
-                  Make a Donation
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button className="w-full bg-teal-600 hover:bg-teal-700 py-6 text-lg font-bold">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
             </div>
@@ -104,9 +104,9 @@ const AccessGate = () => {
                 <p className="text-slate-600 text-sm">
                   Already a member? Enter your email to receive your access link
                 </p>
-                <Button className="w-full bg-amber-600 hover:bg-amber-700">
+                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-6 text-lg font-bold">
                   Request Access Link
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </div>
             </div>
