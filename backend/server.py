@@ -377,6 +377,64 @@ async def add_donor(request: LoginRequest):
         logging.error(f"Error in add_donor: {str(e)}")
         return {"success": False, "message": str(e)}
 
+@api_router.post("/paypal/ipn")
+async def paypal_ipn(request: Request):
+    """Handle PayPal Instant Payment Notification"""
+    try:
+        # Get the raw body
+        body = await request.body()
+        
+        # Log the IPN for debugging
+        logging.info(f"PayPal IPN received: {body.decode()}")
+        
+        # Parse form data
+        form_data = await request.form()
+        
+        # Extract payer email
+        payer_email = form_data.get("payer_email") or form_data.get("receiver_email")
+        payment_status = form_data.get("payment_status")
+        txn_id = form_data.get("txn_id")
+        
+        logging.info(f"PayPal payment - Email: {payer_email}, Status: {payment_status}, TXN: {txn_id}")
+        
+        # Only process completed payments
+        if payment_status == "Completed" and payer_email:
+            email = payer_email.lower()
+            
+            # Check if user exists
+            existing_user = await db.users.find_one({"email": email})
+            
+            if existing_user:
+                # Update existing user
+                await db.users.update_one(
+                    {"email": email},
+                    {"$set": {"verified": True}}
+                )
+                logging.info(f"Updated existing donor: {email}")
+            else:
+                # Create new user and send email
+                verification_token = str(uuid.uuid4())
+                new_user = {
+                    "email": email,
+                    "verified": True,
+                    "verification_token": verification_token,
+                    "created_at": datetime.utcnow(),
+                    "last_login": None
+                }
+                
+                await db.users.insert_one(new_user)
+                
+                # Send welcome email with verification link
+                send_verification_email(email, verification_token)
+                
+                logging.info(f"Created new donor and sent email: {email}")
+        
+        return {"status": "success"}
+        
+    except Exception as e:
+        logging.error(f"Error in PayPal IPN: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
 # Include the routers in the main app
 app.include_router(api_router)
 app.include_router(cms_router, prefix="/api")
