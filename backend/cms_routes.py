@@ -10,16 +10,13 @@ from typing import Optional
 
 router = APIRouter(prefix="/cms")
 
-SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production-2024')
+SECRET_KEY = os.environ['JWT_SECRET_KEY']
 ALGORITHM = "HS256"
 ADMIN_TOKEN_EXPIRE_HOURS = 24
 
-# Default admin credentials (should be changed in production)
-DEFAULT_ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
-DEFAULT_ADMIN_PASSWORD_HASH = bcrypt.hashpw(
-    os.environ.get('ADMIN_PASSWORD', 'admin123').encode('utf-8'),
-    bcrypt.gensalt()
-)
+# Admin credentials from environment
+DEFAULT_ADMIN_USERNAME = os.environ['ADMIN_USERNAME']
+DEFAULT_ADMIN_PASSWORD_HASH = os.environ['ADMIN_PASSWORD_HASH'].encode('utf-8')
 
 def create_admin_token(username: str):
     """Create JWT token for admin user"""
