@@ -796,12 +796,9 @@ const Home = () => {
 
             {/* Dummy Platform 3 - YouTube */}
             <Card className="hover:shadow-xl transition-all duration-300 border-2 border-teal-200 relative overflow-hidden">
-              <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-bold z-10">
-                Preview
-              </div>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl font-bold text-teal-800">YouTube</CardTitle>
+                  <CardTitle className="text-xl font-bold text-teal-800" style={{ filter: 'blur(8px)', userSelect: 'none' }}>YouTube</CardTitle>
                   <Badge className="bg-purple-600">Content Creation</Badge>
                 </div>
                 <CardDescription className="text-slate-600 line-clamp-2">
