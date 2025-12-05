@@ -729,7 +729,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -765,7 +765,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -801,7 +801,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -837,7 +837,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -873,7 +873,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
@@ -909,7 +909,7 @@ const Home = () => {
               </CardHeader>
               <CardContent className="space-y-3 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8 text-teal-600" />
+                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
                 </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
