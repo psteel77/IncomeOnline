@@ -48,7 +48,9 @@ const Home = () => {
         setTimeout(() => {
           window.paypal.HostedButtons({
             hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-homepage").catch((error) => {
+          }).render("#paypal-container-homepage").then(() => {
+            console.log('PayPal button rendered successfully');
+          }).catch((error) => {
             console.log('PayPal button render error:', error);
           });
         }, 100);
