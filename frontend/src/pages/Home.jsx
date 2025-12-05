@@ -594,9 +594,6 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Dummy Category 1 - Freelancing */}
             <Card className="hover:shadow-xl transition-all duration-300 border-2 border-teal-200 bg-gradient-to-br from-white to-teal-50 relative overflow-hidden opacity-90">
-              <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                Preview
-              </div>
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
                   <CardTitle className="text-xl font-bold text-teal-800">Freelancing</CardTitle>
