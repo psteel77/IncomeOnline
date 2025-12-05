@@ -1195,30 +1195,99 @@ const Home = () => {
             <div>
               <h4 className="font-semibold mb-4">Categories</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white cursor-pointer transition-colors">Freelancing</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Surveys</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Content Creation</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Trading</li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => {
+                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Freelancing
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => {
+                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Surveys
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => {
+                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Content Creation
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => {
+                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Trading
+                </li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white cursor-pointer transition-colors">Getting Started</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Success Stories</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Blog</li>
-                <li className="hover:text-white cursor-pointer transition-colors">FAQ</li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Getting Started
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  Success Stories
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  Blog
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  FAQ
+                </li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-slate-400">
-                <li className="hover:text-white cursor-pointer transition-colors">About Us</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Contact</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Privacy Policy</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Terms of Service</li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  About Us
+                </li>
+                <li className="hover:text-white cursor-pointer transition-colors">
+                  <a href="mailto:welcome@incomeonline.info" className="hover:text-white">Contact</a>
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  Privacy Policy
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
+                  Terms of Service
+                </li>
               </ul>
             </div>
           </div>
