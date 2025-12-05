@@ -1,10 +1,15 @@
-from fastapi import FastAPI, APIRouter, Request, Header
 from dotenv import load_dotenv
+from pathlib import Path
+import os
+
+# Load environment variables FIRST before any other imports
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+from fastapi import FastAPI, APIRouter, Request, Header
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
 import logging
-from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid
@@ -14,10 +19,6 @@ from seed_data import categories_data, platforms_data
 from email_service import send_verification_email
 from cms_routes import router as cms_router
 from seed_content import content_sections
-
-
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
