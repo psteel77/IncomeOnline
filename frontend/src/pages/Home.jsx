@@ -745,7 +745,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
@@ -781,7 +781,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
@@ -817,7 +817,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
@@ -853,7 +853,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
@@ -889,7 +889,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
@@ -925,7 +925,7 @@ const Home = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600" disabled>
+                <Button variant="outline" className="w-full" style={{ borderColor: '#43ADD8', color: '#43ADD8' }} disabled>
                   <Lock className="mr-2 h-4 w-4" />
                   Unlock to Access
                 </Button>
