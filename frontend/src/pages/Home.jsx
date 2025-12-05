@@ -47,7 +47,7 @@ const Home = () => {
       if (window.paypal && window.paypal.HostedButtons) {
         setTimeout(() => {
           window.paypal.HostedButtons({
-            hostedButtonId: "8M5AKKB9LJW3S",
+            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
           }).render("#paypal-container-homepage").catch((error) => {
             console.log('PayPal button render error:', error);
           });
@@ -57,7 +57,7 @@ const Home = () => {
     }
 
     const script = document.createElement('script');
-    script.src = 'https://www.paypal.com/sdk/js?client-id=BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY&components=hosted-buttons&disable-funding=venmo&currency=GBP';
+    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&components=hosted-buttons&disable-funding=venmo&currency=GBP`;
     script.async = true;
     script.id = 'paypal-sdk-homepage';
     
