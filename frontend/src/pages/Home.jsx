@@ -1185,7 +1185,7 @@ const Home = () => {
               variant="outline" 
               className="bg-white hover:bg-white/90 border-2 transition-all duration-300 px-8"
               style={{ color: '#43ADD8', borderColor: '#43ADD8' }}
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => window.location.href = '/success-stories'}
             >
               Read Success Stories
             </Button>
