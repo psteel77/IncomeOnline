@@ -28,7 +28,7 @@ const Donate = () => {
       setTimeout(() => {
         if (window.paypal && window.paypal.HostedButtons) {
           window.paypal.HostedButtons({
-            hostedButtonId: "8M5AKKB9LJW3S",
+            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
           }).render("#paypal-container-8M5AKKB9LJW3S").catch((error) => {
             console.log('PayPal button render error:', error);
           });
