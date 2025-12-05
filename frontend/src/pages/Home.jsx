@@ -825,7 +825,7 @@ const Home = () => {
             </Card>
 
             {/* Dummy Platform 4 - Swagbucks */}
-            <Card className="hover:shadow-xl transition-all duration-300 border-2 border-teal-200 relative overflow-hidden">
+            <Card className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden" style={{ borderColor: '#43ADD8' }}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-xl font-bold text-teal-800" style={{ filter: 'blur(8px)', userSelect: 'none' }}>Swagbucks</CardTitle>
