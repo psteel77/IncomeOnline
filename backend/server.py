@@ -216,7 +216,7 @@ from auth_models import LoginRequest, VerifyRequest, AuthResponse, User
 from datetime import timedelta
 import jwt as pyjwt
 
-SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production-2024')
+SECRET_KEY = os.environ['JWT_SECRET_KEY']
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_HOURS = 720  # 30 days
 
