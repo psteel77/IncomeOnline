@@ -1261,7 +1261,7 @@ const Home = () => {
                 </li>
                 <li 
                   className="hover:text-white cursor-pointer transition-colors"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => window.location.href = '/success-stories'}
                 >
                   Success Stories
                 </li>
