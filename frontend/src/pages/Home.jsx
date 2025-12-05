@@ -666,9 +666,6 @@ const Home = () => {
 
             {/* Dummy Category 4 - E-commerce */}
             <Card className="hover:shadow-xl transition-all duration-300 border-2 border-teal-200 bg-gradient-to-br from-white to-green-50 relative overflow-hidden opacity-90">
-              <div className="absolute top-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                Preview
-              </div>
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
                   <CardTitle className="text-xl font-bold text-green-800">E-commerce</CardTitle>
