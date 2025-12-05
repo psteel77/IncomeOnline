@@ -7,6 +7,7 @@ import Donate from "./pages/Donate";
 import Verify from "./pages/Verify";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import SuccessStories from "./pages/SuccessStories";
 
 function App() {
   return (
