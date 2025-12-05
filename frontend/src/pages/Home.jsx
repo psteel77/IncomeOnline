@@ -1167,10 +1167,24 @@ const Home = () => {
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Your Online Earning Journey?</h2>
           <p className="text-xl text-emerald-50 mb-8">Join thousands of people already earning money online through our platform</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-white text-teal-600 hover:bg-teal-50 transition-all duration-300 hover:scale-105 px-8">
+            <Button 
+              size="lg" 
+              className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-8"
+              style={{ color: '#43ADD8' }}
+              onClick={() => {
+                const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
+                target?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Explore All Platforms
             </Button>
-            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-emerald-600 transition-all duration-300 px-8">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="bg-white hover:bg-white/90 border-2 transition-all duration-300 px-8"
+              style={{ color: '#43ADD8', borderColor: '#43ADD8' }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               Read Success Stories
             </Button>
           </div>
