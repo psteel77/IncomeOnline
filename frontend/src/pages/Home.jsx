@@ -158,17 +158,25 @@ const Home = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <nav className="flex space-x-6 lg:space-x-8 max-md:hidden">
+            <nav className="flex space-x-6 lg:space-x-8 max-md:hidden items-center">
               <a 
-                href="#categories" 
-                onClick={(e) => { e.preventDefault(); document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' }); }}
+                href="#categories-preview" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  const target = document.getElementById('categories-preview') || document.getElementById('categories');
+                  target?.scrollIntoView({ behavior: 'smooth' }); 
+                }}
                 className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
               >
                 Categories
               </a>
               <a 
-                href="#platforms" 
-                onClick={(e) => { e.preventDefault(); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }); }}
+                href="#platforms-preview" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
+                  target?.scrollIntoView({ behavior: 'smooth' }); 
+                }}
                 className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
               >
                 Platforms
@@ -183,19 +191,11 @@ const Home = () => {
               <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold cursor-pointer"
+                className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold text-lg cursor-pointer"
               >
-                Donate
+                Get Started NOW
               </a>
             </nav>
-
-            {/* Desktop Get Started Button */}
-            <Button 
-              className="max-md:hidden bg-yellow-500 hover:bg-yellow-400 text-teal-900 font-bold transition-all duration-300 hover:scale-105"
-              onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Get Started
-            </Button>
 
             {/* Mobile Menu Button */}
             <button
