@@ -610,7 +610,7 @@ const Home = () => {
             </Card>
 
             {/* Dummy Category 2 - Surveys & Research */}
-            <Card className="hover:shadow-xl transition-all duration-300 border-2 border-teal-200 bg-gradient-to-br from-white to-cyan-50 relative overflow-hidden opacity-90">
+            <Card className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden opacity-90" style={{ borderColor: '#43ADD8', background: 'linear-gradient(to bottom right, white, #e0f2fe)' }}>
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
                   <CardTitle className="text-xl font-bold text-cyan-800">Surveys & Research</CardTitle>
