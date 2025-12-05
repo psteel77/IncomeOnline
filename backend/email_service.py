@@ -84,7 +84,7 @@ def send_verification_email(email, verification_token):
     email_data = prepare_verification_email(email, verification_token)
     
     # Get frontend URL for verification link
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://workfinder-50.preview.emergentagent.com')
+    frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
     
     # Mailgun API endpoint
