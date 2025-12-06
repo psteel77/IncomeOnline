@@ -531,9 +531,14 @@ const Home = () => {
         <CategoryPreview />
       )}
 
-      {/* PLACEHOLDER_FOR_PLATFORMS_PREVIEW */}
+      {/* Preview Platforms Section - Show to unauthenticated users */}
       {!authLoading && !isAuthenticated && (
-      <section id="categories-preview-OLD" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
+        <PlatformPreview />
+      )}
+
+      {/* OLD CODE BELOW WILL BE DELETED */}
+      {false && (
+      <section id="platforms-preview-OLD" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse Categories OLD</h2>
