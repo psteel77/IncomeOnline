@@ -40,50 +40,6 @@ const Home = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // Load PayPal SDK for donation button
-    if (paypalLoaded.current) return;
-    
-    const existingScript = document.querySelector('script[src*="paypal.com/sdk"]');
-    if (existingScript) {
-      paypalLoaded.current = true;
-      if (window.paypal && window.paypal.HostedButtons) {
-        setTimeout(() => {
-          window.paypal.HostedButtons({
-            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-homepage").then(() => {
-            console.log('PayPal button rendered successfully');
-          }).catch((error) => {
-            console.log('PayPal button render error:', error);
-          });
-        }, 100);
-      }
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&components=hosted-buttons&disable-funding=venmo&currency=GBP`;
-    script.async = true;
-    script.id = 'paypal-sdk-homepage';
-    
-    script.onload = () => {
-      paypalLoaded.current = true;
-      setTimeout(() => {
-        if (window.paypal && window.paypal.HostedButtons) {
-          window.paypal.HostedButtons({
-            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-homepage").then(() => {
-            console.log('PayPal button rendered successfully');
-          }).catch((error) => {
-            console.log('PayPal button render error:', error);
-          });
-        }
-      }, 100);
-    };
-    
-    document.head.appendChild(script);
-  }, []);
-
   const fetchData = async () => {
     try {
       setLoading(true);
