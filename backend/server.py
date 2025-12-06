@@ -258,8 +258,8 @@ async def request_access(request: LoginRequest):
                     {"$set": {"verification_token": verification_token}}
                 )
                 
-                # Send verification email with template
-                send_verification_email(email, verification_token)
+                # Send Email Template 2 (Welcome back!) for RETURNING users
+                send_returning_user_email(email, verification_token)
                 
                 return {
                     "success": True,
