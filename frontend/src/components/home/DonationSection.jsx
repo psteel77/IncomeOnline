@@ -161,7 +161,7 @@ const DonationSection = () => {
                 
                 {/* PayPal Button */}
                 <div className="flex justify-center items-center min-h-[60px]">
-                  <div id="paypal-container-homepage" className="w-full max-w-md"></div>
+                  <div id="paypal-container-donation" className="w-full max-w-md"></div>
                 </div>
               </div>
 
