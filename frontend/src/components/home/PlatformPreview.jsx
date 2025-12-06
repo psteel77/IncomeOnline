@@ -25,6 +25,15 @@ const PlatformPreview = () => {
       difficulty: 'Easy'
     },
     {
+      name: 'Freelancer',
+      category: 'Freelancing',
+      categoryColor: 'teal',
+      description: 'Compete for projects and build your freelance career',
+      rating: '4.1/5',
+      earning: '$300-$8,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
       name: 'YouTube',
       category: 'Content Creation',
       categoryColor: 'purple',
@@ -34,12 +43,48 @@ const PlatformPreview = () => {
       difficulty: 'Hard'
     },
     {
+      name: 'Medium',
+      category: 'Content Creation',
+      categoryColor: 'purple',
+      description: 'Write articles and earn from the Partner Program',
+      rating: '4.3/5',
+      earning: '$100-$2,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
+      name: 'TikTok',
+      category: 'Content Creation',
+      categoryColor: 'purple',
+      description: 'Create short videos and monetize through Creator Fund',
+      rating: '4.5/5',
+      earning: '$500-$20,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
       name: 'Swagbucks',
       category: 'Surveys',
       categoryColor: 'cyan',
       description: 'Complete surveys and tasks to earn rewards and cash',
       rating: '4.2/5',
       earning: '$50-$300/mo',
+      difficulty: 'Easy'
+    },
+    {
+      name: 'Survey Junkie',
+      category: 'Surveys',
+      categoryColor: 'cyan',
+      description: 'Share your opinions through paid online surveys',
+      rating: '4.3/5',
+      earning: '$40-$200/mo',
+      difficulty: 'Easy'
+    },
+    {
+      name: 'Prolific',
+      category: 'Surveys',
+      categoryColor: 'cyan',
+      description: 'Participate in academic research studies for pay',
+      rating: '4.6/5',
+      earning: '$100-$400/mo',
       difficulty: 'Easy'
     },
     {
@@ -59,6 +104,87 @@ const PlatformPreview = () => {
       rating: '4.6/5',
       earning: '$1,000-$20,000+/mo',
       difficulty: 'Hard'
+    },
+    {
+      name: 'eBay',
+      category: 'E-commerce',
+      categoryColor: 'green',
+      description: 'Sell new or used items on the global marketplace',
+      rating: '4.2/5',
+      earning: '$300-$8,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
+      name: 'Shopify',
+      category: 'E-commerce',
+      categoryColor: 'green',
+      description: 'Build your own online store and sell products',
+      rating: '4.5/5',
+      earning: '$500-$50,000+/mo',
+      difficulty: 'Hard'
+    },
+    {
+      name: 'VIPKid',
+      category: 'Teaching',
+      categoryColor: 'blue',
+      description: 'Teach English to Chinese students online',
+      rating: '4.4/5',
+      earning: '$1,000-$3,000/mo',
+      difficulty: 'Medium'
+    },
+    {
+      name: 'Udemy',
+      category: 'Teaching',
+      categoryColor: 'blue',
+      description: 'Create and sell online courses on any topic',
+      rating: '4.3/5',
+      earning: '$200-$10,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
+      name: 'Teachable',
+      category: 'Teaching',
+      categoryColor: 'blue',
+      description: 'Host and sell courses on your own platform',
+      rating: '4.5/5',
+      earning: '$500-$20,000+/mo',
+      difficulty: 'Medium'
+    },
+    {
+      name: 'TaskRabbit',
+      category: 'Gig Economy',
+      categoryColor: 'amber',
+      description: 'Offer local services like handyman work and delivery',
+      rating: '4.2/5',
+      earning: '$500-$3,000/mo',
+      difficulty: 'Easy'
+    },
+    {
+      name: 'Uber',
+      category: 'Gig Economy',
+      categoryColor: 'amber',
+      description: 'Drive and earn on your own schedule',
+      rating: '4.1/5',
+      earning: '$800-$4,000/mo',
+      difficulty: 'Easy'
+    },
+    {
+      name: 'DoorDash',
+      category: 'Gig Economy',
+      categoryColor: 'amber',
+      description: 'Deliver food and earn flexible income',
+      rating: '4.0/5',
+      earning: '$600-$2,500/mo',
+      difficulty: 'Easy'
+    },
+    {
+      name: 'Airbnb',
+      category: 'Gig Economy',
+      categoryColor: 'amber',
+      description: 'Rent out your space to travelers worldwide',
+      rating: '4.6/5',
+      earning: '$500-$10,000+/mo',
+      difficulty: 'Medium'
     }
   ];
 
