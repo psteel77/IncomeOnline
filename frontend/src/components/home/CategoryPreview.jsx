@@ -35,6 +35,38 @@ const CategoryPreview = () => {
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
       platforms: ['Etsy', 'Amazon FBA', 'eBay', 'And more...']
+    },
+    {
+      title: 'Teaching & Tutoring',
+      icon: Star,
+      color: 'blue',
+      description: 'Share your knowledge and teach students online',
+      subtitle: 'Make an impact:',
+      platforms: ['VIPKid', 'Teachable', 'Udemy', 'And more...']
+    },
+    {
+      title: 'Trading & Investing',
+      icon: TrendingUp,
+      color: 'indigo',
+      description: 'Invest in stocks, crypto, and other assets',
+      subtitle: 'Build wealth:',
+      platforms: ['eToro', 'Robinhood', 'Coinbase', 'And more...']
+    },
+    {
+      title: 'Remote Jobs',
+      icon: Star,
+      color: 'rose',
+      description: 'Find full-time remote work opportunities',
+      subtitle: 'Stable income:',
+      platforms: ['Remote.co', 'We Work Remotely', 'FlexJobs', 'And more...']
+    },
+    {
+      title: 'Gig Economy',
+      icon: TrendingUp,
+      color: 'amber',
+      description: 'Take on flexible gigs and side hustles',
+      subtitle: 'Extra income:',
+      platforms: ['TaskRabbit', 'Uber', 'DoorDash', 'And more...']
     }
   ];
 
