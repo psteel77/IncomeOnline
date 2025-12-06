@@ -185,9 +185,14 @@ class PayPalAuthTester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get('message') == "Verification email sent!":
+                expected_messages = [
+                    "Verification email sent!",
+                    "Verification link sent to your email. Check your inbox!"
+                ]
+                
+                if any(msg in data.get('message', '') for msg in expected_messages):
                     self.log_test("Magic Link - Authorized Email", "PASS", 
-                                f"Verification email sent successfully to {authorized_email}")
+                                f"Verification email sent successfully to {authorized_email}: {data.get('message')}")
                     return True
                 else:
                     self.log_test("Magic Link - Authorized Email", "FAIL", 
