@@ -110,11 +110,10 @@ Questions? Contact us at welcome@incomeonline.info
         '''
     }
 
-def send_verification_email(email, verification_token):
+def send_new_user_email(email, verification_token):
     """
-    Send verification email to user using Mailgun API
+    Send Email Template 1 (Welcome!) to NEW users after PayPal donation
     """
-    # Get Mailgun credentials
     api_key = os.environ.get('MAILGUN_API_KEY')
     domain = os.environ.get('MAILGUN_DOMAIN')
     sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
@@ -123,18 +122,15 @@ def send_verification_email(email, verification_token):
         logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
         return False
     
-    # Prepare email content
-    email_data = prepare_verification_email(email, verification_token)
+    # Prepare Email Template 1
+    email_data = prepare_new_user_email(email, verification_token)
     
-    # Get frontend URL for verification link
     frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
     
-    # Mailgun API endpoint
     api_url = f"https://api.mailgun.net/v3/{domain}/messages"
     
     try:
-        # Send email via Mailgun
         response = requests.post(
             api_url,
             auth=("api", api_key),
@@ -152,7 +148,59 @@ def send_verification_email(email, verification_token):
         result = response.json()
         message_id = result.get('id', 'unknown')
         
-        logger.info(f"✅ Verification email sent via Mailgun to {email}. Message ID: {message_id}")
+        logger.info(f"✅ Email Template 1 (NEW user) sent via Mailgun to {email}. Message ID: {message_id}")
+        logger.info(f"Verification link: {verification_link}")
+        
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        logger.error(f"❌ Failed to send email via Mailgun: {str(e)}")
+        if hasattr(e, 'response') and e.response is not None:
+            logger.error(f"Response: {e.response.text}")
+        return False
+    except Exception as e:
+        logger.error(f"❌ Unexpected error sending email: {str(e)}")
+        return False
+
+def send_returning_user_email(email, verification_token):
+    """
+    Send Email Template 2 (Welcome back!) to RETURNING users requesting magic link
+    """
+    api_key = os.environ.get('MAILGUN_API_KEY')
+    domain = os.environ.get('MAILGUN_DOMAIN')
+    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
+    
+    if not api_key or not domain:
+        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
+        return False
+    
+    # Prepare Email Template 2
+    email_data = prepare_returning_user_email(email, verification_token)
+    
+    frontend_url = os.environ['FRONTEND_URL']
+    verification_link = f"{frontend_url}/verify?token={verification_token}"
+    
+    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
+    
+    try:
+        response = requests.post(
+            api_url,
+            auth=("api", api_key),
+            data={
+                "from": f"Income Online <{sender_email}>",
+                "to": email,
+                "subject": email_data['subject'],
+                "html": email_data['html'],
+                "text": email_data['text']
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        
+        result = response.json()
+        message_id = result.get('id', 'unknown')
+        
+        logger.info(f"✅ Email Template 2 (RETURNING user) sent via Mailgun to {email}. Message ID: {message_id}")
         logger.info(f"Verification link: {verification_link}")
         
         return True
