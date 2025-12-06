@@ -17,8 +17,8 @@ ADMIN_TOKEN_EXPIRE_HOURS = 24
 # Admin credentials from environment with fallback
 DEFAULT_ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 
-# Fallback password hash for "MyIncome2025" - works even if env var is missing/corrupted
-FALLBACK_PASSWORD_HASH = b'$2b$12$EVgGWuCCxkeKCjxuILM8Quak6RS/Msldmw.0ASniHLrA7lDGIqjMe'
+# Fallback password hash for "admin123" - works even if env var is missing/corrupted
+FALLBACK_PASSWORD_HASH = b'$2b$12$pcudyiYlj4eWmnRoeWgmFeOnzUG/aKiOWETiODdYhSEnbTC7wVif6'
 
 try:
     # Try to get password hash from environment
