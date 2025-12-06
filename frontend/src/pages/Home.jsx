@@ -7,6 +7,10 @@ import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2,
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import AccessGate from '../components/AccessGate';
+import HeroSection from '../components/home/HeroSection';
+import CategoryPreview from '../components/home/CategoryPreview';
+import PlatformPreview from '../components/home/PlatformPreview';
+import DonationSection from '../components/home/DonationSection';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
