@@ -6,7 +6,7 @@ Your Income Online platform now includes a powerful Content Management System th
 ## Admin Access
 
 ### Login Credentials
-- **URL:** https://workfinder-50.preview.emergentagent.com/admin/login
+- **URL:** https://earnhub-8.preview.emergentagent.com/admin/login
 - **Username:** `admin`
 - **Password:** `admin123`
 
