@@ -977,11 +977,15 @@ const Home = () => {
       )}
 
       {/* Donation Section - Always visible */}
-      <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <DonationSection />
+
+      {/* OLD DONATION CODE - WILL BE REMOVED */}
+      {false && (
+      <section id="support-OLD" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-6">
-              Support Income Online
+              Support Income Online OLD
             </h2>
             <p className="text-xl md:text-2xl text-slate-700 mb-6 max-w-3xl mx-auto leading-relaxed">
               Help us keep this directory up-to-date for everyone
