@@ -424,10 +424,10 @@ async def paypal_ipn(request: Request):
                 
                 await db.users.insert_one(new_user)
                 
-                # Send welcome email with verification link
-                send_verification_email(email, verification_token)
+                # Send Email Template 1 (Welcome!) for NEW donors
+                send_new_user_email(email, verification_token)
                 
-                logging.info(f"Created new donor and sent email: {email}")
+                logging.info(f"Created new donor and sent Email Template 1: {email}")
         
         return {"status": "success"}
         
