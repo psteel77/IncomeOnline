@@ -528,10 +528,15 @@ const Home = () => {
 
       {/* Preview Categories Section - Show to unauthenticated users */}
       {!authLoading && !isAuthenticated && (
-      <section id="categories-preview" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
+        <CategoryPreview />
+      )}
+
+      {/* PLACEHOLDER_FOR_PLATFORMS_PREVIEW */}
+      {!authLoading && !isAuthenticated && (
+      <section id="categories-preview-OLD" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse Categories</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse Categories OLD</h2>
             <p className="text-lg text-slate-600 mb-2">8 earning categories with 20+ verified platforms</p>
             <p className="text-sm text-amber-600 font-semibold">Unlock full access with a donation</p>
           </div>
