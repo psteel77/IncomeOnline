@@ -276,6 +276,21 @@ backend:
         agent: "testing"
         comment: "✅ COMPREHENSIVE PAYPAL & AUTH FLOW TEST PASSED: All requested test scenarios successful - (1) PayPal IPN Webhook: POST /api/paypal/ipn processes completed payments correctly, creates new users with verified=true, logs detailed payment information, handles pending payments and duplicate transactions properly, (2) Magic Link Authentication: POST /api/auth/request-access works correctly for authorized emails (paul-steel@outlook.com), sends verification emails via Mailgun, rejects unauthorized emails appropriately, (3) Auth Status Check: GET /api/auth/check returns authenticated=false for unauthenticated requests, (4) Database Operations: Users created via PayPal IPN have verified=true immediately, verification tokens work correctly, (5) Email Service: Mailgun integration working for authorized sandbox emails (avatarps1977@gmail.com, paul-steel@outlook.com, welcome@incomeonline.info), fails gracefully for unauthorized emails (expected behavior), (6) Edge Cases: Invalid tokens rejected, empty/invalid emails handled properly, idempotency working. Complete PayPal donation to user verification flow working perfectly."
 
+  - task: "Email Templates System (Template 1 & Template 2)"
+    implemented: true
+    working: true
+    file: "/app/backend/email_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Email templates system implemented with Template 1 (New PayPal Donor) and Template 2 (Returning User Magic Link) using HTML templates and proper subject lines"
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE EMAIL TEMPLATES TEST PASSED: All email template scenarios working correctly - (1) EMAIL TEMPLATE 1 (New PayPal Donor): PayPal IPN with payment_status=Completed sends Template 1 with subject 'Welcome to Income Online!' using template_1_new_user.html (contains 'Welcome!' message), backend logs show 'Email Template 1 (NEW user) sent', (2) EMAIL TEMPLATE 2 (Returning User Magic Link): POST /api/auth/request-access for existing authorized user sends Template 2 with subject 'Welcome Back to Income Online!' using template_2_returning_user.html (contains 'Welcome back!' message), backend logs show 'Email Template 2 (RETURNING user) sent', (3) EDGE CASE: PayPal IPN for existing user only updates verified status without sending new email (correct behavior), (4) SUBJECT VERIFICATION: Both templates use correct subjects and HTML content, (5) MAILGUN INTEGRATION: Only authorized emails can receive messages, proper template distinction in backend logs. Created /app/backend/tests/test_email_templates.py for automated testing."
+
 frontend:
   - task: "Admin CMS Login System"
     implemented: true
