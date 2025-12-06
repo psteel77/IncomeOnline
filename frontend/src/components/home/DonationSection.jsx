@@ -1,7 +1,53 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 
 const DonationSection = () => {
+  const paypalLoaded = useRef(false);
+
+  useEffect(() => {
+    // Load PayPal SDK for donation button
+    if (paypalLoaded.current) return;
+    
+    const existingScript = document.querySelector('script[src*="paypal.com/sdk"]');
+    if (existingScript) {
+      paypalLoaded.current = true;
+      if (window.paypal && window.paypal.HostedButtons) {
+        setTimeout(() => {
+          window.paypal.HostedButtons({
+            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
+          }).render("#paypal-container-donation").then(() => {
+            console.log('PayPal donation button rendered successfully');
+          }).catch((error) => {
+            console.log('PayPal donation button render error:', error);
+          });
+        }, 100);
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&components=hosted-buttons&disable-funding=venmo&currency=GBP`;
+    script.async = true;
+    script.id = 'paypal-sdk-donation';
+    
+    script.onload = () => {
+      paypalLoaded.current = true;
+      setTimeout(() => {
+        if (window.paypal && window.paypal.HostedButtons) {
+          window.paypal.HostedButtons({
+            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
+          }).render("#paypal-container-donation").then(() => {
+            console.log('PayPal donation button rendered successfully');
+          }).catch((error) => {
+            console.log('PayPal donation button render error:', error);
+          });
+        }
+      }, 100);
+    };
+    
+    document.head.appendChild(script);
+  }, []);
+
   return (
     <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-6xl mx-auto">
