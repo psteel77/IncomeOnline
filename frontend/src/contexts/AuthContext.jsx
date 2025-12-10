@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('auth_token'));
 
   useEffect(() => {
+    console.log('AuthContext: Token changed, checking auth. Token:', token?.substring(0, 20));
     checkAuth();
   }, [token]);
 
