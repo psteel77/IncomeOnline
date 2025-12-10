@@ -30,15 +30,24 @@ const Verify = () => {
   const verifyToken = async (token) => {
     try {
       const response = await axios.get(`${API}/auth/verify/${token}`);
+      console.log('Verification response:', response.data);
 
       if (response.data.success && response.data.token) {
         setStatus('success');
         setMessage(response.data.message);
+        
+        // Save token to localStorage IMMEDIATELY
+        localStorage.setItem('auth_token', response.data.token);
+        console.log('Token saved to localStorage:', response.data.token.substring(0, 50));
+        
+        // Call login to update context
         login(response.data.token);
+        console.log('Login function called');
         
         // Redirect to homepage after 2 seconds
         setTimeout(() => {
-          navigate('/');
+          console.log('Navigating to homepage...');
+          navigate('/', { replace: true });
         }, 2000);
       } else {
         setStatus('error');
