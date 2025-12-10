@@ -18,7 +18,7 @@ const CategoryPreview = () => {
       color: 'cyan',
       description: 'Share your opinions and get paid for your insights',
       subtitle: 'Quick ROI opportunity:',
-      platforms: ['Swagbucks', 'Survey Junkie', 'User Testing', 'And more...']
+      platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
     },
     {
       title: 'Content Creation',
