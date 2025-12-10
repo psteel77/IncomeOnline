@@ -293,13 +293,12 @@ async def verify_email(token: str):
         if not user:
             return {"success": False, "message": "Invalid or expired verification link"}
         
-        # Update user's last login
+        # Update user's last login (keep verification_token for reuse)
         await db.users.update_one(
             {"email": user['email']},
             {
                 "$set": {
-                    "last_login": datetime.utcnow(),
-                    "verification_token": None
+                    "last_login": datetime.utcnow()
                 }
             }
         )
