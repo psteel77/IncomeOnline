@@ -63,8 +63,8 @@ categories_data = [
         "id": 7,
         "name": "Remote Jobs",
         "description": "Find full-time or part-time remote employment",
-        "count": 3,
-        "totalOpportunities": "2M+ jobs",
+        "count": 5,
+        "totalOpportunities": "3M+ jobs",
         "color": "from-slate-50 to-gray-50",
         "borderColor": "border-slate-200",
         "textColor": "text-slate-700"
@@ -73,8 +73,8 @@ categories_data = [
         "id": 8,
         "name": "Gig Economy",
         "description": "Complete short tasks and micro-jobs for quick cash",
-        "count": 1,
-        "totalOpportunities": "100K+ tasks",
+        "count": 2,
+        "totalOpportunities": "200K+ tasks",
         "color": "from-yellow-50 to-amber-50",
         "borderColor": "border-yellow-200",
         "textColor": "text-yellow-700"
