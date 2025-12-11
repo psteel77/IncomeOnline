@@ -60,17 +60,17 @@ const AccessGate = () => {
 
   if (!userType) {
     return (
-      <Card className="max-w-2xl mx-auto bg-white border-2 border-teal-300 shadow-xl">
-        <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white">
-          <CardTitle className="text-3xl text-teal-800 mb-2">
+      <Card className="max-w-2xl mx-auto bg-white border-2 border-teal-300 shadow-xl mx-2 sm:mx-auto">
+        <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white px-4 sm:px-6">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl text-teal-800 mb-2">
             Access the Income Online Community
           </CardTitle>
-          <CardDescription className="text-lg text-slate-700">
+          <CardDescription className="text-base sm:text-lg text-slate-700">
             Choose your access type below
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8">
-          <div className="grid md:grid-cols-2 gap-6">
+        <CardContent className="p-4 sm:p-6 md:p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* New User Card */}
             <div 
               className="border-2 border-teal-200 rounded-xl p-6 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-teal-50"
