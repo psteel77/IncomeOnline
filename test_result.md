@@ -291,6 +291,18 @@ backend:
         agent: "testing"
         comment: "✅ COMPREHENSIVE EMAIL TEMPLATES TEST PASSED: All email template scenarios working correctly - (1) EMAIL TEMPLATE 1 (New PayPal Donor): PayPal IPN with payment_status=Completed sends Template 1 with subject 'Welcome to Income Online!' using template_1_new_user.html (contains 'Welcome!' message), backend logs show 'Email Template 1 (NEW user) sent', (2) EMAIL TEMPLATE 2 (Returning User Magic Link): POST /api/auth/request-access for existing authorized user sends Template 2 with subject 'Welcome Back to Income Online!' using template_2_returning_user.html (contains 'Welcome back!' message), backend logs show 'Email Template 2 (RETURNING user) sent', (3) EDGE CASE: PayPal IPN for existing user only updates verified status without sending new email (correct behavior), (4) SUBJECT VERIFICATION: Both templates use correct subjects and HTML content, (5) MAILGUN INTEGRATION: Only authorized emails can receive messages, proper template distinction in backend logs. Created /app/backend/tests/test_email_templates.py for automated testing."
 
+  - task: "Production Deployment Verification"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 1
+    priority: "critical"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL PRODUCTION OUTAGE: Backend API server completely down on live domain https://www.incomeonline.info. Frontend React app loads correctly (HTTP 200) but ALL backend endpoints return Cloudflare Error 520 'Web server is returning an unknown error'. This indicates the FastAPI backend server is not running or misconfigured on production. All core functionality broken: CMS admin login, authentication flow, PayPal webhooks, platform data retrieval. IMMEDIATE ACTION REQUIRED: Production backend server needs restart/fix. Cloudflare Ray IDs: 9ac6174356a9615d, 9ac617448b1861d9."
+
 frontend:
   - task: "Admin CMS Login System"
     implemented: true
