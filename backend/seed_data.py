@@ -73,7 +73,7 @@ categories_data = [
         "id": 8,
         "name": "Gig Economy",
         "description": "Complete short tasks and micro-jobs for quick cash",
-        "count": 3,
+        "count": 2,
         "totalOpportunities": "200K+ tasks",
         "color": "from-yellow-50 to-amber-50",
         "borderColor": "border-yellow-200",
