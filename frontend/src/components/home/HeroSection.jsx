@@ -54,11 +54,11 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
 
         {/* Stats - Show only when authenticated */}
         {!authLoading && isAuthenticated && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-4xl mx-auto px-2">
           {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-              <div className="text-3xl font-bold text-yellow-600 mb-2">{stat.value}</div>
-              <div className="text-sm text-slate-600">{stat.label}</div>
+            <div key={index} className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600 mb-1 sm:mb-2">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-slate-600">{stat.label}</div>
             </div>
           ))}
         </div>
