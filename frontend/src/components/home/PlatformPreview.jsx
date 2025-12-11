@@ -245,7 +245,7 @@ const PlatformPreview = () => {
               <Lock className="h-12 w-12 mx-auto mb-4" style={{ color: '#43ADD8' }} />
               <h3 className="text-2xl font-bold mb-3" style={{ color: '#43ADD8' }}>Unlock All Platform Details</h3>
               <p className="text-slate-700 mb-6">
-                Get full access to detailed information, ratings, direct links, and earning strategies for all 20+ platforms
+                Get full access to detailed information, ratings, direct links, and earning strategies for all 50+ platforms
               </p>
               <Button 
                 className="font-bold text-lg px-8 py-6"
