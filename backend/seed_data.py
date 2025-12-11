@@ -23,7 +23,7 @@ categories_data = [
         "id": 3,
         "name": "Content Creation",
         "description": "Create videos, blogs, and content for income",
-        "count": 2,
+        "count": 13,
         "totalOpportunities": "Unlimited opportunities",
         "color": "from-orange-50 to-amber-50",
         "borderColor": "border-orange-200",
