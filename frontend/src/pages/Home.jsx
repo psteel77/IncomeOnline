@@ -352,19 +352,19 @@ const Home = () => {
 
       {/* All Platforms Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
-      <section id="platforms" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
+      <section id="platforms" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
             <div>
-              <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">{content.platforms_all?.title || 'All Platforms'}</h2>
-              <p className="text-lg text-slate-600">{isAuthenticated ? `Showing ${filteredPlatforms.length} platforms` : (content.platforms_all?.subtitle || 'Explore our comprehensive directory and find opportunities that match your skills and interests.')}</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2">{content.platforms_all?.title || 'All Platforms'}</h2>
+              <p className="text-sm sm:text-base md:text-lg text-slate-600">{isAuthenticated ? `Showing ${filteredPlatforms.length} platforms` : (content.platforms_all?.subtitle || 'Explore our comprehensive directory and find opportunities that match your skills and interests.')}</p>
             </div>
-            <div className="flex items-center space-x-3">
-              <Filter className="h-5 w-5 text-slate-500" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500" />
               <select 
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border-2 border-slate-200 rounded-lg focus:border-emerald-500 focus:outline-none"
+                className="px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-slate-200 rounded-lg focus:border-emerald-500 focus:outline-none w-full sm:w-auto"
               >
                 <option value="All">All Categories</option>
                 {categories.map(cat => (
