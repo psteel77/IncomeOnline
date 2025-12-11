@@ -3,8 +3,8 @@ categories_data = [
         "id": 1,
         "name": "Freelancing",
         "description": "Offer your skills and services to clients worldwide",
-        "count": 2,
-        "totalOpportunities": "3M+ jobs",
+        "count": 5,
+        "totalOpportunities": "5M+ jobs",
         "color": "from-emerald-50 to-teal-50",
         "borderColor": "border-emerald-200",
         "textColor": "text-emerald-700"
