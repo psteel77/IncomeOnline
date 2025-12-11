@@ -10,7 +10,7 @@ const CategoryPreview = () => {
       icon: TrendingUp,
       color: 'teal',
       description: 'Offer your skills and services to clients worldwide',
-      platforms: ['Upwork', 'Fiverr', 'Freelancer.co.uk', 'And 2 more...']
+      platforms: ['Upwork', 'Fiverr', 'Toptal', 'And 2 more...']
     },
     {
       title: 'Surveys & Research',
@@ -18,7 +18,7 @@ const CategoryPreview = () => {
       color: 'cyan',
       description: 'Share your opinions and get paid for your insights',
       subtitle: 'Quick ROI opportunity:',
-      platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 20 more...']
+      platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
     },
     {
       title: 'Content Creation',
@@ -26,7 +26,7 @@ const CategoryPreview = () => {
       color: 'purple',
       description: 'Create videos, write articles, or produce content',
       subtitle: 'High earning potential:',
-      platforms: ['YouTube', 'Behance', 'Dribbble', 'And 10 more...']
+      platforms: ['YouTube', 'Twitch', 'TikTok', 'And 11 more...']
     },
     {
       title: 'E-commerce',
@@ -34,7 +34,7 @@ const CategoryPreview = () => {
       color: 'green',
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
-      platforms: ['Etsy', 'Amazon FBA', 'eBay', 'And more...']
+      platforms: ['Amazon FBA', 'Etsy']
     },
     {
       title: 'Teaching & Tutoring',
@@ -42,7 +42,7 @@ const CategoryPreview = () => {
       color: 'blue',
       description: 'Share your knowledge and teach students online',
       subtitle: 'Make an impact:',
-      platforms: ['VIPKid', 'Teachable', 'Udemy', 'And more...']
+      platforms: ['VIPKid', 'Udemy']
     },
     {
       title: 'Trading & Investing',
@@ -50,7 +50,7 @@ const CategoryPreview = () => {
       color: 'indigo',
       description: 'Invest in stocks, crypto, and other assets',
       subtitle: 'Build wealth:',
-      platforms: ['eToro', 'Robinhood', 'Coinbase', 'And more...']
+      platforms: ['Coinbase']
     },
     {
       title: 'Remote Jobs',
@@ -58,7 +58,7 @@ const CategoryPreview = () => {
       color: 'rose',
       description: 'Find full-time remote work opportunities',
       subtitle: 'Stable income:',
-      platforms: ['FlexJobs', 'ZipRecruiter', 'Toptal', 'And 2 more...']
+      platforms: ['FlexJobs', 'Indeed', 'Reed.co.uk', 'And 2 more...']
     },
     {
       title: 'Gig Economy',
@@ -66,7 +66,7 @@ const CategoryPreview = () => {
       color: 'amber',
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
-      platforms: ['TaskRabbit', 'SolidGigs', 'And more...']
+      platforms: ['TaskRabbit', 'Instacart']
     }
   ];
 
