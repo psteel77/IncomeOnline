@@ -683,22 +683,22 @@ const Home = () => {
               <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Company</h4>
               <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   About Us
                 </li>
-                <li className="hover:text-white cursor-pointer transition-colors">
+                <li className="hover:text-white cursor-pointer transition-colors py-1">
                   <a href="mailto:welcome@incomeonline.info" className="hover:text-white">Contact</a>
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   Privacy Policy
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   Terms of Service
