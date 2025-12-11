@@ -707,7 +707,7 @@ const Home = () => {
             </div>
           </div>
           
-          <div className="border-t border-teal-700 pt-8 text-center text-sm text-slate-200">
+          <div className="border-t border-teal-700 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-slate-200">
             <p>{content.footer?.copyright || '© 2025 Income Online. All rights reserved.'}</p>
           </div>
         </div>
