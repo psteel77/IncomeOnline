@@ -368,7 +368,7 @@ async def add_donor(request: LoginRequest):
             await db.users.insert_one(new_user)
             
             # Send welcome email to donor with verification link
-            send_verification_email(email, verification_token)
+            send_new_user_email(email, verification_token)
             
             return {"success": True, "message": "Donor added successfully"}
             
