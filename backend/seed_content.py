@@ -16,7 +16,7 @@ content_sections = [
             "title": "Support Our Mission",
             "description": "Make a donation to unlock access to all earning platforms with detailed information, ratings, and direct links.",
             "features": [
-                "Access to 20+ verified earning platforms with detailed information",
+                "Access to 50+ verified earning platforms with detailed information",
                 "Ratings, reviews, and earning potential for each platform",
                 "Direct links to start earning immediately",
                 "Search and filter tools to find your perfect opportunity",
@@ -53,7 +53,7 @@ content_sections = [
             "title": "Featured Platforms",
             "subtitle": "Top-rated opportunities to start earning today",
             "locked_title": "🔒 Platforms Locked",
-            "locked_description": "Support us with a donation to unlock full access to all 20+ earning platforms with detailed reviews and direct links."
+            "locked_description": "Support us with a donation to unlock full access to all 50+ earning platforms with detailed reviews and direct links."
         }
     },
     {
