@@ -82,7 +82,7 @@ const AccessGate = () => {
                 </div>
                 <h3 className="text-xl font-bold text-teal-800 mb-4">New User</h3>
                 <p className="text-slate-600 text-sm mb-4 flex-grow">
-                  Join the Income Online community and get access to 20+ verified earning platforms
+                  Join the Income Online community and get access to 50+ verified earning platforms
                 </p>
                 <Button className="w-full bg-teal-600 hover:bg-teal-700 py-6 text-lg font-bold mt-auto">
                   Get Started

@@ -75,7 +75,7 @@ const CategoryPreview = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse Categories</h2>
-          <p className="text-lg text-slate-600 mb-2">8 earning categories with 20+ verified platforms</p>
+          <p className="text-lg text-slate-600 mb-2">8 earning categories with 50+ verified platforms</p>
           <p className="text-sm text-amber-600 font-semibold">Unlock full access with a donation</p>
         </div>
         
