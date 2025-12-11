@@ -22,10 +22,10 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
         </div>
       </div>
       <div className="max-w-7xl mx-auto text-center relative z-10">
-        <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-500 mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-500 mb-4 sm:mb-6 leading-tight px-2">
           {content.hero?.title || 'Discover the Best Ways to Earn Money Online'}
         </h1>
-        <p className="text-xl text-slate-600 mb-12 max-w-3xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
           {content.hero?.subtitle || 'Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.'}
         </p>
         
