@@ -653,25 +653,25 @@ const Home = () => {
               <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Resources</h4>
               <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   Getting Started
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => window.location.href = '/success-stories'}
                 >
                   Success Stories
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   Blog
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   FAQ
