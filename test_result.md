@@ -476,10 +476,12 @@ metadata:
   run_ui: true
 
 test_plan:
-  current_focus: []
-  stuck_tasks: []
+  current_focus:
+    - "Production Deployment Verification"
+  stuck_tasks:
+    - "Production Deployment Verification"
   test_all: false
-  test_priority: "completed"
+  test_priority: "critical_first"
 
 agent_communication:
   - agent: "main"
