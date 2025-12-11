@@ -608,8 +608,8 @@ const Home = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Categories</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Categories</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
                 <li 
                   className="hover:text-white cursor-pointer transition-colors"
                   onClick={() => {
