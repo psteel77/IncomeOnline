@@ -570,7 +570,7 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Button 
               size="lg" 
-              className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-8"
+              className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-6 sm:px-8 w-full sm:w-auto"
               style={{ color: '#43ADD8' }}
               onClick={() => {
                 const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
@@ -582,7 +582,7 @@ const Home = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-white hover:bg-white/90 border-2 transition-all duration-300 px-8"
+              className="bg-white hover:bg-white/90 border-2 transition-all duration-300 px-6 sm:px-8 w-full sm:w-auto"
               style={{ color: '#43ADD8', borderColor: '#43ADD8' }}
               onClick={() => window.location.href = '/success-stories'}
             >
