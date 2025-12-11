@@ -10,7 +10,7 @@ const CategoryPreview = () => {
       icon: TrendingUp,
       color: 'teal',
       description: 'Offer your skills and services to clients worldwide',
-      platforms: ['Upwork', 'Fiverr', 'Freelancer', 'And more...']
+      platforms: ['Upwork', 'Fiverr', 'Freelancer.co.uk', 'And 2 more...']
     },
     {
       title: 'Surveys & Research',
@@ -18,7 +18,7 @@ const CategoryPreview = () => {
       color: 'cyan',
       description: 'Share your opinions and get paid for your insights',
       subtitle: 'Quick ROI opportunity:',
-      platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
+      platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 20 more...']
     },
     {
       title: 'Content Creation',
@@ -26,7 +26,7 @@ const CategoryPreview = () => {
       color: 'purple',
       description: 'Create videos, write articles, or produce content',
       subtitle: 'High earning potential:',
-      platforms: ['YouTube', 'Medium', 'Substack', 'And more...']
+      platforms: ['YouTube', 'Behance', 'Dribbble', 'And 10 more...']
     },
     {
       title: 'E-commerce',
@@ -58,7 +58,7 @@ const CategoryPreview = () => {
       color: 'rose',
       description: 'Find full-time remote work opportunities',
       subtitle: 'Stable income:',
-      platforms: ['Remote.co', 'We Work Remotely', 'FlexJobs', 'And more...']
+      platforms: ['FlexJobs', 'ZipRecruiter', 'Toptal', 'And 2 more...']
     },
     {
       title: 'Gig Economy',
@@ -66,7 +66,7 @@ const CategoryPreview = () => {
       color: 'amber',
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
-      platforms: ['TaskRabbit', 'Uber', 'DoorDash', 'And more...']
+      platforms: ['TaskRabbit', 'SolidGigs', 'And more...']
     }
   ];
 
