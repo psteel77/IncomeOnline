@@ -555,7 +555,7 @@ const Home = () => {
 
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(to right, #43ADD8, #3b9fcc)'}}>
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(to right, #43ADD8, #3b9fcc)'}}>
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -564,10 +564,10 @@ const Home = () => {
             className="w-full h-full object-cover opacity-20"
           />
         </div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl font-bold text-white mb-6">Ready to Start Your Online Earning Journey?</h2>
-          <p className="text-xl text-emerald-50 mb-8">Join thousands of people already earning money online through our platform</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="max-w-4xl mx-auto text-center relative z-10 px-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">Ready to Start Your Online Earning Journey?</h2>
+          <p className="text-base sm:text-lg md:text-xl text-emerald-50 mb-6 sm:mb-8">Join thousands of people already earning money online through our platform</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Button 
               size="lg" 
               className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-8"
