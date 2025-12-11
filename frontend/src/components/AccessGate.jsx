@@ -73,40 +73,40 @@ const AccessGate = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* New User Card */}
             <div 
-              className="border-2 border-teal-200 rounded-xl p-6 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-teal-50"
+              className="border-2 border-teal-200 rounded-xl p-4 sm:p-6 hover:border-teal-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-teal-50"
               onClick={handleNewUser}
             >
               <div className="flex flex-col items-center text-center h-full">
-                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mb-4">
-                  <UserPlus className="h-8 w-8 text-white" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-teal-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                  <UserPlus className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-teal-800 mb-4">New User</h3>
-                <p className="text-slate-600 text-sm mb-4 flex-grow">
+                <h3 className="text-lg sm:text-xl font-bold text-teal-800 mb-2 sm:mb-4">New User</h3>
+                <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 flex-grow">
                   Join the Income Online community and get access to 50+ verified earning platforms
                 </p>
-                <Button className="w-full bg-teal-600 hover:bg-teal-700 py-6 text-lg font-bold mt-auto">
+                <Button className="w-full bg-teal-600 hover:bg-teal-700 py-4 sm:py-6 text-base sm:text-lg font-bold mt-auto">
                   Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </div>
             </div>
 
             {/* Returning User Card */}
             <div 
-              className="border-2 border-amber-200 rounded-xl p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
+              className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
               onClick={() => setUserType('returning')}
             >
               <div className="flex flex-col items-center text-center h-full">
-                <div className="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mb-4">
-                  <Mail className="h-8 w-8 text-white" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-amber-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                  <Mail className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-amber-800 mb-4">Returning User</h3>
-                <p className="text-slate-600 text-sm mb-4 flex-grow">
+                <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2 sm:mb-4">Returning User</h3>
+                <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 flex-grow">
                   Already a member? Enter your email to receive your access link
                 </p>
-                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-6 text-lg font-bold mt-auto">
+                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-4 sm:py-6 text-base sm:text-lg font-bold mt-auto">
                   Request Access Link
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </div>
             </div>
