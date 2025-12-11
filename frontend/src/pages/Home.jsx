@@ -611,7 +611,7 @@ const Home = () => {
               <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Categories</h4>
               <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => {
                     const target = document.getElementById('categories-preview') || document.getElementById('categories');
                     target?.scrollIntoView({ behavior: 'smooth' });
@@ -620,7 +620,7 @@ const Home = () => {
                   Freelancing
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => {
                     const target = document.getElementById('categories-preview') || document.getElementById('categories');
                     target?.scrollIntoView({ behavior: 'smooth' });
@@ -629,7 +629,7 @@ const Home = () => {
                   Surveys
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => {
                     const target = document.getElementById('categories-preview') || document.getElementById('categories');
                     target?.scrollIntoView({ behavior: 'smooth' });
@@ -638,7 +638,7 @@ const Home = () => {
                   Content Creation
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors"
+                  className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => {
                     const target = document.getElementById('categories-preview') || document.getElementById('categories');
                     target?.scrollIntoView({ behavior: 'smooth' });
