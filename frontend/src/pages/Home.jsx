@@ -609,42 +609,110 @@ const Home = () => {
             
             <div>
               <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Categories</h4>
-              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
+              <ul className="space-y-1 text-xs sm:text-sm text-slate-400">
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors py-1"
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
-                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
-                    target?.scrollIntoView({ behavior: 'smooth' });
+                    if (isAuthenticated) {
+                      setSelectedCategory('Freelancing');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                 >
                   Freelancing
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors py-1"
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
-                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
-                    target?.scrollIntoView({ behavior: 'smooth' });
+                    if (isAuthenticated) {
+                      setSelectedCategory('Surveys & Research');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                 >
-                  Surveys
+                  Surveys & Research
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors py-1"
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
-                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
-                    target?.scrollIntoView({ behavior: 'smooth' });
+                    if (isAuthenticated) {
+                      setSelectedCategory('Content Creation');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                 >
                   Content Creation
                 </li>
                 <li 
-                  className="hover:text-white cursor-pointer transition-colors py-1"
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
-                    const target = document.getElementById('categories-preview') || document.getElementById('categories');
-                    target?.scrollIntoView({ behavior: 'smooth' });
+                    if (isAuthenticated) {
+                      setSelectedCategory('Trading & Investing');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                 >
-                  Trading
+                  Trading & Investing
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setSelectedCategory('E-commerce');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  E-commerce
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setSelectedCategory('Teaching & Tutoring');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Teaching & Tutoring
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setSelectedCategory('Remote Jobs');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Remote Jobs
+                </li>
+                <li 
+                  className="hover:text-white cursor-pointer transition-colors py-0.5"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setSelectedCategory('Gig Economy');
+                      document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Gig Economy
                 </li>
               </ul>
             </div>
