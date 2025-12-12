@@ -16,10 +16,13 @@ const AccessGate = () => {
   const [error, setError] = useState('');
 
   const handleNewUser = () => {
-    // Scroll to PayPal donation button area
+    // Scroll to PayPal donation button area with offset for sticky header
     const paypalContainer = document.getElementById('paypal-donation-area');
     if (paypalContainer) {
-      paypalContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = 80; // Account for sticky header
+      const elementPosition = paypalContainer.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     } else {
       // Fallback to support section
       const donationSection = document.getElementById('support');
