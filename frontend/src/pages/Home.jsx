@@ -617,7 +617,13 @@ const Home = () => {
                       setSelectedCategory('Freelancing');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-freelancing');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -630,7 +636,13 @@ const Home = () => {
                       setSelectedCategory('Surveys & Research');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-surveys-and-research');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -643,7 +655,13 @@ const Home = () => {
                       setSelectedCategory('Content Creation');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-content-creation');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -656,7 +674,13 @@ const Home = () => {
                       setSelectedCategory('Trading & Investing');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-trading-and-investing');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -669,7 +693,13 @@ const Home = () => {
                       setSelectedCategory('E-commerce');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-e-commerce');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -682,7 +712,13 @@ const Home = () => {
                       setSelectedCategory('Teaching & Tutoring');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-teaching-and-tutoring');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -695,7 +731,13 @@ const Home = () => {
                       setSelectedCategory('Remote Jobs');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-remote-jobs');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
@@ -708,7 +750,13 @@ const Home = () => {
                       setSelectedCategory('Gig Economy');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      document.getElementById('categories-preview')?.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('category-gig-economy');
+                      if (el) {
+                        const headerHeight = 80;
+                        const elementPosition = el.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                      }
                     }
                   }}
                 >
