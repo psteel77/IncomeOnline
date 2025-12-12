@@ -94,17 +94,17 @@ const DonationSection = () => {
         </div>
 
         {/* PayPal Button Card */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto px-4 sm:px-2">
           <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
-            <CardHeader className="text-center px-8 py-8">
-              <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
+            <CardHeader className="text-center px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+              <CardTitle className="text-2xl sm:text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">
                 Make a Donation
               </CardTitle>
-              <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
+              <CardDescription className="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed">
                 Your contribution helps us grow and improve
               </CardDescription>
             </CardHeader>
-            <CardContent className="px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+            <CardContent className="px-4 sm:px-6 md:px-10 py-6 sm:py-8">
               {/* Why Donate Section */}
               <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-teal-200">
                 <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
