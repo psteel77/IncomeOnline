@@ -109,16 +109,16 @@ const CategoryPreview = () => {
         </div>
 
         {/* CTA to unlock */}
-        <div className="mt-12 text-center">
+        <div className="mt-8 sm:mt-12 text-center px-2 sm:px-0">
           <Card className="shadow-lg max-w-2xl mx-auto border-2" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
-            <CardContent className="py-8">
-              <Lock className="h-12 w-12 mx-auto mb-4" style={{ color: '#43ADD8' }} />
-              <h3 className="text-2xl font-bold mb-3" style={{ color: '#43ADD8' }}>Unlock All 8 Categories</h3>
-              <p className="text-slate-700 mb-6">
+            <CardContent className="py-6 sm:py-8 px-4 sm:px-6">
+              <Lock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" style={{ color: '#43ADD8' }} />
+              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{ color: '#43ADD8' }}>Unlock All 8 Categories</h3>
+              <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 px-2">
                 Get full access to all categories including Teaching & Tutoring, Trading & Investing, Remote Jobs, and Gig Economy
               </p>
               <Button 
-                className="font-bold text-lg px-8 py-6"
+                className="font-bold text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
                 style={{ backgroundColor: '#43ADD8', color: 'white' }}
                 onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
               >
