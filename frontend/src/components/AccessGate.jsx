@@ -124,16 +124,16 @@ const AccessGate = () => {
 
   // Returning User Form
   return (
-    <Card className="max-w-md mx-auto bg-white border-2 border-teal-300 shadow-xl">
-      <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white">
-        <CardTitle className="text-2xl text-teal-800">
+    <Card className="max-w-md mx-2 sm:mx-auto bg-white border-2 border-teal-300 shadow-xl">
+      <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white px-4 sm:px-6">
+        <CardTitle className="text-xl sm:text-2xl text-teal-800">
           Welcome Back!
         </CardTitle>
-        <CardDescription className="text-slate-700">
+        <CardDescription className="text-sm sm:text-base text-slate-700">
           Enter your email to receive your access link
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         <form onSubmit={handleReturningUser} className="space-y-4">
           <div>
             <Input
@@ -142,28 +142,28 @@ const AccessGate = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="text-base py-6"
+              className="text-base py-5 sm:py-6"
               disabled={loading}
             />
           </div>
 
           {message && (
-            <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4 flex items-start gap-3">
+            <div className="bg-green-50 border-2 border-green-300 rounded-lg p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
               <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-              <p className="text-green-800 text-sm">{message}</p>
+              <p className="text-green-800 text-xs sm:text-sm">{message}</p>
             </div>
           )}
 
           {error && (
-            <div className="bg-red-50 border-2 border-red-300 rounded-lg p-4 flex items-start gap-3">
+            <div className="bg-red-50 border-2 border-red-300 rounded-lg p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
               <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <div className="text-red-800 text-sm">{error}</div>
+              <div className="text-red-800 text-xs sm:text-sm">{error}</div>
             </div>
           )}
 
           <Button
             type="submit"
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white py-6"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white py-5 sm:py-6 text-base"
             disabled={loading}
           >
             {loading ? 'Sending...' : 'Send Access Link'}
@@ -178,14 +178,14 @@ const AccessGate = () => {
                 setError('');
                 setEmail('');
               }}
-              className="text-sm text-teal-600 hover:text-teal-700"
+              className="text-sm text-teal-600 hover:text-teal-700 py-2"
             >
               ← Back to options
             </button>
           </div>
 
-          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-sm text-amber-800 text-center">
+          <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <p className="text-xs sm:text-sm text-amber-800 text-center">
               Not a member yet?{' '}
               <button
                 type="button"
