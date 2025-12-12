@@ -655,7 +655,7 @@ const Home = () => {
                       setSelectedCategory('Digital Creators/Innovators');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      const el = document.getElementById('category-content-creation');
+                      const el = document.getElementById('category-digital-creators/innovators');
                       if (el) {
                         const headerHeight = 80;
                         const elementPosition = el.getBoundingClientRect().top;
