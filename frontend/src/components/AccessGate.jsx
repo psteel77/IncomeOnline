@@ -60,7 +60,7 @@ const AccessGate = () => {
 
   if (!userType) {
     return (
-      <Card className="max-w-2xl mx-auto bg-white border-2 border-teal-300 shadow-xl mx-2 sm:mx-auto">
+      <Card className="max-w-2xl bg-white border-2 border-teal-300 shadow-xl mx-4 sm:mx-auto">
         <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white px-4 sm:px-6">
           <CardTitle className="text-xl sm:text-2xl md:text-3xl text-teal-800 mb-2">
             Access the Income Online Community
