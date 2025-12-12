@@ -94,7 +94,13 @@ const AccessGate = () => {
             {/* Returning User Card */}
             <div 
               className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
-              onClick={() => setUserType('returning')}
+              onClick={() => {
+                setUserType('returning');
+                // Scroll to top of form after state change
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
+              }}
             >
               <div className="flex flex-col items-center text-center h-full">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-amber-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
