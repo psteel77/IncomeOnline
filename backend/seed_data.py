@@ -21,7 +21,7 @@ categories_data = [
     },
     {
         "id": 3,
-        "name": "Content Creation",
+        "name": "Digital Creators/Innovators",
         "description": "Create videos, blogs, and content for income",
         "count": 14,
         "totalOpportunities": "Unlimited opportunities",
@@ -124,7 +124,7 @@ platforms_data = [
     {
         "id": 4,
         "name": "YouTube",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Create and monetize video content for millions of viewers",
         "earningsPotential": "$100 - $100,000+/month",
         "difficulty": "Hard",
@@ -202,7 +202,7 @@ platforms_data = [
     {
         "id": 10,
         "name": "Medium Partner Program",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Write articles and earn based on reader engagement",
         "earningsPotential": "$100 - $5,000+/month",
         "difficulty": "Medium",
@@ -512,11 +512,11 @@ platforms_data = [
         "featured": False,
         "link": "https://attapoll.app"
     },
-    # Additional Content Creation Platforms (34-45)
+    # Additional Digital Creators/Innovators Platforms (34-45)
     {
         "id": 34,
         "name": "Twitch",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Leading live streaming platform for gamers and creative content creators. Monetize through subscriptions, bits, ads, and sponsorships. Build a community while streaming games, music, art, or just chatting. Partner program offers enhanced revenue sharing.",
         "earningsPotential": "$100 - $50,000+/month",
         "difficulty": "Hard",
@@ -529,7 +529,7 @@ platforms_data = [
     {
         "id": 35,
         "name": "TikTok Creator Fund",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Earn money creating short-form video content on the world's fastest-growing social platform. Creator Fund pays based on video views and engagement. Additional income through brand partnerships, gifts, and the Creator Marketplace.",
         "earningsPotential": "$50 - $10,000+/month",
         "difficulty": "Medium",
@@ -542,7 +542,7 @@ platforms_data = [
     {
         "id": 36,
         "name": "Substack",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Newsletter platform allowing writers to build paid subscriber bases. Keep 90% of subscription revenue. Perfect for journalists, experts, and thought leaders. Built-in audience discovery and simple payment processing.",
         "earningsPotential": "$100 - $50,000+/month",
         "difficulty": "Medium",
@@ -555,7 +555,7 @@ platforms_data = [
     {
         "id": 37,
         "name": "Patreon",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Membership platform for creators to earn recurring income from fans. Offer exclusive content, community access, and perks to patrons. Used by artists, podcasters, writers, and educators. Flexible tier pricing and creator-friendly terms.",
         "earningsPotential": "$100 - $100,000+/month",
         "difficulty": "Medium",
@@ -568,7 +568,7 @@ platforms_data = [
     {
         "id": 38,
         "name": "Spotify for Podcasters",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Create and monetize podcasts on the world's largest audio streaming platform. Earn through listener support, ads, and paid subscriptions. Free hosting and distribution to all major podcast platforms. Analytics help grow your audience.",
         "earningsPotential": "$50 - $10,000+/month",
         "difficulty": "Medium",
@@ -581,7 +581,7 @@ platforms_data = [
     {
         "id": 39,
         "name": "Shutterstock Contributor",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Sell your photos, videos, and illustrations to a global marketplace. Earn royalties each time your content is downloaded. Over 2 million customers including major brands and media companies. Passive income potential from a quality portfolio.",
         "earningsPotential": "$50 - $3,000+/month",
         "difficulty": "Medium",
@@ -594,7 +594,7 @@ platforms_data = [
     {
         "id": 40,
         "name": "Adobe Stock Contributor",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Sell creative assets including photos, vectors, illustrations, and videos. Integration with Adobe Creative Cloud means massive exposure to professional designers. Competitive royalty rates of 33% for photos and up to 35% for videos.",
         "earningsPotential": "$50 - $5,000+/month",
         "difficulty": "Medium",
@@ -607,7 +607,7 @@ platforms_data = [
     {
         "id": 41,
         "name": "Ko-fi",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Accept donations, sell products, and offer memberships with 0% platform fees on donations. Perfect for artists, writers, and small creators. Simple setup with no minimum payout. Shop feature allows selling digital products and commissions.",
         "earningsPotential": "$20 - $5,000+/month",
         "difficulty": "Easy",
@@ -620,7 +620,7 @@ platforms_data = [
     {
         "id": 42,
         "name": "Gumroad",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Sell digital products directly to your audience with simple e-commerce tools. Popular for ebooks, courses, music, and software. Flat 10% fee keeps pricing simple. Built-in audience features help creators grow their following.",
         "earningsPotential": "$100 - $20,000+/month",
         "difficulty": "Medium",
@@ -633,7 +633,7 @@ platforms_data = [
     {
         "id": 43,
         "name": "Redbubble",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Upload artwork and have it printed on products like t-shirts, stickers, and phone cases. No inventory or shipping to manage—Redbubble handles everything. Set your own margins on top of base prices. Global marketplace with millions of buyers.",
         "earningsPotential": "$50 - $2,000+/month",
         "difficulty": "Easy",
@@ -646,7 +646,7 @@ platforms_data = [
     {
         "id": 44,
         "name": "Envato Elements Contributor",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Sell premium digital assets including templates, graphics, audio, and video. Access to Envato's massive customer base of creative professionals. Monthly subscriber earnings based on download frequency. High-quality standards ensure premium pricing.",
         "earningsPotential": "$100 - $5,000+/month",
         "difficulty": "Hard",
@@ -659,7 +659,7 @@ platforms_data = [
     {
         "id": 45,
         "name": "Skillshare Teacher",
-        "category": "Content Creation",
+        "category": "Digital Creators/Innovators",
         "description": "Create video classes and earn royalties based on minutes watched. Topics range from design and photography to business and lifestyle. Community of 12+ million learners actively seeking new skills. Referral bonuses for bringing new students.",
         "earningsPotential": "$100 - $3,000+/month",
         "difficulty": "Medium",

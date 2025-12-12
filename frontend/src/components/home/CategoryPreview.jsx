@@ -21,7 +21,7 @@ const CategoryPreview = () => {
       platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
     },
     {
-      title: 'Content Creation',
+      title: 'Digital Creators/Innovators',
       icon: Star,
       color: 'purple',
       description: 'Create videos, write articles, or produce content',

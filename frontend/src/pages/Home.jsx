@@ -28,7 +28,7 @@ const Home = () => {
   const categoryImages = {
     'Freelancing': 'https://images.unsplash.com/photo-1519337364444-c5eeec430101?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxkaXZlcnNlJTIwcHJvZmVzc2lvbmFscyUyMHdvcmtpbmclMjBsYXB0b3B8ZW58MHx8fHwxNzY0MDczMTUwfDA&ixlib=rb-4.1.0&q=85',
     'Surveys & Research': 'https://images.unsplash.com/photo-1627634777217-c864268db30c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxkaXZlcnNlJTIwcHJvZmVzc2lvbmFscyUyMHdvcmtpbmclMjBsYXB0b3B8ZW58MHx8fHwxNzY0MDczMTUwfDA&ixlib=rb-4.1.0&q=85',
-    'Content Creation': 'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc2NDA3MzA2OXww&ixlib=rb-4.1.0&q=85',
+    'Digital Creators/Innovators': 'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc2NDA3MzA2OXww&ixlib=rb-4.1.0&q=85',
     'Trading & Investing': 'https://images.unsplash.com/photo-1654262609484-76d1a8f3b016?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxkaXZlcnNlJTIwcHJvZmVzc2lvbmFscyUyMHdvcmtpbmclMjBsYXB0b3B8ZW58MHx8fHwxNzY0MDczMTUwfDA&ixlib=rb-4.1.0&q=85',
     'E-commerce': 'https://images.unsplash.com/photo-1586227740560-8cf2732c1531?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxyZW1vdGUlMjB3b3JrfGVufDB8fHx8MTc2NDA3MzA2OXww&ixlib=rb-4.1.0&q=85',
     'Teaching & Tutoring': 'https://images.unsplash.com/photo-1588912914074-b93851ff14b8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxvbmxpbmUlMjB0ZWFjaGluZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzE1Nnww&ixlib=rb-4.1.0&q=85',
@@ -652,7 +652,7 @@ const Home = () => {
                   className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
                     if (isAuthenticated) {
-                      setSelectedCategory('Content Creation');
+                      setSelectedCategory('Digital Creators/Innovators');
                       document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' });
                     } else {
                       const el = document.getElementById('category-content-creation');
@@ -665,7 +665,7 @@ const Home = () => {
                     }
                   }}
                 >
-                  Content Creation
+                  Digital Creators/Innovators
                 </li>
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-0.5"

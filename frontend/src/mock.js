@@ -19,7 +19,7 @@ export const categories = [
   },
   {
     id: 3,
-    name: 'Content Creation',
+    name: 'Digital Creators/Innovators',
     description: 'Create videos, blogs, and content for income',
     count: 28,
     color: 'from-orange-50 to-amber-50',
@@ -116,7 +116,7 @@ export const platforms = [
   {
     id: 4,
     name: 'YouTube',
-    category: 'Content Creation',
+    category: 'Digital Creators/Innovators',
     description: 'Create and monetize video content for millions of viewers',
     earningsPotential: '$100 - $100,000+/month',
     difficulty: 'Hard',
@@ -194,7 +194,7 @@ export const platforms = [
   {
     id: 10,
     name: 'Medium Partner Program',
-    category: 'Content Creation',
+    category: 'Digital Creators/Innovators',
     description: 'Write articles and earn based on reader engagement',
     earningsPotential: '$100 - $5,000+/month',
     difficulty: 'Medium',

@@ -35,7 +35,7 @@ const PlatformPreview = () => {
     },
     {
       name: 'YouTube',
-      category: 'Content Creation',
+      category: 'Digital Creators/Innovators',
       categoryColor: 'purple',
       description: 'Create videos and earn from ads, sponsorships, and more',
       rating: '4.7/5',
@@ -44,7 +44,7 @@ const PlatformPreview = () => {
     },
     {
       name: 'Medium',
-      category: 'Content Creation',
+      category: 'Digital Creators/Innovators',
       categoryColor: 'purple',
       description: 'Write articles and earn from the Partner Program',
       rating: '4.3/5',
@@ -53,7 +53,7 @@ const PlatformPreview = () => {
     },
     {
       name: 'TikTok',
-      category: 'Content Creation',
+      category: 'Digital Creators/Innovators',
       categoryColor: 'purple',
       description: 'Create short videos and monetize through Creator Fund',
       rating: '4.5/5',
