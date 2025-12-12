@@ -251,7 +251,14 @@ const PlatformPreview = () => {
                 <Button 
                   className="font-bold text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 w-full max-w-xs sm:max-w-none sm:w-auto"
                   style={{ backgroundColor: '#43ADD8', color: 'white' }}
-                  onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => {
+                    const paypalArea = document.getElementById('paypal-donation-area');
+                    if (paypalArea) {
+                      paypalArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                      document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                 >
                   Make a Donation to Unlock
                 </Button>
