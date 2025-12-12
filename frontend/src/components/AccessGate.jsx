@@ -84,9 +84,9 @@ const AccessGate = () => {
                 <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 flex-grow">
                   Join the Income Online community and get access to 50+ verified earning platforms
                 </p>
-                <Button className="w-full bg-teal-600 hover:bg-teal-700 py-4 sm:py-6 text-base sm:text-lg font-bold mt-auto">
+                <Button className="w-full bg-teal-600 hover:bg-teal-700 py-3 sm:py-4 text-sm sm:text-base font-bold mt-auto whitespace-nowrap">
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 flex-shrink-0" />
                 </Button>
               </div>
             </div>
