@@ -105,10 +105,16 @@ const AccessGate = () => {
               className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
               onClick={() => {
                 setUserType('returning');
-                // Scroll to top of page so form is fully visible
+                // Scroll to show the form after state change
                 setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 100);
+                  const form = document.getElementById('returning-user-form');
+                  if (form) {
+                    const headerHeight = 80;
+                    const elementPosition = form.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                  }
+                }, 150);
               }}
             >
               <div className="flex flex-col items-center text-center h-full">
