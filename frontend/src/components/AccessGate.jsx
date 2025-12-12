@@ -19,7 +19,7 @@ const AccessGate = () => {
     // Scroll to PayPal donation button area
     const paypalContainer = document.getElementById('paypal-donation-area');
     if (paypalContainer) {
-      paypalContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      paypalContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       // Fallback to support section
       const donationSection = document.getElementById('support');
