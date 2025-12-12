@@ -124,7 +124,10 @@ const CategoryPreview = () => {
                   onClick={() => {
                     const paypalArea = document.getElementById('paypal-donation-area');
                     if (paypalArea) {
-                      paypalArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      const headerHeight = 80;
+                      const elementPosition = paypalArea.getBoundingClientRect().top;
+                      const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                     } else {
                       document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
                     }
