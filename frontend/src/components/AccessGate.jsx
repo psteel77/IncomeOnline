@@ -96,10 +96,15 @@ const AccessGate = () => {
               className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
               onClick={() => {
                 setUserType('returning');
-                // Scroll to top of form after state change
+                // Scroll the form into view after a brief delay
                 setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, 100);
+                  const element = document.getElementById('returning-user-form');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }, 150);
               }}
             >
               <div className="flex flex-col items-center text-center h-full">
@@ -110,9 +115,10 @@ const AccessGate = () => {
                 <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 flex-grow">
                   Already a member? Enter your email to receive your access link
                 </p>
-                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-4 sm:py-6 text-base sm:text-lg font-bold mt-auto">
-                  Request Access Link
-                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-3 sm:py-4 text-sm sm:text-base font-bold mt-auto whitespace-nowrap">
+                  <span className="hidden sm:inline">Request Access Link</span>
+                  <span className="sm:hidden">Get Access Link</span>
+                  <ArrowRight className="ml-1 sm:ml-2 h-4 w-4 flex-shrink-0" />
                 </Button>
               </div>
             </div>
