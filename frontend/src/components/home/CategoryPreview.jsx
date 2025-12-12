@@ -82,8 +82,14 @@ const CategoryPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {dummyCategories.map((category, index) => {
             const IconComponent = category.icon;
+            const categoryId = category.title.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and');
             return (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden opacity-90" style={{ borderColor: '#43ADD8', background: 'linear-gradient(to bottom right, white, #e0f2fe)' }}>
+              <Card 
+                key={index} 
+                id={`category-${categoryId}`}
+                className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden opacity-90" 
+                style={{ borderColor: '#43ADD8', background: 'linear-gradient(to bottom right, white, #e0f2fe)' }}
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                     <CardTitle className={`text-xl font-bold text-${category.color}-800`}>{category.title}</CardTitle>
