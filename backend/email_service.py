@@ -91,12 +91,12 @@ Welcome Back to Income Online!
 
 Thank you for being part of the Income Online community!
 
-Click the link below to verify your email and unlock full access to all 20+ earning platforms:
+Click the link below to verify your email and unlock full access to all 50+ income producing platforms:
 
 {verification_link}
 
 What You'll Get:
-✓ Access to 20+ verified earning platforms with detailed information
+✓ Access to 50+ income producing platforms with detailed information
 ✓ Ratings, reviews, and earning potential for each platform
 ✓ Direct links to start earning immediately
 ✓ Search and filter tools to find your perfect opportunity
