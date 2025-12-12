@@ -16,10 +16,16 @@ const AccessGate = () => {
   const [error, setError] = useState('');
 
   const handleNewUser = () => {
-    // Scroll to donation section
-    const donationSection = document.getElementById('support');
-    if (donationSection) {
-      donationSection.scrollIntoView({ behavior: 'smooth' });
+    // Scroll to PayPal donation button area
+    const paypalContainer = document.getElementById('paypal-donation-area');
+    if (paypalContainer) {
+      paypalContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      // Fallback to support section
+      const donationSection = document.getElementById('support');
+      if (donationSection) {
+        donationSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
