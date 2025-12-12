@@ -49,7 +49,7 @@ const DonationSection = () => {
   }, []);
 
   return (
-    <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white relative z-10">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-6">
