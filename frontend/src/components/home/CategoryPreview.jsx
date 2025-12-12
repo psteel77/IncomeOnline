@@ -109,21 +109,23 @@ const CategoryPreview = () => {
         </div>
 
         {/* CTA to unlock */}
-        <div className="mt-8 sm:mt-12 text-center px-2 sm:px-0">
-          <Card className="shadow-lg max-w-2xl mx-auto border-2" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
+        <div className="mt-8 sm:mt-12 text-center px-4 sm:px-2">
+          <Card className="shadow-lg mx-auto border-2 max-w-full sm:max-w-2xl" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
             <CardContent className="py-6 sm:py-8 px-4 sm:px-6">
               <Lock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" style={{ color: '#43ADD8' }} />
-              <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{ color: '#43ADD8' }}>Unlock All 8 Categories</h3>
-              <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 px-2">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-center" style={{ color: '#43ADD8' }}>Unlock All 8 Categories</h3>
+              <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 text-center px-2">
                 Get full access to all categories including Teaching & Tutoring, Trading & Investing, Remote Jobs, and Gig Economy
               </p>
-              <Button 
-                className="font-bold text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
-                style={{ backgroundColor: '#43ADD8', color: 'white' }}
-                onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Make a Donation to Unlock
-              </Button>
+              <div className="flex justify-center">
+                <Button 
+                  className="font-bold text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 w-full max-w-xs sm:max-w-none sm:w-auto"
+                  style={{ backgroundColor: '#43ADD8', color: 'white' }}
+                  onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Make a Donation to Unlock
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
