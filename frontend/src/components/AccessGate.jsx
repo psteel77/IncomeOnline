@@ -130,7 +130,7 @@ const AccessGate = () => {
 
   // Returning User Form
   return (
-    <Card className="max-w-md mx-2 sm:mx-auto bg-white border-2 border-teal-300 shadow-xl">
+    <Card id="returning-user-form" className="max-w-md mx-4 sm:mx-auto bg-white border-2 border-teal-300 shadow-xl">
       <CardHeader className="text-center bg-gradient-to-br from-teal-50 to-white px-4 sm:px-6">
         <CardTitle className="text-xl sm:text-2xl text-teal-800">
           Welcome Back!
