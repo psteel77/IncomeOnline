@@ -254,7 +254,7 @@ const PlatformPreview = () => {
                   onClick={() => {
                     const paypalArea = document.getElementById('paypal-donation-area');
                     if (paypalArea) {
-                      paypalArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      paypalArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     } else {
                       document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' });
                     }
