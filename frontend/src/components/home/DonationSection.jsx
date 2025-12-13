@@ -152,9 +152,9 @@ const DonationSection = () => {
                 </p>
               </div>
 
-              <div id="paypal-donation-area" className="bg-white rounded-xl p-4 sm:p-6 md:p-8 border-2 border-teal-200">
+              <div id="paypal-donation-area" className="bg-white rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-teal-200">
                 <div className="text-center mb-4 sm:mb-6">
-                  <p className="text-slate-700 font-medium text-base sm:text-lg leading-relaxed">
+                  <p className="text-slate-700 font-medium text-sm sm:text-base md:text-lg leading-relaxed">
                     Click the button below to donate securely via PayPal
                   </p>
                 </div>
