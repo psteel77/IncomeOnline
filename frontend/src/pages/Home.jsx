@@ -438,7 +438,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">How It Works</h2>
-            <p className="text-base sm:text-lg text-slate-600">Start earning money online in three simple steps</p>
+            <p className="text-base sm:text-lg text-slate-600">Join the IncomeOnline community and start earning online in three simple steps</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
