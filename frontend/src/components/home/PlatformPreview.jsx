@@ -200,9 +200,13 @@ const PlatformPreview = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {dummyPlatforms.map((platform, index) => (
             <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden" style={{ borderColor: '#43ADD8' }}>
+              {/* SAMPLE Watermark */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                <span className="text-6xl font-bold text-gray-300 opacity-40 rotate-[-30deg] select-none">SAMPLE</span>
+              </div>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl font-bold text-teal-800" style={{ filter: 'blur(8px)', userSelect: 'none' }}>
+                  <CardTitle className="text-xl font-bold text-teal-800">
                     {platform.name}
                   </CardTitle>
                   <Badge className={`bg-${platform.categoryColor}-600`}>{platform.category}</Badge>
@@ -212,9 +216,6 @@ const PlatformPreview = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 backdrop-blur-[2px] flex items-center justify-center">
-                  <Lock className="h-8 w-8" style={{ color: '#43ADD8' }} />
-                </div>
                 <div className="flex items-center gap-2 opacity-60">
                   <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
                   <span className="font-semibold">{platform.rating}</span>
