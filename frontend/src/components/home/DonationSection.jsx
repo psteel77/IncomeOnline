@@ -157,9 +157,20 @@ const DonationSection = () => {
                   Click the button below to donate securely via PayPal
                 </p>
                 
-                {/* PayPal Button */}
-                <div className="flex justify-center items-center min-h-[60px] relative z-0 mt-4">
-                  <div id="paypal-container-donation" className="w-full max-w-md relative z-0"></div>
+                {/* PayPal Button - with CSS override for content alignment */}
+                <div className="relative z-0 mt-2">
+                  <style>{`
+                    #paypal-container-donation {
+                      width: 100%;
+                    }
+                    #paypal-container-donation iframe {
+                      width: 100% !important;
+                    }
+                    #paypal-container-donation .paypal-button-container {
+                      width: 100% !important;
+                    }
+                  `}</style>
+                  <div id="paypal-container-donation" className="w-full relative z-0"></div>
                 </div>
               </div>
 
