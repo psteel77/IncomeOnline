@@ -55,8 +55,9 @@ const DonationSection = () => {
         <div className="max-w-3xl mx-auto px-4 sm:px-2">
           <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
             <CardHeader className="text-center px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+              <p className="text-sm sm:text-base mb-2" style={{ color: '#43ADD8' }}>help us to help you...</p>
               <CardTitle className="text-2xl sm:text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">
-                Ready to write your own success story?
+                Support IncomeOnline
               </CardTitle>
               <CardDescription className="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed">
                 Your contribution helps us grow and improve
@@ -144,7 +145,7 @@ const DonationSection = () => {
           </Card>
         </div>
 
-        {/* Thank You Message */}
+        {/* Thank You Message - no praying hands emoji */}
         <div className="mt-12 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-8 border-2 border-teal-200 max-w-4xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-4">Thank You!</h3>
           <p className="text-slate-700 text-lg md:text-xl leading-relaxed">
