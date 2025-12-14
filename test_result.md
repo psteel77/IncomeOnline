@@ -73,9 +73,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "CMS Content API Testing"
-    - "CMS Platform Management CRUD APIs"
-    - "CMS Categories API Testing"
+    - "Income Online Website Changes Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
