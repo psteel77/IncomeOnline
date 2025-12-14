@@ -114,14 +114,14 @@ const CategoryPreview = () => {
           })}
         </div>
 
-        {/* CTA to unlock */}
+        {/* CTA to unlock - moved to end after Gig Economy */}
         <div className="mt-8 sm:mt-12 text-center px-4 sm:px-2">
           <Card className="shadow-lg mx-auto border-2 max-w-full sm:max-w-2xl" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
             <CardContent className="py-6 sm:py-8 px-4 sm:px-6">
               <Lock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" style={{ color: '#43ADD8' }} />
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-center" style={{ color: '#43ADD8' }}>Unlock All 8 Categories</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-center" style={{ color: '#43ADD8' }}>Unlock All Platform Details</h3>
               <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 text-center px-2">
-                Get full access to all categories including Teaching & Tutoring, Trading & Investing, Remote Jobs, and Gig Economy
+                Get full access to detailed information, ratings, direct links, and earning strategies for all 50+ platforms
               </p>
               <div className="flex justify-center">
                 <Button 
