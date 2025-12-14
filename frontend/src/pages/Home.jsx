@@ -530,8 +530,8 @@ const Home = () => {
           />
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10 px-2">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">Ready to Start Your Online Earning Journey?</h2>
-          <p className="text-base sm:text-lg md:text-xl text-emerald-50 mb-6 sm:mb-8">Join thousands of people already earning money online through our platform</p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">{content.cta?.title || 'Ready to Start Your Online Earning Journey?'}</h2>
+          <p className="text-base sm:text-lg md:text-xl text-emerald-50 mb-6 sm:mb-8">{content.cta?.subtitle || 'Join thousands of people already earning money online through our platform'}</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Button 
               size="lg" 
@@ -542,7 +542,7 @@ const Home = () => {
                 target?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Explore All Platforms
+              {content.cta?.button_primary || 'Explore All Platforms'}
             </Button>
             <Button 
               size="lg" 
@@ -551,7 +551,7 @@ const Home = () => {
               style={{ color: '#43ADD8', borderColor: '#43ADD8' }}
               onClick={() => window.location.href = '/success-stories'}
             >
-              Read Success Stories
+              {content.cta?.button_secondary || 'Read Success Stories'}
             </Button>
           </div>
         </div>
