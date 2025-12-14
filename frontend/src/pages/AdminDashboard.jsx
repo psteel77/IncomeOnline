@@ -259,15 +259,14 @@ const AdminDashboard = () => {
     return null;
   }
 
-  const SectionWrapper = ({ id, title, description, children }) => (
-    <Card>
-      <CardHeader 
-        className="cursor-pointer hover:bg-slate-50 transition-colors"
-        onClick={() => toggleSection(id)}
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>{title}</CardTitle>
+  const renderSectionHeader = (id, title, description) => (
+    <CardHeader 
+      className="cursor-pointer hover:bg-slate-50 transition-colors"
+      onClick={() => toggleSection(id)}
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
           </div>
           {expandedSections[id] ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
