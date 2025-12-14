@@ -138,7 +138,8 @@ const AccessGate = () => {
                   />
                   <Button 
                     type="submit"
-                    className="w-full bg-amber-600 hover:bg-amber-700 py-3 sm:py-4 text-xs sm:text-base font-bold"
+                    className="w-full py-3 sm:py-4 text-xs sm:text-base font-bold"
+                    style={{ backgroundColor: '#d97706' }}
                     disabled={loading || !email}
                   >
                     {loading ? 'Sending...' : 'Request Access Link'}
