@@ -437,46 +437,28 @@ const Home = () => {
       <section id="how-it-works" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">How It Works</h2>
-            <p className="text-base sm:text-lg text-slate-600">Join the IncomeOnline community and start earning online in three simple steps</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">{content.how_it_works?.title || 'How It Works'}</h2>
+            <p className="text-base sm:text-lg text-slate-600">{content.how_it_works?.subtitle || 'Join the IncomeOnline community and start earning online in three simple steps'}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
-            <div className="text-center">
-              <div className="mb-4 sm:mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1629184510982-cf91280c1d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
-                  alt="Browse and search"
-                  className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
-                />
+            {(content.how_it_works?.steps || [
+              { title: '1. Browse & Search', description: 'Explore our comprehensive directory and find opportunities that match your skills and interests.', image: 'https://images.unsplash.com/photo-1629184510982-cf91280c1d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85' },
+              { title: '2. Choose Verified Platforms', description: 'Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.', image: 'https://images.unsplash.com/photo-1758611971587-ddc6656822d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85' },
+              { title: '3. Start Earning', description: 'Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.', image: 'https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHN1Y2Nlc3NmdWx8ZW58MHx8fHwxNzY0MDczMTE3fDA&ixlib=rb-4.1.0&q=85' }
+            ]).map((step, index) => (
+              <div key={index} className="text-center">
+                <div className="mb-4 sm:mb-6">
+                  <img 
+                    src={step.image}
+                    alt={step.title}
+                    className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
+                  />
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3">{step.title}</h3>
+                <p className="text-sm sm:text-base text-slate-600">{step.description}</p>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3">1. Browse & Search</h3>
-              <p className="text-sm sm:text-base text-slate-600">Explore our comprehensive directory and find opportunities that match your skills and interests.</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="mb-4 sm:mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1758611971587-ddc6656822d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
-                  alt="Choose platforms"
-                  className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
-                />
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3">2. Choose Verified Platforms</h3>
-              <p className="text-sm sm:text-base text-slate-600">Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="mb-4 sm:mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHN1Y2Nlc3NmdWx8ZW58MHx8fHwxNzY0MDczMTE3fDA&ixlib=rb-4.1.0&q=85"
-                  alt="Start earning"
-                  className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
-                />
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3">3. Start Earning</h3>
-              <p className="text-sm sm:text-base text-slate-600">Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
