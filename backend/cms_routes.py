@@ -173,3 +173,161 @@ async def update_content_section(
 async def verify_admin_session(username: str = Depends(get_admin_user)):
     """Verify admin session is valid"""
     return {"success": True, "username": username, "authenticated": True}
+
+# ==================== PLATFORM CRUD OPERATIONS ====================
+
+from pydantic import BaseModel
+from typing import Optional, List
+
+class PlatformCreate(BaseModel):
+    name: str
+    category: str
+    description: str
+    link: str
+    earningsPotential: str = "$100-500/month"
+    difficulty: str = "Medium"
+    rating: float = 4.0
+    minPayout: str = "$10"
+    featured: bool = False
+
+class PlatformUpdate(BaseModel):
+    name: Optional[str] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    link: Optional[str] = None
+    earningsPotential: Optional[str] = None
+    difficulty: Optional[str] = None
+    rating: Optional[float] = None
+    minPayout: Optional[str] = None
+    featured: Optional[bool] = None
+
+@router.get("/platforms")
+async def get_all_platforms_admin(username: str = Depends(get_admin_user)):
+    """Get all platforms for admin management"""
+    from server import db
+    
+    try:
+        platforms = await db.platforms.find({}, {"_id": 0}).to_list(1000)
+        return {"success": True, "platforms": platforms, "total": len(platforms)}
+    except Exception as e:
+        logging.error(f"Error fetching platforms: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/platforms")
+async def create_platform(platform: PlatformCreate, username: str = Depends(get_admin_user)):
+    """Create a new platform"""
+    from server import db
+    
+    try:
+        # Get the next ID
+        last_platform = await db.platforms.find_one(sort=[("id", -1)])
+        next_id = (last_platform["id"] + 1) if last_platform else 1
+        
+        platform_data = platform.model_dump()
+        platform_data["id"] = next_id
+        platform_data["created_at"] = datetime.now(timezone.utc).isoformat()
+        platform_data["created_by"] = username
+        
+        await db.platforms.insert_one(platform_data)
+        
+        # Update category count
+        await update_category_count(db, platform.category)
+        
+        return {
+            "success": True,
+            "message": "Platform created successfully",
+            "platform_id": next_id
+        }
+    except Exception as e:
+        logging.error(f"Error creating platform: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/platforms/{platform_id}")
+async def update_platform(platform_id: int, platform: PlatformUpdate, username: str = Depends(get_admin_user)):
+    """Update an existing platform"""
+    from server import db
+    
+    try:
+        existing = await db.platforms.find_one({"id": platform_id})
+        if not existing:
+            raise HTTPException(status_code=404, detail="Platform not found")
+        
+        old_category = existing.get("category")
+        
+        update_data = {k: v for k, v in platform.model_dump().items() if v is not None}
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["updated_by"] = username
+        
+        await db.platforms.update_one(
+            {"id": platform_id},
+            {"$set": update_data}
+        )
+        
+        # Update category counts if category changed
+        new_category = update_data.get("category")
+        if new_category and new_category != old_category:
+            await update_category_count(db, old_category)
+            await update_category_count(db, new_category)
+        
+        return {
+            "success": True,
+            "message": "Platform updated successfully",
+            "platform_id": platform_id
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error updating platform: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/platforms/{platform_id}")
+async def delete_platform(platform_id: int, username: str = Depends(get_admin_user)):
+    """Delete a platform"""
+    from server import db
+    
+    try:
+        existing = await db.platforms.find_one({"id": platform_id})
+        if not existing:
+            raise HTTPException(status_code=404, detail="Platform not found")
+        
+        category = existing.get("category")
+        
+        await db.platforms.delete_one({"id": platform_id})
+        
+        # Update category count
+        if category:
+            await update_category_count(db, category)
+        
+        return {
+            "success": True,
+            "message": "Platform deleted successfully",
+            "platform_id": platform_id
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error deleting platform: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def update_category_count(db, category_name: str):
+    """Update the platform count for a category"""
+    try:
+        count = await db.platforms.count_documents({"category": category_name})
+        await db.categories.update_one(
+            {"name": category_name},
+            {"$set": {"count": count}}
+        )
+    except Exception as e:
+        logging.error(f"Error updating category count: {str(e)}")
+
+@router.get("/categories")
+async def get_all_categories_admin(username: str = Depends(get_admin_user)):
+    """Get all categories for admin (for dropdown selections)"""
+    from server import db
+    
+    try:
+        categories = await db.categories.find({}, {"_id": 0}).to_list(100)
+        return {"success": True, "categories": categories}
+    except Exception as e:
+        logging.error(f"Error fetching categories: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
