@@ -51,54 +51,12 @@ const DonationSection = () => {
   return (
     <section id="support" className="py-20 px-4 sm:px-6 lg:px-8 bg-white relative z-10">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-6">
-            Support Income Online
-          </h2>
-          <p className="text-xl md:text-2xl text-slate-700 mb-6 max-w-3xl mx-auto leading-relaxed">
-            Help us keep this directory up-to-date for everyone
-          </p>
-          <p className="text-lg md:text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed">
-            Your donation helps us maintain and expand our platform, bringing more earning opportunities to people worldwide.
-          </p>
-        </div>
-
-        {/* Benefits Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-yellow-700 text-xl mb-3">Keep it relevant</CardTitle>
-              <CardDescription className="text-base leading-relaxed">
-                Your support helps us keep the platform live and relevant
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-yellow-700 text-xl mb-3">More Platforms</CardTitle>
-              <CardDescription className="text-base leading-relaxed">
-                We can add more verified earning opportunities and update existing ones
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-teal-50 to-cyan-50 border-2 border-teal-200 hover:shadow-lg transition-all duration-300">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-yellow-700 text-xl mb-3">Better Features</CardTitle>
-              <CardDescription className="text-base leading-relaxed">
-                Your donations fund new features like reviews, comparisons, and earnings calculators
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-
-        {/* PayPal Button Card */}
+        {/* Single PayPal Donation Card */}
         <div className="max-w-3xl mx-auto px-4 sm:px-2">
           <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
             <CardHeader className="text-center px-4 sm:px-6 md:px-8 py-6 sm:py-8">
               <CardTitle className="text-2xl sm:text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4">
-                Make a Donation
+                Ready to write your own success story?
               </CardTitle>
               <CardDescription className="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed">
                 Your contribution helps us grow and improve
