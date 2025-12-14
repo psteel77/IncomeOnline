@@ -617,7 +617,7 @@ class BackendTester:
         print("BACKEND API TESTING - Online Earning Opportunities Website")
         print("=" * 60)
         
-        # Test in order of priority
+        # Test basic endpoints first
         self.test_seed_endpoint()
         self.test_categories_endpoint()
         self.test_platforms_endpoint()
@@ -627,6 +627,20 @@ class BackendTester:
         self.test_platform_by_id()
         self.test_stats_endpoint()
         
+        # Test CMS functionality
+        print("\n" + "=" * 60)
+        print("CMS FUNCTIONALITY TESTING")
+        print("=" * 60)
+        
+        # CMS tests require authentication first
+        if self.test_cms_admin_login():
+            self.test_cms_content_api()
+            self.test_cms_platforms_get()
+            self.test_cms_platforms_crud()
+            self.test_cms_categories_api()
+        else:
+            print("⚠️ Skipping CMS tests due to login failure")
+        
         # Summary
         print("\n" + "=" * 60)
         print("TEST SUMMARY")
@@ -634,10 +648,12 @@ class BackendTester:
         
         passed = len([r for r in self.test_results if r['status'] == 'PASS'])
         failed = len([r for r in self.test_results if r['status'] == 'FAIL'])
+        skipped = len([r for r in self.test_results if r['status'] == 'SKIP'])
         
         print(f"Total Tests: {len(self.test_results)}")
         print(f"Passed: {passed}")
         print(f"Failed: {failed}")
+        print(f"Skipped: {skipped}")
         
         if failed > 0:
             print("\nFAILED TESTS:")
