@@ -76,7 +76,8 @@ const CategoryPreview = () => {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Browse Categories</h2>
           <p className="text-lg text-slate-600 mb-2">8 earning categories with 50+ verified platforms</p>
-          <p className="text-sm text-amber-600 font-semibold">Unlock full access with a donation</p>
+          <p className="text-sm text-amber-600 font-semibold mb-3">Unlock full access to them all with a small donation</p>
+          <p className="text-sm text-slate-500 italic">Here are some examples to give you a taste of what we have to offer you at IncomeOnline...</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -114,7 +115,7 @@ const CategoryPreview = () => {
           })}
         </div>
 
-        {/* CTA to unlock - moved to end after Gig Economy */}
+        {/* Single CTA to unlock - after Gig Economy */}
         <div className="mt-8 sm:mt-12 text-center px-4 sm:px-2">
           <Card className="shadow-lg mx-auto border-2 max-w-full sm:max-w-2xl" style={{ background: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', borderColor: '#43ADD8' }}>
             <CardContent className="py-6 sm:py-8 px-4 sm:px-6">
@@ -123,7 +124,7 @@ const CategoryPreview = () => {
               <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 text-center px-2">
                 Get full access to detailed information, ratings, direct links, and earning strategies for all 50+ platforms
               </p>
-              <div className="flex justify-center">
+              <div className="flex flex-col items-center gap-3">
                 <Button 
                   className="font-bold text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-6 w-full max-w-xs sm:max-w-none sm:w-auto"
                   style={{ backgroundColor: '#43ADD8', color: 'white' }}
@@ -141,6 +142,9 @@ const CategoryPreview = () => {
                 >
                   Make a Donation to Unlock
                 </Button>
+                <p className="text-sm text-slate-600">
+                  Already donated? Check your email for the Access All Areas link
+                </p>
               </div>
             </CardContent>
           </Card>
