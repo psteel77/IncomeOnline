@@ -441,12 +441,13 @@ const Home = () => {
             <p className="text-base sm:text-lg text-slate-600">{content.how_it_works?.subtitle || 'Join the IncomeOnline community and start earning online in three simple steps'}</p>
           </div>
           
+          {/* Regular steps with images - show in 3-column grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
             {(content.how_it_works?.steps || [
               { title: '1. Browse & Search', description: 'Explore our comprehensive directory and find opportunities that match your skills and interests.', image: 'https://images.unsplash.com/photo-1629184510982-cf91280c1d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85' },
               { title: '2. Choose Verified Platforms', description: 'Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.', image: 'https://images.unsplash.com/photo-1758611971587-ddc6656822d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85' },
               { title: '3. Start Earning', description: 'Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.', image: 'https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHN1Y2Nlc3NmdWx8ZW58MHx8fHwxNzY0MDczMTE3fDA&ixlib=rb-4.1.0&q=85' }
-            ]).map((step, index) => (
+            ]).filter(step => step.image && step.image.trim() !== '').map((step, index) => (
               <div key={index} className="text-center">
                 <div className="mb-4 sm:mb-6">
                   <img 
@@ -460,6 +461,18 @@ const Home = () => {
               </div>
             ))}
           </div>
+          
+          {/* Conclusion step (no image) - centered, spanning full width */}
+          {(content.how_it_works?.steps || []).filter(step => !step.image || step.image.trim() === '').map((step, index) => (
+            <div key={`conclusion-${index}`} className="mt-10 sm:mt-12 text-center max-w-4xl mx-auto">
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700 leading-relaxed px-4">
+                {step.title}
+              </p>
+              {step.description && step.description.trim() !== '' && (
+                <p className="mt-3 text-base sm:text-lg text-slate-600">{step.description}</p>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
