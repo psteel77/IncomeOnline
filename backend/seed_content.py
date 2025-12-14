@@ -71,5 +71,59 @@ content_sections = [
             "tagline": "Your trusted guide to legitimate online earning opportunities",
             "copyright": "© 2025 Income Online. All rights reserved."
         }
+    },
+    {
+        "section_id": "how_it_works",
+        "content": {
+            "title": "How It Works",
+            "subtitle": "Join the IncomeOnline community and start earning online in three simple steps",
+            "steps": [
+                {
+                    "title": "1. Browse & Search",
+                    "description": "Explore our comprehensive directory and find opportunities that match your skills and interests.",
+                    "image": "https://images.unsplash.com/photo-1629184510982-cf91280c1d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
+                },
+                {
+                    "title": "2. Choose Verified Platforms",
+                    "description": "Select from our curated list of legitimate, trusted platforms with real earning potential and user reviews.",
+                    "image": "https://images.unsplash.com/photo-1758611971587-ddc6656822d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGNvbXB1dGVyfGVufDB8fHx8MTc2NDA3MzExMnww&ixlib=rb-4.1.0&q=85"
+                },
+                {
+                    "title": "3. Start Earning",
+                    "description": "Sign up on your chosen platforms and begin your online earning journey with confidence and clarity.",
+                    "image": "https://images.unsplash.com/photo-1551727974-8af20a3322f1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHN1Y2Nlc3NmdWx8ZW58MHx8fHwxNzY0MDczMTE3fDA&ixlib=rb-4.1.0&q=85"
+                }
+            ]
+        }
+    },
+    {
+        "section_id": "success_stories",
+        "content": {
+            "title": "Success Stories",
+            "subtitle": "Real people earning real money online",
+            "stories": [
+                {
+                    "quote": "I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!",
+                    "author": "Freelance Designer",
+                    "category": "Freelancing",
+                    "image": "https://images.unsplash.com/photo-1758518731027-78a22c8852ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxzdWNjZXNzJTIwY2VsZWJyYXRpb258ZW58MHx8fHwxNzY0MDczMTg4fDA&ixlib=rb-4.1.0&q=85"
+                },
+                {
+                    "quote": "Teaching online changed my life! I now reach students worldwide and earn consistently while working from home. The flexibility is incredible!",
+                    "author": "Online Educator",
+                    "category": "Teaching & Tutoring",
+                    "image": "https://images.unsplash.com/photo-1758519290801-c07424a5142a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHw0fHxhY2hpZXZlbWVudCUyMGJ1c2luZXNzfGVufDB8fHx8MTc2NDA3MzE5NHww&ixlib=rb-4.1.0&q=85"
+                }
+            ]
+        }
+    },
+    {
+        "section_id": "cta",
+        "content": {
+            "title": "Ready to Start Your Online Earning Journey?",
+            "subtitle": "Join thousands of people already earning money online through our platform",
+            "button_primary": "Explore All Platforms",
+            "button_secondary": "Read Success Stories"
+        }
     }
 ]
