@@ -102,20 +102,7 @@ const AccessGate = () => {
 
             {/* Returning User Card */}
             <div 
-              className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all cursor-pointer bg-gradient-to-br from-white to-amber-50"
-              onClick={() => {
-                setUserType('returning');
-                // Scroll to show the form after state change
-                setTimeout(() => {
-                  const form = document.getElementById('returning-user-form');
-                  if (form) {
-                    const headerHeight = 80;
-                    const elementPosition = form.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                  }
-                }, 150);
-              }}
+              className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all bg-gradient-to-br from-white to-amber-50"
             >
               <div className="flex flex-col items-center text-center h-full">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-amber-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
@@ -125,10 +112,39 @@ const AccessGate = () => {
                 <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 flex-grow">
                   Already a member? Enter your email to receive your access link
                 </p>
-                <Button className="w-full bg-amber-600 hover:bg-amber-700 py-3 sm:py-4 text-xs sm:text-base font-bold mt-auto">
-                  Access Link
-                  <ArrowRight className="ml-1 h-4 w-4 flex-shrink-0" />
-                </Button>
+                <form 
+                  className="w-full space-y-3"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setUserType('returning');
+                    // Trigger the email submission after setting state
+                    setTimeout(() => {
+                      const form = document.getElementById('returning-user-form');
+                      if (form) {
+                        const submitBtn = form.querySelector('button[type="submit"]');
+                        if (submitBtn) submitBtn.click();
+                      }
+                    }, 100);
+                  }}
+                >
+                  <Input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="text-sm py-3 bg-white"
+                    disabled={loading}
+                  />
+                  <Button 
+                    type="submit"
+                    className="w-full bg-amber-600 hover:bg-amber-700 py-3 sm:py-4 text-xs sm:text-base font-bold"
+                    disabled={loading || !email}
+                  >
+                    {loading ? 'Sending...' : 'Request Access Link'}
+                    <ArrowRight className="ml-1 h-4 w-4 flex-shrink-0" />
+                  </Button>
+                </form>
               </div>
             </div>
           </div>
