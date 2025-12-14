@@ -66,8 +66,7 @@ const DonationSection = () => {
               {/* Why Donate Section */}
               <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-teal-200">
                 <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
-                  There are websites that offer Income Online opportunities that are "free" but in my experience very few things on the Internet are genuinely "free". 
-                  Many of the 'free' websites accept commissions/fees from other Platforms and direct you towards these out of their own financial interest.
+                  There are websites offering Income Online opportunities that are "free" but in our experience very few things on the Internet are genuinely "free". Many of the 'free' websites accept commissions/fees from other Platforms and direct you towards these out of their own financial interest.
                 </p>
                 <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
                   By making a donation to access the online income opportunities via our web portal you have <span className="font-bold text-teal-800">3 Factor peace of mind</span>:
@@ -78,7 +77,7 @@ const DonationSection = () => {
                       1
                     </div>
                     <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We do not accept commissions/fees from any of the Platforms on our site.
+                      We do not accept commissions/fees/incentives or any other form of enrichment from any of the Platforms recommended on our site.
                     </p>
                   </div>
                   <div className="flex items-start gap-2 sm:gap-3">
@@ -86,7 +85,7 @@ const DonationSection = () => {
                       2
                     </div>
                     <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We are completely independent with no commercial link to any Platform.
+                      We are completely independent, we have no commercial link or personal relationship to any recommended Platform or potential provider of Income Online.
                     </p>
                   </div>
                   <div className="flex items-start gap-2 sm:gap-3">
@@ -94,12 +93,12 @@ const DonationSection = () => {
                       3
                     </div>
                     <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We will never sell or release your data.
+                      We will never sell or release your data to any third parties.
                     </p>
                   </div>
                 </div>
                 <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
-                  We believe that the donation we ask you to make in return for unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
+                  We believe that the modest donation we ask you to make in return for unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
                 </p>
               </div>
 
