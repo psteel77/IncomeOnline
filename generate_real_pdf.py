@@ -3,7 +3,7 @@ from playwright.async_api import async_playwright
 import os
 
 BASE_URL = "http://localhost:3000"
-JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBkZmdlbkBpbmNvbWVvbmxpbmUuaW5mbyIsImV4cCI6MTc2NTg4NzYzMn0.B8fDG3Q-W669h1IP5H--9tn4Vfpyf2aNFPKndUGGVjk"
+JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBkZmdlbkBpbmNvbWVvbmxpbmUuaW5mbyIsImV4cCI6MTc2NTg4Nzc2MH0.RJnrVzeaqZRqLFKQZwY1mOq8deBZ3PZXxyaQRPNYLn8"
 
 async def generate_real_website_pdf():
     """Generate PDF of the actual website with authentication"""
