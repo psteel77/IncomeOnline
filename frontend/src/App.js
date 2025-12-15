@@ -8,6 +8,7 @@ import Verify from "./pages/Verify";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuccessStories from "./pages/SuccessStories";
+import PDFView from "./pages/PDFView";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/pdf-view" element={<PDFView />} />
             </Routes>
           </BrowserRouter>
         </AdminProvider>
