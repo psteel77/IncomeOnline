@@ -276,7 +276,7 @@ const Home = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500" style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }} mb-4">{content.platforms_featured?.title || 'Featured Platforms'}</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.platforms_featured?.title || 'Featured Platforms'}</h2>
             <p className="text-lg text-slate-600">{content.platforms_featured?.subtitle || 'Top-rated and most popular earning opportunities'}</p>
           </div>
           
