@@ -437,7 +437,7 @@ const Home = () => {
       <section id="how-it-works" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500" style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }} mb-3 sm:mb-4">{content.how_it_works?.title || 'How It Works'}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.how_it_works?.title || 'How It Works'}</h2>
             <p className="text-base sm:text-lg text-slate-600">{content.how_it_works?.subtitle || 'Join the IncomeOnline community and start earning online in three simple steps'}</p>
           </div>
           
