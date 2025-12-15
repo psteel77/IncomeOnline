@@ -5,10 +5,10 @@ import os
 BASE_URL = "https://money-opp-guide.preview.emergentagent.com"
 
 # Main pages to capture (excluding admin and verify which need auth)
+# Note: Donate section is now integrated into the Home page
 PAGES = [
     {"name": "Home", "path": "/", "filename": "01_home.pdf"},
     {"name": "Success Stories", "path": "/success-stories", "filename": "02_success_stories.pdf"},
-    {"name": "Donate", "path": "/donate", "filename": "03_donate.pdf"},
 ]
 
 async def generate_pdfs():
