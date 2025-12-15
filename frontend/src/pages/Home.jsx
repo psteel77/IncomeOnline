@@ -287,7 +287,7 @@ const Home = () => {
                 <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
                   <CardContent className="py-16 text-center">
                     <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} mb-4">{content.platforms_featured?.locked_title || '🔒 Platforms Locked'}</h3>
+                    <h3 className="text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{content.platforms_featured?.locked_title || '🔒 Platforms Locked'}</h3>
                     <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
                       {content.platforms_featured?.locked_description || `Support us with a donation to unlock full access to all ${platforms.length}+ earning platforms with detailed reviews and direct links.`}
                     </p>
