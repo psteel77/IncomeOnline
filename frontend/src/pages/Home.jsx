@@ -456,7 +456,7 @@ const Home = () => {
                     className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
                   />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} mb-2 sm:mb-3">{step.title}</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{step.title}</h3>
                 <p className="text-sm sm:text-base text-slate-600">{step.description}</p>
               </div>
             ))}
