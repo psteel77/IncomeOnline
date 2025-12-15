@@ -354,80 +354,159 @@ const Home = () => {
       {!authLoading && isAuthenticated && (
       <section id="platforms" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.platforms_all?.title || 'All Platforms'}</h2>
-              <p className="text-sm sm:text-base md:text-lg text-slate-600">{isAuthenticated ? `Showing ${filteredPlatforms.length} platforms` : (content.platforms_all?.subtitle || 'Explore our comprehensive directory and find opportunities that match your skills and interests.')}</p>
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500" />
-              <select 
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-slate-200 rounded-lg focus:border-emerald-500 focus:outline-none w-full sm:w-auto"
-              >
-                <option value="All">All Categories</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.name}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.platforms_all?.title || 'All Platforms'}</h2>
+            <p className="text-sm sm:text-base md:text-lg text-slate-600">{isAuthenticated ? `Explore our ${platforms.length} verified earning opportunities across 8 categories` : (content.platforms_all?.subtitle || 'Explore our comprehensive directory and find opportunities that match your skills and interests.')}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {!authLoading && !isAuthenticated ? (
-              // Show locked message
-              <div className="col-span-full">
-                <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
-                  <CardContent className="py-16 text-center">
-                    <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{content.platforms_all?.locked_title || '🔒 Content Locked'}</h3>
-                    <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
-                      {content.platforms_all?.locked_description || 'Make a donation to view all platforms and start your earning journey today.'}
-                    </p>
-                    <Button 
-                      onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
-                      size="lg"
-                      className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
-                    >
-                      Donate Now
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-            ) : filteredPlatforms.map((platform) => (
-              <Card key={platform.id} className="hover:shadow-lg transition-all duration-300 border border-slate-200">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg text-slate-900">{platform.name}</CardTitle>
-                      <Badge variant="outline" className="mt-2 text-xs">{platform.category}</Badge>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span className="text-xs font-semibold">{platform.rating}</span>
-                    </div>
-                  </div>
-                  <CardDescription className="mt-3 text-sm">{platform.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-600">Earning:</span>
-                    <span className="font-semibold text-emerald-700">{platform.earningsPotential}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-600">Difficulty:</span>
-                    <Badge variant="secondary" className="text-xs">{platform.difficulty}</Badge>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="w-full border-teal-600 text-teal-600 hover:bg-teal-50" onClick={() => window.open(platform.link, '_blank')}>
-                    Learn More
-                    <ExternalLink className="ml-2 h-3 w-3" />
+          {!authLoading && !isAuthenticated ? (
+            // Show locked message for unauthenticated users
+            <div className="max-w-2xl mx-auto">
+              <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
+                <CardContent className="py-16 text-center">
+                  <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
+                  <h3 className="text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{content.platforms_all?.locked_title || '🔒 Content Locked'}</h3>
+                  <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
+                    {content.platforms_all?.locked_description || 'Make a donation to view all platforms and start your earning journey today.'}
+                  </p>
+                  <Button 
+                    onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
+                    size="lg"
+                    className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+                  >
+                    Donate Now
                   </Button>
-                </CardFooter>
+                </CardContent>
               </Card>
-            ))}
+            </div>
+          ) : (
+            <>
+              {/* Category Quick Navigation */}
+              <div className="mb-10 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Jump to Category:</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        const element = document.getElementById(`cat-${cat.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`);
+                        if (element) {
+                          const headerHeight = 80;
+                          const elementPosition = element.getBoundingClientRect().top;
+                          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
+                      }}
+                      className="px-3 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
+                      style={{ 
+                        backgroundColor: cat.name === 'Freelancing' ? '#0891b2' :
+                                        cat.name === 'Surveys & Research' ? '#2563eb' :
+                                        cat.name === 'Digital Creators/Innovators' ? '#7c3aed' :
+                                        cat.name === 'E-commerce' ? '#0d9488' :
+                                        cat.name === 'Teaching & Tutoring' ? '#4f46e5' :
+                                        cat.name === 'Trading & Investing' ? '#1d4ed8' :
+                                        cat.name === 'Remote Jobs' ? '#6366f1' :
+                                        cat.name === 'Gig Economy' ? '#0284c7' : '#43ADD8',
+                        color: 'white'
+                      }}
+                    >
+                      {cat.name.length > 15 ? cat.name.substring(0, 12) + '...' : cat.name}
+                      <span className="block text-xs opacity-80">({cat.count})</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Platforms by Category */}
+              {categories.map((category) => {
+                const categoryPlatforms = platforms.filter(p => p.category === category.name);
+                if (categoryPlatforms.length === 0) return null;
+                
+                const categoryColor = category.name === 'Freelancing' ? '#0891b2' :
+                                      category.name === 'Surveys & Research' ? '#2563eb' :
+                                      category.name === 'Digital Creators/Innovators' ? '#7c3aed' :
+                                      category.name === 'E-commerce' ? '#0d9488' :
+                                      category.name === 'Teaching & Tutoring' ? '#4f46e5' :
+                                      category.name === 'Trading & Investing' ? '#1d4ed8' :
+                                      category.name === 'Remote Jobs' ? '#6366f1' :
+                                      category.name === 'Gig Economy' ? '#0284c7' : '#43ADD8';
+                
+                return (
+                  <div 
+                    key={category.id} 
+                    id={`cat-${category.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`}
+                    className="mb-12"
+                  >
+                    {/* Category Header */}
+                    <div className="flex items-center gap-4 mb-6 pb-3 border-b-4" style={{ borderColor: categoryColor }}>
+                      <h3 
+                        className="text-2xl sm:text-3xl font-bold"
+                        style={{ color: categoryColor }}
+                      >
+                        {category.name}
+                      </h3>
+                      <span 
+                        className="px-3 py-1 rounded-full text-sm font-semibold text-white"
+                        style={{ backgroundColor: categoryColor }}
+                      >
+                        {categoryPlatforms.length} platforms
+                      </span>
+                    </div>
+                    
+                    {/* Category Platforms Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {categoryPlatforms.map((platform) => (
+                        <Card key={platform.id} className="hover:shadow-lg transition-all duration-300 border border-slate-200">
+                          <CardHeader>
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <CardTitle className="text-lg text-slate-900">{platform.name}</CardTitle>
+                                {platform.featured && (
+                                  <Badge className="mt-1 bg-amber-100 text-amber-700 text-xs">Featured</Badge>
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                <span className="text-sm font-semibold">{platform.rating}</span>
+                              </div>
+                            </div>
+                            <CardDescription className="mt-3 text-sm line-clamp-3">{platform.description}</CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-slate-600">Earning:</span>
+                              <span className="font-semibold text-emerald-700">{platform.earningsPotential}</span>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-slate-600">Difficulty:</span>
+                              <Badge variant="secondary" className="text-xs">{platform.difficulty}</Badge>
+                            </div>
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-slate-600">Min Payout:</span>
+                              <span className="font-medium">{platform.minPayout}</span>
+                            </div>
+                          </CardContent>
+                          <CardFooter>
+                            <Button 
+                              variant="outline" 
+                              className="w-full border-2 hover:text-white transition-all"
+                              style={{ borderColor: categoryColor, color: categoryColor }}
+                              onMouseEnter={(e) => e.target.style.backgroundColor = categoryColor}
+                              onMouseLeave={(e) => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = categoryColor; }}
+                              onClick={() => window.open(platform.link, '_blank')}
+                            >
+                              Visit Platform
+                              <ExternalLink className="ml-2 h-4 w-4" />
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
           </div>
         </div>
       </section>
