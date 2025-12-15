@@ -287,7 +287,7 @@ const Home = () => {
                 <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
                   <CardContent className="py-16 text-center">
                     <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-yellow-700 mb-4">{content.platforms_featured?.locked_title || '🔒 Platforms Locked'}</h3>
+                    <h3 className="text-3xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} mb-4">{content.platforms_featured?.locked_title || '🔒 Platforms Locked'}</h3>
                     <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
                       {content.platforms_featured?.locked_description || `Support us with a donation to unlock full access to all ${platforms.length}+ earning platforms with detailed reviews and direct links.`}
                     </p>
@@ -381,7 +381,7 @@ const Home = () => {
                 <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
                   <CardContent className="py-16 text-center">
                     <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-yellow-700 mb-4">{content.platforms_all?.locked_title || '🔒 Content Locked'}</h3>
+                    <h3 className="text-3xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} mb-4">{content.platforms_all?.locked_title || '🔒 Content Locked'}</h3>
                     <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
                       {content.platforms_all?.locked_description || 'Make a donation to view all platforms and start your earning journey today.'}
                     </p>
@@ -456,7 +456,7 @@ const Home = () => {
                     className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
                   />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3">{step.title}</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} mb-2 sm:mb-3">{step.title}</h3>
                 <p className="text-sm sm:text-base text-slate-600">{step.description}</p>
               </div>
             ))}
@@ -465,7 +465,7 @@ const Home = () => {
           {/* Conclusion step (no image) - centered, spanning full width */}
           {(content.how_it_works?.steps || []).filter(step => !step.image || step.image.trim() === '').map((step, index) => (
             <div key={`conclusion-${index}`} className="mt-10 sm:mt-12 text-center max-w-4xl mx-auto">
-              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700 leading-relaxed px-4">
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} leading-relaxed px-4">
                 {step.title}
               </p>
               {step.description && step.description.trim() !== '' && (
