@@ -8,7 +8,7 @@ const PlatformPreview = () => {
     <section id="platforms-preview" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">Featured Platforms</h2>
+          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>Featured Platforms</h2>
           <p className="text-lg text-slate-600 mb-2">50+ verified platforms ready for you to explore</p>
           <p className="text-sm text-amber-600 font-semibold">Unlock full details with a donation</p>
         </div>
