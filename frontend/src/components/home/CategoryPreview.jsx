@@ -122,7 +122,7 @@ const CategoryPreview = () => {
               <Lock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" style={{ color: '#43ADD8' }} />
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-center" style={{ color: '#43ADD8' }}>Unlock All Platform Details</h3>
               <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 text-center px-2">
-                Get full access to detailed information, ratings, direct links, and earning strategies for all 50+ platforms
+                Get full access to detailed information, ratings, direct links, and earning strategies for all 110+ platforms
               </p>
               <div className="flex flex-col items-center gap-3">
                 <Button 
