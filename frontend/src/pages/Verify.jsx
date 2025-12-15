@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
@@ -11,13 +11,15 @@ const API = `${BACKEND_URL}/api`;
 
 const Verify = () => {
   const [searchParams] = useSearchParams();
+  const { token: pathToken } = useParams();
   const navigate = useNavigate();
   const { login } = useAuth();
   const [status, setStatus] = useState('verifying'); // verifying, success, error
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    // Try path param first, then query param
+    const token = pathToken || searchParams.get('token');
     if (!token) {
       setStatus('error');
       setMessage('Invalid verification link');
@@ -25,7 +27,7 @@ const Verify = () => {
     }
 
     verifyToken(token);
-  }, [searchParams]);
+  }, [searchParams, pathToken]);
 
   const verifyToken = async (token) => {
     try {
