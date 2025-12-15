@@ -105,7 +105,7 @@ const AccessGate = () => {
               className="border-2 border-amber-200 rounded-xl p-4 sm:p-6 hover:border-amber-400 hover:shadow-lg transition-all bg-gradient-to-br from-white to-amber-50"
             >
               <div className="flex flex-col items-center text-center h-full">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-amber-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mb-3 sm:mb-4" style={{ backgroundColor: '#d97706' }}>
                   <Mail className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-amber-800 mb-2 sm:mb-4">Returning User</h3>
