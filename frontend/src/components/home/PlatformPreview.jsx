@@ -16,7 +16,7 @@ const PlatformPreview = () => {
         {/* Locked Message - simple text version, no duplicate lock box */}
         <div className="max-w-3xl mx-auto text-center">
           <Lock className="h-16 w-16 sm:h-20 sm:w-20 text-teal-600 mx-auto mb-6" />
-          <h3 className="text-2xl sm:text-3xl font-bold text-yellow-700 mb-4">Featured Platforms Locked</h3>
+          <h3 className="text-2xl sm:text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>Featured Platforms Locked</h3>
           <p className="text-lg sm:text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
             Support us with a donation to unlock full access to all 50+ earning platforms with detailed reviews, ratings, and direct links.
           </p>
