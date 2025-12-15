@@ -465,7 +465,7 @@ const Home = () => {
           {/* Conclusion step (no image) - centered, spanning full width */}
           {(content.how_it_works?.steps || []).filter(step => !step.image || step.image.trim() === '').map((step, index) => (
             <div key={`conclusion-${index}`} className="mt-10 sm:mt-12 text-center max-w-4xl mx-auto">
-              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700" style={{ textShadow: "1px 1px 3px rgba(0,0,0,0.2)" }} leading-relaxed px-4">
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700 leading-relaxed px-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>
                 {step.title}
               </p>
               {step.description && step.description.trim() !== '' && (
