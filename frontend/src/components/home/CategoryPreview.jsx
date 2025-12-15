@@ -8,14 +8,14 @@ const CategoryPreview = () => {
     {
       title: 'Freelancing',
       icon: TrendingUp,
-      color: 'teal',
+      color: '#0891b2', // cyan-600
       description: 'Offer your skills and services to clients worldwide',
-      platforms: ['Upwork', 'Fiverr', 'Toptal', 'And 2 more...']
+      platforms: ['Upwork', 'Fiverr', 'Toptal', 'And 7 more...']
     },
     {
       title: 'Surveys & Research',
       icon: Star,
-      color: 'cyan',
+      color: '#2563eb', // blue-600
       description: 'Share your opinions and get paid for your insights',
       subtitle: 'Quick ROI opportunity:',
       platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
@@ -23,7 +23,7 @@ const CategoryPreview = () => {
     {
       title: 'Digital Creators/Innovators',
       icon: Star,
-      color: 'purple',
+      color: '#7c3aed', // violet-600
       description: 'Create videos, write articles, or produce content',
       subtitle: 'High earning potential:',
       platforms: ['YouTube', 'Twitch', 'TikTok', 'And 11 more...']
@@ -31,42 +31,42 @@ const CategoryPreview = () => {
     {
       title: 'E-commerce',
       icon: TrendingUp,
-      color: 'green',
+      color: '#0d9488', // teal-600
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
-      platforms: ['Amazon FBA', 'Etsy']
+      platforms: ['Amazon FBA', 'Etsy', 'Shopify', 'And 12 more...']
     },
     {
       title: 'Teaching & Tutoring',
       icon: Star,
-      color: 'blue',
+      color: '#4f46e5', // indigo-600
       description: 'Share your knowledge and teach students online',
       subtitle: 'Make an impact:',
-      platforms: ['VIPKid', 'Udemy']
+      platforms: ['VIPKid', 'Udemy', 'Preply', 'And 7 more...']
     },
     {
       title: 'Trading & Investing',
       icon: TrendingUp,
-      color: 'indigo',
+      color: '#1d4ed8', // blue-700
       description: 'Invest in stocks, crypto, and other assets',
       subtitle: 'Build wealth:',
-      platforms: ['Coinbase']
+      platforms: ['Coinbase', 'eToro', 'Robinhood', 'And 8 more...']
     },
     {
       title: 'Remote Jobs',
       icon: Star,
-      color: 'rose',
+      color: '#6366f1', // indigo-500
       description: 'Find full-time remote work opportunities',
       subtitle: 'Stable income:',
-      platforms: ['FlexJobs', 'Indeed', 'Reed.co.uk', 'And 2 more...']
+      platforms: ['FlexJobs', 'Indeed', 'Remote.co', 'And 12 more...']
     },
     {
       title: 'Gig Economy',
       icon: TrendingUp,
-      color: 'amber',
+      color: '#0284c7', // sky-600
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
-      platforms: ['TaskRabbit', 'Instacart']
+      platforms: ['TaskRabbit', 'Instacart', 'DoorDash', 'And 13 more...']
     }
   ];
 
