@@ -93,8 +93,8 @@ const CategoryPreview = () => {
               >
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
-                    <CardTitle className={`text-xl font-bold text-${category.color}-800`}>{category.title}</CardTitle>
-                    <IconComponent className={`h-8 w-8 text-${category.color}-600`} />
+                    <CardTitle className="text-xl font-bold" style={{ color: '#43ADD8' }}>{category.title}</CardTitle>
+                    <IconComponent className="h-8 w-8" style={{ color: '#43ADD8' }} />
                   </div>
                   <CardDescription className="text-slate-600">
                     {category.description}
