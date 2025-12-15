@@ -2,7 +2,7 @@ import asyncio
 from playwright.async_api import async_playwright
 import os
 
-BASE_URL = "https://earn-platform-hub.preview.emergentagent.com"
+BASE_URL = "https://money-opp-guide.preview.emergentagent.com"
 
 # Main pages to capture (excluding admin and verify which need auth)
 PAGES = [
