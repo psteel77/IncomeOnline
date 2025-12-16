@@ -211,6 +211,12 @@ const Home = () => {
                 How It Works
               </a>
               <a 
+                href="/success-stories"
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                Success Stories
+              </a>
+              <a 
                 href="#support" 
                 onClick={(e) => { 
                   e.preventDefault(); 
