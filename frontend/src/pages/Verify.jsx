@@ -51,6 +51,10 @@ const Verify = () => {
           console.log('Navigating to homepage...');
           navigate('/', { replace: true });
         }, 2000);
+      } else if (response.data.expired) {
+        // Subscription expired
+        setStatus('error');
+        setMessage('Your 12-month subscription has expired. Please make a new donation to renew your access.');
       } else {
         setStatus('error');
         setMessage(response.data.message || 'Verification failed');
