@@ -11,7 +11,7 @@ The CMS lets you **edit text on your website** without touching any code. It's l
 1. Open your web browser (Chrome, Firefox, Safari, etc.)
 2. Type this URL: **`your-website.com/admin/login`**
    - Replace `your-website.com` with your actual domain
-   - For preview: `https://moneysource.preview.emergentagent.com/admin/login`
+   - For preview: `https://moneyguide-2.preview.emergentagent.com/admin/login`
 3. Press Enter
 
 ### STEP 2: Login

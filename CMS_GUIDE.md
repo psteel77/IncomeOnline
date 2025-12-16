@@ -6,7 +6,7 @@ Your Income Online platform now includes a powerful Content Management System th
 ## Admin Access
 
 ### Login Credentials
-- **URL:** https://moneysource.preview.emergentagent.com/admin/login
+- **URL:** https://moneyguide-2.preview.emergentagent.com/admin/login
 - **Username:** `admin`
 - **Password:** `admin123`
 
