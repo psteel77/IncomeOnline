@@ -244,17 +244,56 @@ def verify_token(token: str):
 
 @api_router.post("/auth/request-access")
 async def request_access(request: LoginRequest):
-    """Request access - sends verification email"""
+    """Request access - sends verification email or expiration message"""
     try:
         email = request.email.lower()
         
-        # Check if user exists
+        # Check if user exists in active users
         existing_user = await db.users.find_one({"email": email})
         
         if existing_user:
-            # User exists, check if verified
+            # Check if subscription has expired
+            expires_at = existing_user.get('expires_at')
+            if expires_at:
+                # Parse expiry date if it's a string
+                if isinstance(expires_at, str):
+                    expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                
+                # Check if expired
+                now = datetime.now(timezone.utc)
+                if expires_at < now:
+                    # Move user to expired_users collection
+                    expired_user_data = {
+                        **existing_user,
+                        'expired_at': now.isoformat(),
+                        'original_donated_at': existing_user.get('donated_at'),
+                        'original_expires_at': existing_user.get('expires_at')
+                    }
+                    # Remove MongoDB _id before inserting
+                    expired_user_data.pop('_id', None)
+                    
+                    await db.expired_users.update_one(
+                        {"email": email},
+                        {"$set": expired_user_data},
+                        upsert=True
+                    )
+                    
+                    # Remove from active users
+                    await db.users.delete_one({"email": email})
+                    
+                    # Send expired notification email
+                    send_expired_email(email)
+                    
+                    return {
+                        "success": False,
+                        "message": "Your 12-month subscription has expired. Please make a new donation to renew your access and continue exploring income opportunities.",
+                        "expired": True,
+                        "token": None
+                    }
+            
+            # User exists and subscription is active
             if existing_user.get('verified'):
-                # User already has access, send new verification link
+                # User has active access, send new verification link
                 verification_token = str(uuid.uuid4())
                 await db.users.update_one(
                     {"email": email},
@@ -276,6 +315,16 @@ async def request_access(request: LoginRequest):
                     "token": None
                 }
         else:
+            # Check if user is in expired_users collection
+            expired_user = await db.expired_users.find_one({"email": email})
+            if expired_user:
+                return {
+                    "success": False,
+                    "message": "Your 12-month subscription has expired. Please make a new donation to renew your access and continue exploring income opportunities.",
+                    "expired": True,
+                    "token": None
+                }
+            
             return {
                 "success": False,
                 "message": "Email not found. Please donate first to get access.",
