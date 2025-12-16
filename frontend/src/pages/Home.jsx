@@ -148,6 +148,12 @@ const Home = () => {
                 How It Works
               </a>
               <a 
+                href="/success-stories"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+              >
+                Success Stories
+              </a>
+              <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
                 className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold text-lg cursor-pointer"
