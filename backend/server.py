@@ -16,9 +16,12 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
-from email_service import send_new_user_email, send_returning_user_email
+from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email
 from cms_routes import router as cms_router
 from seed_content import content_sections
+
+# Subscription duration in days
+SUBSCRIPTION_DURATION_DAYS = 365
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
