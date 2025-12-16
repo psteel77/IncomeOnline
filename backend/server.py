@@ -556,6 +556,195 @@ async def paypal_ipn(request: Request):
         logging.error(f"Error in PayPal IPN: {str(e)}")
         return {"status": "error", "message": str(e)}
 
+
+@api_router.post("/subscription/process-expirations")
+async def process_subscription_expirations():
+    """
+    Process subscription expirations:
+    1. Send 7-day warning emails to users expiring soon
+    2. Move expired users to expired_users collection
+    3. Send expiration notification emails
+    
+    This should be called daily by a cron job or scheduler.
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        seven_days_from_now = now + timedelta(days=7)
+        
+        results = {
+            "warnings_sent": 0,
+            "expired_processed": 0,
+            "errors": []
+        }
+        
+        # 1. Send 7-day warning emails
+        # Find users whose subscription expires in exactly 7 days (within a 24-hour window)
+        warning_start = seven_days_from_now - timedelta(hours=12)
+        warning_end = seven_days_from_now + timedelta(hours=12)
+        
+        users_to_warn = await db.users.find({
+            "verified": True,
+            "warning_sent": {"$ne": True},
+            "expires_at": {"$exists": True}
+        }).to_list(1000)
+        
+        for user in users_to_warn:
+            try:
+                expires_at = user.get('expires_at')
+                if isinstance(expires_at, str):
+                    expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                
+                # Check if expiry is within the warning window
+                if warning_start <= expires_at <= warning_end:
+                    # Send warning email
+                    send_expiry_warning_email(user['email'], expires_at)
+                    
+                    # Mark warning as sent
+                    await db.users.update_one(
+                        {"email": user['email']},
+                        {"$set": {"warning_sent": True}}
+                    )
+                    
+                    results["warnings_sent"] += 1
+                    logging.info(f"Sent 7-day expiry warning to: {user['email']}")
+            except Exception as e:
+                results["errors"].append(f"Warning email error for {user.get('email')}: {str(e)}")
+        
+        # 2. Process expired subscriptions
+        expired_users = await db.users.find({
+            "verified": True,
+            "expires_at": {"$exists": True}
+        }).to_list(1000)
+        
+        for user in expired_users:
+            try:
+                expires_at = user.get('expires_at')
+                if isinstance(expires_at, str):
+                    expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                
+                if expires_at < now:
+                    email = user['email']
+                    
+                    # Prepare expired user data
+                    expired_user_data = {
+                        "email": email,
+                        "created_at": user.get('created_at'),
+                        "original_donated_at": user.get('donated_at'),
+                        "original_expires_at": user.get('expires_at'),
+                        "expired_at": now.isoformat(),
+                        "verification_token": user.get('verification_token'),
+                        "previous_subscriptions": user.get('previous_subscriptions', [])
+                    }
+                    
+                    # Move to expired_users collection
+                    await db.expired_users.update_one(
+                        {"email": email},
+                        {"$set": expired_user_data},
+                        upsert=True
+                    )
+                    
+                    # Remove from active users
+                    await db.users.delete_one({"email": email})
+                    
+                    # Send expiration email
+                    send_expired_email(email)
+                    
+                    results["expired_processed"] += 1
+                    logging.info(f"Processed expired subscription for: {email}")
+            except Exception as e:
+                results["errors"].append(f"Expiration processing error for {user.get('email')}: {str(e)}")
+        
+        return {
+            "success": True,
+            "results": results
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in process_subscription_expirations: {str(e)}")
+        return {"success": False, "message": str(e)}
+
+
+@api_router.post("/subscription/migrate-existing-users")
+async def migrate_existing_users():
+    """
+    One-time migration: Add subscription dates to existing users.
+    Sets donated_at to today and expires_at to 12 months from today.
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
+        
+        # Find all verified users without expires_at
+        users_to_migrate = await db.users.find({
+            "verified": True,
+            "expires_at": {"$exists": False}
+        }).to_list(10000)
+        
+        migrated_count = 0
+        
+        for user in users_to_migrate:
+            await db.users.update_one(
+                {"email": user['email']},
+                {"$set": {
+                    "donated_at": now.isoformat(),
+                    "expires_at": expires_at.isoformat(),
+                    "status": "active",
+                    "warning_sent": False
+                }}
+            )
+            migrated_count += 1
+        
+        return {
+            "success": True,
+            "message": f"Migrated {migrated_count} existing users with 12-month subscription from today"
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in migrate_existing_users: {str(e)}")
+        return {"success": False, "message": str(e)}
+
+
+@api_router.get("/subscription/stats")
+async def get_subscription_stats():
+    """Get subscription statistics"""
+    try:
+        now = datetime.now(timezone.utc)
+        seven_days_from_now = now + timedelta(days=7)
+        thirty_days_from_now = now + timedelta(days=30)
+        
+        total_active = await db.users.count_documents({"verified": True})
+        total_expired = await db.expired_users.count_documents({})
+        
+        # Count users expiring soon (need to check date strings)
+        all_users = await db.users.find({"verified": True, "expires_at": {"$exists": True}}).to_list(10000)
+        
+        expiring_7_days = 0
+        expiring_30_days = 0
+        
+        for user in all_users:
+            expires_at = user.get('expires_at')
+            if isinstance(expires_at, str):
+                expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+            
+            if expires_at and expires_at <= seven_days_from_now:
+                expiring_7_days += 1
+            if expires_at and expires_at <= thirty_days_from_now:
+                expiring_30_days += 1
+        
+        return {
+            "success": True,
+            "stats": {
+                "total_active_subscribers": total_active,
+                "total_expired_users": total_expired,
+                "expiring_within_7_days": expiring_7_days,
+                "expiring_within_30_days": expiring_30_days
+            }
+        }
+        
+    except Exception as e:
+        logging.error(f"Error in get_subscription_stats: {str(e)}")
+        return {"success": False, "message": str(e)}
+
 # Include the routers in the main app
 app.include_router(api_router)
 app.include_router(cms_router, prefix="/api")
