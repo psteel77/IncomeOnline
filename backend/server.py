@@ -337,7 +337,7 @@ async def request_access(request: LoginRequest):
 
 @api_router.get("/auth/verify/{token}")
 async def verify_email(token: str):
-    """Verify email token and return JWT"""
+    """Verify email token and return JWT (checks subscription expiration)"""
     try:
         # Find user with this verification token
         user = await db.users.find_one({"verification_token": token})
@@ -345,12 +345,27 @@ async def verify_email(token: str):
         if not user:
             return {"success": False, "message": "Invalid or expired verification link"}
         
+        # Check if subscription has expired
+        expires_at = user.get('expires_at')
+        if expires_at:
+            if isinstance(expires_at, str):
+                expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+            
+            now = datetime.now(timezone.utc)
+            if expires_at < now:
+                # Subscription expired
+                return {
+                    "success": False,
+                    "message": "Your 12-month subscription has expired. Please make a new donation to renew your access.",
+                    "expired": True
+                }
+        
         # Update user's last login (keep verification_token for reuse)
         await db.users.update_one(
             {"email": user['email']},
             {
                 "$set": {
-                    "last_login": datetime.utcnow()
+                    "last_login": datetime.now(timezone.utc).isoformat()
                 }
             }
         )
