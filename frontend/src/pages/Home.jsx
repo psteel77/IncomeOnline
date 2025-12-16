@@ -102,7 +102,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       {/* Header */}
-      <header className="border-b border-teal-800 sticky top-0 z-50 shadow-md" style={{backgroundColor: '#165e84'}}>
+      <header className="border-b border-teal-800 sticky top-0 z-50 shadow-lg" style={{backgroundColor: '#165e84', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             {/* Logo on the left */}
@@ -117,7 +117,7 @@ const Home = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <nav className="flex space-x-6 lg:space-x-8 max-md:hidden items-center">
+            <nav className="flex space-x-6 lg:space-x-8 max-md:hidden items-center ml-8">
               <a 
                 href="#categories-preview" 
                 onClick={(e) => { 
@@ -125,7 +125,7 @@ const Home = () => {
                   const target = document.getElementById('categories-preview') || document.getElementById('categories');
                   target?.scrollIntoView({ behavior: 'smooth' }); 
                 }}
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 Categories
               </a>
@@ -136,27 +136,27 @@ const Home = () => {
                   const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
                   target?.scrollIntoView({ behavior: 'smooth' }); 
                 }}
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 Platforms
               </a>
               <a 
                 href="#how-it-works" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 How It Works
               </a>
               <a 
                 href="/success-stories"
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 Success Stories
               </a>
               <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold text-lg cursor-pointer"
+                className="text-yellow-300 hover:text-yellow-200 transition-colors font-bold text-lg cursor-pointer no-underline"
               >
                 Get Started NOW
               </a>
