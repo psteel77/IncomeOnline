@@ -71,10 +71,10 @@ const PlatformPreview = () => {
       color: "#6366f1"
     },
     {
-      name: "DoorDash",
+      name: "Deliveroo",
       category: "Gig Economy",
-      description: "Leading food delivery platform. Flexible scheduling with peak-hour bonuses. Earn tips on top of base pay with instant withdrawals.",
-      earningsPotential: "$500-2,500/month",
+      description: "UK-based food delivery platform. Become a rider and earn flexible income delivering food from restaurants to customers in your area.",
+      earningsPotential: "£10-20/hour",
       difficulty: "Easy",
       rating: 4.2,
       color: "#0284c7"
