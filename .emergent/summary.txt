@@ -1,89 +1,109 @@
-<analysis>**original_problem_statement**: The user wants to build a comprehensive website for discovering online earning opportunities. Key features include a directory of platforms, search/filter functionality, custom branding, a PayPal-based paywall system, magic link authentication, and a full-featured admin panel for content management. The project has involved significant content expansion and iterative UI/UX improvements, especially for mobile devices, based on frequent user feedback.
+<analysis>**original_problem_statement**: The user wants to build a comprehensive website for discovering online earning opportunities. Key features include a directory of platforms, search/filter functionality, custom branding, a PayPal-based paywall system, magic link authentication, and a full-featured admin panel for content management. The project has evolved to include a time-based subscription system with automated renewal reminders and expiration handling.
+
+PRODUCT REQUIREMENTS:
+1.  **Platform Directory**: A searchable, filterable list of online earning platforms.
+2.  **Paywall**: Access to the full platform details is restricted to users who have made a donation via PayPal.
+3.  **Subscription System**: User access is valid for 12 months from their donation date.
+4.  **Automated Emails**: Users receive a warning email 7 days before their subscription expires and an expiration notification email after it lapses.
+5.  **Automated Job**: A daily cron job must run to check for expiring and expired subscriptions and trigger the corresponding emails.
+6.  **Admin Panel**: A full CMS for the user to manage all site content and platforms.
+7.  **Custom Branding**: The UI/UX must follow specific user requests regarding layout, colors, and text.
+8.  **Production Deployment**: The final application must be live on the user's custom domain ().
 
 **User's preferred language**: English
 
 **what currently exists?**
-The project is a feature-rich full-stack application (React/FastAPI/MongoDB). It features over 110 online earning platforms, a custom-built CMS that allows the user to edit nearly all site content (including platform details), and a magic link authentication system. The UI has been heavily customized with specific layouts, colors, and text effects per user requests.
+The application is a full-stack React/FastAPI/MongoDB project. It features a directory of over 110 earning platforms, a custom CMS, and a magic link authentication system.
 
-A critical, unresolved issue is that the user's production domain () does not reflect the latest deployed changes, despite the preview environment working perfectly. This has been diagnosed as a platform-level DNS or deployment issue requiring user action or support from Emergent.
+A complete subscription management system has been implemented:
+-   The  collection now tracks , , and  (/).
+-   API endpoints (, , ) enforce subscription status.
+-   The PayPal IPN webhook correctly sets subscription dates for new donors.
+-   Automated email templates for expiry warnings and expiration notices have been created.
+-   A daily scheduler job, managed by Supervisor, runs a script to process expirations and send emails.
+
+The key unresolved problem is a platform-level deployment issue. Despite successful deployments, the user's custom domain () serves an old, default version of the application, while the preview environment works perfectly. This has been identified as a domain linking or build caching issue on the Emergent platform, not a code bug.
 
 **Last working item**:
-- **Last item agent was working:** The agent was in the middle of implementing a three-part UI/content change request from the user:
-    1.  Move the How it works section to appear after the New User and Returning User boxes.
-    2.  Reduce the number of sample platforms in the unauthenticated view to 8.
-    3.  Update all platform count references (e.g., 113+) to 110+.
+- **Last item agent was working:** The user requested a list of all platforms from the database that do not operate in the UK. The agent acknowledged the request and was about to begin the research process.
 - **Status:** IN PROGRESS
 - **Agent Testing Done:** N
-- **Which testing method agent to use?** screenshot tool
+- **Which testing method agent to use?** NA (This is a research task, not a code change). The agent will need to query the database and likely use the  for each platform.
 - **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1:** Production Deployment Not Updating (CRITICAL - P0)
-- **Issue 2:** Complete the latest user request (P0)
+- **Issue 1:** Production Deployment Not Reflecting Changes (CRITICAL BLOCKER - P0)
+- **Issue 2:** Provide list of non-UK platforms (P0)
 
 **Issues Detail:**
-- **Issue 1: Production Deployment Not Updating**
-  - **Attempted fixes:** The agent has repeatedly diagnosed this as a platform-level DNS issue, not a code bug. It has used the  to provide the user with clear instructions: remove old 'A' records from their domain registrar and re-link the domain in the Emergent UI, or contact .
+- **Issue 1: Production Deployment Not Reflecting Changes**
+  - **Attempted fixes:** The agent has confirmed via screenshots and remote checks that the preview environment is correct, but the production domain serves an old/default build. The agent guided the user to contact Emergent support to clear old domain registrations and advised re-deploying. This has been a persistent, recurring issue. The latest diagnosis is that the domain is pointing to the correct deployment *ID*, but that deployment is serving a stale build, possibly due to a caching issue on the platform.
   - **Next debug checklist**:
-      1.  Politely reiterate that this is a platform issue that the agent cannot fix via code.
-      2.  Advise the user to follow the support agent's guidance.
-      3.  Focus on development tasks for the preview environment, which is the current source of truth.
-  - **Why fix this issue and what will be achieved with the fix?**: Resolving this will sync the live production site with all the completed development work, allowing the project to be finalized.
-  - **Status:** BLOCKED (Requires user action or Emergent support intervention).
+      1.  Advise the user to re-confirm with Emergent support that their domain () is correctly linked to the latest *build* of the  deployment.
+      2.  Reiterate that this is a platform-level issue the agent cannot fix with code. The preview URL remains the source of truth for development.
+  - **Why fix this issue and what will be achieved with the fix?**: This is the final blocker preventing the user from seeing all the completed work on their live domain. Resolving it is critical for project completion.
+  - **Status:** BLOCKED (Requires user action and Emergent support intervention).
   - **Is recurring issue?** Y
-  - **Should Test frontend/backend/both after fix?** Both (on the production domain ).
-  - **Blocked on other issue:** This blocks final user verification for all completed work on the live domain.
+  - **Should Test frontend/backend/both after fix?** Both, on the production domain.
+  - **Blocked on other issue:** This blocks the final validation of all completed features.
 
-- **Issue 2: Complete the latest user request**
-  - **Attempted fixes:** The agent successfully moved the How It Works section and updated the number of sample platforms. It began updating the platform count text.
+- **Issue 2: Provide list of non-UK platforms**
+  - **Attempted fixes:** None yet, task just started.
   - **Next debug checklist**:
-      1.  View  and .
-      2.  Search for any remaining hardcoded platform counts (e.g., 50+, 113+) and replace them with 110+.
-      3.  Use the screenshot tool to verify all three changes on the preview URL.
-  - **Why fix this issue and what will be achieved with the fix?**: It will fulfill the user's latest feedback and keep the project moving forward.
+      1.  Write a script to connect to the MongoDB database and fetch all platform names and links from the  collection.
+      2.  For each platform, use the  with queries like [Platform Name] available in UK, [Platform Name] countries of operation.
+      3.  Compile a list of platforms that explicitly state they are not available in the UK or are only available in other specific regions.
+      4.  Present the final list to the user.
+  - **Why fix this issue and what will be achieved with the fix?**: Fulfills a direct user data request, which may inform future content decisions.
   - **Status:** IN PROGRESS
   - **Is recurring issue?** N
-  - **Should Test frontend/backend/both after fix?** Frontend.
+  - **Should Test frontend/backend/both after fix?** NA
   - **Blocked on other issue:** None.
 
 **In progress Task List**:
-*   None apart from the pending issue above.
+- **Task 1: Research UK availability of platforms**
+  - **Where to resume:** Start by creating a script to fetch all platform data from the database.
+  - **What will be achieved with this?** A list of platforms not operating in the UK, as requested by the user.
+  - **Status:** NOT STARTED
+  - **Should Test frontend/backend/both after fix?** NA
+  - **Blocked on something:** No.
 
 **Upcoming and Future Tasks**
-*   **Generate an updated PDF (P1):** The user consistently requests a full-site PDF for offline review after each batch of changes. This will likely be the next request once the current task is complete.
+*   **Upcoming Tasks:**
+    *   **Generate an updated PDF (P1):** The user consistently requests a full-site PDF for offline review after each batch of changes. This will likely be the next request.
 
 **Completed work in this session**
-- **Full-featured CMS Creation**:
-  - Built a complete admin panel from scratch to manage all dynamic site content, including How It Works, Success Stories, CTA, and platform categories.
-  - Implemented full CRUD (Create, Read, Update, Delete) functionality for all 113+ earning platforms.
-  - Fixed a critical CMS bug where input fields would not accept text due to a React re-render issue.
-- **Massive Content Expansion**:
-  - Researched, compiled, and added 60 new earning platforms to the database across six different categories.
-- **Major UI/Layout Overhaul**:
-  - Implemented a categorized view for all 113+ platforms on the authenticated homepage.
-  - Added a Jump to Category navigation bar with color-coded buttons for easy browsing.
-  - Iteratively changed component layouts, text, and colors based on over 15 specific user requests (e.g., creating 3D text effects, changing button colors, removing duplicate elements).
-- **User Access & Bug Fixing**:
-  - Fixed a critical routing bug in  that prevented a direct access link from working.
-  - Provided the user with a direct access link to bypass the paywall and review all content on the preview site.
-- **PDF Generation**:
-  - Created and repeatedly ran a Python script using Playwright to generate a full-color PDF of the website for the user's review, fixing an issue where a duplicate page was being included.
+- **Subscription Expiration System (Feature Complete)**:
+  - **Backend Logic**: Modified  to add , , , and  fields to the user model. Updated all authentication endpoints (, , ) and the PayPal webhook () to manage the subscription lifecycle.
+  - **Database Migration**: Created and executed a one-time API endpoint () to grant all 17 existing users a 12-month subscription.
+  - **Automated Scheduler**: Implemented a daily cron job using  and a Python  script () to call a new endpoint () that handles sending expiry warnings and updating user statuses.
+  - **Email Templates**: Created and integrated two new email templates (, ) and updated  to send them.
+- **Bug Fixes for Returning User Flow**:
+  - Fixed the Request Access Link button to be correctly styled and not appear faded/disabled.
+  - Corrected the user flow to show success/error messages inline, preventing a redirect to an old, unwanted Welcome Back page.
+  - Resolved a critical bug where authenticated users were not seeing the paywalled content after logging in.
+- **UI & Content Updates**:
+  - Updated all references of Unlimited Access to 12 months Unlimited Access in  and .
+  - Completed the previous session's work: moved the How it Works section, limited sample platforms to 8, and updated all platform counts to 110+.
+- **Authenticated PDF Generation**:
+  - After several failed attempts, successfully debugged the JWT authentication process to generate a complete, correctly styled PDF of the entire site behind the paywall.
+- **User Support**: Provided extensive guidance on platform issues, including diagnosing deployment problems, explaining how to contact Emergent support, and answering questions about agent types and billing.
 
 **Earlier issues found/mentioned but not fixed**
 *   None.
 
 **Known issue recurrence from previous fork**
-- **Production Deployment Issues**: This is a persistent, project-level blocker. The user's custom domain () fails to update with the latest deployed code, despite the preview URL working correctly. This is not a code issue.
+- **Production Deployment Issues**: This remains a persistent, project-level blocker. The user's custom domain () fails to update with the latest deployed code, despite the preview URL working correctly. This is not a code issue.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-*   **Frontend:** React, React Router, TailwindCSS,  for state management.
-*   **Backend:** FastAPI, MongoDB (Motor), Pydantic models.
-*   **Authentication:** Magic Link with JWTs. A workaround for generating a direct verification link was implemented.
-*   **CMS:** A custom-built admin panel integrated with new FastAPI CRUD endpoints for content and platform management.
-*   **Scripting:** A Python script using  generates a multi-page PDF of the website.
+*   **Frontend:** React, React Router, TailwindCSS, .
+*   **Backend:** FastAPI, MongoDB (Motor), Pydantic.
+*   **Authentication:** Magic Link with JWTs, now integrated with a time-based subscription status.
+*   **Scheduled Jobs:** Using the  library in a standalone Python script, managed and kept alive by .
+*   **Process Management:**  is used to run the main backend, frontend, and the new scheduler process.
 
 **key DB schema**
 -   ****: 
@@ -92,70 +112,74 @@ A critical, unresolved issue is that the user's production domain () does not re
 -   ****: 
 
 **changes in tech stack**
-*   None.
+-   Added  library to  for cron job functionality.
 
 **All files of reference**
-*   ****: The main page, heavily modified to handle authenticated/unauthenticated views, categorized platform lists, and numerous layout changes.
-*   ****: Completely rewritten to build the full CMS interface and fix a major input bug.
-*   ****: Modified for text, styling, and layout changes for the unauthenticated view.
-*   ****: Modified to manage the locked state and display sample platforms.
-*   ** & **: Modified to fix a critical bug with the direct access link.
-*   ****: A new file created to house all API endpoints for the CMS.
-*   ****: New file to seed the database with initial editable content for the CMS.
-*   ****: Script used to generate PDF summaries for the user.
+*   ****: Heavily modified to implement the entire subscription lifecycle logic, including new API endpoints.
+*   ****: New file. Runs as a separate process to trigger daily subscription checks.
+*   ****: New file. Configures Supervisor to manage the  process.
+*   ****: Updated with functions to send the new subscription-related emails.
+*   ****: New directory containing HTML templates for expiration and warning emails.
+*   ****: Modified to fix the faded button and unwanted redirect bugs in the returning user flow.
+*   ****: Modified to correctly handle API responses and ensure the auth token is set, fixing the no access after login bug.
+*   ****: Contains the core logic for displaying gated vs. authenticated content.
+*   ****: Script used to successfully generate the authenticated PDF.
 
 **Areas that need refactoring**:
-*   The  component has grown very large (over 600 lines) and contains complex conditional logic for authenticated vs. unauthenticated states. It could be broken down into more modular components (e.g., , ) to improve readability and maintainability.
-*   The agent's repeated use of  to apply styling changes has proven brittle, causing syntax errors that required multiple follow-up fixes. A more robust method should be used for DOM manipulation or styling updates.
+*   The  component is still very large and manages complex state. It could be split into smaller, more focused components.
+*   There are multiple similar PDF generation scripts (, , ). These could be consolidated into a single, more robust script that accepts parameters (e.g., URL, authenticated, output file name).
 
 **key api endpoints**
-*   : (POST) Sends magic link email.
-*   : (GET) Verifies magic link token and authenticates the user.
-*   : (GET) Fetches all editable content sections for the CMS.
-*   : (PUT) Updates a specific content section.
-*   : (GET, POST, PUT, DELETE) Full CRUD endpoints for managing earning platforms via the CMS.
+*   : (POST) Checks subscription status before sending a magic link.
+*   : (GET) Verifies token and subscription status before creating a session.
+*   : (GET) Checks if a user's JWT is valid and their subscription is active.
+*   : (POST) PayPal webhook, now sets  and .
+*   : (POST) One-time endpoint to update existing users.
+*   : (POST) The endpoint called by the daily cron job to manage expirations and send emails.
 
 **Critical Info for New Agent**
-*   **The Deployment Issue is NOT a Code Bug:** The user's main frustration is their live domain () not updating. This is a platform/DNS issue. The preview URL is the source of truth. Your role is to continue development on the preview site and guide the user to contact Emergent support for the domain problem. Do not attempt to debug the live domain yourself.
-*   **Resume the Current Task:** Your immediate priority is to finish the user's last request: updating all platform count references to 110+. Start by checking .
-*   **PDF Generation is a Core Task:** The user frequently requests a full-site PDF to review changes. Be prepared to run the  script and provide the download link after completing each set of amendments.
-*   **User Access for Review:** The user will need to see content behind the paywall. If they report being unable to log in, you may need to generate a new direct access link for them. A script for this was successfully used in the previous session.
+*   **The Deployment Issue is a Platform Blocker:** The user's number one frustration is their live domain () not updating. This is a platform issue, not a code issue. Do not waste time debugging the code for this. Your role is to continue development on the preview site and guide the user to work with Emergent support.
+*   **Resume the Research Task:** Your immediate priority is to fulfill the user's request for a list of platforms that do not operate in the UK. This will require querying the database and using web search.
+*   **Subscription System is Live:** The subscription logic is fully implemented and running. The daily scheduler process is active. Be aware of this system when making any changes to user authentication or data.
+*   **User Frustration:** The user is becoming frustrated with the recurring deployment issues and the time spent on them. Be direct, efficient, and clearly separate code issues (which you can fix) from platform issues (which require user/support action).
 
 **documents created in this job**
-*   
-*   
-*   
-*   
+-   
+-   
+-   
+-   
+-    (and other temporary PDF scripts)
+-   
 
 **Last 10 User Messages and any pending user messages**
-1.  **User**: Provided amended text for the donation section. - **Status:** Completed.
-2.  **User**: Requested an updated PDF. - **Status:** Completed.
-3.  **User**: Provided a 7-point list of UI amendments. - **Status:** Completed.
-4.  **User**: Reported a duplicate donation box was still in the PDF. - **Status:** Completed (Agent identified and removed the separate  page from the PDF generation).
-5.  **User**: Requested UI styling changes (colors, 3D text) and a massive content addition (add 67 new platforms). - **Status:** Completed.
-6.  **User**: Requested further UI tweaks and reported they couldn't see behind the paywall. - **Status:** Completed (Agent created a direct access link).
-7.  **User**: Reported the access link led to a blank page. - **Status:** Completed (Agent fixed the frontend routing issue).
-8.  **User**: Confirmed the link works and requested a major layout change to categorize all 113 platforms. - **Status:** Completed.
-9.  **User**: Requested final layout tweaks: move a section, reduce sample platforms to 8, and change platform count to 110+. - **Status:** IN PROGRESS.
-10. **(Pending)** The user is waiting for the changes from message #9 to be completed and verified.
+1.  **User**: Deploy button is in the current interface? - **Status:** Completed (Agent provided guidance).
+2.  **User**: Registration Failed. Domain already exists. - **Status:** Completed (Agent diagnosed as a platform issue and provided steps).
+3.  **User**: I have deleted CNAME records from Wix. - **Status:** Completed (Agent explained the issue is on Emergent's side).
+4.  **User**: Can't find the info button for Job ID. - **Status:** Completed (Agent provided alternative way to contact support).
+5.  **User**: Sent email to support, Discord failed, send me a full PDF behind the paywall. - **Status:** Completed (Agent explained Discord link and generated the authenticated PDF after significant debugging).
+6.  **User**: The PDF is wrong, missing images/styling. I'm going in circles. - **Status:** Completed (Agent acknowledged the error and re-did the PDF generation properly).
+7.  **User**: OK, waiting for Emergent support. - **Status:** Acknowledged.
+8.  **User**: The deployed site has old content. - **Status:** Investigated (Agent confirmed it's a platform/build issue and advised re-deploying).
+9.  **User**: Reported 3 new bugs: faded button, redirect page, and no access after login. - **Status:** Completed (Agent fixed all three bugs).
+10. **(Pending)** **User**: Visit all 113 platforms and confirm they operate in the UK and send me a list of those ones that don't. - **Status:** IN PROGRESS.
 
 **Project Health Check:**
-*   **Broken:** The deployment pipeline to the user's custom production domain (). This is a platform issue requiring user/support intervention.
-*   **Mocked:** A 'SAMPLE' badge is used on platform cards in the unauthenticated view.
+*   **Broken:** The deployment to the production domain  is non-functional due to a platform-level issue (serving stale builds).
+*   **Mocked:** None.
 
 **3rd Party Integrations**
-*   **PayPal:** Integrated via a hosted button for donations.
-*   **Mailgun:** Present in the backend for sending magic links, but appears to be in a sandbox mode, which prompted the agent to create a direct link workaround.
+*   **PayPal:** Used for the donation paywall. The IPN listener is configured.
+*   **Mailgun:** Used for sending all transactional emails (magic link, expiry warnings, expiration notices).
 
 **Testing status**
-- **Testing agent used after significant changes:** YES, for CMS and frontend validation.
+- **Testing agent used after significant changes:** NO
 - **Troubleshoot agent used after agent stuck in loop:** NO
 - **Test files created:** None
-- **Known regressions:** None in the codebase.
+- **Known regressions:** None in the codebase. All reported regressions were fixed.
 
 **Credentials to test flow:**
 *   **CMS Admin:** URL , Username: , Password: 
-*   **Verified User (for paywall):** Generate a direct access link using a script. The last working link was . A new one may be needed.
+*   **Verified User (for paywall):** The backend logic now supports creating test users and generating verification links via API calls, which is the most reliable method for testing the authenticated flow.
 
 **What agent forgot to execute**
-*   The agent was mid-task. It needs to complete updating all platform count text references from 113+ or 50+ to 110+ in files like  and then verify all recent changes.</analysis>
+*   The agent was in the process of starting the last user request (researching UK platforms) when the session ended. No prior tasks were forgotten.</analysis>
