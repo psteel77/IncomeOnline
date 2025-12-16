@@ -99,7 +99,7 @@ const DonationSection = () => {
                   </div>
                 </div>
                 <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
-                  We believe that the modest donation we ask you to make in return for unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
+                  We believe that the modest donation we ask you to make in return for 12 months unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
                 </p>
               </div>
 

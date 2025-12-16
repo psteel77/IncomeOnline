@@ -76,7 +76,7 @@ const CategoryPreview = () => {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Browse Categories</h2>
           <p className="text-lg text-slate-600 mb-2">8 earning categories with 110+ verified platforms</p>
-          <p className="text-sm text-amber-600 font-semibold mb-3">You gain full and unlimited access in return for a small donation</p>
+          <p className="text-sm text-amber-600 font-semibold mb-3">You gain 12 months full and unlimited access in return for a small donation</p>
           <p className="text-sm text-slate-500 italic">Here are some examples to give you a taste of what we have to offer you at IncomeOnline...</p>
         </div>
         
