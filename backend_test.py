@@ -610,6 +610,168 @@ class BackendTester:
                 
         except Exception as e:
             self.log_test("GET /api/cms/categories", "FAIL", f"Exception: {str(e)}")
+
+    # ==================== UK AVAILABILITY FEATURE TESTS ====================
+    
+    def test_uk_availability_platforms_endpoint(self):
+        """Test GET /api/platforms for UK availability feature"""
+        try:
+            url = f"{self.base_url}/api/platforms"
+            response = self.session.get(url, timeout=30)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if 'platforms' in data and 'total' in data:
+                    platforms = data['platforms']
+                    total = data['total']
+                    
+                    # Check if we have 133 platforms as expected
+                    if total == 133:
+                        self.log_test("GET /api/platforms - Total Count", "PASS", 
+                                    f"Total platform count is 133 as expected")
+                    else:
+                        self.log_test("GET /api/platforms - Total Count", "FAIL", 
+                                    f"Expected 133 platforms, got {total}")
+                    
+                    # Check if platforms have ukAvailable field
+                    platforms_with_uk_field = [p for p in platforms if 'ukAvailable' in p]
+                    if len(platforms_with_uk_field) == len(platforms):
+                        self.log_test("GET /api/platforms - ukAvailable Field", "PASS", 
+                                    f"All {len(platforms)} platforms have ukAvailable field")
+                        
+                        # Check for platforms that should be ukAvailable: false
+                        uk_unavailable_platforms = [
+                            "VIPKid", "Instacart Shopper", "DoorDash", "Lyft", "Shipt", 
+                            "Favor", "E*TRADE", "Public.com", "Poshmark", "Mercari", 
+                            "Wyzant", "Tutor.com", "InboxDollars", "Crowdtap", "Bellhop", "Wonolo"
+                        ]
+                        
+                        found_uk_unavailable = []
+                        for platform in platforms:
+                            if platform['name'] in uk_unavailable_platforms and platform.get('ukAvailable') == False:
+                                found_uk_unavailable.append(platform['name'])
+                        
+                        if len(found_uk_unavailable) >= 10:  # Should find most of them
+                            self.log_test("GET /api/platforms - UK Unavailable Platforms", "PASS", 
+                                        f"Found {len(found_uk_unavailable)} platforms marked as UK unavailable: {found_uk_unavailable}")
+                        else:
+                            self.log_test("GET /api/platforms - UK Unavailable Platforms", "FAIL", 
+                                        f"Expected to find platforms marked as UK unavailable, found only: {found_uk_unavailable}")
+                        
+                        # Check for new UK platforms
+                        uk_platforms = [
+                            "Deliveroo", "Just Eat", "Vinted", "Freecash", "MyTutor", "Trading 212"
+                        ]
+                        
+                        found_uk_platforms = []
+                        for platform in platforms:
+                            if platform['name'] in uk_platforms:
+                                found_uk_platforms.append(platform['name'])
+                        
+                        if len(found_uk_platforms) >= 3:  # Should find at least some of them
+                            self.log_test("GET /api/platforms - New UK Platforms", "PASS", 
+                                        f"Found {len(found_uk_platforms)} new UK platforms: {found_uk_platforms}")
+                        else:
+                            self.log_test("GET /api/platforms - New UK Platforms", "FAIL", 
+                                        f"Expected to find new UK platforms like Deliveroo, Just Eat, etc. Found: {found_uk_platforms}")
+                            
+                    else:
+                        self.log_test("GET /api/platforms - ukAvailable Field", "FAIL", 
+                                    f"Only {len(platforms_with_uk_field)} out of {len(platforms)} platforms have ukAvailable field")
+                else:
+                    self.log_test("GET /api/platforms - UK Feature", "FAIL", 
+                                f"Missing 'platforms' or 'total' field in response")
+            else:
+                self.log_test("GET /api/platforms - UK Feature", "FAIL", 
+                            f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("GET /api/platforms - UK Feature", "FAIL", f"Exception: {str(e)}")
+
+    def test_specific_uk_unavailable_platforms(self):
+        """Test specific platforms that should be marked as UK unavailable"""
+        test_platforms = [
+            {"name": "DoorDash", "expected_uk": False},
+            {"name": "Lyft", "expected_uk": False}, 
+            {"name": "InboxDollars", "expected_uk": False},
+            {"name": "VIPKid", "expected_uk": False}
+        ]
+        
+        try:
+            url = f"{self.base_url}/api/platforms"
+            response = self.session.get(url, timeout=30)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if 'platforms' in data:
+                    platforms = data['platforms']
+                    
+                    for test_platform in test_platforms:
+                        platform_found = False
+                        for platform in platforms:
+                            if platform['name'] == test_platform['name']:
+                                platform_found = True
+                                uk_available = platform.get('ukAvailable')
+                                
+                                if uk_available == test_platform['expected_uk']:
+                                    self.log_test(f"Platform {test_platform['name']} UK Status", "PASS", 
+                                                f"{test_platform['name']} correctly marked as ukAvailable: {uk_available}")
+                                else:
+                                    self.log_test(f"Platform {test_platform['name']} UK Status", "FAIL", 
+                                                f"{test_platform['name']} should be ukAvailable: {test_platform['expected_uk']}, got: {uk_available}")
+                                break
+                        
+                        if not platform_found:
+                            self.log_test(f"Platform {test_platform['name']} UK Status", "FAIL", 
+                                        f"Platform {test_platform['name']} not found in database")
+                else:
+                    self.log_test("Specific UK Platform Tests", "FAIL", 
+                                f"Missing 'platforms' field in response")
+            else:
+                self.log_test("Specific UK Platform Tests", "FAIL", 
+                            f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Specific UK Platform Tests", "FAIL", f"Exception: {str(e)}")
+
+    def test_deliveroo_sample_platform(self):
+        """Test that Deliveroo is now the sample platform for Gig Economy"""
+        try:
+            url = f"{self.base_url}/api/platforms?category=Gig Economy"
+            response = self.session.get(url, timeout=30)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if 'platforms' in data:
+                    platforms = data['platforms']
+                    
+                    # Look for Deliveroo in Gig Economy category
+                    deliveroo_found = False
+                    for platform in platforms:
+                        if platform['name'] == 'Deliveroo':
+                            deliveroo_found = True
+                            
+                            # Check if it has UK-specific details
+                            if 'UK-based' in platform.get('description', '') or '£' in platform.get('earningsPotential', ''):
+                                self.log_test("Deliveroo Sample Platform", "PASS", 
+                                            f"Deliveroo found in Gig Economy with UK-specific details: {platform.get('description', '')}, earnings: {platform.get('earningsPotential', '')}")
+                            else:
+                                self.log_test("Deliveroo Sample Platform", "FAIL", 
+                                            f"Deliveroo found but missing UK-specific details. Description: {platform.get('description', '')}, Earnings: {platform.get('earningsPotential', '')}")
+                            break
+                    
+                    if not deliveroo_found:
+                        self.log_test("Deliveroo Sample Platform", "FAIL", 
+                                    f"Deliveroo not found in Gig Economy category. Found platforms: {[p['name'] for p in platforms]}")
+                else:
+                    self.log_test("Deliveroo Sample Platform", "FAIL", 
+                                f"Missing 'platforms' field in response")
+            else:
+                self.log_test("Deliveroo Sample Platform", "FAIL", 
+                            f"HTTP {response.status_code}: {response.text}")
+                
+        except Exception as e:
+            self.log_test("Deliveroo Sample Platform", "FAIL", f"Exception: {str(e)}")
             
     def run_all_tests(self):
         """Run all backend API tests"""
