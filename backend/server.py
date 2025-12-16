@@ -500,7 +500,7 @@ async def add_donor(request: LoginRequest):
 
 @api_router.post("/paypal/ipn")
 async def paypal_ipn(request: Request):
-    """Handle PayPal Instant Payment Notification"""
+    """Handle PayPal Instant Payment Notification (with 12-month subscription)"""
     try:
         # Get the raw body
         body = await request.body()
@@ -521,25 +521,66 @@ async def paypal_ipn(request: Request):
         # Only process completed payments
         if payment_status == "Completed" and payer_email:
             email = payer_email.lower()
+            now = datetime.now(timezone.utc)
+            expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
             
-            # Check if user exists
+            # Check if user exists in active users
             existing_user = await db.users.find_one({"email": email})
             
+            # Check if user is in expired_users (renewal)
+            expired_user = await db.expired_users.find_one({"email": email})
+            
             if existing_user:
-                # Update existing user
+                # Renew existing user subscription
                 await db.users.update_one(
                     {"email": email},
-                    {"$set": {"verified": True}}
+                    {"$set": {
+                        "verified": True,
+                        "donated_at": now.isoformat(),
+                        "expires_at": expires_at.isoformat(),
+                        "status": "active",
+                        "warning_sent": False
+                    }}
                 )
-                logging.info(f"Updated existing donor: {email}")
+                logging.info(f"Renewed subscription for existing donor: {email}")
+            elif expired_user:
+                # Reactivate expired user
+                verification_token = str(uuid.uuid4())
+                reactivated_user = {
+                    "email": email,
+                    "verified": True,
+                    "verification_token": verification_token,
+                    "created_at": expired_user.get('created_at', now.isoformat()),
+                    "donated_at": now.isoformat(),
+                    "expires_at": expires_at.isoformat(),
+                    "status": "active",
+                    "warning_sent": False,
+                    "last_login": None,
+                    "previous_subscriptions": expired_user.get('previous_subscriptions', []) + [{
+                        "donated_at": expired_user.get('original_donated_at'),
+                        "expired_at": expired_user.get('expired_at')
+                    }]
+                }
+                
+                await db.users.insert_one(reactivated_user)
+                await db.expired_users.delete_one({"email": email})
+                
+                # Send welcome back email
+                send_new_user_email(email, verification_token)
+                
+                logging.info(f"Reactivated expired user: {email}")
             else:
-                # Create new user and send email
+                # Create new user with subscription
                 verification_token = str(uuid.uuid4())
                 new_user = {
                     "email": email,
                     "verified": True,
                     "verification_token": verification_token,
-                    "created_at": datetime.utcnow(),
+                    "created_at": now.isoformat(),
+                    "donated_at": now.isoformat(),
+                    "expires_at": expires_at.isoformat(),
+                    "status": "active",
+                    "warning_sent": False,
                     "last_login": None
                 }
                 
