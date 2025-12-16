@@ -73,10 +73,26 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Income Online Website Changes Testing"
+    - "UK Availability Warning and New Platforms Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
+
+  - task: "UK Availability Warning and New Platforms Testing"
+    implemented: true
+    working: pending
+    file: "frontend/src/pages/Home.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history: []
+    test_details:
+      - "Verify 133 platforms are now in database (20 new UK platforms added)"
+      - "Verify 16 platforms are marked as ukAvailable=false"
+      - "Verify 'Service not available to UK residents' message displays below 'Learn More' button for non-UK platforms"
+      - "Message should be in violet color, bold, italics"
+      - "Verify platform count updated from 110+ to 130+ in UI"
+      - "Verify sample platform changed from DoorDash to Deliveroo in PlatformPreview"
 
 agent_communication:
   - agent: "testing"
