@@ -385,7 +385,7 @@ async def verify_email(token: str):
 
 @api_router.get("/auth/check")
 async def check_auth(authorization: str = Header(None)):
-    """Check if user is authenticated"""
+    """Check if user is authenticated (also checks subscription expiration)"""
     try:
         if not authorization or not authorization.startswith("Bearer "):
             return {"authenticated": False, "email": None}
@@ -402,6 +402,16 @@ async def check_auth(authorization: str = Header(None)):
         if not user or not user.get('verified'):
             return {"authenticated": False, "email": None}
         
+        # Check subscription expiration
+        expires_at = user.get('expires_at')
+        if expires_at:
+            if isinstance(expires_at, str):
+                expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+            
+            now = datetime.now(timezone.utc)
+            if expires_at < now:
+                return {"authenticated": False, "email": None, "expired": True}
+        
         return {"authenticated": True, "email": email}
         
     except Exception as e:
@@ -410,25 +420,70 @@ async def check_auth(authorization: str = Header(None)):
 
 @api_router.post("/auth/add-donor")
 async def add_donor(request: LoginRequest):
-    """Add a donor email after PayPal payment"""
+    """Add a donor email after PayPal payment (with 12-month subscription)"""
     try:
         email = request.email.lower()
+        now = datetime.now(timezone.utc)
+        expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
         
         existing_user = await db.users.find_one({"email": email})
         
+        # Also check expired_users for renewals
+        expired_user = await db.expired_users.find_one({"email": email})
+        
         if existing_user:
+            # Renew existing subscription
             await db.users.update_one(
                 {"email": email},
-                {"$set": {"verified": True}}
+                {"$set": {
+                    "verified": True,
+                    "donated_at": now.isoformat(),
+                    "expires_at": expires_at.isoformat(),
+                    "status": "active",
+                    "warning_sent": False
+                }}
             )
-            return {"success": True, "message": "Donor updated"}
+            return {"success": True, "message": "Subscription renewed for 12 months"}
+        elif expired_user:
+            # Reactivate expired user
+            verification_token = str(uuid.uuid4())
+            reactivated_user = {
+                "email": email,
+                "verified": True,
+                "verification_token": verification_token,
+                "created_at": expired_user.get('created_at', now.isoformat()),
+                "donated_at": now.isoformat(),
+                "expires_at": expires_at.isoformat(),
+                "status": "active",
+                "warning_sent": False,
+                "last_login": None,
+                "previous_subscriptions": expired_user.get('previous_subscriptions', []) + [{
+                    "donated_at": expired_user.get('original_donated_at'),
+                    "expired_at": expired_user.get('expired_at')
+                }]
+            }
+            
+            await db.users.insert_one(reactivated_user)
+            
+            # Remove from expired_users
+            await db.expired_users.delete_one({"email": email})
+            
+            # Send welcome email
+            send_new_user_email(email, verification_token)
+            
+            return {"success": True, "message": "Welcome back! Subscription renewed for 12 months"}
         else:
+            # New user
             verification_token = str(uuid.uuid4())
             new_user = {
                 "email": email,
                 "verified": True,
                 "verification_token": verification_token,
-                "created_at": datetime.utcnow(),
+                "created_at": now.isoformat(),
+                "donated_at": now.isoformat(),
+                "expires_at": expires_at.isoformat(),
+                "status": "active",
+                "warning_sent": False,
                 "last_login": None
             }
             
@@ -437,7 +492,7 @@ async def add_donor(request: LoginRequest):
             # Send welcome email to donor with verification link
             send_new_user_email(email, verification_token)
             
-            return {"success": True, "message": "Donor added successfully"}
+            return {"success": True, "message": "Donor added with 12-month subscription"}
             
     except Exception as e:
         logging.error(f"Error in add_donor: {str(e)}")
