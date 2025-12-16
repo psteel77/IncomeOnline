@@ -486,7 +486,7 @@ const Home = () => {
                               <span className="font-medium">{platform.minPayout}</span>
                             </div>
                           </CardContent>
-                          <CardFooter>
+                          <CardFooter className="flex flex-col gap-2">
                             <Button 
                               variant="outline" 
                               className="w-full border-2 hover:text-white transition-all"
@@ -495,9 +495,14 @@ const Home = () => {
                               onMouseLeave={(e) => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = categoryColor; }}
                               onClick={() => window.open(platform.link, '_blank')}
                             >
-                              Visit Platform
+                              Learn More
                               <ExternalLink className="ml-2 h-4 w-4" />
                             </Button>
+                            {platform.ukAvailable === false && (
+                              <p className="text-xs font-bold italic text-center" style={{ color: '#8B5CF6' }}>
+                                Service not available to UK residents
+                              </p>
+                            )}
                           </CardFooter>
                         </Card>
                       ))}
