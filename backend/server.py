@@ -216,9 +216,7 @@ async def get_stats():
         return {"error": str(e)}
 
 # Authentication endpoints
-from auth_models import LoginRequest, VerifyRequest, AuthResponse, User
-from datetime import timedelta
-import jwt as pyjwt
+from auth_models import VerifyRequest, AuthResponse, User
 
 SECRET_KEY = os.environ['JWT_SECRET_KEY']
 ALGORITHM = "HS256"
