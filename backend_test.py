@@ -789,6 +789,15 @@ class BackendTester:
         self.test_platform_by_id()
         self.test_stats_endpoint()
         
+        # Test UK Availability Feature
+        print("\n" + "=" * 60)
+        print("UK AVAILABILITY FEATURE TESTING")
+        print("=" * 60)
+        
+        self.test_uk_availability_platforms_endpoint()
+        self.test_specific_uk_unavailable_platforms()
+        self.test_deliveroo_sample_platform()
+        
         # Test CMS functionality
         print("\n" + "=" * 60)
         print("CMS FUNCTIONALITY TESTING")
