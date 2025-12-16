@@ -337,11 +337,16 @@ const Home = () => {
                     <span className="font-medium text-slate-700">{platform.minPayout}</span>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex flex-col gap-2">
                   <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white transition-all duration-300" onClick={() => window.open(platform.link, '_blank')}>
-                    Visit Platform
+                    Learn More
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
+                  {platform.ukAvailable === false && (
+                    <p className="text-xs font-bold italic text-center" style={{ color: '#8B5CF6' }}>
+                      Service not available to UK residents
+                    </p>
+                  )}
                 </CardFooter>
               </Card>
             ))}
