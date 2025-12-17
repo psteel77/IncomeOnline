@@ -27,7 +27,8 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
           <span className="block">Earn Money Online</span>
         </h1>
         <div className="text-base sm:text-lg md:text-xl text-slate-600 mb-8 sm:mb-12 max-w-4xl mx-auto px-2 text-center">
-          <p className="mb-1">Your comprehensive directory of legitimate online earning opportunities - all in one easy to use location!</p>
+          <p className="mb-1">Your comprehensive directory of legitimate online earning opportunities</p>
+          <p className="mb-1">- all in one easy to use location!</p>
           <p className="mb-1">From Freelancing to Passive Income, One Time to Part Time to Full Time</p>
           <p>Find the perfect way for you to make money online</p>
         </div>
