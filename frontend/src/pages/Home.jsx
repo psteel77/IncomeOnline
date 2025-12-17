@@ -578,6 +578,11 @@ const Home = () => {
       </section>
       )}
 
+      {/* Preview Categories Section - Show to unauthenticated users AFTER How It Works */}
+      {!authLoading && !isAuthenticated && (
+        <CategoryPreview />
+      )}
+
       {/* Preview Platforms Section - Show to unauthenticated users */}
       {!authLoading && !isAuthenticated && (
         <PlatformPreview />
