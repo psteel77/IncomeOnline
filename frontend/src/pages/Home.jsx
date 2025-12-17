@@ -533,12 +533,7 @@ const Home = () => {
       </section>
       )}
 
-      {/* Preview Categories Section - Show to unauthenticated users */}
-      {!authLoading && !isAuthenticated && (
-        <CategoryPreview />
-      )}
-
-      {/* How It Works - Show after AccessGate for unauthenticated users */}
+      {/* How It Works - Show ABOVE Browse Categories for unauthenticated users */}
       {!authLoading && !isAuthenticated && (
       <section id="how-it-works" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
