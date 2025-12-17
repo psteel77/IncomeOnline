@@ -947,12 +947,12 @@ const SuccessStories = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-6" style={{ color: '#43ADD8' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6" style={{ color: '#43ADD8' }}>
             Real People, Real Success
           </h2>
-          <p className="text-xl text-slate-700 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-slate-700 max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
             These are genuine success stories from people who used online platforms to transform their financial situation. 
             Every story includes the source where we found it, so you can verify for yourself.
           </p>
