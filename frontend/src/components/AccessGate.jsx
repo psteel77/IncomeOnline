@@ -15,19 +15,13 @@ const AccessGate = () => {
   const [error, setError] = useState('');
 
   const handleNewUser = () => {
-    // Scroll to PayPal donation button area with offset for sticky header
-    const paypalContainer = document.getElementById('paypal-donation-area');
-    if (paypalContainer) {
+    // Scroll to Support IncomeOnline section
+    const supportSection = document.getElementById('support');
+    if (supportSection) {
       const headerHeight = 80; // Account for sticky header
-      const elementPosition = paypalContainer.getBoundingClientRect().top;
+      const elementPosition = supportSection.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
       window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-    } else {
-      // Fallback to support section
-      const donationSection = document.getElementById('support');
-      if (donationSection) {
-        donationSection.scrollIntoView({ behavior: 'smooth' });
-      }
     }
   };
 
@@ -131,15 +125,18 @@ const AccessGate = () => {
                 className="w-full space-y-3"
                 onSubmit={handleReturningUser}
               >
-                <Input
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="text-sm py-3 bg-white"
-                  disabled={loading}
-                />
+                {/* Only show email input if no success message */}
+                {!message && (
+                  <Input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="text-sm py-3 bg-white"
+                    disabled={loading}
+                  />
+                )}
                 
                 {message && (
                   <div className="bg-green-50 border-2 border-green-300 rounded-lg p-3 flex items-start gap-2 text-left">
@@ -155,15 +152,18 @@ const AccessGate = () => {
                   </div>
                 )}
                 
-                <Button 
-                  type="submit"
-                  className="w-full py-3 sm:py-4 text-xs sm:text-base font-bold text-white"
-                  style={{ backgroundColor: '#d97706' }}
-                  disabled={loading}
-                >
-                  {loading ? 'Sending...' : 'Request Access Link'}
-                  <ArrowRight className="ml-1 h-4 w-4 flex-shrink-0" />
-                </Button>
+                {/* Only show button if no success message */}
+                {!message && (
+                  <Button 
+                    type="submit"
+                    className="w-full py-3 sm:py-4 text-xs sm:text-base font-bold text-white"
+                    style={{ backgroundColor: '#d97706' }}
+                    disabled={loading}
+                  >
+                    {loading ? 'Sending...' : 'Request Access Link'}
+                    <ArrowRight className="ml-1 h-4 w-4 flex-shrink-0" />
+                  </Button>
+                )}
               </form>
             </div>
           </div>
