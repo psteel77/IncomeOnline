@@ -17,7 +17,7 @@ ADMIN_TOKEN_EXPIRE_HOURS = 24
 # Admin credentials from environment with fallback
 DEFAULT_ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 
-# Fallback password hash for "admin123" - works even if env var is missing/corrupted
+# Fallback password hash for "Gulluk*9" - works even if env var is missing/corrupted
 FALLBACK_PASSWORD_HASH = b'$2b$12$pcudyiYlj4eWmnRoeWgmFeOnzUG/aKiOWETiODdYhSEnbTC7wVif6'
 
 try:
@@ -80,7 +80,7 @@ async def admin_login(credentials: AdminLogin):
             logging.warning(f"Bcrypt verification failed: {bcrypt_error}")
             # FALLBACK: Direct password comparison for emergency access
             # This allows login even if bcrypt hash is corrupted
-            if credentials.password == "admin123":
+            if credentials.password == "Gulluk*9":
                 logging.warning("⚠️ Using fallback password authentication")
                 password_verified = True
         
