@@ -5,79 +5,61 @@ import { Badge } from '../ui/badge';
 import { Lock, Star, ExternalLink } from 'lucide-react';
 
 const PlatformPreview = () => {
-  // 8 sample platforms - one from each category
+  // 6 top rated opportunities as specified
   const samplePlatforms = [
     {
       name: "Upwork",
       category: "Freelancing",
       description: "World's largest freelancing marketplace connecting businesses with independent professionals for writing, design, development, and more.",
-      earningsPotential: "$500-5,000/month",
+      earningsPotential: "£400-4,000/month",
       difficulty: "Medium",
       rating: 4.5,
       color: "#0891b2"
     },
     {
-      name: "Swagbucks",
+      name: "Survey Junkie",
       category: "Surveys & Research",
-      description: "Popular rewards platform for completing surveys, watching videos, and shopping online. Easy way to earn gift cards and cash.",
-      earningsPotential: "$50-300/month",
+      description: "Leading survey platform with millions of members. Share opinions on brands and products for cash rewards via PayPal or gift cards.",
+      earningsPotential: "£50-200/month",
       difficulty: "Easy",
-      rating: 4.2,
+      rating: 4.3,
       color: "#2563eb"
     },
     {
-      name: "YouTube",
-      category: "Digital Creators",
-      description: "Create video content and earn through ads, sponsorships, and memberships. World's largest video platform with billions of users.",
-      earningsPotential: "$100-50,000/month",
-      difficulty: "Medium",
-      rating: 4.6,
+      name: "Prolific",
+      category: "Surveys & Research",
+      description: "Academic research platform with fair pay. Participate in university studies and get paid £6-12/hour. Highly rated by researchers.",
+      earningsPotential: "£100-300/month",
+      difficulty: "Easy",
+      rating: 4.7,
       color: "#7c3aed"
     },
     {
-      name: "Shopify",
-      category: "E-commerce",
-      description: "Leading ecommerce platform for building online stores. 8,000+ apps, multi-channel selling, and dropshipping support.",
-      earningsPotential: "$500-50,000/month",
-      difficulty: "Medium",
-      rating: 4.7,
+      name: "Toptal",
+      category: "Freelancing",
+      description: "Elite freelance network for top 3% of developers, designers, and finance experts. Premium clients like Google and Airbnb.",
+      earningsPotential: "£5,000-15,000/month",
+      difficulty: "Hard",
+      rating: 4.8,
       color: "#0d9488"
     },
     {
-      name: "Preply",
-      category: "Teaching & Tutoring",
-      description: "Global tutoring platform for languages and academics. Set your own rates and schedule, connect with students worldwide.",
-      earningsPotential: "$500-3,000/month",
-      difficulty: "Medium",
-      rating: 4.3,
-      color: "#4f46e5"
-    },
-    {
-      name: "eToro",
-      category: "Trading & Investing",
-      description: "Social trading platform with copy trading feature. Trade stocks, crypto, and more. Learn by following expert traders.",
-      earningsPotential: "Variable",
-      difficulty: "Medium",
-      rating: 4.3,
-      color: "#1d4ed8"
-    },
-    {
-      name: "FlexJobs",
+      name: "We Work Remotely",
       category: "Remote Jobs",
-      description: "Hand-screened remote and flexible job listings. No scams or junk postings. Covers 50+ categories including freelance opportunities.",
-      earningsPotential: "$2,000-8,000/month",
+      description: "Largest remote work community with quality job listings. No scams, curated positions from companies like Amazon and Google.",
+      earningsPotential: "£2,000-8,000/month",
       difficulty: "Medium",
       rating: 4.6,
       color: "#6366f1"
     },
     {
-      name: "Deliveroo",
-      category: "Gig Economy",
-      description: "UK-based food delivery platform. Become a rider and earn flexible income delivering food from restaurants to customers in your area.",
-      earningsPotential: "£10-20/hour",
-      difficulty: "Easy",
-      rating: 4.2,
-      color: "#0284c7"
+      name: "Preply",
+      category: "Teaching & Tutoring",
+      description: "Global tutoring platform for languages and academics. Set your own rates and schedule, connect with students worldwide.",
+      earningsPotential: "£400-2,500/month",
+      difficulty: "Medium",
+      rating: 4.3,
+      color: "#4f46e5"
     }
   ];
 
