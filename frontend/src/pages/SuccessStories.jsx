@@ -928,6 +928,16 @@ const SuccessStories = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-cyan-50 to-blue-50">
+      <Helmet>
+        <title>Success Stories | Real People Earning Money Online | Income Online</title>
+        <meta name="description" content="Read 60+ verified success stories from real people earning money online. From freelancing on Upwork to surveys on Prolific, see how others transformed their income." />
+        <meta name="keywords" content="online earning success stories, make money online testimonials, freelancing success, survey earnings, work from home stories" />
+        <link rel="canonical" href="https://www.incomeonline.info/success-stories" />
+        <meta property="og:title" content="Success Stories | Real People Earning Money Online" />
+        <meta property="og:description" content="Read 60+ verified success stories from real people earning money online." />
+        <meta property="og:url" content="https://www.incomeonline.info/success-stories" />
+        <meta property="og:type" content="website" />
+      </Helmet>
       {/* Header */}
       <header className="border-b border-blue-200 sticky top-0 z-50 shadow-md bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
