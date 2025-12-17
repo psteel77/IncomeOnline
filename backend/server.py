@@ -332,7 +332,7 @@ async def get_stats():
         stats = [
             {"label": "Total Platforms", "value": f"{total_platforms}+"},
             {"label": "Categories", "value": str(total_categories)},
-            {"label": "Avg. Monthly Earning", "value": "$2,500"},
+            {"label": "Avg. Monthly Earning", "value": "£2,500"},
             {"label": "Success Stories", "value": "50K+"}
         ]
         
