@@ -1,0 +1,25 @@
+# robots.txt for Income Online
+# https://www.incomeonline.info
+
+User-agent: *
+Allow: /
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.incomeonline.info/sitemap.xml
