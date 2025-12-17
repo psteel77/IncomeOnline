@@ -55,12 +55,24 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
         {/* Stats - Show only when authenticated */}
         {!authLoading && isAuthenticated && (
           <div className="grid grid-cols-2 gap-3 sm:gap-6 max-w-4xl mx-auto px-2">
-          {stats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600 mb-1 sm:mb-2">{stat.value}</div>
-              <div className="text-xs sm:text-sm text-slate-600">{stat.label}</div>
-            </div>
-          ))}
+          {stats.map((stat, index) => {
+            // Colorful gradient backgrounds matching category boxes
+            const colors = [
+              { bg: 'linear-gradient(to bottom right, #e0f2fe, #bfdbfe)', border: '#0891b2', text: '#0891b2' }, // cyan
+              { bg: 'linear-gradient(to bottom right, #dbeafe, #bfdbfe)', border: '#2563eb', text: '#2563eb' }, // blue
+              { bg: 'linear-gradient(to bottom right, #d1fae5, #a7f3d0)', border: '#0d9488', text: '#0d9488' }, // teal
+              { bg: 'linear-gradient(to bottom right, #ede9fe, #ddd6fe)', border: '#7c3aed', text: '#7c3aed' }  // violet
+            ];
+            const color = colors[index % colors.length];
+            // Convert $ to £ in stat values
+            const displayValue = stat.value.replace(/\$/g, '£');
+            return (
+              <div key={index} className="rounded-xl p-4 sm:p-6 shadow-md border-2 hover:shadow-lg transition-shadow" style={{ background: color.bg, borderColor: color.border }}>
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2" style={{ color: color.text }}>{displayValue}</div>
+                <div className="text-xs sm:text-sm text-slate-700 font-medium">{stat.label}</div>
+              </div>
+            );
+          })}
         </div>
         )}
       </div>
