@@ -1001,7 +1001,7 @@ const SuccessStories = () => {
       </section>
 
       {/* Success Stories Grid */}
-      <section className="pb-20 px-4 sm:px-6 lg:px-8">
+      <section className="pb-20 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {filteredStories.map((story) => (
