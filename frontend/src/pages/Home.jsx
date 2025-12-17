@@ -102,6 +102,11 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
+      <Helmet>
+        <title>Income Online | Discover 130+ Legitimate Ways to Earn Money Online</title>
+        <meta name="description" content="Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find 130+ verified platforms to make money online." />
+        <link rel="canonical" href="https://www.incomeonline.info" />
+      </Helmet>
       {/* Header */}
       <header className="border-b border-teal-800 sticky top-0 z-50 shadow-lg" style={{backgroundColor: '#165e84', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
