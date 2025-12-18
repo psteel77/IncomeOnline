@@ -77,8 +77,8 @@ const CategoryPreview = () => {
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Browse Categories</h2>
           <p className="text-lg text-slate-600 mb-2">8 earning categories with 130+ verified platforms</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">You gain 12 months full and unlimited access in return for a small donation</p>
-          {/* Info Image */}
-          <div className="max-w-2xl mx-auto mb-4">
+          {/* Info Image - same width as the 4-column grid below */}
+          <div className="w-full mb-4">
             <img 
               src="https://customer-assets.emergentagent.com/job_moneyguide-2/artifacts/egxrpox0_Pic1.png" 
               alt="Income Online Information"
