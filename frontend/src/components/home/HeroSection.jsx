@@ -22,6 +22,7 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
         </div>
       </div>
       <div className="max-w-7xl mx-auto text-center relative z-10">
+        <p className="text-sm sm:text-base md:text-lg text-slate-600 mb-2">How to make money online....</p>
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-amber-500 to-yellow-500 mb-4 sm:mb-6 leading-tight px-2">
           <span className="block">Discover the Best Ways to</span>
           <span className="block">Earn Money Online</span>
