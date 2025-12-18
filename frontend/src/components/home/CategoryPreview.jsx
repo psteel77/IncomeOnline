@@ -34,7 +34,7 @@ const CategoryPreview = () => {
       color: '#0d9488', // teal-600
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
-      platforms: ['Amazon FBA', 'Etsy', 'Shopify', 'And 12 more...']
+      platforms: ['eBay', 'Vinted', 'Shopify', 'And 12 more...']
     },
     {
       title: 'Teaching & Tutoring',
@@ -42,7 +42,7 @@ const CategoryPreview = () => {
       color: '#4f46e5', // indigo-600
       description: 'Share your knowledge and teach students online',
       subtitle: 'Make an impact:',
-      platforms: ['VIPKid', 'Udemy', 'Preply', 'And 7 more...']
+      platforms: ['MyTutor', 'Udemy', 'Preply', 'And 7 more...']
     },
     {
       title: 'Trading & Investing',
