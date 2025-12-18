@@ -1,0 +1,126 @@
+ID,Name,Category,UK Available,Link,Earnings Potential,Difficulty,Rating
+1,Upwork,Freelancing,Yes,https://upwork.com,"$1,000 - $10,000+/month",Medium,4.5
+2,Fiverr,Freelancing,Yes,https://fiverr.com,"$500 - $5,000+/month",Easy,4.3
+3,Swagbucks,Surveys & Research,Yes,https://swagbucks.com,$50 - $300/month,Easy,4.0
+4,YouTube,Digital Creators/Innovators,Yes,https://youtube.com,"$100 - $100,000+/month",Hard,4.7
+5,Coinbase,Trading & Investing,Yes,https://coinbase.com,Variable (High Risk),Medium,4.2
+6,Amazon FBA,E-commerce,Yes,https://sell.amazon.com,"$1,000 - $50,000+/month",Hard,4.4
+7,VIPKid,Teaching & Tutoring,NO - NOT AVAILABLE IN UK,https://vipkid.com,"$500 - $2,000/month",Medium,4.1
+8,FlexJobs,Remote Jobs,Yes,https://flexjobs.com,"$2,000 - $10,000+/month",Medium,4.6
+9,TaskRabbit,Gig Economy,Yes,https://taskrabbit.com,"$300 - $2,000/month",Easy,4.2
+10,Medium Partner Program,Digital Creators/Innovators,Yes,https://medium.com,"$100 - $5,000+/month",Medium,4.3
+11,Etsy,E-commerce,Yes,https://etsy.com,"$200 - $10,000+/month",Medium,4.5
+12,Udemy,Teaching & Tutoring,Yes,https://udemy.com,"$100 - $10,000+/month",Hard,4.4
+13,Reed.co.uk,Remote Jobs,Yes,https://www.reed.co.uk/jobs/remote-jobs,"$1,500 - $8,000+/month",Medium,4.5
+14,Indeed,Remote Jobs,Yes,https://www.indeed.com/q-remote-jobs.html,"$2,000 - $10,000+/month",Medium,4.6
+15,SurveySpotter,Surveys & Research,Yes,https://www.surveyspotter.com,$100 - $400/month,Easy,4.1
+16,Ipsos iSay,Surveys & Research,Yes,https://www.ipsosisay.com,$50 - $200/month,Easy,4.2
+17,YouGov,Surveys & Research,Yes,https://account.yougov.com/gb-en/join/main,$30 - $150/month,Easy,4.3
+18,Y Live Community,Surveys & Research,Yes,https://www.ylive-community.com,$60 - $250/month,Easy,4.0
+19,Google Opinion Rewards,Surveys & Research,Yes,https://surveys.google.com/google-opinion-rewards/,$30 - $100/year,Easy,4.4
+20,Qmee,Surveys & Research,Yes,https://www.qmee.com/en-gb,$50 - $150/month,Easy,4.3
+21,Prolific,Surveys & Research,Yes,https://www.prolific.co,$100 - $500/month,Easy,4.8
+22,Toluna,Surveys & Research,Yes,https://www.toluna.com,$50 - $200/month,Easy,4.1
+23,LifePoints,Surveys & Research,Yes,https://www.lifepointspanel.com,$40 - $150/month,Easy,4.0
+24,Branded Surveys,Surveys & Research,Yes,https://surveys.gobranded.com,$50 - $200/month,Easy,4.2
+25,Opinion Outpost,Surveys & Research,Yes,https://www.opinionoutpost.com,$30 - $100/month,Easy,4.0
+26,Pinecone Research,Surveys & Research,Yes,https://www.pineconeresearch.com,$30 - $90/month,Easy,4.5
+27,Survey Junkie,Surveys & Research,Yes,https://www.surveyjunkie.com,$40 - $150/month,Easy,4.3
+28,InboxDollars,Surveys & Research,NO - NOT AVAILABLE IN UK,https://www.inboxdollars.com,$50 - $200/month,Easy,4.1
+29,MyPoints,Surveys & Research,Yes,https://www.mypoints.com,$30 - $100/month,Easy,4.0
+30,PrizeRebel,Surveys & Research,Yes,https://www.prizerebel.com,$50 - $250/month,Easy,4.2
+31,Valued Opinions,Surveys & Research,Yes,https://www.valuedopinions.co.uk,$30 - $100/month,Easy,4.1
+32,Forthright,Surveys & Research,Yes,https://www.forthright.com,$40 - $120/month,Easy,4.3
+33,Attapoll,Surveys & Research,Yes,https://attapoll.app,$20 - $80/month,Easy,4.2
+34,Twitch,Digital Creators/Innovators,Yes,https://www.twitch.tv,"$100 - $50,000+/month",Hard,4.5
+35,TikTok Creator Fund,Digital Creators/Innovators,Yes,https://www.tiktok.com/creators,"$50 - $10,000+/month",Medium,4.3
+36,Substack,Digital Creators/Innovators,Yes,https://substack.com,"$100 - $50,000+/month",Medium,4.6
+37,Patreon,Digital Creators/Innovators,Yes,https://www.patreon.com,"$100 - $100,000+/month",Medium,4.5
+38,Spotify for Podcasters,Digital Creators/Innovators,Yes,https://podcasters.spotify.com,"$50 - $10,000+/month",Medium,4.4
+39,Shutterstock Contributor,Digital Creators/Innovators,Yes,https://submit.shutterstock.com,"$50 - $3,000+/month",Medium,4.2
+40,Adobe Stock Contributor,Digital Creators/Innovators,Yes,https://contributor.stock.adobe.com,"$50 - $5,000+/month",Medium,4.3
+41,Ko-fi,Digital Creators/Innovators,Yes,https://ko-fi.com,"$20 - $5,000+/month",Easy,4.4
+42,Gumroad,Digital Creators/Innovators,Yes,https://gumroad.com,"$100 - $20,000+/month",Medium,4.3
+43,Redbubble,Digital Creators/Innovators,Yes,https://www.redbubble.com,"$50 - $2,000+/month",Easy,4.1
+44,Envato Elements Contributor,Digital Creators/Innovators,Yes,https://elements.envato.com/authors,"$100 - $5,000+/month",Hard,4.2
+45,Skillshare Teacher,Digital Creators/Innovators,Yes,https://www.skillshare.com/teach,"$100 - $3,000+/month",Medium,4.3
+46,Toptal,Freelancing,Yes,https://www.toptal.com,"$5,000 - $20,000+/month",Hard,4.7
+47,Freelancer.com,Freelancing,Yes,https://www.freelancer.com,"$500 - $5,000+/month",Medium,4.0
+48,PeoplePerHour,Freelancing,Yes,https://www.peopleperhour.com,"$1,000 - $8,000+/month",Medium,4.2
+49,We Work Remotely,Remote Jobs,Yes,https://weworkremotely.com,"$3,000 - $15,000+/month",Medium,4.6
+50,Remote OK,Remote Jobs,Yes,https://remoteok.com,"$2,500 - $12,000+/month",Medium,4.4
+51,Instacart Shopper,Gig Economy,NO - NOT AVAILABLE IN UK,https://shoppers.instacart.com,"$500 - $2,500/month",Easy,4.1
+52,Panel Station,Surveys & Research,Yes,https://www.thepanelstation.com,$30 - $100/month,Easy,4.0
+53,Crowdtap,Surveys & Research,NO - NOT AVAILABLE IN UK,https://www.crowdtap.com,$20 - $80/month,Easy,4.1
+54,DoorDash,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.doordash.com,"$500 - $2,500/month",Easy,4.2
+55,Lyft,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.lyft.com,"$1,000 - $4,000/month",Easy,4.0
+56,Uber,Gig Economy,Yes,https://www.uber.com,"£500 - £3,000/month",Easy,4.2
+57,Deliveroo,Gig Economy,Yes,https://deliveroo.co.uk/apply,£10-20/hour,Easy,4.2
+58,Just Eat,Gig Economy,Yes,https://www.just-eat.co.uk/,£8-15/hour,Easy,4.0
+59,Shipt,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.shipt.com,"$500 - $2,000/month",Easy,4.0
+60,Favor,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.favordelivery.com,"$500 - $1,500/month",Easy,3.9
+61,Bellhop,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.getbellhops.com,$15 - $25/hour,Medium,4.0
+62,Wonolo,Gig Economy,NO - NOT AVAILABLE IN UK,https://www.wonolo.com,"$500 - $2,000/month",Easy,4.0
+63,Rover,Gig Economy,Yes,https://www.rover.com,"£300 - £1,500/month",Easy,4.4
+64,Thumbtack,Gig Economy,Yes,https://www.thumbtack.com,"£500 - £3,000/month",Medium,4.1
+65,Airtasker,Gig Economy,Yes,https://www.airtasker.com/uk/,£10-30/hour,Easy,4.2
+66,Stuart,Gig Economy,Yes,https://stuart.com/,£10-18/hour,Easy,4.1
+67,Gopuff,Gig Economy,Yes,https://www.gopuff.com,£10-15/hour,Easy,4.0
+68,Amazon Flex,Gig Economy,Yes,https://flex.amazon.co.uk,£13-17/hour,Easy,4.1
+69,Field Agent,Gig Economy,Yes,https://www.fieldagent.co.uk,£50-200/month,Easy,4.0
+70,Gigwalk,Gig Economy,Yes,https://www.gigwalk.com,£50-300/month,Easy,3.9
+71,Vinted,E-commerce,Yes,https://www.vinted.co.uk/,£50-500+/month,Easy,4.5
+72,Depop,E-commerce,Yes,https://www.depop.com,"£100 - £2,000/month",Easy,4.3
+73,Poshmark,E-commerce,NO - NOT AVAILABLE IN UK,https://poshmark.com,"$100 - $2,000/month",Easy,4.2
+74,Mercari,E-commerce,NO - NOT AVAILABLE IN UK,https://www.mercari.com,"$100 - $1,000/month",Easy,4.1
+75,eBay,E-commerce,Yes,https://www.ebay.co.uk,"£200 - £5,000+/month",Easy,4.4
+76,Facebook Marketplace,E-commerce,Yes,https://www.facebook.com/marketplace,"£100 - £1,000/month",Easy,4.2
+77,Printful,E-commerce,Yes,https://www.printful.com,"£200 - £5,000/month",Medium,4.3
+78,Shopify,E-commerce,Yes,https://www.shopify.com,"£500 - £50,000/month",Medium,4.7
+79,Teespring (Spring),E-commerce,Yes,https://www.spri.ng,"$100 - $5,000/month",Easy,4.0
+80,Zazzle,E-commerce,Yes,https://www.zazzle.com,"$50 - $1,500/month",Easy,4.0
+81,Bonanza,E-commerce,Yes,https://www.bonanza.com,"$100 - $2,000/month",Easy,4.0
+82,MyTutor,Teaching & Tutoring,Yes,https://www.mytutor.co.uk/,"£500-2,000/month",Medium,4.5
+83,Tutorful,Teaching & Tutoring,Yes,https://tutorful.co.uk/,"£400-1,500/month",Medium,4.3
+84,Preply,Teaching & Tutoring,Yes,https://www.preply.com,"£500 - £3,000/month",Medium,4.3
+85,Cambly,Teaching & Tutoring,Yes,https://www.cambly.com,"£300 - £1,000/month",Easy,4.1
+86,Wyzant,Teaching & Tutoring,NO - NOT AVAILABLE IN UK,https://www.wyzant.com,"$500 - $2,500/month",Medium,4.2
+87,Tutor.com,Teaching & Tutoring,NO - NOT AVAILABLE IN UK,https://www.tutor.com,"$500 - $2,000/month",Medium,4.1
+88,Outschool,Teaching & Tutoring,Yes,https://outschool.com/teach,"£500 - £3,000/month",Medium,4.4
+89,Varsity Tutors,Teaching & Tutoring,Yes,https://www.varsitytutors.com,"£500 - £2,500/month",Medium,4.2
+90,Chegg Tutors,Teaching & Tutoring,Yes,https://www.chegg.com,"£400 - £1,500/month",Medium,4.0
+91,italki,Teaching & Tutoring,Yes,https://www.italki.com,"£400 - £2,000/month",Medium,4.3
+92,eToro,Trading & Investing,Yes,https://www.etoro.com,Variable,Medium,4.3
+93,Trading 212,Trading & Investing,Yes,https://www.trading212.com/,Variable,Medium,4.5
+94,Freetrade,Trading & Investing,Yes,https://freetrade.io/,Variable,Medium,4.3
+95,Robinhood,Trading & Investing,Yes,https://robinhood.com/gb/,Variable,Medium,4.2
+96,Webull,Trading & Investing,Yes,https://www.webull-uk.com,Variable,Medium,4.4
+97,E*TRADE,Trading & Investing,NO - NOT AVAILABLE IN UK,https://us.etrade.com,Variable,Medium,4.3
+98,Public.com,Trading & Investing,NO - NOT AVAILABLE IN UK,https://public.com,Variable,Easy,4.1
+99,Interactive Brokers,Trading & Investing,Yes,https://www.interactivebrokers.co.uk,Variable,Hard,4.5
+100,Charles Schwab,Trading & Investing,Yes,https://www.schwab.co.uk,Variable,Medium,4.4
+101,IG Index,Trading & Investing,Yes,https://www.ig.com/uk/,Variable,Hard,4.4
+102,Binance,Trading & Investing,Yes,https://www.binance.com,Variable,Medium,4.3
+103,Kraken,Trading & Investing,Yes,https://www.kraken.com,Variable,Medium,4.3
+104,Freecash,Surveys & Research,Yes,https://freecash.com/,£50-200/month,Easy,4.3
+105,Testable Minds,Surveys & Research,Yes,https://minds.testable.org/,£30-100/month,Easy,4.0
+106,Honeygain,Surveys & Research,Yes,https://www.honeygain.com/,£10-30/month,Easy,3.8
+107,NewVista Live,Surveys & Research,Yes,https://www.newvistalive.com/,£30-100/month,Easy,4.0
+108,Prime Opinion,Surveys & Research,Yes,https://primeopinion.com/,£20-80/month,Easy,4.1
+109,MOBROG,Surveys & Research,Yes,https://www.mobrog.com/,£20-60/month,Easy,4.0
+110,Remotive,Remote Jobs,Yes,https://www.remotive.com,"£2,000 - £10,000/month",Medium,4.3
+111,Dynamite Jobs,Remote Jobs,Yes,https://dynamitejobs.com,"£2,000 - £12,000/month",Medium,4.4
+112,Jobspresso,Remote Jobs,Yes,https://www.jobspresso.co,"£2,500 - £10,000/month",Medium,4.2
+113,Working Nomads,Remote Jobs,Yes,https://www.workingnomads.com,"£2,000 - £8,000/month",Medium,4.1
+114,Virtual Vocations,Remote Jobs,Yes,https://www.virtualvocations.com,"£2,000 - £8,000/month",Medium,4.0
+115,Skip The Drive,Remote Jobs,Yes,https://www.skipthedrive.com,"£1,500 - £7,000/month",Medium,4.0
+116,Authentic Jobs,Remote Jobs,Yes,https://authenticjobs.com,"£2,500 - £10,000/month",Medium,4.1
+117,LinkedIn Remote Jobs,Remote Jobs,Yes,https://www.linkedin.com/jobs,"£2,000 - £15,000/month",Medium,4.5
+118,Guru,Freelancing,Yes,https://www.guru.com,"£500 - £5,000/month",Medium,4.0
+119,99designs,Freelancing,Yes,https://99designs.com,"£500 - £5,000/month",Medium,4.1
+120,Contra,Freelancing,Yes,https://contra.com,"£500 - £8,000/month",Medium,4.2
+121,Malt,Freelancing,Yes,https://www.malt.co.uk/,"£500-8,000/month",Medium,4.2
+122,Bark,Freelancing,Yes,https://www.bark.com/en/gb/,"£500-5,000/month",Medium,4.0
+123,SolidGigs,Freelancing,Yes,https://solidgigs.com,"£500-5,000/month",Medium,4.1
+124,Designhill,Freelancing,Yes,https://www.designhill.com,"£300-3,000/month",Medium,4.0
+125,Popsa,Digital Creators/Innovators,Yes,https://www.popsa.com/,Varies,Easy,4.3
