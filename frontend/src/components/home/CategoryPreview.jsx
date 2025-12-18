@@ -66,7 +66,7 @@ const CategoryPreview = () => {
       color: '#0284c7', // sky-600
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
-      platforms: ['TaskRabbit', 'Instacart', 'DoorDash', 'And 13 more...']
+      platforms: ['TaskRabbit', 'Deliveroo', 'Just Eat', 'And 13 more...']
     }
   ];
 
