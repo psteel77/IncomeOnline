@@ -75,7 +75,7 @@ const CategoryPreview = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Browse Categories</h2>
-          <p className="text-lg text-slate-600 mb-2">8 earning categories with 130+ verified platforms</p>
+          <p className="text-lg text-slate-600 mb-2">8 earning categories with 130+ verified platforms - presenting you with more than 100 ways to make money online</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">You gain 12 months full and unlimited access in return for a small donation</p>
           {/* Info Image - same width as the 4-column grid below */}
           <div className="w-full mb-4">
@@ -85,7 +85,8 @@ const CategoryPreview = () => {
               className="w-full rounded-xl shadow-lg border-2 border-teal-200"
             />
           </div>
-          <p className="text-sm text-slate-500 italic">Here are some examples to give you a taste of what we have to offer you at IncomeOnline...</p>
+          <p className="text-lg text-slate-600 mb-2">make money online, make money from home</p>
+          <p className="text-sm text-slate-500 italic">Here are some less crowded examples to give you a taste of what we have to offer you at IncomeOnline...</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
