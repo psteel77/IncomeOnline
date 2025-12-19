@@ -77,15 +77,21 @@ const CategoryPreview = () => {
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Browse Categories</h2>
           <p className="text-lg text-slate-600 mb-2">8 earning categories with 130+ verified platforms - presenting you with more than 100 ways to make money online</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">You gain 12 months full and unlimited access in return for a small donation</p>
-          {/* Info Image - same width as the 4-column grid below */}
-          <div className="w-full mb-4">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_moneyguide-2/artifacts/egxrpox0_Pic1.png" 
-              alt="Income Online Information"
-              className="w-full rounded-xl shadow-lg border-2 border-teal-200"
-            />
+          {/* Category Quick Navigation Box - matching authenticated view */}
+          <div className="w-full mb-4 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
+            <h3 className="text-lg text-slate-600 mb-4 text-center">make money online, make money from home</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+              {categories.map((cat, index) => (
+                <div
+                  key={index}
+                  className="px-3 py-2 text-sm font-medium rounded-lg text-center text-white"
+                  style={{ backgroundColor: cat.color }}
+                >
+                  {cat.title.length > 15 ? cat.title.substring(0, 12) + '...' : cat.title}
+                </div>
+              ))}
+            </div>
           </div>
-          <p className="text-lg text-slate-600 mb-2">make money online, make money from home</p>
           <p className="text-sm text-slate-500 italic">Here are some less crowded examples to give you a taste of what we have to offer you at IncomeOnline...</p>
         </div>
         
