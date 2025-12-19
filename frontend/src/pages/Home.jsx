@@ -425,7 +425,7 @@ const Home = () => {
             <>
               {/* Category Quick Navigation */}
               <div className="mb-10 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
-                <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Jump to Category:</h3>
+                <h3 className="text-lg text-slate-600 mb-4 text-center">make money online, make money from home</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
                   {categories.map((cat) => (
                     <button
