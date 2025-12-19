@@ -81,7 +81,7 @@ const CategoryPreview = () => {
           <div className="w-full mb-4 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
             <h3 className="text-lg text-slate-600 mb-4 text-center">make money online, make money from home</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-              {categories.map((cat, index) => (
+              {dummyCategories.map((cat, index) => (
                 <div
                   key={index}
                   className="px-3 py-2 text-sm font-medium rounded-lg text-center text-white"
