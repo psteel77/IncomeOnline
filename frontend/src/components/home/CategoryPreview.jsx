@@ -26,7 +26,7 @@ const CategoryPreview = () => {
       color: '#7c3aed', // violet-600
       description: 'Create videos, write articles, or produce content',
       subtitle: 'High earning potential:',
-      platforms: ['YouTube', 'Twitch', 'TikTok', 'And 11 more...']
+      platforms: ['Shutterstock', 'Twitch', 'TikTok', 'And 11 more...']
     },
     {
       title: 'E-commerce',
@@ -34,7 +34,7 @@ const CategoryPreview = () => {
       color: '#0d9488', // teal-600
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
-      platforms: ['eBay', 'Vinted', 'Shopify', 'And 12 more...']
+      platforms: ['Poshmark', 'Vinted', 'Zazzle', 'And 12 more...']
     },
     {
       title: 'Teaching & Tutoring',
