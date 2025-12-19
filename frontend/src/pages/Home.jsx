@@ -154,7 +154,16 @@ const Home = () => {
                 How It Works
               </a>
               <a 
-                href="/success-stories"
+                href="#success-stories"
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  const section = document.getElementById('success-stories');
+                  if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = '/success-stories';
+                  }
+                }}
                 className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 Success Stories
