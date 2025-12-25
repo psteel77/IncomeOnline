@@ -46,6 +46,13 @@ const Donate = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
+      <Helmet>
+        <title>Support Income Online | Make a Donation</title>
+        <meta name="description" content="Support Income Online with a donation and get 12 months full access to 130+ verified online earning platforms." />
+        <link rel="canonical" href="https://www.incomeonline.info/donate" />
+        <meta property="og:title" content="Support Income Online | Make a Donation" />
+        <meta property="og:url" content="https://www.incomeonline.info/donate" />
+      </Helmet>
       {/* Header */}
       <header className="border-b border-teal-600 sticky top-0 z-50 shadow-md" style={{backgroundColor: '#43ADD8'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
