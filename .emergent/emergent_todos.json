@@ -1,0 +1,18 @@
+[
+  {
+    "content": "Explore backend folder structure to discover all GET routes",
+    "status": "completed"
+  },
+  {
+    "content": "Create performance_test.py in /tmp folder for GET endpoints only",
+    "status": "completed"
+  },
+  {
+    "content": "Run performance tests against all three backend providers",
+    "status": "completed"
+  },
+  {
+    "content": "Submit results using Performance_result callback",
+    "status": "completed"
+  }
+]
