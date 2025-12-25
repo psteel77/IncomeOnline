@@ -69,6 +69,10 @@ const Verify = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50 flex items-center justify-center px-4">
+      <Helmet>
+        <title>Verify Email | Income Online</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <Card className="max-w-md w-full shadow-xl border-2 border-teal-300">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
