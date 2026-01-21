@@ -68,7 +68,7 @@ const PlatformPreview = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>6 Top Rated Opportunities</h2>
-          <p className="text-lg text-slate-600 mb-2">130+ verified platforms ready for you to explore</p>
+          <p className="text-lg text-slate-600 mb-2">137+ verified platforms ready for you to explore</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">Unlock full details with a donation</p>
           <p className="text-sm text-slate-500 italic">Here is a taster of what we have to offer so you can make money online...</p>
         </div>
