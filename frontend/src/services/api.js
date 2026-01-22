@@ -7,10 +7,10 @@ export const categoriesAPI = {
   getAll: async () => {
     try {
       const response = await axios.get(`${API}/categories`);
-      return response.data.categories;
+      return response.data.categories || [];
     } catch (error) {
       console.error('Error fetching categories:', error);
-      throw error;
+      return [];
     }
   }
 };
@@ -19,10 +19,10 @@ export const platformsAPI = {
   getAll: async (params = {}) => {
     try {
       const response = await axios.get(`${API}/platforms`, { params });
-      return response.data;
+      return response.data || { platforms: [] };
     } catch (error) {
       console.error('Error fetching platforms:', error);
-      throw error;
+      return { platforms: [] };
     }
   },
   

@@ -1,0 +1,72 @@
+=============================================
+INCOME ONLINE - ENVIRONMENT VARIABLES BACKUP
+Export Date: December 2024
+=============================================
+
+SAVE THIS FILE SECURELY - Contains sensitive credentials!
+
+=============================================
+BACKEND ENVIRONMENT VARIABLES
+=============================================
+
+MONGO_URL=mongodb://localhost:27017
+(Note: You'll replace this with MongoDB Atlas URL)
+
+DB_NAME=test_database
+(Note: Change to 'income_online' on new platform)
+
+CORS_ORIGINS=*
+(Note: Update to your actual frontend URLs)
+
+FRONTEND_URL=https://www.incomeonline.info
+
+MAILGUN_API_KEY=6c956bc08cf876056b04d0b49067f764-67edcffb-4f54a2ac
+MAILGUN_DOMAIN=sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org
+MAILGUN_SENDER_EMAIL=noreply@sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org
+
+JWT_SECRET_KEY=ksGZbi67-ZXRunBb88v37bWDtShwJ2gAFSogizO3o_E
+
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=$2b$12$fmR3qimgLkI.zxs.aDSaIuXRjTcLuNwplwiuoGSdd7ibWS0xUb/Ia
+(Note: This hash is for password 'Gulluk*9')
+
+=============================================
+FRONTEND ENVIRONMENT VARIABLES
+=============================================
+
+REACT_APP_BACKEND_URL=<YOUR_RAILWAY_BACKEND_URL>
+(Note: Replace with your Railway URL after deployment)
+
+REACT_APP_PAYPAL_CLIENT_ID=BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY
+
+REACT_APP_PAYPAL_BUTTON_ID=8M5AKKB9LJW3S
+
+=============================================
+ADMIN CREDENTIALS
+=============================================
+
+Admin URL: /admin/login
+Username: admin
+Password: Gulluk*9
+
+=============================================
+THIRD-PARTY SERVICES
+=============================================
+
+1. MAILGUN (Email)
+   - API Key: 6c956bc08cf876056b04d0b49067f764-67edcffb-4f54a2ac
+   - Domain: sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org
+   - Note: This is a sandbox domain - upgrade for production
+
+2. PAYPAL (Payments)
+   - Client ID: BAAb5JvCWdn7JYDqhUeZ_O2MbGr5ASqqkdLndrBFU6s5q0EGRu3VHw5cgW6zHe7Vd-bh5gwq6kenrUGuzY
+   - Button ID: 8M5AKKB9LJW3S
+   - Dashboard: https://developer.paypal.com/
+
+3. GOOGLE SEARCH CONSOLE
+   - Verification Code: 0ZXFWbudBcRvIA8vfNVD47cg7MogiHDNQBpAoSCEvQk
+
+4. BING WEBMASTER TOOLS
+   - Verification Code: 79F4D4308B0E7CFD67B56E0557443450
+
+=============================================

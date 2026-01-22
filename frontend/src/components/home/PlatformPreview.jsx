@@ -11,7 +11,7 @@ const PlatformPreview = () => {
       name: "Upwork",
       category: "Freelancing",
       description: "World's largest freelancing marketplace connecting businesses with independent professionals for writing, design, development, and more.",
-      earningsPotential: "£400-4,000/month",
+      earningsPotential: "$400-4,000/month",
       difficulty: "Medium",
       rating: 4.5,
       color: "#0891b2"
@@ -20,7 +20,7 @@ const PlatformPreview = () => {
       name: "Survey Junkie",
       category: "Surveys & Research",
       description: "Leading survey platform with millions of members. Share opinions on brands and products for cash rewards via PayPal or gift cards.",
-      earningsPotential: "£50-200/month",
+      earningsPotential: "$50-200/month",
       difficulty: "Easy",
       rating: 4.3,
       color: "#2563eb"
@@ -28,8 +28,8 @@ const PlatformPreview = () => {
     {
       name: "Prolific",
       category: "Surveys & Research",
-      description: "Academic research platform with fair pay. Participate in university studies and get paid £6-12/hour. Highly rated by researchers.",
-      earningsPotential: "£100-300/month",
+      description: "Academic research platform with fair pay. Participate in university studies and get paid $6-12/hour. Highly rated by researchers.",
+      earningsPotential: "$100-300/month",
       difficulty: "Easy",
       rating: 4.7,
       color: "#7c3aed"
@@ -38,7 +38,7 @@ const PlatformPreview = () => {
       name: "Toptal",
       category: "Freelancing",
       description: "Elite freelance network for top 3% of developers, designers, and finance experts. Premium clients like Google and Airbnb.",
-      earningsPotential: "£5,000-15,000/month",
+      earningsPotential: "$5,000-15,000/month",
       difficulty: "Hard",
       rating: 4.8,
       color: "#0d9488"
@@ -47,7 +47,7 @@ const PlatformPreview = () => {
       name: "We Work Remotely",
       category: "Remote Jobs",
       description: "Largest remote work community with quality job listings. No scams, curated positions from companies like Amazon and Google.",
-      earningsPotential: "£2,000-8,000/month",
+      earningsPotential: "$2,000-8,000/month",
       difficulty: "Medium",
       rating: 4.6,
       color: "#6366f1"
@@ -56,7 +56,7 @@ const PlatformPreview = () => {
       name: "Preply",
       category: "Teaching & Tutoring",
       description: "Global tutoring platform for languages and academics. Set your own rates and schedule, connect with students worldwide.",
-      earningsPotential: "£400-2,500/month",
+      earningsPotential: "$400-2,500/month",
       difficulty: "Medium",
       rating: 4.3,
       color: "#4f46e5"
@@ -68,7 +68,7 @@ const PlatformPreview = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>6 Top Rated Opportunities</h2>
-          <p className="text-lg text-slate-600 mb-2">137+ verified platforms ready for you to explore</p>
+          <p className="text-lg text-slate-600 mb-2">165+ verified platforms ready for you to explore</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">Unlock full details with a donation</p>
           <p className="text-sm text-slate-500 italic">Here is a taster of what we have to offer so you can make money online...</p>
         </div>

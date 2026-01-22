@@ -69,8 +69,8 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
               { bg: 'linear-gradient(to bottom right, #ede9fe, #ddd6fe)', border: '#7c3aed', text: '#7c3aed' }  // violet
             ];
             const color = colors[index % colors.length];
-            // Convert $ to £ in stat values
-            const displayValue = stat.value.replace(/\$/g, '£');
+            // Convert $ to $ in stat values
+            const displayValue = stat.value.replace(/\$/g, '$');
             return (
               <div key={index} className="rounded-xl p-4 sm:p-6 shadow-md border-2 hover:shadow-lg transition-shadow" style={{ background: color.bg, borderColor: color.border }}>
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2" style={{ color: color.text }}>{displayValue}</div>
