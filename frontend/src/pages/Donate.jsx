@@ -48,7 +48,7 @@ const Donate = () => {
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       <Helmet>
         <title>Support Income Online | Make a Donation</title>
-        <meta name="description" content="Support Income Online with a donation and get 12 months full access to 165+ verified online earning platforms." />
+        <meta name="description" content="Support Income Online with a donation and get 12 months full access to 199+ verified online earning platforms." />
         <link rel="canonical" href="https://www.incomeonline.info/donate" />
         <meta property="og:title" content="Support Income Online | Make a Donation" />
         <meta property="og:url" content="https://www.incomeonline.info/donate" />

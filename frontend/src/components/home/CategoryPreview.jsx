@@ -75,7 +75,7 @@ const CategoryPreview = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Browse Categories</h2>
-          <p className="text-lg text-slate-600 mb-2">8 earning categories with 165+ verified platforms - presenting you with more than 100 ways to make money online</p>
+          <p className="text-lg text-slate-600 mb-2">8 earning categories with 199+ verified platforms - presenting you with more than 100 ways to make money online</p>
           <p className="text-sm text-amber-600 font-semibold mb-3">You gain 12 months full and unlimited access in return for a small donation</p>
           {/* Category Quick Navigation Box - matching authenticated view */}
           <div className="w-full mb-4 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
@@ -137,7 +137,7 @@ const CategoryPreview = () => {
               <Lock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" style={{ color: '#43ADD8' }} />
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-3 text-center" style={{ color: '#43ADD8' }}>Unlock All Platform Details</h3>
               <p className="text-sm sm:text-base text-slate-700 mb-4 sm:mb-6 text-center px-2">
-                Get full access to detailed information, ratings, direct links, and earning strategies for all 165+ platforms
+                Get full access to detailed information, ratings, direct links, and earning strategies for all 199+ platforms
               </p>
               <div className="flex flex-col items-center gap-3">
                 <Button 

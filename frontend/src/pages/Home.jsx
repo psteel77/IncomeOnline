@@ -107,8 +107,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50">
       <Helmet>
-        <title>Income Online | Discover 165+ Legitimate Ways to Earn Money Online</title>
-        <meta name="description" content="Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find 165+ verified platforms to make money online." />
+        <title>Income Online | Discover 199+ Legitimate Ways to Earn Money Online</title>
+        <meta name="description" content="Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find 199+ verified platforms to make money online." />
         <link rel="canonical" href="https://www.incomeonline.info" />
       </Helmet>
       {/* Header */}
