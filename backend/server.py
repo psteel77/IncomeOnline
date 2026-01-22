@@ -106,8 +106,14 @@ async def seed_database():
         # Insert platforms with ukAvailable field
         await db.platforms.insert_many(platforms_with_uk)
         
-        # Add additional UK-available platforms
-        await add_uk_platforms()
+        # Update category counts based on actual data
+        categories = await db.categories.find({}).to_list(100)
+        for cat in categories:
+            count = await db.platforms.count_documents({"category": cat["name"]})
+            await db.categories.update_one(
+                {"name": cat["name"]},
+                {"$set": {"count": count}}
+            )
         
         return {
             "message": "Database seeded successfully",
