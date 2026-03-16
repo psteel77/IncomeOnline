@@ -236,6 +236,13 @@ const Home = () => {
                 How It Works
               </a>
               <a 
+                href="/blog"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                Blog
+              </a>
+              <a 
                 href="#success-stories"
                 onClick={(e) => { 
                   e.preventDefault(); 
