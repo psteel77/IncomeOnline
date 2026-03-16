@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
-import { Textarea } from '../components/ui/textarea';
-import { Badge } from '../components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
+import { Badge } from '../ui/badge';
 import { Save, Plus, Trash2, Edit2, X, Eye, EyeOff, ChevronDown, ChevronUp, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 
