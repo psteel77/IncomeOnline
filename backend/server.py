@@ -920,6 +920,8 @@ async def get_subscription_stats():
 # Include the routers in the main app
 app.include_router(api_router)
 app.include_router(cms_router, prefix="/api")
+app.include_router(blog_router, prefix="/api")
+app.include_router(pdf_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
