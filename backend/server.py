@@ -18,6 +18,8 @@ import jwt as pyjwt
 from seed_data import categories_data, platforms_data
 from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email
 from cms_routes import router as cms_router
+from blog_routes import router as blog_router
+from pdf_routes import router as pdf_router
 from seed_content import content_sections
 
 # Subscription duration in days
