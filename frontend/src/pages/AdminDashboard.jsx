@@ -820,9 +820,18 @@ const AdminDashboard = () => {
           {expandedSections['platforms_management'] && (
             <CardContent className="space-y-4 border-t pt-4">
               {/* Add Platform Button */}
-              <Button onClick={() => setShowAddPlatform(true)} className="bg-teal-600 hover:bg-teal-700">
-                <Plus className="h-4 w-4 mr-2" /> Add New Platform
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => setShowAddPlatform(true)} className="bg-teal-600 hover:bg-teal-700">
+                  <Plus className="h-4 w-4 mr-2" /> Add New Platform
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => window.open(`${API_URL}/api/pdf/platforms`, '_blank')}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" /> Download PDF
+                </Button>
+              </div>
 
               {/* Add Platform Modal */}
               {showAddPlatform && (
