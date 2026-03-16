@@ -158,6 +158,12 @@ const Home = () => {
                 How It Works
               </a>
               <a 
+                href="/blog"
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
+              >
+                Blog
+              </a>
+              <a 
                 href="#success-stories"
                 onClick={(e) => { 
                   e.preventDefault(); 
