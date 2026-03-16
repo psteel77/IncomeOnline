@@ -1087,6 +1087,9 @@ const AdminDashboard = () => {
           )}
         </Card>
 
+        {/* Blog Management Section */}
+        <BlogAdmin />
+
       </div>
     </div>
   );
