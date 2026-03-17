@@ -45,6 +45,7 @@ A comprehensive website for discovering online earning opportunities. Features i
   1. "10 Best Survey Sites to Make Money Online in 2025" (Survey Strategies)
   2. "How to Start Freelancing: A Complete Beginner's Guide" (Freelancing Tips)
   3. "7 Passive Income Ideas You Can Start With Little Money" (Passive Income)
+- **Social Sharing Buttons**: Twitter, Facebook, LinkedIn, Copy Link on all blog posts
 
 ## Technical Architecture
 ```
