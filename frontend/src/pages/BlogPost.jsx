@@ -4,7 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Calendar, Clock, ArrowLeft, Share2, Tag, Loader2, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, Share2, Tag, Loader2, ChevronRight, Twitter, Facebook, Linkedin, Link2, Check } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
