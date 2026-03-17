@@ -271,24 +271,83 @@ const BlogPost = () => {
         )}
 
         {/* Share & Navigation */}
-        <div className="mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/blog')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Blog
-          </Button>
-          
-          <Button 
-            variant="outline"
-            onClick={handleShare}
-            className="flex items-center gap-2"
-          >
-            <Share2 className="h-4 w-4" />
-            Share Article
-          </Button>
+        <div className="mt-8 pt-6 border-t border-slate-200">
+          {/* Social Share Buttons */}
+          <div className="mb-6">
+            <p className="text-sm font-medium text-slate-700 mb-3">Share this article:</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button 
+                onClick={shareOnTwitter}
+                className="bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white flex items-center gap-2"
+                size="sm"
+                data-testid="share-twitter"
+              >
+                <Twitter className="h-4 w-4" />
+                Twitter
+              </Button>
+              
+              <Button 
+                onClick={shareOnFacebook}
+                className="bg-[#4267B2] hover:bg-[#365899] text-white flex items-center gap-2"
+                size="sm"
+                data-testid="share-facebook"
+              >
+                <Facebook className="h-4 w-4" />
+                Facebook
+              </Button>
+              
+              <Button 
+                onClick={shareOnLinkedIn}
+                className="bg-[#0077B5] hover:bg-[#006097] text-white flex items-center gap-2"
+                size="sm"
+                data-testid="share-linkedin"
+              >
+                <Linkedin className="h-4 w-4" />
+                LinkedIn
+              </Button>
+              
+              <Button 
+                variant="outline"
+                onClick={copyToClipboard}
+                className="flex items-center gap-2"
+                size="sm"
+                data-testid="share-copy-link"
+              >
+                {linkCopied ? (
+                  <>
+                    <Check className="h-4 w-4 text-green-600" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Link2 className="h-4 w-4" />
+                    Copy Link
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/blog')}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Blog
+            </Button>
+            
+            <Button 
+              variant="outline"
+              onClick={handleShare}
+              className="flex items-center gap-2 md:hidden"
+            >
+              <Share2 className="h-4 w-4" />
+              Share
+            </Button>
+          </div>
         </div>
 
         {/* Recent Posts */}
