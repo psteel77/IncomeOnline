@@ -7,7 +7,6 @@ import { Button } from '../components/ui/button';
 import { Textarea } from '../components/ui/textarea';
 import { LogOut, Save, Home, Loader2, CheckCircle2, AlertCircle, Plus, Trash2, Edit2, X, ChevronDown, ChevronUp, FileText, Download } from 'lucide-react';
 import axios from 'axios';
-import BlogAdmin from '../components/admin/BlogAdmin';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
