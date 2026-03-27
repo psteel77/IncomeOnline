@@ -129,6 +129,13 @@ const Home = () => {
             {/* Desktop Navigation */}
             <nav className="flex space-x-6 lg:space-x-8 max-md:hidden items-center ml-8">
               <a 
+                href="#how-it-works" 
+                onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
+              >
+                How It Works
+              </a>
+              <a 
                 href="#categories-preview" 
                 onClick={(e) => { 
                   e.preventDefault(); 
@@ -149,19 +156,6 @@ const Home = () => {
                 className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
               >
                 Platforms
-              </a>
-              <a 
-                href="#how-it-works" 
-                onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
-              >
-                How It Works
-              </a>
-              <a 
-                href="/blog"
-                className="text-white hover:text-yellow-300 transition-colors font-medium cursor-pointer no-underline"
-              >
-                Blog
               </a>
               <a 
                 href="#success-stories"
