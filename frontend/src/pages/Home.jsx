@@ -195,6 +195,17 @@ const Home = () => {
           {mobileMenuOpen && (
             <nav className="md:hidden mt-4 pb-4 space-y-3">
               <a 
+                href="#how-it-works" 
+                onClick={(e) => { 
+                  e.preventDefault(); 
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                How It Works
+              </a>
+              <a 
                 href="#categories-preview" 
                 onClick={(e) => { 
                   e.preventDefault(); 
@@ -217,24 +228,6 @@ const Home = () => {
                 className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
               >
                 Platforms
-              </a>
-              <a 
-                href="#how-it-works" 
-                onClick={(e) => { 
-                  e.preventDefault(); 
-                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
-                  setMobileMenuOpen(false);
-                }}
-                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
-              >
-                How It Works
-              </a>
-              <a 
-                href="/blog"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
-              >
-                Blog
               </a>
               <a 
                 href="#success-stories"
