@@ -9,8 +9,6 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuccessStories from "./pages/SuccessStories";
 import PDFView from "./pages/PDFView";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
 
 function App() {
   return (
@@ -24,8 +22,6 @@ function App() {
               <Route path="/verify" element={<Verify />} />
               <Route path="/verify/:token" element={<Verify />} />
               <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/pdf-view" element={<PDFView />} />
