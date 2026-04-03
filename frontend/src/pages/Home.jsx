@@ -875,8 +875,8 @@ const Home = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Resources</h4>
-              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-pink-300">Resources</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-purple-300">
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' })}
@@ -891,9 +891,9 @@ const Home = () => {
                 </li>
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-1"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  Blog
+                  How It Works
                 </li>
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-1"
@@ -905,8 +905,8 @@ const Home = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Company</h4>
-              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-400">
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-pink-300">Company</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-purple-300">
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-1"
                   onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
@@ -932,7 +932,7 @@ const Home = () => {
             </div>
           </div>
           
-          <div className="border-t border-teal-700 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-slate-200">
+          <div className="border-t border-purple-500/30 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-purple-200">
             <p>{content.footer?.copyright || '© 2025 Income Online. All rights reserved.'}</p>
           </div>
         </div>
