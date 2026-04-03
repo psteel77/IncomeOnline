@@ -112,7 +112,7 @@ const Home = () => {
         <link rel="canonical" href="https://www.incomeonline.info" />
       </Helmet>
       {/* Header */}
-      <header className="sticky top-0 z-50 glass-dark backdrop-blur-xl border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 border-b border-purple-500/20 shadow-lg shadow-purple-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             {/* Logo on the left */}
@@ -121,7 +121,7 @@ const Home = () => {
                 <img 
                   src="/earnhub-logo.jpeg" 
                   alt="Income Online - Your Earning Hub" 
-                  className="h-16 md:h-20 w-auto cursor-pointer hover-scale"
+                  className="h-16 md:h-20 w-auto cursor-pointer hover-scale rounded-lg"
                 />
               </a>
             </div>
