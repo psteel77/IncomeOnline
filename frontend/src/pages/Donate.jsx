@@ -185,7 +185,7 @@ const Donate = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-slate-800 via-teal-900 to-cyan-900 text-white py-12 px-4 sm:px-6 lg:px-8 mt-20">
+      <footer className="bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white py-12 px-4 sm:px-6 lg:px-8 mt-20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -193,15 +193,15 @@ const Donate = () => {
                 <img 
                   src="/earnhub-logo.jpeg" 
                   alt="Income Online - Your Earning Hub" 
-                  className="h-30 w-auto"
+                  className="h-20 w-auto rounded-lg"
                 />
               </div>
-              <p className="text-slate-400 text-sm">Your trusted directory for online earning opportunities.</p>
+              <p className="text-purple-200 text-sm">Your trusted directory for online earning opportunities.</p>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <h4 className="font-semibold mb-4 text-pink-300">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-purple-300">
                 <li><a href="/" className="hover:text-white cursor-pointer transition-colors">Home</a></li>
                 <li><a href="/#categories" className="hover:text-white cursor-pointer transition-colors">Categories</a></li>
                 <li><a href="/#platforms" className="hover:text-white cursor-pointer transition-colors">Platforms</a></li>
@@ -210,18 +210,18 @@ const Donate = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <h4 className="font-semibold mb-4 text-pink-300">Resources</h4>
+              <ul className="space-y-2 text-sm text-purple-300">
                 <li className="hover:text-white cursor-pointer transition-colors">Getting Started</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Success Stories</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Blog</li>
+                <li className="hover:text-white cursor-pointer transition-colors">How It Works</li>
                 <li className="hover:text-white cursor-pointer transition-colors">FAQ</li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <h4 className="font-semibold mb-4 text-pink-300">Company</h4>
+              <ul className="space-y-2 text-sm text-purple-300">
                 <li className="hover:text-white cursor-pointer transition-colors">About Us</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Contact</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Privacy Policy</li>
@@ -230,7 +230,7 @@ const Donate = () => {
             </div>
           </div>
           
-          <div className="border-t border-slate-800 pt-8 text-center text-sm text-slate-400">
+          <div className="border-t border-purple-500/30 pt-8 text-center text-sm text-purple-200">
             <p>© 2025 Income Online. All rights reserved.</p>
           </div>
         </div>
