@@ -717,8 +717,8 @@ const Home = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Categories</h4>
-              <ul className="space-y-1 text-xs sm:text-sm text-slate-400">
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-pink-300">Categories</h4>
+              <ul className="space-y-1 text-xs sm:text-sm text-purple-300">
                 <li 
                   className="hover:text-white cursor-pointer transition-colors py-0.5"
                   onClick={() => {
