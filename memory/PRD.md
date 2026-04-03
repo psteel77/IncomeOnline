@@ -50,6 +50,15 @@ A comprehensive website for discovering online earning opportunities. Features i
   - Custom scrollbar styling
   - Dark gradient section for donation area
 
+### Completed (April 2025)
+- **Rule of 72 Word Document**: 
+  - Professional 10+ page .docx guide covering The Rule of 72 for investors
+  - Includes: formula explanation, step-by-step usage, quick reference tables, real-world examples, accuracy comparisons, variations (Rule of 69/70), limitations
+  - Branded with Income Online purple/pink/orange colors and formatting
+  - Backend endpoint: GET /api/pdf/rule-of-72
+  - Frontend "Free Resources" section on homepage with download button
+  - All tests passing (100% backend, 100% frontend)
+
 ## Technical Architecture
 ```
 /app
@@ -87,6 +96,7 @@ A comprehensive website for discovering online earning opportunities. Features i
 ### PDF
 - `GET /api/pdf/platforms` - Download PDF
 - `GET /api/pdf/preview` - Get PDF metadata
+- `GET /api/pdf/rule-of-72` - Download Rule of 72 Word document
 
 ## Admin Credentials
 - URL: `/admin/login`
