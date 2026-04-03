@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Shield, Heart, Lock, Sparkles, CheckCircle } from 'lucide-react';
 
 const DonationSection = () => {
   const paypalLoaded = useRef(false);
@@ -49,74 +50,86 @@ const DonationSection = () => {
   }, []);
 
   return (
-    <section id="support" className="py-20 px-2 sm:px-4 md:px-6 lg:px-8 bg-white relative z-10">
-      <div className="max-w-6xl mx-auto">
-        {/* Single PayPal Donation Card */}
-        <div className="max-w-3xl mx-auto px-2 sm:px-4">
-          <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
-            <CardHeader className="text-center px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-              <p className="text-sm sm:text-base mb-2" style={{ color: '#43ADD8' }}>help us to help you...</p>
-              <CardTitle className="text-2xl sm:text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>
-                Support IncomeOnline
-              </CardTitle>
-              <CardDescription className="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed">
-                Your contribution helps us grow and improve
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6 md:px-10 py-6 sm:py-8">
-              {/* Why Donate Section */}
-              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-teal-200">
-                <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
-                  There are websites offering Income Online opportunities that are "free" but in our experience very few things on the Internet are genuinely "free". Many of the 'free' websites accept commissions/fees from other Platforms and direct you towards these out of their own financial interest.
-                </p>
-                <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed mb-4">
-                  By making a donation to access the online income opportunities via our web portal you have <span className="font-bold text-teal-800">3 Factor peace of mind</span>:
-                </p>
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm sm:text-base">
-                      1
+    <section id="support" className="py-20 px-2 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900"></div>
+      <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 float-animation"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 float-animation-delay-1"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-4">
+            <Heart className="h-4 w-4 text-pink-400" />
+            <span className="text-sm font-medium text-white/90">Support Our Mission</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Support <span className="gradient-text-warm">IncomeOnline</span>
+          </h2>
+          <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            Your contribution helps us maintain an independent, unbiased platform
+          </p>
+        </div>
+
+        {/* Main Donation Card */}
+        <div className="max-w-3xl mx-auto">
+          <Card className="border-0 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-lg">
+            <div className="h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"></div>
+            <CardContent className="px-6 sm:px-8 md:px-10 py-8">
+              
+              {/* Trust Factors */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-white/20">
+                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-emerald-400" />
+                  3-Factor Peace of Mind
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    "We do not accept commissions, fees, or incentives from any recommended platforms.",
+                    "We are completely independent with no commercial links to any platform.",
+                    "We will never sell or release your data to any third parties."
+                  ].map((text, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                        {index + 1}
+                      </div>
+                      <p className="text-white/80 text-sm sm:text-base leading-relaxed pt-1">
+                        {text}
+                      </p>
                     </div>
-                    <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We do not accept commissions/fees/incentives or any other form of enrichment from any of the Platforms recommended on our site.
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm sm:text-base">
-                      2
-                    </div>
-                    <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We are completely independent, we have no commercial link or personal relationship to any recommended Platform or potential provider of Income Online.
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-sm sm:text-base">
-                      3
-                    </div>
-                    <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed pt-0.5 sm:pt-1">
-                      We will never sell or release your data to any third parties.
+                  ))}
+                </div>
+              </div>
+
+              {/* Value Proposition */}
+              <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-amber-500/30">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="h-6 w-6 text-amber-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-2">Quick Return on Investment</h4>
+                    <p className="text-white/80 text-sm sm:text-base leading-relaxed">
+                      Devote just <span className="font-semibold text-amber-400">1 hour</span> to one of our Survey and Research opportunities and earn more than the cost of your access fee. Show a positive ROI within the hour!
                     </p>
                   </div>
                 </div>
-                <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
-                  We believe that the modest donation we ask you to make in return for 12 months unlimited access to Income Online is a small price to pay when you consider the added benefit and peace of mind the 3 factors above give you.
-                </p>
               </div>
 
-              {/* ROI Section */}
-              <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-amber-200">
-                <p className="text-slate-700 text-sm sm:text-base md:text-lg leading-relaxed">
-                  Once you join <span className="font-bold text-teal-800">incomeOnline</span> You might be overwhelmed by the sheer number of possibilities available to you so while you are considering your best way forward or you simply can't decide what really excites you (our Freelancers platform alone has more than 20,000 opportunities!), you could devote just 1 hour of your time to one of the many Survey and Research opportunities available on incomeOnline and earn more than the cost of your 'online income' fee so you could be showing a positive return on your investment within the hour!
-                </p>
-              </div>
-
-              <div id="paypal-donation-area" className="bg-white rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-teal-200">
-                <p className="font-bold text-teal-800 text-sm sm:text-base md:text-lg leading-relaxed mb-0">
-                  Click the button below to donate securely via PayPal
-                </p>
+              {/* PayPal Section */}
+              <div id="paypal-donation-area" className="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+                <div className="text-center mb-4">
+                  <Lock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                  <p className="font-bold text-gray-800 text-lg">
+                    Secure Payment via PayPal
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    Get 12 months unlimited access
+                  </p>
+                </div>
                 
-                {/* PayPal Button - with CSS override for content alignment */}
-                <div className="relative z-0 mt-2">
+                {/* PayPal Button */}
+                <div className="relative z-0">
                   <style>{`
                     #paypal-container-donation {
                       width: 100%;
@@ -132,27 +145,27 @@ const DonationSection = () => {
                 </div>
               </div>
 
-              {/* Security Notice */}
-              <div className="mt-4 sm:mt-6 text-center px-2 sm:px-4">
-                <p className="text-sm sm:text-base text-slate-600 mb-2">
-                  🔒 Secure payment processing by PayPal
-                </p>
-                <p className="text-xs sm:text-sm text-slate-500">
-                  We never see or store your payment information
-                </p>
+              {/* Security Badge */}
+              <div className="flex items-center justify-center gap-2 text-white/60 text-sm">
+                <Lock className="h-4 w-4" />
+                <span>We never see or store your payment information</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Thank You Message - no praying hands emoji */}
-        <div className="mt-12 text-center bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-8 border-2 border-teal-200 max-w-4xl mx-auto">
-          <h3 className="text-2xl md:text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>Thank You!</h3>
-          <p className="text-slate-700 text-lg md:text-xl leading-relaxed">
-            Your action today sets you on the path to fulfilling your income potential and discovering your passion while earning income online.
-          </p>
+        {/* Thank You Section */}
+        <div className="mt-12 text-center">
+          <div className="inline-block bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-6 border border-white/20">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 flex items-center justify-center gap-2">
+              <Heart className="h-6 w-6 text-pink-400" />
+              Thank You!
+            </h3>
+            <p className="text-white/80 text-lg max-w-xl">
+              Your action today sets you on the path to fulfilling your income potential and discovering your passion while earning online.
+            </p>
+          </div>
         </div>
-
       </div>
     </section>
   );
