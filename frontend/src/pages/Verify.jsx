@@ -68,25 +68,25 @@ const Verify = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-50 to-teal-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 flex items-center justify-center px-4">
       <Helmet>
         <title>Verify Email | Income Online</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <Card className="max-w-md w-full shadow-xl border-2 border-teal-300">
+      <Card className="max-w-md w-full shadow-2xl border-0 bg-white/95 backdrop-blur-lg">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
             {status === 'verifying' && (
-              <Loader2 className="h-16 w-16 text-teal-600 animate-spin" />
+              <Loader2 className="h-16 w-16 text-purple-600 animate-spin" />
             )}
             {status === 'success' && (
-              <CheckCircle className="h-16 w-16 text-green-600" />
+              <CheckCircle className="h-16 w-16 text-emerald-500" />
             )}
             {status === 'error' && (
-              <XCircle className="h-16 w-16 text-red-600" />
+              <XCircle className="h-16 w-16 text-red-500" />
             )}
           </div>
-          <CardTitle className="text-2xl">
+          <CardTitle className="text-2xl gradient-text">
             {status === 'verifying' && 'Verifying...'}
             {status === 'success' && 'Success!'}
             {status === 'error' && 'Verification Failed'}
@@ -102,7 +102,7 @@ const Verify = () => {
           {status === 'error' && (
             <Button
               onClick={() => navigate('/')}
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
             >
               Go to Homepage
             </Button>
