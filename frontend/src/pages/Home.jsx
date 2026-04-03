@@ -82,10 +82,10 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-emerald-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-600">Loading earning opportunities...</p>
+          <div className="spinner mx-auto mb-6"></div>
+          <p className="text-white/80 text-lg">Loading earning opportunities...</p>
         </div>
       </div>
     );
@@ -93,10 +93,10 @@ const Home = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={fetchData} className="bg-teal-600 hover:bg-teal-700">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex items-center justify-center">
+        <div className="text-center glass p-8 rounded-2xl">
+          <p className="text-red-400 mb-4 text-lg">{error}</p>
+          <Button onClick={fetchData} className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white border-0">
             Try Again
           </Button>
         </div>
