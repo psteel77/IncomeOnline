@@ -927,7 +927,7 @@ const SuccessStories = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-cyan-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-pink-50">
       <Helmet>
         <title>Success Stories | Real People Earning Money Online | Income Online</title>
         <meta name="description" content="Read 60+ verified success stories from real people earning money online. From freelancing on Upwork to surveys on Prolific, see how others transformed their income." />
@@ -939,19 +939,18 @@ const SuccessStories = () => {
         <meta property="og:type" content="website" />
       </Helmet>
       {/* Header */}
-      <header className="border-b border-blue-200 sticky top-0 z-50 shadow-md bg-white">
+      <header className="sticky top-0 z-50 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 hover:bg-blue-50"
-              style={{ color: '#43ADD8' }}
+              className="flex items-center gap-2 text-white hover:bg-white/10"
             >
               <ArrowLeft className="h-5 w-5" />
               Back to Home
             </Button>
-            <h1 className="text-2xl font-bold" style={{ color: '#43ADD8' }}>Success Stories</h1>
+            <h1 className="text-2xl font-bold text-white">Success Stories</h1>
             <div className="w-32"></div>
           </div>
         </div>
@@ -960,7 +959,7 @@ const SuccessStories = () => {
       {/* Hero Section */}
       <section className="py-10 sm:py-16 px-3 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6" style={{ color: '#43ADD8' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 gradient-text">
             Real People, Real Success
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-slate-700 max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
@@ -968,11 +967,11 @@ const SuccessStories = () => {
             Every story includes the source where we found it, so you can verify for yourself.
           </p>
           <div className="flex items-center justify-center gap-4 mb-12 flex-wrap">
-            <Badge className="px-4 py-2 text-base" style={{ backgroundColor: '#43ADD8' }}>
+            <Badge className="px-4 py-2 text-base bg-gradient-to-r from-purple-600 to-pink-600 border-0">
               <Star className="mr-2 h-4 w-4" />
               {stories.length} Verified Stories
             </Badge>
-            <Badge className="px-4 py-2 text-base bg-green-600">
+            <Badge className="px-4 py-2 text-base bg-gradient-to-r from-emerald-500 to-teal-500 border-0">
               <TrendingUp className="mr-2 h-4 w-4" />
               All Sources Cited
             </Badge>
@@ -988,7 +987,7 @@ const SuccessStories = () => {
                   placeholder="Search stories..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
               <div className="relative">
@@ -996,7 +995,7 @@ const SuccessStories = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full sm:w-auto pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent appearance-none bg-white"
+                  className="w-full sm:w-auto pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
