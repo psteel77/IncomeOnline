@@ -119,7 +119,7 @@ const Home = () => {
             <div className="flex items-center">
               <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                 <img 
-                  src="/earnhub-logo.jpeg" 
+                  src="/earnhub-logo.png" 
                   alt="Income Online - Your Earning Hub" 
                   className="h-16 md:h-20 w-auto cursor-pointer hover-scale rounded-lg"
                 />
@@ -708,7 +708,7 @@ const Home = () => {
             <div className="col-span-2 sm:col-span-2 md:col-span-1">
               <div className="mb-4">
                 <img 
-                  src="/earnhub-logo.jpeg" 
+                  src="/earnhub-logo.png" 
                   alt="Income Online - Your Earning Hub" 
                   className="h-20 sm:h-28 w-auto rounded-lg"
                 />

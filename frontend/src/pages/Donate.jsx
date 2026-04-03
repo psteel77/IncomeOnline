@@ -61,7 +61,7 @@ const Donate = () => {
               {/* Logo */}
               <a href="/">
                 <img 
-                  src="/earnhub-logo.jpeg" 
+                  src="/earnhub-logo.png" 
                   alt="Income Online - Your Earning Hub" 
                   className="h-20 w-auto cursor-pointer rounded-lg hover:scale-105 transition-transform"
                 />
@@ -191,7 +191,7 @@ const Donate = () => {
             <div>
               <div className="mb-4">
                 <img 
-                  src="/earnhub-logo.jpeg" 
+                  src="/earnhub-logo.png" 
                   alt="Income Online - Your Earning Hub" 
                   className="h-20 w-auto rounded-lg"
                 />

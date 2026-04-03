@@ -99,7 +99,7 @@ const Blog = () => {
           <div className="flex items-center justify-between">
             <Link to="/">
               <img 
-                src="/earnhub-logo.jpeg" 
+                src="/earnhub-logo.png" 
                 alt="Income Online" 
                 className="h-16 md:h-20 w-auto cursor-pointer"
               />
