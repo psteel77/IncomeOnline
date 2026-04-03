@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 import os
 import logging
 from datetime import datetime, timezone
@@ -277,4 +277,31 @@ async def get_pdf_preview():
         }
     except Exception as e:
         logging.error(f"Error getting PDF preview: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/rule-of-72")
+async def download_rule_of_72():
+    """Download The Rule of 72 Word document"""
+    try:
+        doc_path = os.path.join(os.path.dirname(__file__), 'static', 'The_Rule_of_72_Guide.docx')
+
+        if not os.path.exists(doc_path):
+            # Generate on first request
+            from generate_rule72_doc import generate_rule72_document
+            buffer = generate_rule72_document()
+            os.makedirs(os.path.dirname(doc_path), exist_ok=True)
+            with open(doc_path, 'wb') as f:
+                f.write(buffer.read())
+
+        return FileResponse(
+            path=doc_path,
+            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            filename='The_Rule_of_72_Complete_Guide.docx',
+            headers={
+                'Content-Disposition': 'attachment; filename="The_Rule_of_72_Complete_Guide.docx"'
+            }
+        )
+    except Exception as e:
+        logging.error(f"Error serving Rule of 72 document: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

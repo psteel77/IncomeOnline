@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X } from 'lucide-react';
+import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X, Download, FileText } from 'lucide-react';
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import AccessGate from '../components/AccessGate';
@@ -658,6 +658,52 @@ const Home = () => {
         </div>
       </section>
       )}
+
+      {/* Free Resources Section - Always visible */}
+      <section id="free-resources" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-3">
+              Free Resources
+            </h2>
+            <p className="text-base sm:text-lg text-slate-600">Download expert guides to boost your financial knowledge</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 max-w-2xl mx-auto">
+            {/* Rule of 72 Guide */}
+            <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
+              <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"></div>
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex flex-col sm:flex-row items-start gap-5">
+                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <FileText className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">The Rule of 72 — Complete Investment Guide</h3>
+                    <p className="text-slate-600 text-sm mb-4 leading-relaxed">
+                      Learn the most powerful shortcut in personal finance. Discover how to quickly calculate when your investments will double, with worked examples, comparison tables, and real-world scenarios. A must-read for every investor.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button
+                        data-testid="download-rule-of-72-btn"
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
+                        onClick={() => {
+                          const backendUrl = process.env.REACT_APP_BACKEND_URL;
+                          window.open(`${backendUrl}/api/pdf/rule-of-72`, '_blank');
+                        }}
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Free Guide
+                      </Button>
+                      <span className="text-xs text-slate-400 font-medium">Word Document (.docx) — 10 Pages</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* Donation Section - Always visible */}
       <DonationSection />
