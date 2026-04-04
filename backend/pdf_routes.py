@@ -305,3 +305,26 @@ async def download_rule_of_72():
     except Exception as e:
         logging.error(f"Error serving Rule of 72 document: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/moneyrules-template")
+async def download_moneyrules_template():
+    """Download the blank MoneyRules branded template"""
+    try:
+        doc_path = os.path.join(os.path.dirname(__file__), 'static', 'MoneyRules_Template.docx')
+        if not os.path.exists(doc_path):
+            raise HTTPException(status_code=404, detail="Template not found")
+
+        return FileResponse(
+            path=doc_path,
+            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            filename='MoneyRules_Template.docx',
+            headers={
+                'Content-Disposition': 'attachment; filename="MoneyRules_Template.docx"'
+            }
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error serving MoneyRules template: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
