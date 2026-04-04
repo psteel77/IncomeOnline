@@ -4,7 +4,7 @@ export const categories = [
     name: 'Freelancing',
     description: 'Offer your skills and services to clients worldwide',
     count: 45,
-    color: 'from-emerald-50 to-teal-50',
+    color: 'from-purple-50 to-pink-50',
     borderColor: 'border-emerald-200',
     textColor: 'text-emerald-700'
   },
@@ -13,7 +13,7 @@ export const categories = [
     name: 'Surveys & Research',
     description: 'Share your opinions and get paid for your time',
     count: 32,
-    color: 'from-blue-50 to-cyan-50',
+    color: 'from-rose-50 to-pink-50',
     borderColor: 'border-blue-200',
     textColor: 'text-blue-700'
   },

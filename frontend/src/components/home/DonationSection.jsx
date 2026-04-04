@@ -92,7 +92,7 @@ const DonationSection = () => {
                     "We will never sell or release your data to any third parties."
                   ].map((text, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-400 to-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                      <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
                         {index + 1}
                       </div>
                       <p className="text-white/80 text-sm sm:text-base leading-relaxed pt-1">

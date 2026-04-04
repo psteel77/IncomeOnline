@@ -94,10 +94,10 @@ const Donate = () => {
 
         {/* Benefits Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
+          <Card className="bg-white border-2 border-purple-200 hover:shadow-lg transition-shadow">
             <CardHeader className="pb-4">
-              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
-                <Heart className="h-6 w-6 text-teal-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Heart className="h-6 w-6 text-purple-600" />
               </div>
               <CardTitle className="text-yellow-700 text-xl mb-3">Keep it relevant</CardTitle>
               <CardDescription className="text-base leading-relaxed">
@@ -106,10 +106,10 @@ const Donate = () => {
             </CardHeader>
           </Card>
 
-          <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
+          <Card className="bg-white border-2 border-purple-200 hover:shadow-lg transition-shadow">
             <CardHeader className="pb-4">
-              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
-                <Gift className="h-6 w-6 text-teal-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Gift className="h-6 w-6 text-purple-600" />
               </div>
               <CardTitle className="text-yellow-700 text-xl mb-3">More Platforms</CardTitle>
               <CardDescription className="text-base leading-relaxed">
@@ -118,10 +118,10 @@ const Donate = () => {
             </CardHeader>
           </Card>
 
-          <Card className="bg-white border-2 border-teal-200 hover:shadow-lg transition-shadow">
+          <Card className="bg-white border-2 border-purple-200 hover:shadow-lg transition-shadow">
             <CardHeader className="pb-4">
-              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mb-4">
-                <Star className="h-6 w-6 text-teal-600" />
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <Star className="h-6 w-6 text-purple-600" />
               </div>
               <CardTitle className="text-yellow-700 text-xl mb-3">Better Features</CardTitle>
               <CardDescription className="text-base leading-relaxed">
@@ -133,7 +133,7 @@ const Donate = () => {
 
         {/* PayPal Button Section */}
         <div className="max-w-3xl mx-auto">
-          <Card className="bg-gradient-to-br from-white to-teal-50 shadow-xl border-2 border-teal-300">
+          <Card className="bg-gradient-to-br from-white to-purple-50 shadow-xl border-2 border-purple-300">
             <CardHeader className="text-center px-8 py-8">
               <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
                 Make a Donation
@@ -143,7 +143,7 @@ const Donate = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-8 py-8">
-              <div className="bg-white rounded-xl p-8 border-2 border-teal-200">
+              <div className="bg-white rounded-xl p-8 border-2 border-purple-200">
                 <div className="text-center mb-6">
                   <p className="text-slate-700 font-medium text-lg leading-relaxed">
                     Click the button below to donate securely via PayPal
@@ -170,7 +170,7 @@ const Donate = () => {
         </div>
 
         {/* Thank You Message */}
-        <div className="mt-12 text-center bg-white rounded-lg p-8 border-2 border-teal-200">
+        <div className="mt-12 text-center bg-white rounded-lg p-8 border-2 border-purple-200">
           <h3 className="text-2xl font-bold text-yellow-700 mb-4">Thank You! 🙏</h3>
           <p className="text-slate-600 text-base md:text-lg leading-relaxed mb-4">
             Your action today not only sets you on the path to fulfilling your income potential...

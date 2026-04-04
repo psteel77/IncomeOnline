@@ -16,8 +16,8 @@ const CategoryPreview = () => {
     {
       title: 'Surveys & Research',
       icon: Users,
-      gradient: 'from-blue-500 to-cyan-600',
-      bgGradient: 'from-blue-50 to-cyan-100',
+      gradient: 'from-rose-500 to-pink-600',
+      bgGradient: 'from-rose-50 to-pink-100',
       description: 'Share your opinions and get paid for your insights',
       subtitle: 'Quick ROI opportunity:',
       platforms: ['Swagbucks', 'Prolific', 'Qmee', 'And 19 more...']
@@ -34,8 +34,8 @@ const CategoryPreview = () => {
     {
       title: 'E-commerce',
       icon: ShoppingBag,
-      gradient: 'from-emerald-500 to-teal-600',
-      bgGradient: 'from-emerald-50 to-teal-100',
+      gradient: 'from-amber-500 to-orange-600',
+      bgGradient: 'from-amber-50 to-orange-100',
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
       platforms: ['Poshmark', 'Vinted', 'Zazzle', 'And 12 more...']
@@ -70,8 +70,8 @@ const CategoryPreview = () => {
     {
       title: 'Gig Economy',
       icon: Clock,
-      gradient: 'from-cyan-500 to-blue-600',
-      bgGradient: 'from-cyan-50 to-blue-100',
+      gradient: 'from-purple-500 to-indigo-600',
+      bgGradient: 'from-purple-50 to-indigo-100',
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
       platforms: ['TaskRabbit', 'Deliveroo', 'Just Eat', 'And 13 more...']

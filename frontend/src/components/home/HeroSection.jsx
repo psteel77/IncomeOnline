@@ -71,7 +71,7 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
               const gradients = [
                 'from-purple-500 to-indigo-600',
                 'from-pink-500 to-rose-600',
-                'from-blue-500 to-cyan-600',
+                'from-rose-500 to-pink-600',
                 'from-amber-500 to-orange-600'
               ];
               const displayValue = stat.value.replace(/\$/g, '$');

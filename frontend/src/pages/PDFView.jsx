@@ -40,29 +40,29 @@ const PDFView = () => {
   return (
     <div className="min-h-screen bg-white p-8">
       {/* Header */}
-      <div className="text-center mb-12 border-b-4 border-teal-500 pb-8">
-        <h1 className="text-5xl font-bold text-teal-700 mb-4">IncomeOnline</h1>
+      <div className="text-center mb-12 border-b-4 border-purple-500 pb-8">
+        <h1 className="text-5xl font-bold text-purple-700 mb-4">IncomeOnline</h1>
         <p className="text-2xl text-slate-600">Your Complete Directory of {platforms.length} Online Earning Platforms</p>
         <p className="text-lg text-amber-600 mt-2">8 Categories • Verified & Legitimate Opportunities</p>
       </div>
 
       {/* How It Works */}
-      <div className="mb-12 bg-gradient-to-r from-teal-50 to-cyan-50 p-8 rounded-xl">
+      <div className="mb-12 bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-xl">
         <h2 className="text-3xl font-bold text-amber-600 mb-6 text-center">How It Works</h2>
         <div className="grid grid-cols-3 gap-8">
           <div className="text-center">
             <div className="text-4xl mb-3">🔍</div>
-            <h3 className="text-xl font-bold text-teal-700 mb-2">1. Browse & Search</h3>
+            <h3 className="text-xl font-bold text-purple-700 mb-2">1. Browse & Search</h3>
             <p className="text-slate-600">Explore our comprehensive directory and find opportunities that match your skills.</p>
           </div>
           <div className="text-center">
             <div className="text-4xl mb-3">✅</div>
-            <h3 className="text-xl font-bold text-teal-700 mb-2">2. Choose Verified Platforms</h3>
+            <h3 className="text-xl font-bold text-purple-700 mb-2">2. Choose Verified Platforms</h3>
             <p className="text-slate-600">Select from our curated list of legitimate, trusted platforms.</p>
           </div>
           <div className="text-center">
             <div className="text-4xl mb-3">💰</div>
-            <h3 className="text-xl font-bold text-teal-700 mb-2">3. Start Earning</h3>
+            <h3 className="text-xl font-bold text-purple-700 mb-2">3. Start Earning</h3>
             <p className="text-slate-600">Sign up and begin your online earning journey with confidence.</p>
           </div>
         </div>
@@ -73,14 +73,14 @@ const PDFView = () => {
         const categoryPlatforms = platforms.filter(p => p.category === category.name);
         if (categoryPlatforms.length === 0) return null;
         
-        const categoryColor = category.name === 'Freelancing' ? '#0891b2' :
+        const categoryColor = category.name === 'Freelancing' ? '#7c3aed' :
                               category.name === 'Surveys & Research' ? '#2563eb' :
                               category.name === 'Digital Creators/Innovators' ? '#7c3aed' :
-                              category.name === 'E-commerce' ? '#0d9488' :
+                              category.name === 'E-commerce' ? '#db2777' :
                               category.name === 'Teaching & Tutoring' ? '#4f46e5' :
                               category.name === 'Trading & Investing' ? '#1d4ed8' :
                               category.name === 'Remote Jobs' ? '#6366f1' :
-                              category.name === 'Gig Economy' ? '#0284c7' : '#43ADD8';
+                              category.name === 'Gig Economy' ? '#f97316' : '#7c3aed';
         
         return (
           <div key={category.id} className="mb-12 break-inside-avoid">
@@ -126,7 +126,7 @@ const PDFView = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-slate-600">Link:</span>
-                      <span className="font-medium text-teal-600 text-xs break-all">{platform.link}</span>
+                      <span className="font-medium text-purple-600 text-xs break-all">{platform.link}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -137,8 +137,8 @@ const PDFView = () => {
       })}
 
       {/* Footer */}
-      <div className="mt-12 text-center border-t-4 border-teal-500 pt-8">
-        <h2 className="text-2xl font-bold text-teal-700 mb-2">www.incomeonline.info</h2>
+      <div className="mt-12 text-center border-t-4 border-purple-500 pt-8">
+        <h2 className="text-2xl font-bold text-purple-700 mb-2">www.incomeonline.info</h2>
         <p className="text-slate-600">© 2025 Income Online. All rights reserved.</p>
         <p className="text-amber-600 mt-2">Your trusted guide to legitimate online earning opportunities</p>
       </div>

@@ -251,7 +251,7 @@ const AdminDashboard = () => {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
       </div>
     );
   }
@@ -337,7 +337,7 @@ const AdminDashboard = () => {
                   placeholder="Enter button text"
                 />
               </div>
-              <Button onClick={() => saveSection('hero')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('hero')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Hero Section'}
               </Button>
@@ -417,7 +417,7 @@ const AdminDashboard = () => {
                 </Button>
               </div>
               
-              <Button onClick={() => saveSection('how_it_works')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('how_it_works')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save How It Works'}
               </Button>
@@ -504,7 +504,7 @@ const AdminDashboard = () => {
                 </Button>
               </div>
               
-              <Button onClick={() => saveSection('success_stories')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('success_stories')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Success Stories'}
               </Button>
@@ -559,7 +559,7 @@ const AdminDashboard = () => {
                   />
                 </div>
               </div>
-              <Button onClick={() => saveSection('cta')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('cta')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save CTA Section'}
               </Button>
@@ -596,7 +596,7 @@ const AdminDashboard = () => {
                   placeholder="Enter section subtitle"
                 />
               </div>
-              <Button onClick={() => saveSection('categories')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('categories')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Categories Section'}
               </Button>
@@ -651,7 +651,7 @@ const AdminDashboard = () => {
                   rows={2}
                 />
               </div>
-              <Button onClick={() => saveSection('donation')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('donation')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Donation Section'}
               </Button>
@@ -705,7 +705,7 @@ const AdminDashboard = () => {
                   rows={2}
                 />
               </div>
-              <Button onClick={() => saveSection('platforms_featured')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('platforms_featured')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Featured Section'}
               </Button>
@@ -760,7 +760,7 @@ const AdminDashboard = () => {
                   rows={2}
                 />
               </div>
-              <Button onClick={() => saveSection('platforms_all')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('platforms_all')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save All Platforms Section'}
               </Button>
@@ -797,7 +797,7 @@ const AdminDashboard = () => {
                   placeholder="Enter copyright text"
                 />
               </div>
-              <Button onClick={() => saveSection('footer')} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => saveSection('footer')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Footer Section'}
               </Button>
@@ -820,7 +820,7 @@ const AdminDashboard = () => {
             <CardContent className="space-y-4 border-t pt-4">
               {/* Add Platform Button */}
               <div className="flex gap-2">
-                <Button onClick={() => setShowAddPlatform(true)} className="bg-teal-600 hover:bg-teal-700">
+                <Button onClick={() => setShowAddPlatform(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                   <Plus className="h-4 w-4 mr-2" /> Add New Platform
                 </Button>
                 <Button 
@@ -937,7 +937,7 @@ const AdminDashboard = () => {
                         <label htmlFor="featured" className="text-sm font-medium">Featured Platform</label>
                       </div>
                       <div className="flex gap-2 pt-4">
-                        <Button onClick={handleAddPlatform} disabled={saving || !newPlatform.name || !newPlatform.category || !newPlatform.description || !newPlatform.link} className="bg-teal-600 hover:bg-teal-700">
+                        <Button onClick={handleAddPlatform} disabled={saving || !newPlatform.name || !newPlatform.category || !newPlatform.description || !newPlatform.link} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                           {saving ? 'Adding...' : 'Add Platform'}
                         </Button>
                         <Button variant="outline" onClick={() => setShowAddPlatform(false)}>Cancel</Button>
@@ -1046,7 +1046,7 @@ const AdminDashboard = () => {
                         <label htmlFor="edit-featured" className="text-sm font-medium">Featured Platform</label>
                       </div>
                       <div className="flex gap-2 pt-4">
-                        <Button onClick={() => handleUpdatePlatform(editingPlatform.id)} disabled={saving} className="bg-teal-600 hover:bg-teal-700">
+                        <Button onClick={() => handleUpdatePlatform(editingPlatform.id)} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                           {saving ? 'Saving...' : 'Save Changes'}
                         </Button>
                         <Button variant="outline" onClick={() => setEditingPlatform(null)}>Cancel</Button>

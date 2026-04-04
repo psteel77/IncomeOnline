@@ -273,7 +273,7 @@ const Home = () => {
 
       {/* Categories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
-      <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 via-cyan-50 to-white">
+      <section id="categories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50/50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.categories?.title || 'Browse by Category'}</h2>
@@ -325,10 +325,10 @@ const Home = () => {
             {!authLoading && !isAuthenticated ? (
               // Show locked message
               <div className="col-span-full">
-                <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
+                <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-300 shadow-xl">
                   <CardContent className="py-16 text-center">
-                    <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                    <h3 className="text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{content.platforms_featured?.locked_title || '🔒 Platforms Locked'}</h3>
+                    <Lock className="h-20 w-20 text-purple-600 mx-auto mb-6" />
+                    <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-4">{content.platforms_featured?.locked_title || 'Platforms Locked'}</h3>
                     <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
                       {content.platforms_featured?.locked_description || `Support us with a donation to unlock full access to all ${platforms.length}+ earning platforms with detailed reviews and direct links.`}
                     </p>
@@ -336,7 +336,7 @@ const Home = () => {
                       <Button 
                         onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
                         size="lg"
-                        className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-6 border-0"
                       >
                         Donate to Unlock
                       </Button>
@@ -379,7 +379,7 @@ const Home = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-2">
-                  <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white transition-all duration-300" onClick={() => window.open(platform.link, '_blank')}>
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-300 border-0" onClick={() => window.open(platform.link, '_blank')}>
                     Learn More
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
@@ -398,7 +398,7 @@ const Home = () => {
 
       {/* All Platforms Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
-      <section id="platforms" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-cyan-50 to-teal-50">
+      <section id="platforms" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.platforms_all?.title || 'All Platforms'}</h2>
@@ -408,17 +408,17 @@ const Home = () => {
           {!authLoading && !isAuthenticated ? (
             // Show locked message for unauthenticated users
             <div className="max-w-2xl mx-auto">
-              <Card className="bg-gradient-to-br from-slate-50 to-teal-50 border-2 border-teal-300 shadow-xl">
+              <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-300 shadow-xl">
                 <CardContent className="py-16 text-center">
-                  <Lock className="h-20 w-20 text-teal-600 mx-auto mb-6" />
-                  <h3 className="text-3xl font-bold text-yellow-700 mb-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{content.platforms_all?.locked_title || '🔒 Content Locked'}</h3>
+                  <Lock className="h-20 w-20 text-purple-600 mx-auto mb-6" />
+                  <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-4">{content.platforms_all?.locked_title || 'Content Locked'}</h3>
                   <p className="text-xl text-slate-700 mb-6 max-w-2xl mx-auto">
                     {content.platforms_all?.locked_description || 'Make a donation to view all platforms and start your earning journey today.'}
                   </p>
                   <Button 
                     onClick={() => document.getElementById('support').scrollIntoView({ behavior: 'smooth' })}
                     size="lg"
-                    className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-6 border-0"
                   >
                     Donate Now
                   </Button>
@@ -428,7 +428,7 @@ const Home = () => {
           ) : (
             <>
               {/* Category Quick Navigation */}
-              <div className="mb-10 p-6 bg-white rounded-xl shadow-lg border-2 border-teal-200">
+              <div className="mb-10 p-6 bg-white rounded-xl shadow-lg border-2 border-purple-200">
                 <h3 className="text-lg text-slate-600 mb-4 text-center">make money online, make money from home</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
                   {categories.map((cat) => (
@@ -445,14 +445,14 @@ const Home = () => {
                       }}
                       className="px-3 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
                       style={{ 
-                        backgroundColor: cat.name === 'Freelancing' ? '#0891b2' :
-                                        cat.name === 'Surveys & Research' ? '#2563eb' :
-                                        cat.name === 'Digital Creators/Innovators' ? '#7c3aed' :
-                                        cat.name === 'E-commerce' ? '#0d9488' :
-                                        cat.name === 'Teaching & Tutoring' ? '#4f46e5' :
-                                        cat.name === 'Trading & Investing' ? '#1d4ed8' :
-                                        cat.name === 'Remote Jobs' ? '#6366f1' :
-                                        cat.name === 'Gig Economy' ? '#0284c7' : '#43ADD8',
+                        backgroundColor: cat.name === 'Freelancing' ? '#7c3aed' :
+                                        cat.name === 'Surveys & Research' ? '#db2777' :
+                                        cat.name === 'Digital Creators/Innovators' ? '#8b5cf6' :
+                                        cat.name === 'E-commerce' ? '#ea580c' :
+                                        cat.name === 'Teaching & Tutoring' ? '#a855f7' :
+                                        cat.name === 'Trading & Investing' ? '#6366f1' :
+                                        cat.name === 'Remote Jobs' ? '#ec4899' :
+                                        cat.name === 'Gig Economy' ? '#f97316' : '#7c3aed',
                         color: 'white'
                       }}
                     >
@@ -468,14 +468,14 @@ const Home = () => {
                 const categoryPlatforms = platforms.filter(p => p.category === category.name);
                 if (categoryPlatforms.length === 0) return null;
                 
-                const categoryColor = category.name === 'Freelancing' ? '#0891b2' :
-                                      category.name === 'Surveys & Research' ? '#2563eb' :
-                                      category.name === 'Digital Creators/Innovators' ? '#7c3aed' :
-                                      category.name === 'E-commerce' ? '#0d9488' :
-                                      category.name === 'Teaching & Tutoring' ? '#4f46e5' :
-                                      category.name === 'Trading & Investing' ? '#1d4ed8' :
-                                      category.name === 'Remote Jobs' ? '#6366f1' :
-                                      category.name === 'Gig Economy' ? '#0284c7' : '#43ADD8';
+                const categoryColor = category.name === 'Freelancing' ? '#7c3aed' :
+                                      category.name === 'Surveys & Research' ? '#db2777' :
+                                      category.name === 'Digital Creators/Innovators' ? '#8b5cf6' :
+                                      category.name === 'E-commerce' ? '#ea580c' :
+                                      category.name === 'Teaching & Tutoring' ? '#a855f7' :
+                                      category.name === 'Trading & Investing' ? '#6366f1' :
+                                      category.name === 'Remote Jobs' ? '#ec4899' :
+                                      category.name === 'Gig Economy' ? '#f97316' : '#7c3aed';
                 
                 return (
                   <div 
@@ -620,7 +620,7 @@ const Home = () => {
 
       {/* Success Stories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
-      <section id="success-stories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-teal-50 to-cyan-100">
+      <section id="success-stories" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.success_stories?.title || 'Success Stories'}</h2>
@@ -649,7 +649,7 @@ const Home = () => {
                     </div>
                     <p className="text-slate-700 mb-4 italic">"{story.quote}"</p>
                     <p className="font-semibold text-slate-900">- {story.author}</p>
-                    <Badge className="mt-2 bg-teal-100 text-teal-700">{story.category}</Badge>
+                    <Badge className="mt-2 bg-purple-100 text-purple-700">{story.category}</Badge>
                   </CardContent>
                 </div>
               </Card>
@@ -710,7 +710,7 @@ const Home = () => {
 
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" style={{background: 'linear-gradient(to right, #43ADD8, #3b9fcc)'}}>
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-r from-purple-800 via-indigo-800 to-purple-800">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -725,8 +725,7 @@ const Home = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Button 
               size="lg" 
-              className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-6 sm:px-8 w-full sm:w-auto"
-              style={{ color: '#43ADD8' }}
+              className="bg-white hover:bg-white/90 transition-all duration-300 hover:scale-105 px-6 sm:px-8 w-full sm:w-auto text-purple-700 font-bold"
               onClick={() => {
                 const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
                 target?.scrollIntoView({ behavior: 'smooth' });
@@ -737,8 +736,7 @@ const Home = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-white hover:bg-white/90 border-2 transition-all duration-300 px-6 sm:px-8 w-full sm:w-auto"
-              style={{ color: '#43ADD8', borderColor: '#43ADD8' }}
+              className="bg-white hover:bg-white/90 border-2 border-pink-300 transition-all duration-300 px-6 sm:px-8 w-full sm:w-auto text-purple-700 font-bold"
               onClick={() => window.location.href = '/success-stories'}
             >
               {content.cta?.button_secondary || 'Read Success Stories'}

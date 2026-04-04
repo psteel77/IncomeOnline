@@ -40,10 +40,10 @@ const LoginBox = ({ onLoginSuccess }) => {
   };
 
   return (
-    <Card className="max-w-md mx-auto bg-gradient-to-br from-white to-teal-50 border-2 border-teal-300 shadow-lg">
+    <Card className="max-w-md mx-auto bg-gradient-to-br from-white to-purple-50 border-2 border-purple-300 shadow-lg">
       <CardHeader className="text-center">
-        <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Mail className="h-8 w-8 text-teal-600" />
+        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Mail className="h-8 w-8 text-purple-600" />
         </div>
         <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500">
           Access All Platforms
@@ -80,7 +80,7 @@ const LoginBox = ({ onLoginSuccess }) => {
 
           <Button
             type="submit"
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white text-base py-6"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-base py-6"
             disabled={loading}
           >
             {loading ? (
@@ -96,7 +96,7 @@ const LoginBox = ({ onLoginSuccess }) => {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-slate-600">
-            Don't have access? <a href="#support" className="text-teal-600 hover:text-teal-700 font-semibold">Donate to get access</a>
+            Don't have access? <a href="#support" className="text-purple-600 hover:text-purple-700 font-semibold">Donate to get access</a>
           </p>
         </div>
       </CardContent>

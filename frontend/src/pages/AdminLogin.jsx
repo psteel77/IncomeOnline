@@ -31,12 +31,12 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-amber-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="bg-teal-100 p-3 rounded-full">
-              <Lock className="h-8 w-8 text-teal-600" />
+            <div className="bg-purple-100 p-3 rounded-full">
+              <Lock className="h-8 w-8 text-purple-600" />
             </div>
           </div>
           <CardTitle className="text-2xl font-bold text-slate-800">Admin Login</CardTitle>
@@ -83,7 +83,7 @@ const AdminLogin = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-teal-600 hover:bg-teal-700"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               disabled={loading}
             >
               {loading ? 'Logging in...' : 'Login'}
@@ -94,7 +94,7 @@ const AdminLogin = () => {
             <Button 
               variant="link" 
               onClick={() => navigate('/')}
-              className="text-teal-600 hover:text-teal-700"
+              className="text-purple-600 hover:text-purple-700"
             >
               ← Back to Home
             </Button>

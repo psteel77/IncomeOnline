@@ -14,7 +14,7 @@ const PlatformPreview = () => {
       earningsPotential: "$400-4,000/month",
       difficulty: "Medium",
       rating: 4.5,
-      color: "#0891b2"
+      color: "#7c3aed"
     },
     {
       name: "Survey Junkie",
@@ -23,7 +23,7 @@ const PlatformPreview = () => {
       earningsPotential: "$50-200/month",
       difficulty: "Easy",
       rating: 4.3,
-      color: "#2563eb"
+      color: "#db2777"
     },
     {
       name: "Prolific",
@@ -32,7 +32,7 @@ const PlatformPreview = () => {
       earningsPotential: "$100-300/month",
       difficulty: "Easy",
       rating: 4.7,
-      color: "#7c3aed"
+      color: "#8b5cf6"
     },
     {
       name: "Toptal",
@@ -41,7 +41,7 @@ const PlatformPreview = () => {
       earningsPotential: "$5,000-15,000/month",
       difficulty: "Hard",
       rating: 4.8,
-      color: "#0d9488"
+      color: "#a855f7"
     },
     {
       name: "We Work Remotely",
@@ -99,7 +99,7 @@ const PlatformPreview = () => {
                 <div className="space-y-1 mb-3 text-sm">
                   <div className="flex justify-between">
                     <span className="text-slate-500">Earnings:</span>
-                    <span className="font-semibold text-teal-600">{platform.earningsPotential}</span>
+                    <span className="font-semibold text-purple-600">{platform.earningsPotential}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500">Difficulty:</span>
@@ -120,15 +120,15 @@ const PlatformPreview = () => {
         </div>
 
         {/* Locked Message */}
-        <div className="max-w-2xl mx-auto text-center bg-gradient-to-br from-slate-50 to-teal-50 rounded-xl p-8 border-2 border-teal-200">
-          <Lock className="h-12 w-12 text-teal-600 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-yellow-700 mb-3" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>100+ More Platforms Available</h3>
+        <div className="max-w-2xl mx-auto text-center bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-8 border-2 border-purple-200">
+          <Lock className="h-12 w-12 text-purple-600 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-3">100+ More Platforms Available</h3>
           <p className="text-slate-700 mb-6">
             Support us with a donation to unlock full access to all platforms with detailed reviews, ratings, and direct links.
           </p>
           <Button 
             size="lg"
-            className="bg-teal-600 hover:bg-teal-700 text-white text-lg px-8 py-6"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-6 border-0 rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
             onClick={() => {
               const paypalArea = document.getElementById('paypal-donation-area');
               if (paypalArea) {

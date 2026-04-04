@@ -83,13 +83,13 @@ code {
     }
 }
 
-/* Custom logo color from #43ADD8 */
-.logo-teal {
-    background-color: #43ADD8;
+/* Custom brand color */
+.logo-brand {
+    background-color: #7c3aed;
 }
 
-.logo-teal-text {
-    color: #43ADD8;
+.logo-brand-text {
+    color: #7c3aed;
 }
 
 @layer base {

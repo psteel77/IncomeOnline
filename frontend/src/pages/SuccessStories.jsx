@@ -971,7 +971,7 @@ const SuccessStories = () => {
               <Star className="mr-2 h-4 w-4" />
               {stories.length} Verified Stories
             </Badge>
-            <Badge className="px-4 py-2 text-base bg-gradient-to-r from-emerald-500 to-teal-500 border-0">
+            <Badge className="px-4 py-2 text-base bg-gradient-to-r from-orange-500 to-amber-500 border-0">
               <TrendingUp className="mr-2 h-4 w-4" />
               All Sources Cited
             </Badge>
@@ -1018,17 +1018,17 @@ const SuccessStories = () => {
               <Card 
                 key={story.id} 
                 className="hover:shadow-2xl transition-all duration-300 border-2"
-                style={{ borderColor: '#43ADD8' }}
+                style={{ borderColor: '#8b5cf6' }}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <CardTitle className="text-2xl mb-2" style={{ color: '#43ADD8' }}>
+                      <CardTitle className="text-2xl mb-2" style={{ color: '#7c3aed' }}>
                         {story.name}
                       </CardTitle>
                       <div className="flex gap-2 mb-3 flex-wrap">
-                        <Badge style={{ backgroundColor: '#43ADD8' }}>{story.platform}</Badge>
-                        <Badge variant="outline" style={{ borderColor: '#43ADD8', color: '#43ADD8' }}>
+                        <Badge style={{ backgroundColor: '#7c3aed' }}>{story.platform}</Badge>
+                        <Badge variant="outline" style={{ borderColor: '#8b5cf6', color: '#7c3aed' }}>
                           {story.category}
                         </Badge>
                       </div>
@@ -1071,10 +1071,10 @@ const SuccessStories = () => {
                       </div>
                       <div className="bg-blue-50 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
-                          <TrendingUp className="h-4 w-4" style={{ color: '#43ADD8' }} />
-                          <span className="text-sm font-semibold" style={{ color: '#43ADD8' }}>Timeline</span>
+                          <TrendingUp className="h-4 w-4" style={{ color: '#7c3aed' }} />
+                          <span className="text-sm font-semibold" style={{ color: '#7c3aed' }}>Timeline</span>
                         </div>
-                        <p className="text-lg font-bold" style={{ color: '#43ADD8' }}>{story.timeline}</p>
+                        <p className="text-lg font-bold" style={{ color: '#7c3aed' }}>{story.timeline}</p>
                       </div>
                     </div>
 
@@ -1093,7 +1093,7 @@ const SuccessStories = () => {
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-sm font-medium hover:underline"
-                        style={{ color: '#43ADD8' }}
+                        style={{ color: '#7c3aed' }}
                       >
                         View Original Source
                         <ExternalLink className="h-4 w-4" />
@@ -1108,7 +1108,7 @@ const SuccessStories = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ background: 'linear-gradient(135deg, #43ADD8 0%, #3b9fcc 100%)' }}>
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-800 via-indigo-800 to-purple-800">
         <div className="max-w-4xl mx-auto text-center text-white">
           <h2 className="text-4xl font-bold mb-6">Ready to Write Your Own Success Story?</h2>
           <p className="text-xl mb-8 opacity-90">
@@ -1116,8 +1116,7 @@ const SuccessStories = () => {
           </p>
           <Button 
             size="lg" 
-            className="bg-white hover:bg-gray-100 text-lg px-8 py-6 font-bold"
-            style={{ color: '#43ADD8' }}
+            className="bg-white hover:bg-gray-100 text-lg px-8 py-6 font-bold text-purple-700"
             onClick={() => navigate('/')}
           >
             Get Started Today
@@ -1137,8 +1136,7 @@ const SuccessStories = () => {
           <Button 
             variant="link" 
             onClick={() => navigate('/')}
-            className="mt-4"
-            style={{ color: '#43ADD8' }}
+            className="mt-4 text-purple-600 hover:text-purple-700"
           >
             Return to Income Online Homepage
           </Button>
