@@ -58,6 +58,16 @@ A comprehensive website for discovering online earning opportunities. Features i
   - Backend endpoint: GET /api/pdf/rule-of-72
   - Frontend "Free Resources" section on homepage with download button
   - All tests passing (100% backend, 100% frontend)
+- **MoneyRules Branded Template**:
+  - Reusable Word document template at `/app/backend/moneyrules_template.py`
+  - Pink/purple page borders on every page
+  - Page numbers (left) + "www.incomeonline.info" branding (bottom-right)
+  - Helper functions: `add_styled_heading`, `add_body_text`, `add_highlight_box`, `add_branded_table`, `add_title_page`, `add_closing_page`
+  - Rule of 72 document regenerated using this template
+- **Complete Teal-to-Purple Theme Migration**:
+  - Removed ALL teal/cyan/#43ADD8 colors from: Home, Donate, SuccessStories, AdminLogin, LoginBox, CategoryPreview, PlatformPreview, DonationSection, HeroSection, PDFView, AdminDashboard, index.css, mock.js
+  - All sections now use purple/pink/orange gradients consistently
+  - 100% verified by testing agent (13/13 backend, all frontend pages)
 
 ## Technical Architecture
 ```
