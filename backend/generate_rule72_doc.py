@@ -4,7 +4,7 @@ Generate The Rule of 72 guide using the MoneyRules branded template.
 from moneyrules_template import (
     create_moneyrules_document, add_title_page, add_styled_heading,
     add_body_text, add_highlight_box, add_branded_table, add_closing_page,
-    save_to_buffer, PURPLE, PINK, ORANGE, DARK, GREY
+    save_to_buffer, DEEP_PURPLE, PURPLE, PINK, ACCENT_GOLD, DARK_TEXT, BODY_TEXT, GREY
 )
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -52,7 +52,7 @@ def generate_rule72_document():
         run_num.bold = True
         run_title = para.add_run(title_text)
         run_title.font.size = Pt(13)
-        run_title.font.color.rgb = DARK
+        run_title.font.color.rgb = BODY_TEXT
 
     doc.add_paragraph()
     disc = doc.add_paragraph()
@@ -125,7 +125,7 @@ def generate_rule72_document():
     formula.paragraph_format.space_after = Pt(12)
     run = formula.add_run('A = P × (1 + r)ⁿ')
     run.font.size = Pt(16)
-    run.font.color.rgb = PURPLE
+    run.font.color.rgb = DEEP_PURPLE
     run.bold = True
 
     add_body_text(doc, 'Where:')
@@ -138,7 +138,7 @@ def generate_rule72_document():
         para = doc.add_paragraph(item, style='List Bullet')
         for run in para.runs:
             run.font.size = Pt(11)
-            run.font.color.rgb = DARK
+            run.font.color.rgb = BODY_TEXT
 
     add_body_text(doc, 'To find when the investment doubles, we set A = 2P:')
 
@@ -167,7 +167,7 @@ def generate_rule72_document():
         para = doc.add_paragraph(a, style='List Bullet')
         for run in para.runs:
             run.font.size = Pt(11)
-            run.font.color.rgb = DARK
+            run.font.color.rgb = BODY_TEXT
 
     add_body_text(doc,
         'Despite these simplifications, the Rule of 72 remains remarkably accurate for interest rates '
@@ -355,7 +355,7 @@ def generate_rule72_document():
         para = doc.add_paragraph(p, style='List Bullet')
         for run in para.runs:
             run.font.size = Pt(11)
-            run.font.color.rgb = DARK
+            run.font.color.rgb = BODY_TEXT
 
     add_body_text(doc,
         'Notice how the gains in each doubling period are equal to the total of ALL previous gains '
@@ -494,7 +494,7 @@ def generate_rule72_document():
         para.paragraph_format.space_after = Pt(6)
         for run in para.runs:
             run.font.size = Pt(11)
-            run.font.color.rgb = DARK
+            run.font.color.rgb = BODY_TEXT
 
     doc.add_paragraph()
     add_styled_heading(doc, 'Your Next Steps', level=2)
