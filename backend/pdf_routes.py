@@ -307,6 +307,33 @@ async def download_rule_of_72():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/budget-503020")
+async def download_budget_503020():
+    """Download The 50/30/20 Budget Rule Word document"""
+    try:
+        doc_path = os.path.join(os.path.dirname(__file__), 'static', 'The_50_30_20_Budget_Rule.docx')
+
+        if not os.path.exists(doc_path):
+            # Generate on first request
+            from generate_503020_doc import generate_503020_document
+            buffer = generate_503020_document()
+            os.makedirs(os.path.dirname(doc_path), exist_ok=True)
+            with open(doc_path, 'wb') as f:
+                f.write(buffer.read())
+
+        return FileResponse(
+            path=doc_path,
+            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            filename='The_50_30_20_Budget_Rule_Complete_Guide.docx',
+            headers={
+                'Content-Disposition': 'attachment; filename="The_50_30_20_Budget_Rule_Complete_Guide.docx"'
+            }
+        )
+    except Exception as e:
+        logging.error(f"Error serving 50/30/20 document: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/moneyrules-template")
 async def download_moneyrules_template():
     """Download the blank MoneyRules branded template"""

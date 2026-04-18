@@ -1,125 +1,80 @@
 # Income Online - Product Requirements Document
 
 ## Project Overview
-A comprehensive website for discovering online earning opportunities. Features include a directory of platforms, search/filter functionality, custom branding, PayPal-based paywall system, magic link authentication, and a full-featured admin panel for content management.
+A comprehensive website for discovering online earning opportunities. Features include a directory of 199+ platforms, search/filter, custom branding, PayPal-based paywall, magic link auth, and a full admin panel for content management.
 
 ## Core Requirements
 1. **Platform Directory**: Searchable, filterable list of 199+ online earning platforms
-2. **Paywall**: Access to full platform details restricted to users who have donated via PayPal
-3. **Subscription System**: User access valid for 12 months from donation date
-4. **Automated Emails**: Warning emails 7 days before expiration and expiration notifications
-5. **Admin Panel**: Full CMS for managing all site content and platforms
-6. **Custom Branding & UI**: Specific layout, colors, and text per user requests
+2. **Paywall**: Full platform details restricted to users who have donated via PayPal
+3. **Subscription**: User access valid for 12 months from donation date
+4. **Automated Emails**: Warning 7 days before expiration + expiration notifications
+5. **Admin Panel**: Full CMS for site content and platforms
+6. **Custom Branding & UI**: Purple/pink/orange gradient theme with glass-morphism (strictly NO teal/cyan)
 7. **SEO**: Site must be discoverable and indexable by search engines
+8. **Free Resources**: Downloadable educational Word documents (MoneyRules series)
 
 ## Deployment
 - **Frontend**: Vercel (https://www.incomeonline.info)
 - **Backend**: Railway
 - **Database**: MongoDB Atlas
-- **Source Control**: GitHub (psteel77/IncomeOnline)
+- **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
 ## What's Been Implemented
 
-### Completed (January 2025)
-- Full-stack React/FastAPI/MongoDB application
-- 199+ platforms across 8 categories
+### Completed (Jan 2025)
+- Full-stack React/FastAPI/MongoDB app; 199+ platforms across 8 categories
 - PayPal donation integration with 12-month subscription
-- Magic link authentication system
-- Admin CMS for content and platform management
-- SEO meta tags, structured data, sitemap
+- Magic link authentication; Admin CMS; SEO meta + sitemap
 - Google Search Console & Bing Webmaster Tools verified
 
-### Completed (March 2025)
-- **SEO Fixes**: Optimized meta description (150-160 chars), added H1 tag for crawlers, updated all references to 199+
-- **Blog Feature**: (Removed per user request)
-- **PDF Generation**: 
-  - Automatic PDF with all 199+ platforms
-  - Organized by category with platform details
-  - Professional formatting with branding
-  - Download available via Admin Dashboard
-- **Navigation Reorder**: How It Works → Categories → Platforms → Success Stories
-- **Modern UI Redesign**:
-  - New vibrant color scheme: Purple, pink, orange gradients replacing teal
-  - Animated floating gradient orbs in hero section
-  - Glass-morphism effects on header and cards
-  - Smooth hover animations (lift, scale, glow effects)
-  - Gradient text effects for headings
-  - Pulse glow animations on CTA buttons
-  - Modern rounded cards with gradient borders
-  - Staggered entrance animations for lists
-  - Custom scrollbar styling
-  - Dark gradient section for donation area
+### Completed (Mar 2025)
+- SEO fixes, PDF generation for platforms, nav reorder
+- Modern UI redesign (purple/pink/orange vibrant theme)
 
-### Completed (April 2025)
-- **Rule of 72 Word Document**: 
-  - Professional 10+ page .docx guide covering The Rule of 72 for investors
-  - Includes: formula explanation, step-by-step usage, quick reference tables, real-world examples, accuracy comparisons, variations (Rule of 69/70), limitations
-  - Branded with Income Online purple/pink/orange colors and formatting
-  - Backend endpoint: GET /api/pdf/rule-of-72
-  - Frontend "Free Resources" section on homepage with download button
-  - All tests passing (100% backend, 100% frontend)
-- **MoneyRules Branded Template**:
-  - Reusable Word document template at `/app/backend/moneyrules_template.py`
-  - Pink/purple page borders on every page
-  - Page numbers (left) + "www.incomeonline.info" branding (bottom-right)
-  - Helper functions: `add_styled_heading`, `add_body_text`, `add_highlight_box`, `add_branded_table`, `add_title_page`, `add_closing_page`
-  - Rule of 72 document regenerated using this template
-- **Complete Teal-to-Purple Theme Migration**:
-  - Removed ALL teal/cyan/#43ADD8 colors from: Home, Donate, SuccessStories, AdminLogin, LoginBox, CategoryPreview, PlatformPreview, DonationSection, HeroSection, PDFView, AdminDashboard, index.css, mock.js
-  - All sections now use purple/pink/orange gradients consistently
-  - 100% verified by testing agent (13/13 backend, all frontend pages)
+### Completed (Apr 2025)
+- Rule of 72 10-page Word document + endpoint `/api/pdf/rule-of-72`
+- MoneyRules reusable template (`moneyrules_template.py`) — Georgia serif, double-line borders, shadow effect
+- Complete teal-to-purple theme migration (all components verified)
+
+### Completed (Feb / Apr 2026)
+- **SEO Cleanup**: sitemap.xml lastmod refreshed to 2026-04-18 (current); index.html cache-control + hidden H1 cleaned up
+- **50/30/20 Budget Rule 10-page Word guide**: `/api/pdf/budget-503020` with branded card on Home Free Resources section (pink/orange gradient to complement the purple/pink Rule of 72 card)
+- **Blog feature fully removed**: deleted `blog_routes.py`, `Blog.jsx`, `BlogPost.jsx`, `BlogAdmin.jsx`, removed blog_router registration from `server.py`
 
 ## Technical Architecture
 ```
 /app
 ├── backend
-│   ├── server.py          # Main FastAPI server
-│   ├── blog_routes.py     # Blog CRUD API (NEW)
-│   ├── pdf_routes.py      # PDF generation API (NEW)
-│   ├── cms_routes.py      # CMS admin routes
-│   ├── email_service.py   # Email templates
-│   └── seed_data.py       # 199 platforms data
+│   ├── server.py                  # Main FastAPI server (blog removed)
+│   ├── pdf_routes.py              # PDF + Word doc endpoints
+│   ├── moneyrules_template.py     # Reusable MoneyRules brochure template
+│   ├── generate_rule72_doc.py     # Rule of 72 content
+│   ├── generate_503020_doc.py     # 50/30/20 Budget Rule content (NEW)
+│   ├── cms_routes.py              # CMS admin routes
+│   ├── email_service.py           # Email templates
+│   └── seed_data.py               # 199 platforms data
 ├── frontend
-│   ├── src
-│   │   ├── pages
-│   │   │   ├── Home.jsx
-│   │   │   ├── Blog.jsx         # (NEW)
-│   │   │   ├── BlogPost.jsx     # (NEW)
-│   │   │   └── AdminDashboard.jsx
-│   │   └── components
-│   │       └── admin
-│   │           └── BlogAdmin.jsx  # (NEW)
-│   └── public
-│       ├── index.html     # SEO meta tags
-│       └── sitemap.xml    # Updated with /blog
+│   ├── public
+│   │   ├── index.html             # SEO meta tags (cleaned)
+│   │   └── sitemap.xml            # lastmod: 2026-04-18
+│   └── src/pages/Home.jsx         # Free Resources: 2 card grid
 ```
 
-## API Endpoints
-
-### Blog
-- `GET /api/blog/posts` - List published posts
-- `GET /api/blog/posts/:slug` - Get single post
-- `GET /api/blog/categories` - Get blog categories
-- `GET /api/blog/recent` - Get recent posts
-- `POST/PUT/DELETE /api/blog/admin/posts` - Admin CRUD
-
-### PDF
-- `GET /api/pdf/platforms` - Download PDF
-- `GET /api/pdf/preview` - Get PDF metadata
-- `GET /api/pdf/rule-of-72` - Download Rule of 72 Word document
+## Key API Endpoints
+- `GET /api/pdf/platforms` — Download full platforms PDF
+- `GET /api/pdf/rule-of-72` — Rule of 72 Word guide
+- `GET /api/pdf/budget-503020` — 50/30/20 Budget Rule Word guide (NEW)
+- `GET /api/pdf/moneyrules-template` — Blank branded template
 
 ## Admin Credentials
-- URL: `/admin/login`
-- Username: `admin`
-- Password: `Gulluk*9`
+See `/app/memory/test_credentials.md`
 
-## Pending/Backlog
-1. SEO verification - User needs to check `site:incomeonline.info` on Google
-2. Create first blog posts to drive organic traffic
-3. Monitor Bing re-crawl after SEO fixes
+## Pending / Backlog
+1. **P0 — User Action**: Push current changes to GitHub `main` to trigger Vercel + Railway deploy
+2. **P0 — User Action**: Add `www.incomeonline.info` as a property in Google Search Console (separate from `incomeonline.info`) and resubmit sitemap
+3. **P2**: Expand Free Resources (e.g. Beginner's Guide to Passive Income, Debt Snowball Method) using MoneyRules template
 
 ## Future Enhancements
-- Blog post scheduling
-- Social sharing buttons
-- Email newsletter integration
-- Analytics dashboard
+- Social sharing buttons for Free Resources (downloads are ready-made lead magnets)
+- Email capture on download (newsletter list)
+- Analytics dashboard (downloads per resource)

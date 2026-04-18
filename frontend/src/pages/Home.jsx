@@ -669,7 +669,7 @@ const Home = () => {
             <p className="text-base sm:text-lg text-slate-600">Download expert guides to boost your financial knowledge</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6 max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Rule of 72 Guide */}
             <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
               <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"></div>
@@ -695,7 +695,39 @@ const Home = () => {
                         <Download className="mr-2 h-4 w-4" />
                         Download Free Guide
                       </Button>
-                      <span className="text-xs text-slate-400 font-medium">Word Document (.docx) — 10 Pages</span>
+                      <span className="text-xs text-slate-400 font-medium">Word (.docx) — 10 Pages</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 50/30/20 Budget Rule Guide */}
+            <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
+              <div className="h-1.5 bg-gradient-to-r from-pink-500 via-orange-500 to-amber-500"></div>
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex flex-col sm:flex-row items-start gap-5">
+                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-pink-600 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                    <FileText className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">The 50/30/20 Rule — Budget Guide</h3>
+                    <p className="text-slate-600 text-sm mb-4 leading-relaxed">
+                      The simplest, most reliable way to budget. Learn how to split every pound into Needs, Wants, and Savings — with worked examples at every income level, common pitfalls, and an action plan you can set up in under 30 minutes.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button
+                        data-testid="download-budget-503020-btn"
+                        className="bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
+                        onClick={() => {
+                          const backendUrl = process.env.REACT_APP_BACKEND_URL;
+                          window.open(`${backendUrl}/api/pdf/budget-503020`, '_blank');
+                        }}
+                      >
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Free Guide
+                      </Button>
+                      <span className="text-xs text-slate-400 font-medium">Word (.docx) — 10 Pages</span>
                     </div>
                   </div>
                 </div>
