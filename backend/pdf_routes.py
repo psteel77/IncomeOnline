@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse, FileResponse
+from pydantic import BaseModel, EmailStr, Field
 import os
+import uuid
 import logging
 from datetime import datetime, timezone
 from io import BytesIO
@@ -355,3 +357,98 @@ async def download_moneyrules_template():
     except Exception as e:
         logging.error(f"Error serving MoneyRules template: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+# ======================================================================
+# Email-capture gateway for Free Resources
+# ======================================================================
+
+RESOURCE_MAP = {
+    'rule-of-72': {
+        'title': 'The Rule of 72 — Complete Investment Guide',
+        'download_path': '/api/pdf/rule-of-72',
+    },
+    'budget-503020': {
+        'title': 'The 50/30/20 Rule — Budget Guide',
+        'download_path': '/api/pdf/budget-503020',
+    },
+}
+
+
+class ResourceRequest(BaseModel):
+    email: EmailStr
+    resource: str
+    consent: bool = False
+
+
+@router.post("/resources/request-download")
+async def request_resource_download(payload: ResourceRequest):
+    """
+    Email-capture gateway: stores the visitor's email against the requested
+    Free Resource and returns the direct download URL. Newsletter opt-in is
+    tracked via the `consent` flag so downloads never accidentally mail users.
+    """
+    from server import db
+
+    resource = RESOURCE_MAP.get(payload.resource)
+    if not resource:
+        raise HTTPException(status_code=400, detail="Unknown resource")
+
+    now = datetime.now(timezone.utc).isoformat()
+    email_lower = payload.email.lower().strip()
+
+    # Upsert the subscriber record (email is canonical key).
+    # newsletter_opt_in is only ever set to True (never downgraded) so a user
+    # who opts in once stays opted in even on subsequent non-consent downloads.
+    # Note: field not pre-populated in $setOnInsert to avoid MongoDB conflict
+    # with $set during upsert-insert; count queries for True still work correctly.
+    set_fields = {'last_seen_at': now}
+    if payload.consent:
+        set_fields['newsletter_opt_in'] = True
+
+    await db.resource_subscribers.update_one(
+        {'email': email_lower},
+        {
+            '$setOnInsert': {
+                'id': str(uuid.uuid4()),
+                'email': email_lower,
+                'first_seen_at': now,
+            },
+            '$set': set_fields,
+            '$inc': {'download_count': 1},
+            '$addToSet': {'resources_downloaded': payload.resource},
+        },
+        upsert=True,
+    )
+
+    # Log each individual download event (for analytics)
+    await db.resource_download_events.insert_one({
+        'id': str(uuid.uuid4()),
+        'email': email_lower,
+        'resource': payload.resource,
+        'resource_title': resource['title'],
+        'consent': bool(payload.consent),
+        'created_at': now,
+    })
+
+    return {
+        'success': True,
+        'resource': payload.resource,
+        'title': resource['title'],
+        'download_url': resource['download_path'],
+    }
+
+
+@router.get("/resources/subscribers")
+async def list_resource_subscribers(limit: int = 500):
+    """Admin-only list of captured subscriber emails (no auth for now — add later)."""
+    from server import db
+    subs = await db.resource_subscribers.find({}, {"_id": 0}).sort('last_seen_at', -1).to_list(limit)
+    total = await db.resource_subscribers.count_documents({})
+    opted_in = await db.resource_subscribers.count_documents({'newsletter_opt_in': True})
+    return {
+        'total': total,
+        'newsletter_opt_in_count': opted_in,
+        'subscribers': subs,
+    }

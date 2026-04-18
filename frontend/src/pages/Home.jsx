@@ -12,6 +12,7 @@ import HeroSection from '../components/home/HeroSection';
 import CategoryPreview from '../components/home/CategoryPreview';
 import PlatformPreview from '../components/home/PlatformPreview';
 import DonationSection from '../components/home/DonationSection';
+import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,6 +24,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [resourceDialog, setResourceDialog] = useState({ open: false, resource: '', title: '' });
   const { isAuthenticated, loading: authLoading } = useAuth();
 
   // Category images mapping
@@ -567,7 +569,7 @@ const Home = () => {
       <section id="how-it-works" className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-3 sm:mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.how_it_works?.title || 'How It Works'}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3 sm:mb-4" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.15)' }}>{content.how_it_works?.title || 'How It Works'}</h2>
             <p className="text-base sm:text-lg text-slate-600">{content.how_it_works?.subtitle || 'Join the IncomeOnline community and start earning online in three simple steps'}</p>
           </div>
           
@@ -586,7 +588,7 @@ const Home = () => {
                     className="w-full h-40 sm:h-48 object-cover rounded-xl shadow-md mx-auto"
                   />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-yellow-700 mb-2 sm:mb-3" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>{step.title}</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-purple-800 mb-2 sm:mb-3" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.1)' }}>{step.title}</h3>
                 <p className="text-sm sm:text-base text-slate-600">{step.description}</p>
               </div>
             ))}
@@ -595,7 +597,7 @@ const Home = () => {
           {/* Conclusion step (no image) - centered, spanning full width */}
           {(content.how_it_works?.steps || []).filter(step => !step.image || step.image.trim() === '').map((step, index) => (
             <div key={`conclusion-${index}`} className="mt-10 sm:mt-12 text-center max-w-4xl mx-auto">
-              <p className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-700 leading-relaxed px-4" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.2)' }}>
+              <p className="text-lg sm:text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 leading-relaxed px-4">
                 {step.title}
               </p>
               {step.description && step.description.trim() !== '' && (
@@ -687,10 +689,7 @@ const Home = () => {
                       <Button
                         data-testid="download-rule-of-72-btn"
                         className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-                        onClick={() => {
-                          const backendUrl = process.env.REACT_APP_BACKEND_URL;
-                          window.open(`${backendUrl}/api/pdf/rule-of-72`, '_blank');
-                        }}
+                        onClick={() => setResourceDialog({ open: true, resource: 'rule-of-72', title: 'The Rule of 72 — Complete Investment Guide' })}
                       >
                         <Download className="mr-2 h-4 w-4" />
                         Download Free Guide
@@ -719,10 +718,7 @@ const Home = () => {
                       <Button
                         data-testid="download-budget-503020-btn"
                         className="bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-                        onClick={() => {
-                          const backendUrl = process.env.REACT_APP_BACKEND_URL;
-                          window.open(`${backendUrl}/api/pdf/budget-503020`, '_blank');
-                        }}
+                        onClick={() => setResourceDialog({ open: true, resource: 'budget-503020', title: 'The 50/30/20 Rule — Budget Guide' })}
                       >
                         <Download className="mr-2 h-4 w-4" />
                         Download Free Guide
@@ -1013,6 +1009,13 @@ const Home = () => {
           </div>
         </div>
       </footer>
+
+      <ResourceDownloadDialog
+        open={resourceDialog.open}
+        onOpenChange={(open) => setResourceDialog((prev) => ({ ...prev, open }))}
+        resource={resourceDialog.resource}
+        title={resourceDialog.title}
+      />
     </div>
   );
 };

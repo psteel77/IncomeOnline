@@ -40,6 +40,8 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **SEO Cleanup**: sitemap.xml lastmod refreshed to 2026-04-18 (current); index.html cache-control + hidden H1 cleaned up
 - **50/30/20 Budget Rule 10-page Word guide**: `/api/pdf/budget-503020` with branded card on Home Free Resources section (pink/orange gradient to complement the purple/pink Rule of 72 card)
 - **Blog feature fully removed**: deleted `blog_routes.py`, `Blog.jsx`, `BlogPost.jsx`, `BlogAdmin.jsx`, removed blog_router registration from `server.py`
+- **Colour-scheme final sweep**: replaced remaining yellow/amber legacy colours in "How It Works" section (title + step headings + conclusion) and "6 Top Rated Opportunities" title/subtitle in `PlatformPreview.jsx` → purple/pink/orange gradient
+- **Email-capture gateway for Free Resources**: new `ResourceDownloadDialog` component asks for email before download; stored in `resource_subscribers` (unique by email, `$addToSet` resources, `$inc` download_count) and per-event log in `resource_download_events`. Newsletter opt-in checkbox (default checked) is one-way: True→never downgraded. Admin endpoint `GET /api/pdf/resources/subscribers` lists captured emails with opt-in counts.
 
 ## Technical Architecture
 ```
@@ -63,8 +65,10 @@ A comprehensive website for discovering online earning opportunities. Features i
 ## Key API Endpoints
 - `GET /api/pdf/platforms` — Download full platforms PDF
 - `GET /api/pdf/rule-of-72` — Rule of 72 Word guide
-- `GET /api/pdf/budget-503020` — 50/30/20 Budget Rule Word guide (NEW)
+- `GET /api/pdf/budget-503020` — 50/30/20 Budget Rule Word guide
 - `GET /api/pdf/moneyrules-template` — Blank branded template
+- `POST /api/pdf/resources/request-download` — Email-capture gateway (body: `{email, resource, consent}`) → returns `{download_url}`
+- `GET /api/pdf/resources/subscribers` — Admin list of captured subscriber emails
 
 ## Admin Credentials
 See `/app/memory/test_credentials.md`
