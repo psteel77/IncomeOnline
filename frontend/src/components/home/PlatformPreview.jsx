@@ -79,7 +79,7 @@ const PlatformPreview = () => {
             <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 relative overflow-hidden" style={{ borderColor: platform.color }}>
               {/* Sample Watermark */}
               <div className="absolute top-2 right-2 z-10">
-                <Badge className="bg-amber-100 text-amber-700 text-xs">SAMPLE</Badge>
+                <Badge className="bg-purple-100 text-purple-700 border border-purple-300 text-xs font-semibold hover:bg-purple-100">SAMPLE</Badge>
               </div>
               
               <CardHeader className="pb-2">
