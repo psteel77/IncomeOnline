@@ -557,3 +557,31 @@ async def list_resource_subscribers(limit: int = 500):
         'newsletter_opt_in_count': opted_in,
         'subscribers': subs,
     }
+
+
+@router.get("/resources/progress")
+async def resource_progress(email: str):
+    """
+    Return which resources a given email has already downloaded.
+    Used by the frontend library-progress tracker to show tick-marks.
+    """
+    from server import db
+    email_lower = (email or '').lower().strip()
+    if not email_lower:
+        return {'email': '', 'downloaded': [], 'count': 0, 'total': len(RESOURCE_MAP)}
+
+    sub = await db.resource_subscribers.find_one(
+        {'email': email_lower},
+        {"_id": 0, "resources_downloaded": 1, "download_count": 1, "newsletter_opt_in": 1},
+    )
+    downloaded = list((sub or {}).get('resources_downloaded') or [])
+    # Only count known resources (future-proof against deleted keys)
+    downloaded = [r for r in downloaded if r in RESOURCE_MAP]
+    return {
+        'email': email_lower,
+        'downloaded': downloaded,
+        'count': len(downloaded),
+        'total': len(RESOURCE_MAP),
+        'download_count': (sub or {}).get('download_count', 0),
+        'newsletter_opt_in': bool((sub or {}).get('newsletter_opt_in', False)),
+    }

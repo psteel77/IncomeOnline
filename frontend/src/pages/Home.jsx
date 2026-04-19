@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X, Download, FileText } from 'lucide-react';
+import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X, Download, FileText, CheckCircle2, Sparkles } from 'lucide-react';
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import AccessGate from '../components/AccessGate';
@@ -14,6 +14,7 @@ import DonationSection from '../components/home/DonationSection';
 import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
 import ResourceLibraryBanner from '../components/home/ResourceLibraryBanner';
 import useSEO from '../hooks/useSEO';
+import useLibraryProgress from '../hooks/useLibraryProgress';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,6 +28,7 @@ const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resourceDialog, setResourceDialog] = useState({ open: false, resource: '', title: '' });
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const libProgress = useLibraryProgress();
 
   useSEO({
     title: 'Income Online | Discover 199+ Legitimate Ways to Earn Money Online',
@@ -674,7 +676,41 @@ const Home = () => {
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3">
               MoneyRules Library — 7 Free Guides
             </h2>
-            <p className="text-base sm:text-lg text-slate-600">Professional Word documents you can download, edit and print</p>
+            <p className="text-base sm:text-lg text-slate-600 mb-5">Professional Word documents you can download, edit and print</p>
+
+            {/* Progress tracker (only visible once the user has downloaded at least one) */}
+            {libProgress.downloadedCount > 0 && (
+              <div
+                className="max-w-md mx-auto"
+                data-testid="library-progress-tracker"
+              >
+                <div className="flex items-center justify-between text-sm font-semibold text-slate-700 mb-2">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    Your library progress
+                  </span>
+                  <span data-testid="library-progress-count">
+                    {libProgress.downloadedCount} of 7 downloaded
+                  </span>
+                </div>
+                <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden shadow-inner">
+                  <div
+                    className="h-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${Math.min(100, (libProgress.downloadedCount / 7) * 100)}%` }}
+                  />
+                </div>
+                {libProgress.downloadedCount === 7 ? (
+                  <p className="mt-3 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 flex items-center justify-center gap-1.5">
+                    <Sparkles className="h-4 w-4 text-pink-500" />
+                    Library complete — well done!
+                  </p>
+                ) : (
+                  <p className="mt-2 text-xs text-slate-500">
+                    {7 - libProgress.downloadedCount} guide{7 - libProgress.downloadedCount === 1 ? '' : 's'} left to unlock
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -742,13 +778,24 @@ const Home = () => {
                 iconBg: 'from-amber-600 to-orange-600',
                 btn: 'from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700',
               },
-            ].map((g) => (
+            ].map((g) => {
+              const isDone = libProgress.downloaded.has(g.key);
+              return (
               <Card
                 key={g.key}
                 data-testid={`resource-card-${g.key}`}
-                className="overflow-hidden border-0 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white"
+                className={`relative overflow-hidden border-0 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white ${isDone ? 'ring-2 ring-purple-300' : ''}`}
               >
                 <div className={`h-1.5 bg-gradient-to-r ${g.accent}`}></div>
+                {isDone && (
+                  <div
+                    className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shadow-md"
+                    data-testid={`downloaded-badge-${g.key}`}
+                  >
+                    <CheckCircle2 className="h-3 w-3" />
+                    Downloaded
+                  </div>
+                )}
                 <CardContent className="p-5 sm:p-6">
                   <div className="flex items-start gap-4 mb-3">
                     <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-br ${g.iconBg} rounded-xl flex items-center justify-center shadow-md`}>
@@ -764,17 +811,20 @@ const Home = () => {
                     <Button
                       data-testid={`download-${g.key}-btn`}
                       size="sm"
-                      className={`bg-gradient-to-r ${g.btn} text-white font-semibold rounded-full shadow hover:shadow-md transition-all`}
+                      className={`${isDone
+                        ? 'bg-white text-purple-700 border-2 border-purple-300 hover:bg-purple-50'
+                        : `bg-gradient-to-r ${g.btn} text-white`} font-semibold rounded-full shadow hover:shadow-md transition-all`}
                       onClick={() => setResourceDialog({ open: true, resource: g.key, title: `${g.title} — ${g.subtitle}` })}
                     >
                       <Download className="mr-1.5 h-3.5 w-3.5" />
-                      Download
+                      {isDone ? 'Download again' : 'Download'}
                     </Button>
                     <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">.docx · 10 pages</span>
                   </div>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -1061,6 +1111,7 @@ const Home = () => {
         onOpenChange={(open) => setResourceDialog((prev) => ({ ...prev, open }))}
         resource={resourceDialog.resource}
         title={resourceDialog.title}
+        onSuccess={(email, resourceKey) => libProgress.recordDownload(email, resourceKey)}
       />
     </div>
   );

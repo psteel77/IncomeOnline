@@ -9,8 +9,10 @@ import { Download, Loader2, Mail, CheckCircle2 } from 'lucide-react';
  * Email-capture gateway shown before a Free Resource download starts.
  * On submit, POSTs to /api/pdf/resources/request-download, then triggers the download.
  */
-const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, description }) => {
-  const [email, setEmail] = useState('');
+const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, description, onSuccess }) => {
+  const [email, setEmail] = useState(() => {
+    try { return localStorage.getItem('io_resource_email') || ''; } catch { return ''; }
+  });
   const [consent, setConsent] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -18,8 +20,13 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
 
   const handleClose = (isOpen) => {
     if (!isOpen) {
-      // reset state when closing
-      setEmail('');
+      // reset transient state when closing; keep email for known visitors
+      try {
+        const saved = localStorage.getItem('io_resource_email') || '';
+        setEmail(saved);
+      } catch {
+        setEmail('');
+      }
       setConsent(true);
       setError('');
       setSuccess(false);
@@ -52,6 +59,9 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
 
       const data = await response.json();
       setSuccess(true);
+
+      // Notify parent so it can update library progress tracker
+      try { onSuccess && onSuccess(email.trim().toLowerCase(), resource); } catch {}
 
       // Trigger the download in a new tab
       const downloadUrl = `${backendUrl}${data.download_url}`;
