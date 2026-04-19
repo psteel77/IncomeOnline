@@ -9,6 +9,7 @@ import {
   TrendingUp, Zap, CreditCard, Globe2, Sparkles,
 } from 'lucide-react';
 import useSEO from '../hooks/useSEO';
+import SharePanel from '../components/platform/SharePanel';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -192,6 +193,11 @@ const PlatformDetail = () => {
               >
                 <Link to="/">Browse all 199+ platforms</Link>
               </Button>
+            </div>
+
+            {/* Share panel */}
+            <div className="mt-6 pt-5 border-t border-slate-200">
+              <SharePanel url={canonical} title={`${name} — ${category} on Income Online`} />
             </div>
           </CardContent>
         </Card>

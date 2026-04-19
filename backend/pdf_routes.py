@@ -336,6 +336,91 @@ async def download_budget_503020():
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ---------------------------------------------------------------
+# New MoneyRules library guides — shared helper + per-guide routes
+# ---------------------------------------------------------------
+
+DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+
+def _serve_docx(filename: str, download_name: str, generator_fn=None):
+    """Serve a .docx from /static; optionally generate it on first request."""
+    doc_path = os.path.join(os.path.dirname(__file__), 'static', filename)
+    if not os.path.exists(doc_path) and generator_fn is not None:
+        buffer = generator_fn()
+        os.makedirs(os.path.dirname(doc_path), exist_ok=True)
+        with open(doc_path, 'wb') as f:
+            f.write(buffer.read())
+    if not os.path.exists(doc_path):
+        raise HTTPException(status_code=404, detail="Guide not found")
+    return FileResponse(
+        path=doc_path,
+        media_type=DOCX_MIME,
+        filename=download_name,
+        headers={'Content-Disposition': f'attachment; filename="{download_name}"'},
+    )
+
+
+@router.get("/passive-income")
+async def download_passive_income():
+    """Beginner's Guide to Passive Income."""
+    from generate_passive_income_doc import generate_passive_income_document
+    return _serve_docx(
+        'Passive_Income_Beginners_Guide.docx',
+        'Beginners_Guide_to_Passive_Income.docx',
+        generate_passive_income_document,
+    )
+
+
+@router.get("/debt-snowball")
+async def download_debt_snowball():
+    """The Debt Snowball Method guide."""
+    from generate_debt_snowball_doc import generate_debt_snowball_document
+    return _serve_docx(
+        'The_Debt_Snowball_Method.docx',
+        'The_Debt_Snowball_Method.docx',
+        generate_debt_snowball_document,
+    )
+
+
+@router.get("/emergency-fund")
+async def download_emergency_fund():
+    """Build a 3-Month Emergency Fund guide."""
+    from generate_emergency_fund_doc import generate_emergency_fund_document
+    return _serve_docx(
+        'The_Emergency_Fund_Guide.docx',
+        'Build_a_3_Month_Emergency_Fund.docx',
+        generate_emergency_fund_document,
+    )
+
+
+@router.get("/compound-interest")
+async def download_compound_interest():
+    """The Compound Interest Handbook."""
+    from generate_compound_interest_doc import generate_compound_interest_document
+    return _serve_docx(
+        'Compound_Interest_Handbook.docx',
+        'The_Compound_Interest_Handbook.docx',
+        generate_compound_interest_document,
+    )
+
+
+@router.get("/uk-tax-basics")
+async def download_uk_tax_basics():
+    """UK Tax Basics for Freelancers."""
+    from generate_uk_tax_basics_doc import generate_uk_tax_basics_document
+    return _serve_docx(
+        'UK_Tax_Basics_Freelancers.docx',
+        'UK_Tax_Basics_for_Freelancers.docx',
+        generate_uk_tax_basics_document,
+    )
+
+
+# ---------------------------------------------------------------
+# Email-capture gateway for Free Resources
+# ---------------------------------------------------------------
+
+
 @router.get("/moneyrules-template")
 async def download_moneyrules_template():
     """Download the blank MoneyRules branded template"""
@@ -372,6 +457,26 @@ RESOURCE_MAP = {
     'budget-503020': {
         'title': 'The 50/30/20 Rule — Budget Guide',
         'download_path': '/api/pdf/budget-503020',
+    },
+    'passive-income': {
+        'title': "Beginner's Guide to Passive Income",
+        'download_path': '/api/pdf/passive-income',
+    },
+    'debt-snowball': {
+        'title': 'The Debt Snowball Method',
+        'download_path': '/api/pdf/debt-snowball',
+    },
+    'emergency-fund': {
+        'title': 'Build a 3-Month Emergency Fund',
+        'download_path': '/api/pdf/emergency-fund',
+    },
+    'compound-interest': {
+        'title': 'The Compound Interest Handbook',
+        'download_path': '/api/pdf/compound-interest',
+    },
+    'uk-tax-basics': {
+        'title': 'UK Tax Basics for Freelancers & Side-Hustlers',
+        'download_path': '/api/pdf/uk-tax-basics',
     },
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -13,6 +12,8 @@ import CategoryPreview from '../components/home/CategoryPreview';
 import PlatformPreview from '../components/home/PlatformPreview';
 import DonationSection from '../components/home/DonationSection';
 import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
+import ResourceLibraryBanner from '../components/home/ResourceLibraryBanner';
+import useSEO from '../hooks/useSEO';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +27,13 @@ const Home = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resourceDialog, setResourceDialog] = useState({ open: false, resource: '', title: '' });
   const { isAuthenticated, loading: authLoading } = useAuth();
+
+  useSEO({
+    title: 'Income Online | Discover 199+ Legitimate Ways to Earn Money Online',
+    description: 'Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find 199+ verified platforms plus free financial guides.',
+    canonical: 'https://www.incomeonline.info/',
+    ogImage: 'https://www.incomeonline.info/earnhub-logo.png',
+  });
 
   // Category images mapping
   const categoryImages = {
@@ -108,11 +116,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-purple-50/30 to-white">
-      <Helmet>
-        <title>Income Online | Discover 199+ Legitimate Ways to Earn Money Online</title>
-        <meta name="description" content="Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find 199+ verified platforms to make money online." />
-        <link rel="canonical" href="https://www.incomeonline.info" />
-      </Helmet>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 border-b border-purple-500/20 shadow-lg shadow-purple-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -272,6 +275,9 @@ const Home = () => {
         setSearchTerm={setSearchTerm}
         stats={stats}
       />
+
+      {/* Resource Library Banner — prominent, animated, below hero */}
+      <ResourceLibraryBanner count={7} />
 
       {/* Categories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
@@ -663,72 +669,112 @@ const Home = () => {
 
       {/* Free Resources Section - Always visible */}
       <section id="free-resources" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 mb-3">
-              Free Resources
+            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3">
+              MoneyRules Library — 7 Free Guides
             </h2>
-            <p className="text-base sm:text-lg text-slate-600">Download expert guides to boost your financial knowledge</p>
+            <p className="text-base sm:text-lg text-slate-600">Professional Word documents you can download, edit and print</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Rule of 72 Guide */}
-            <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
-              <div className="h-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"></div>
-              <CardContent className="p-6 sm:p-8">
-                <div className="flex flex-col sm:flex-row items-start gap-5">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <FileText className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">The Rule of 72 — Complete Investment Guide</h3>
-                    <p className="text-slate-600 text-sm mb-4 leading-relaxed">
-                      Learn the most powerful shortcut in personal finance. Discover how to quickly calculate when your investments will double, with worked examples, comparison tables, and real-world scenarios. A must-read for every investor.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Button
-                        data-testid="download-rule-of-72-btn"
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-                        onClick={() => setResourceDialog({ open: true, resource: 'rule-of-72', title: 'The Rule of 72 — Complete Investment Guide' })}
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        Download Free Guide
-                      </Button>
-                      <span className="text-xs text-slate-400 font-medium">Word (.docx) — 10 Pages</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                key: 'rule-of-72',
+                title: 'The Rule of 72',
+                subtitle: 'Complete Investment Guide',
+                desc: 'The powerful shortcut that tells you exactly when your money will double. Worked examples, comparison tables, real scenarios.',
+                accent: 'from-purple-500 via-pink-500 to-orange-500',
+                iconBg: 'from-purple-600 to-pink-500',
+                btn: 'from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700',
+              },
+              {
+                key: 'budget-503020',
+                title: 'The 50/30/20 Rule',
+                subtitle: 'Simplest Budget System',
+                desc: 'Split every pound into Needs, Wants, and Savings. Worked examples at every income level and a 30-minute action plan.',
+                accent: 'from-pink-500 via-orange-500 to-amber-500',
+                iconBg: 'from-pink-600 to-orange-500',
+                btn: 'from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700',
+              },
+              {
+                key: 'passive-income',
+                title: 'Passive Income',
+                subtitle: "Beginner's Guide",
+                desc: 'The 7 streams of passive income, honestly explained. What they really earn, how to start, and realistic timelines.',
+                accent: 'from-purple-500 to-indigo-500',
+                iconBg: 'from-purple-600 to-indigo-600',
+                btn: 'from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700',
+              },
+              {
+                key: 'debt-snowball',
+                title: 'The Debt Snowball',
+                subtitle: 'Clear Debts Faster',
+                desc: 'The proven method to escape credit cards, overdrafts and loans — with worked UK examples and step-by-step rollover rules.',
+                accent: 'from-rose-500 to-pink-600',
+                iconBg: 'from-rose-600 to-pink-600',
+                btn: 'from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700',
+              },
+              {
+                key: 'emergency-fund',
+                title: '3-Month Emergency Fund',
+                subtitle: 'Financial Security Blueprint',
+                desc: 'Why 3 months, where to keep it, and how to build it in 6–18 months. The single best money move you can make this year.',
+                accent: 'from-emerald-500 to-teal-600',
+                iconBg: 'from-emerald-600 to-teal-600',
+                btn: 'from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700',
+              },
+              {
+                key: 'compound-interest',
+                title: 'Compound Interest',
+                subtitle: 'The Handbook',
+                desc: 'Why Einstein called it the 8th wonder — the formula, real scenarios for retirement, children, house deposits, and the dark side of debt.',
+                accent: 'from-indigo-500 via-purple-500 to-pink-500',
+                iconBg: 'from-indigo-600 to-purple-600',
+                btn: 'from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700',
+              },
+              {
+                key: 'uk-tax-basics',
+                title: 'UK Tax Basics',
+                subtitle: 'For Freelancers',
+                desc: 'Self Assessment without the jargon. £1,000 trading allowance, expenses you can claim, key dates, and the dreaded January surprise.',
+                accent: 'from-amber-500 to-orange-600',
+                iconBg: 'from-amber-600 to-orange-600',
+                btn: 'from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700',
+              },
+            ].map((g) => (
+              <Card
+                key={g.key}
+                data-testid={`resource-card-${g.key}`}
+                className="overflow-hidden border-0 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 bg-white"
+              >
+                <div className={`h-1.5 bg-gradient-to-r ${g.accent}`}></div>
+                <CardContent className="p-5 sm:p-6">
+                  <div className="flex items-start gap-4 mb-3">
+                    <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-br ${g.iconBg} rounded-xl flex items-center justify-center shadow-md`}>
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-bold text-slate-900 leading-tight">{g.title}</h3>
+                      <p className="text-xs text-slate-500 font-medium">{g.subtitle}</p>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 50/30/20 Budget Rule Guide */}
-            <Card className="overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-white">
-              <div className="h-1.5 bg-gradient-to-r from-pink-500 via-orange-500 to-amber-500"></div>
-              <CardContent className="p-6 sm:p-8">
-                <div className="flex flex-col sm:flex-row items-start gap-5">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-pink-600 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <FileText className="h-8 w-8 text-white" />
+                  <p className="text-slate-600 text-sm mb-4 leading-relaxed line-clamp-3">{g.desc}</p>
+                  <div className="flex items-center justify-between gap-2">
+                    <Button
+                      data-testid={`download-${g.key}-btn`}
+                      size="sm"
+                      className={`bg-gradient-to-r ${g.btn} text-white font-semibold rounded-full shadow hover:shadow-md transition-all`}
+                      onClick={() => setResourceDialog({ open: true, resource: g.key, title: `${g.title} — ${g.subtitle}` })}
+                    >
+                      <Download className="mr-1.5 h-3.5 w-3.5" />
+                      Download
+                    </Button>
+                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">.docx · 10 pages</span>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2">The 50/30/20 Rule — Budget Guide</h3>
-                    <p className="text-slate-600 text-sm mb-4 leading-relaxed">
-                      The simplest, most reliable way to budget. Learn how to split every pound into Needs, Wants, and Savings — with worked examples at every income level, common pitfalls, and an action plan you can set up in under 30 minutes.
-                    </p>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Button
-                        data-testid="download-budget-503020-btn"
-                        className="bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300"
-                        onClick={() => setResourceDialog({ open: true, resource: 'budget-503020', title: 'The 50/30/20 Rule — Budget Guide' })}
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        Download Free Guide
-                      </Button>
-                      <span className="text-xs text-slate-400 font-medium">Word (.docx) — 10 Pages</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

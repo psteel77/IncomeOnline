@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import useSEO from '../hooks/useSEO';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -10,6 +10,13 @@ const SuccessStories = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+
+  useSEO({
+    title: 'Success Stories | Real People Earning Money Online | Income Online',
+    description: 'Read 60+ verified success stories from real people earning money online. From freelancing on Upwork to surveys on Prolific, see how others transformed their income.',
+    canonical: 'https://www.incomeonline.info/success-stories',
+    ogImage: 'https://www.incomeonline.info/earnhub-logo.png',
+  });
 
   const stories = [
     // Original 8 stories
@@ -928,16 +935,6 @@ const SuccessStories = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-purple-50 to-pink-50">
-      <Helmet>
-        <title>Success Stories | Real People Earning Money Online | Income Online</title>
-        <meta name="description" content="Read 60+ verified success stories from real people earning money online. From freelancing on Upwork to surveys on Prolific, see how others transformed their income." />
-        <meta name="keywords" content="online earning success stories, make money online testimonials, freelancing success, survey earnings, work from home stories" />
-        <link rel="canonical" href="https://www.incomeonline.info/success-stories" />
-        <meta property="og:title" content="Success Stories | Real People Earning Money Online" />
-        <meta property="og:description" content="Read 60+ verified success stories from real people earning money online." />
-        <meta property="og:url" content="https://www.incomeonline.info/success-stories" />
-        <meta property="og:type" content="website" />
-      </Helmet>
       {/* Header */}
       <header className="sticky top-0 z-50 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
