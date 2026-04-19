@@ -19,6 +19,7 @@ from seed_data import categories_data, platforms_data
 from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email
 from cms_routes import router as cms_router
 from pdf_routes import router as pdf_router
+from seo_routes import router as seo_router
 from seed_content import content_sections
 
 # Subscription duration in days
@@ -920,6 +921,7 @@ async def get_subscription_stats():
 app.include_router(api_router)
 app.include_router(cms_router, prefix="/api")
 app.include_router(pdf_router, prefix="/api")
+app.include_router(seo_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,

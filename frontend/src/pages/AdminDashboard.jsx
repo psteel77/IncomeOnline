@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { Textarea } from '../components/ui/textarea';
 import { LogOut, Save, Home, Loader2, CheckCircle2, AlertCircle, Plus, Trash2, Edit2, X, ChevronDown, ChevronUp, FileText, Download } from 'lucide-react';
 import axios from 'axios';
+import SitemapPingCard from '../components/admin/SitemapPingCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -298,7 +299,10 @@ const AdminDashboard = () => {
 
       {/* Content Sections */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        
+
+        {/* SEO / Sitemap Ping */}
+        <SitemapPingCard />
+
         {/* Hero Section */}
         <Card>
           <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => toggleSection('hero')}>
