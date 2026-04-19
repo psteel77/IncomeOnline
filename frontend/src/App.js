@@ -9,6 +9,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuccessStories from "./pages/SuccessStories";
 import PDFView from "./pages/PDFView";
+import PlatformDetail from "./pages/PlatformDetail";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/verify" element={<Verify />} />
               <Route path="/verify/:token" element={<Verify />} />
               <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/platforms/:slug" element={<PlatformDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/pdf-view" element={<PDFView />} />

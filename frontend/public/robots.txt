@@ -21,5 +21,9 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-# Sitemap location
+# Allow public SEO endpoints (sitemaps are dynamically generated)
+Allow: /api/seo/
+
+# Sitemap locations
 Sitemap: https://www.incomeonline.info/sitemap.xml
+Sitemap: https://www.incomeonline.info/api/seo/platforms-sitemap.xml
