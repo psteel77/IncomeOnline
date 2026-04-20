@@ -21,6 +21,13 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (Feb 2026 — current session)
+- **Hardcoded text moved to CMS (a)**: Hero section now reads `badge`, `headline_line1`, `headline_line2`, `subtitle_line1`, `subtitle_line2` from CMS with fallbacks. New CMS sections added: `library_banner` (badge/headline/description/cta_primary/cta_secondary) and `free_resources` (title/subtitle). Admin Dashboard expanded with edit forms for all 3. `POST /api/seed-content` is now idempotent — adds missing sections without clobbering admin edits.
+- **Admin Subscribers page (b)**: New `SubscribersCard` in `/admin` dashboard shows captured emails in a table with filter, totals (total / newsletter opt-in), and CSV export (`resource_subscribers_YYYY-MM-DD.csv`).
+- **Mailgun email-delivery of guides (d)**: Free Resources dialog now has an "Email me the guide" checkbox. When checked, POST `/api/pdf/resources/request-download` with `deliver_via_email=true` attaches the `.docx` and emails it via Mailgun (`send_resource_email` in `email_service.py`). Response includes `email_delivery: "sent" | "failed" | "skipped"`.
+
+### Completed (earlier — see CHANGELOG context in previous sessions)
+
 ### Completed (Jan 2025)
 - Full-stack React/FastAPI/MongoDB app; 199+ platforms across 8 categories
 - PayPal donation integration with 12-month subscription
