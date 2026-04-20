@@ -2,7 +2,7 @@ import asyncio
 from playwright.async_api import async_playwright
 import os
 
-BASE_URL = "https://income-hub-238.preview.emergentagent.com"
+BASE_URL = "https://money-platforms.preview.emergentagent.com"
 VERIFY_TOKEN = "ra2bopgkjY2OVpVgOzdmJS2UCwwwiJmKp6exg8IteRI"
 
 async def generate_full_pdf():

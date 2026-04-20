@@ -3,24 +3,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Checkbox } from '../ui/checkbox';
-import { Download, Loader2, Mail, CheckCircle2 } from 'lucide-react';
+import { Download, Loader2, Mail, CheckCircle2, Send } from 'lucide-react';
 
 /**
  * Email-capture gateway shown before a Free Resource download starts.
- * On submit, POSTs to /api/pdf/resources/request-download, then triggers the download.
+ * On submit, POSTs to /api/pdf/resources/request-download. Supports two delivery modes:
+ *   - Instant download in a new tab (default)
+ *   - Email the guide as a .docx attachment via Mailgun
  */
 const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, description, onSuccess }) => {
   const [email, setEmail] = useState(() => {
     try { return localStorage.getItem('io_resource_email') || ''; } catch { return ''; }
   });
   const [consent, setConsent] = useState(true);
+  const [deliverViaEmail, setDeliverViaEmail] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [successMode, setSuccessMode] = useState('download'); // 'download' | 'email'
 
   const handleClose = (isOpen) => {
     if (!isOpen) {
-      // reset transient state when closing; keep email for known visitors
       try {
         const saved = localStorage.getItem('io_resource_email') || '';
         setEmail(saved);
@@ -28,9 +31,11 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
         setEmail('');
       }
       setConsent(true);
+      setDeliverViaEmail(false);
       setError('');
       setSuccess(false);
       setSubmitting(false);
+      setSuccessMode('download');
     }
     onOpenChange(isOpen);
   };
@@ -50,7 +55,7 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
       const response = await fetch(`${backendUrl}/api/pdf/resources/request-download`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), resource, consent }),
+        body: JSON.stringify({ email: email.trim(), resource, consent, deliver_via_email: deliverViaEmail }),
       });
 
       if (!response.ok) {
@@ -58,17 +63,19 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
       }
 
       const data = await response.json();
+      try { localStorage.setItem('io_resource_email', email.trim().toLowerCase()); } catch {}
       setSuccess(true);
+      setSuccessMode(deliverViaEmail ? 'email' : 'download');
 
-      // Notify parent so it can update library progress tracker
       try { onSuccess && onSuccess(email.trim().toLowerCase(), resource); } catch {}
 
-      // Trigger the download in a new tab
-      const downloadUrl = `${backendUrl}${data.download_url}`;
-      window.open(downloadUrl, '_blank');
+      // If the user didn't request email delivery, trigger the instant download.
+      if (!deliverViaEmail) {
+        const downloadUrl = `${backendUrl}${data.download_url}`;
+        window.open(downloadUrl, '_blank');
+      }
 
-      // Auto-close after short success moment
-      setTimeout(() => handleClose(false), 1800);
+      setTimeout(() => handleClose(false), deliverViaEmail ? 3000 : 1800);
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
@@ -98,8 +105,17 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
             <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
               <CheckCircle2 className="h-7 w-7 text-white" />
             </div>
-            <h3 className="text-base font-semibold text-slate-900 mb-1">Your download is on its way</h3>
-            <p className="text-sm text-slate-600">If it didn't start automatically, check your browser's pop-up blocker.</p>
+            {successMode === 'email' ? (
+              <>
+                <h3 className="text-base font-semibold text-slate-900 mb-1">Check your inbox</h3>
+                <p className="text-sm text-slate-600">We've emailed your guide to <span className="font-semibold">{email}</span>. It should arrive within a minute — look in Promotions if you can't find it.</p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-base font-semibold text-slate-900 mb-1">Your download is on its way</h3>
+                <p className="text-sm text-slate-600">If it didn't start automatically, check your browser's pop-up blocker.</p>
+              </>
+            )}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -119,6 +135,19 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
                 className="focus-visible:ring-purple-500"
               />
             </div>
+
+            <label className="flex items-start gap-2 cursor-pointer select-none">
+              <Checkbox
+                checked={deliverViaEmail}
+                onCheckedChange={(val) => setDeliverViaEmail(val === true)}
+                disabled={submitting}
+                data-testid="resource-email-delivery-checkbox"
+                className="mt-0.5"
+              />
+              <span className="text-xs text-slate-700 leading-relaxed">
+                <span className="font-semibold">Email me the guide</span> as a Word document attachment instead of downloading it now.
+              </span>
+            </label>
 
             <label className="flex items-start gap-2 cursor-pointer select-none">
               <Checkbox
@@ -157,6 +186,11 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Preparing...
+                  </>
+                ) : deliverViaEmail ? (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Email Me the Guide
                   </>
                 ) : (
                   <>

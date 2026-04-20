@@ -235,23 +235,30 @@ async def add_uk_platforms():
 
 @api_router.post("/seed-content")
 async def seed_content():
-    """Seed CMS content with initial data"""
+    """Seed CMS content with initial data.
+    
+    Idempotent merge: inserts any section_ids from `content_sections` that are
+    missing from the database. Existing sections are NOT overwritten so admin
+    edits are preserved.
+    """
     try:
-        # Check if content already exists
-        existing_count = await db.content.count_documents({})
-        
-        if existing_count > 0:
+        existing = await db.content.find({}, {"_id": 0, "section_id": 1}).to_list(100)
+        existing_ids = {s['section_id'] for s in existing}
+
+        to_insert = [s for s in content_sections if s['section_id'] not in existing_ids]
+
+        if not to_insert:
             return {
-                "message": "Content already seeded",
-                "content_sections": existing_count
+                "message": "Content already seeded — no missing sections",
+                "content_sections": len(existing_ids),
             }
-        
-        # Insert content sections
-        await db.content.insert_many(content_sections)
-        
+
+        await db.content.insert_many(to_insert)
         return {
-            "message": "Content seeded successfully",
-            "content_sections_added": len(content_sections)
+            "message": "Seeded missing content sections",
+            "content_sections_added": len(to_insert),
+            "added_ids": [s['section_id'] for s in to_insert],
+            "total_sections": len(existing_ids) + len(to_insert),
         }
     except Exception as e:
         return {"error": str(e)}

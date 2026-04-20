@@ -4,6 +4,13 @@ import { Search, Sparkles, TrendingUp, Users, DollarSign } from 'lucide-react';
 import AccessGate from '../AccessGate';
 
 const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSearchTerm, stats }) => {
+  const hero = content?.hero || {};
+  const badgeText = hero.badge || '199+ Verified Earning Platforms';
+  const headlineLine1 = hero.headline_line1 || 'Discover the Best Ways to';
+  const headlineLine2 = hero.headline_line2 || 'Earn Money Online';
+  const subtitleLine1 = hero.subtitle_line1 || 'Your comprehensive directory of legitimate online earning opportunities';
+  const subtitleLine2 = hero.subtitle_line2 || 'From Freelancing to Passive Income • One Time to Full Time';
+
   return (
     <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated Background */}
@@ -19,21 +26,21 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
 
       <div className="max-w-7xl mx-auto text-center relative z-10">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 mb-6 slide-up">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 mb-6 slide-up" data-testid="hero-badge">
           <Sparkles className="h-4 w-4 text-purple-600" />
-          <span className="text-sm font-medium text-purple-700">199+ Verified Earning Platforms</span>
+          <span className="text-sm font-medium text-purple-700">{badgeText}</span>
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up slide-up-delay-1">
-          <span className="block text-gray-900">Discover the Best Ways to</span>
-          <span className="block gradient-text-warm">Earn Money Online</span>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up slide-up-delay-1" data-testid="hero-heading">
+          <span className="block text-gray-900">{headlineLine1}</span>
+          <span className="block gradient-text-warm">{headlineLine2}</span>
         </h1>
 
         {/* Subtitle */}
-        <div className="text-lg sm:text-xl text-gray-600 mb-10 max-w-3xl mx-auto slide-up slide-up-delay-2">
-          <p className="mb-2">Your comprehensive directory of <span className="font-semibold text-purple-600">legitimate</span> online earning opportunities</p>
-          <p>From Freelancing to Passive Income • One Time to Full Time</p>
+        <div className="text-lg sm:text-xl text-gray-600 mb-10 max-w-3xl mx-auto slide-up slide-up-delay-2" data-testid="hero-subtitle">
+          <p className="mb-2">{subtitleLine1}</p>
+          <p>{subtitleLine2}</p>
         </div>
         
         {/* Access Gate - Show only when NOT authenticated */}

@@ -409,3 +409,75 @@ def send_expiry_warning_email(email, expiry_date):
     except Exception as e:
         logger.error(f"❌ Unexpected error sending expiry warning email: {str(e)}")
         return False
+
+
+DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+
+def send_resource_email(email: str, resource_title: str, attachment_path: str, attachment_filename: str) -> bool:
+    """
+    Email a MoneyRules free guide to the subscriber with the .docx attached.
+
+    Used by the Free Resources gateway when the visitor chooses "Email me the guide"
+    instead of an in-browser download.
+    """
+    api_key = os.environ.get('MAILGUN_API_KEY')
+    domain = os.environ.get('MAILGUN_DOMAIN')
+    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://www.incomeonline.info')
+
+    if not api_key or not domain or not sender_email:
+        logger.error("Mailgun credentials missing; cannot send resource email")
+        return False
+
+    if not os.path.exists(attachment_path):
+        logger.error(f"Resource attachment missing on disk: {attachment_path}")
+        return False
+
+    subject = f"Your free guide: {resource_title}"
+    html = f"""
+    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; color: #1f2937;">
+      <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Your MoneyRules guide is attached</h1>
+      <p style="font-size: 16px; line-height: 1.6;">Thank you for downloading <strong>{resource_title}</strong> from Income Online.</p>
+      <p style="font-size: 15px; line-height: 1.6;">Open the attachment — it's a print-ready Word document you can edit, annotate, and keep forever.</p>
+      <p style="font-size: 15px; line-height: 1.6;">When you're ready to go deeper, our <a href="{frontend_url}/#premium-pack" style="color:#7c3aed;">£12.99 Premium Pack</a> bundles all 10 free guides plus 2 exclusive premium guides and 5 editable Excel spreadsheets.</p>
+      <p style="font-size: 14px; color: #6b7280; margin-top: 32px;">Sent with love from Income Online · <a href="{frontend_url}" style="color:#7c3aed;">www.incomeonline.info</a></p>
+    </div>
+    """
+    text = (
+        f"Your MoneyRules guide is attached\n\n"
+        f"Thank you for downloading '{resource_title}' from Income Online.\n"
+        f"Open the attachment — it's a print-ready Word document you can edit, annotate, and keep forever.\n\n"
+        f"Want to go deeper? Upgrade to the £12.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
+        f"— Income Online · {frontend_url}\n"
+    )
+
+    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
+    try:
+        with open(attachment_path, 'rb') as fh:
+            response = requests.post(
+                api_url,
+                auth=("api", api_key),
+                data={
+                    "from": f"Income Online <{sender_email}>",
+                    "to": email,
+                    "subject": subject,
+                    "html": html,
+                    "text": text,
+                },
+                files=[("attachment", (attachment_filename, fh.read(), DOCX_MIME))],
+                timeout=30,
+            )
+            response.raise_for_status()
+
+        result = response.json()
+        logger.info(f"✅ Resource email sent via Mailgun to {email} · {resource_title} · ID: {result.get('id', 'unknown')}")
+        return True
+    except requests.exceptions.RequestException as e:
+        logger.error(f"❌ Failed to email resource guide: {str(e)}")
+        if hasattr(e, 'response') and e.response is not None:
+            logger.error(f"Mailgun response: {e.response.text[:500]}")
+        return False
+    except Exception as e:
+        logger.error(f"❌ Unexpected error emailing resource guide: {str(e)}")
+        return False

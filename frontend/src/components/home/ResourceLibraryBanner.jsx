@@ -5,8 +5,22 @@ import { BookOpenCheck, Sparkles, ChevronDown } from 'lucide-react';
 /**
  * Prominent animated banner promoting the MoneyRules resource library.
  * Sits below the hero to catch visitors immediately.
+ *
+ * Copy is CMS-driven (see `library_banner` content section) with safe fallbacks.
  */
-const ResourceLibraryBanner = ({ count = 7 }) => {
+const ResourceLibraryBanner = ({ count = 10, content }) => {
+  const cms = content || {};
+  const badge = cms.badge || '100% Free · MoneyRules Library';
+  // Headline supports a {count} placeholder for the number of guides.
+  const rawHeadline = cms.headline || '{count} FREE Financial Guides, Yours to Keep';
+  const description = cms.description || 'Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.';
+  const ctaPrimary = cms.cta_primary || 'Get My Free Guides';
+  const ctaSecondary = cms.cta_secondary || 'or grab the £12.99 Premium Pack →';
+
+  // Replace {count} and highlight the FREE word if it's in the headline
+  const headlineText = rawHeadline.replace('{count}', String(count));
+  const headlineParts = headlineText.split(/\b(FREE|Free)\b/);
+
   const scrollToLibrary = () => {
     const el = document.getElementById('free-resources');
     if (el) {
@@ -44,16 +58,21 @@ const ResourceLibraryBanner = ({ count = 7 }) => {
 
           {/* Copy */}
           <div className="flex-1 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 bg-amber-300 text-amber-900 rounded-full px-3 py-1 mb-2 shadow-md">
+            <div className="inline-flex items-center gap-1.5 bg-amber-300 text-amber-900 rounded-full px-3 py-1 mb-2 shadow-md" data-testid="library-banner-badge">
               <Sparkles className="h-3.5 w-3.5" />
-              <span className="text-xs font-extrabold uppercase tracking-widest">100% Free · MoneyRules Library</span>
+              <span className="text-xs font-extrabold uppercase tracking-widest">{badge}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-1.5 leading-tight">
-              {count} <span className="bg-white text-purple-700 px-2 rounded-md">FREE</span> Financial Guides,
-              <span className="block sm:inline"> Yours to Keep.</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-1.5 leading-tight" data-testid="library-banner-headline">
+              {headlineParts.map((part, i) =>
+                /^(FREE|Free)$/.test(part) ? (
+                  <span key={i} className="bg-white text-purple-700 px-2 rounded-md">{part}</span>
+                ) : (
+                  <React.Fragment key={i}>{part}</React.Fragment>
+                )
+              )}
             </h2>
-            <p className="text-sm sm:text-base text-white/90 max-w-2xl">
-              Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.
+            <p className="text-sm sm:text-base text-white/90 max-w-2xl" data-testid="library-banner-description">
+              {description}
             </p>
           </div>
 
@@ -65,7 +84,7 @@ const ResourceLibraryBanner = ({ count = 7 }) => {
               data-testid="library-banner-cta"
               className="bg-white text-purple-700 hover:bg-purple-50 font-bold text-base px-6 py-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
             >
-              Get My Free Guides
+              {ctaPrimary}
               <ChevronDown className="ml-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
             </Button>
             <button
@@ -79,7 +98,7 @@ const ResourceLibraryBanner = ({ count = 7 }) => {
               data-testid="library-banner-premium-link"
               className="text-xs font-semibold text-white/90 hover:text-white underline underline-offset-2 text-center transition-colors"
             >
-              or grab the £12.99 Premium Pack →
+              {ctaSecondary}
             </button>
           </div>
         </div>

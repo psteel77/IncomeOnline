@@ -280,7 +280,7 @@ const Home = () => {
       />
 
       {/* Resource Library Banner — prominent, animated, below hero */}
-      <ResourceLibraryBanner count={10} />
+      <ResourceLibraryBanner count={10} content={content.library_banner} />
 
       {/* Categories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
@@ -674,10 +674,10 @@ const Home = () => {
       <section id="free-resources" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3">
-              MoneyRules Library — 10 Free Guides
+            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3" data-testid="free-resources-title">
+              {content.free_resources?.title || 'MoneyRules Library — 10 Free Guides'}
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 mb-5">Professional Word documents you can download, edit and print</p>
+            <p className="text-base sm:text-lg text-slate-600 mb-5" data-testid="free-resources-subtitle">{content.free_resources?.subtitle || 'Professional Word documents you can download, edit and print'}</p>
 
             {/* Progress tracker (only visible once the user has downloaded at least one) */}
             {libProgress.downloadedCount > 0 && (

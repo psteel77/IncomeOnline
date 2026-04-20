@@ -566,42 +566,62 @@ RESOURCE_MAP = {
     'rule-of-72': {
         'title': 'The Rule of 72 — Complete Investment Guide',
         'download_path': '/api/pdf/rule-of-72',
+        'file': 'The_Rule_of_72_Guide.docx',
+        'download_name': 'The_Rule_of_72_Complete_Guide.docx',
     },
     'budget-503020': {
         'title': 'The 50/30/20 Rule — Budget Guide',
         'download_path': '/api/pdf/budget-503020',
+        'file': 'The_50_30_20_Budget_Rule.docx',
+        'download_name': 'The_50_30_20_Budget_Rule_Complete_Guide.docx',
     },
     'passive-income': {
         'title': "Beginner's Guide to Passive Income",
         'download_path': '/api/pdf/passive-income',
+        'file': 'Passive_Income_Beginners_Guide.docx',
+        'download_name': 'Beginners_Guide_to_Passive_Income.docx',
     },
     'debt-snowball': {
         'title': 'The Debt Snowball Method',
         'download_path': '/api/pdf/debt-snowball',
+        'file': 'The_Debt_Snowball_Method.docx',
+        'download_name': 'The_Debt_Snowball_Method.docx',
     },
     'emergency-fund': {
         'title': 'Build a 3-Month Emergency Fund',
         'download_path': '/api/pdf/emergency-fund',
+        'file': 'The_Emergency_Fund_Guide.docx',
+        'download_name': 'Build_a_3_Month_Emergency_Fund.docx',
     },
     'compound-interest': {
         'title': 'The Compound Interest Handbook',
         'download_path': '/api/pdf/compound-interest',
+        'file': 'Compound_Interest_Handbook.docx',
+        'download_name': 'The_Compound_Interest_Handbook.docx',
     },
     'uk-tax-basics': {
         'title': 'UK Tax Basics for Freelancers & Side-Hustlers',
         'download_path': '/api/pdf/uk-tax-basics',
+        'file': 'UK_Tax_Basics_Freelancers.docx',
+        'download_name': 'UK_Tax_Basics_for_Freelancers.docx',
     },
     'credit-score': {
         'title': 'UK Credit Score Masterclass',
         'download_path': '/api/pdf/credit-score',
+        'file': 'UK_Credit_Score_Masterclass.docx',
+        'download_name': 'UK_Credit_Score_Masterclass.docx',
     },
     'isa-vs-sipp': {
         'title': 'ISA vs SIPP — Tax-Efficient Investing',
         'download_path': '/api/pdf/isa-vs-sipp',
+        'file': 'ISA_vs_SIPP_Complete_Guide.docx',
+        'download_name': 'ISA_vs_SIPP_Complete_Guide.docx',
     },
     'side-hustle-quickstart': {
         'title': 'The Side-Hustle Quick-Start Guide',
         'download_path': '/api/pdf/side-hustle-quickstart',
+        'file': 'Side_Hustle_Quick_Start_Guide.docx',
+        'download_name': 'Side_Hustle_Quick_Start_Guide.docx',
     },
 }
 
@@ -610,6 +630,7 @@ class ResourceRequest(BaseModel):
     email: EmailStr
     resource: str
     consent: bool = False
+    deliver_via_email: bool = False
 
 
 @router.post("/resources/request-download")
@@ -618,8 +639,12 @@ async def request_resource_download(payload: ResourceRequest):
     Email-capture gateway: stores the visitor's email against the requested
     Free Resource and returns the direct download URL. Newsletter opt-in is
     tracked via the `consent` flag so downloads never accidentally mail users.
+
+    When `deliver_via_email=True` the guide is also sent as a .docx attachment
+    via Mailgun (best-effort; the direct download URL is still returned).
     """
     from server import db
+    from email_service import send_resource_email
 
     resource = RESOURCE_MAP.get(payload.resource)
     if not resource:
@@ -659,14 +684,28 @@ async def request_resource_download(payload: ResourceRequest):
         'resource': payload.resource,
         'resource_title': resource['title'],
         'consent': bool(payload.consent),
+        'delivered_via_email': bool(payload.deliver_via_email),
         'created_at': now,
     })
+
+    # Optional: email the guide as a .docx attachment via Mailgun.
+    email_delivery_status = 'skipped'
+    if payload.deliver_via_email:
+        attachment_path = os.path.join(os.path.dirname(__file__), 'static', resource['file'])
+        ok = send_resource_email(
+            email=email_lower,
+            resource_title=resource['title'],
+            attachment_path=attachment_path,
+            attachment_filename=resource['download_name'],
+        )
+        email_delivery_status = 'sent' if ok else 'failed'
 
     return {
         'success': True,
         'resource': payload.resource,
         'title': resource['title'],
         'download_url': resource['download_path'],
+        'email_delivery': email_delivery_status,
     }
 
 

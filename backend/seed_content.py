@@ -1,13 +1,39 @@
 # Initial content for the CMS
-# This will be seeded into the database on first run
+# This will be seeded into the database on first run.
+# Existing production records are preserved — new fields fall back to defaults
+# in the frontend when the admin hasn't set them yet.
 
 content_sections = [
     {
         "section_id": "hero",
         "content": {
+            # Legacy fields (kept for back-compat with older CMS payloads)
             "title": "Discover the Best Ways to Earn Money Online",
             "subtitle": "Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.",
-            "cta_text": "Get Started"
+            "cta_text": "Get Started",
+            # New granular fields (editable via admin)
+            "badge": "199+ Verified Earning Platforms",
+            "headline_line1": "Discover the Best Ways to",
+            "headline_line2": "Earn Money Online",
+            "subtitle_line1": "Your comprehensive directory of legitimate online earning opportunities",
+            "subtitle_line2": "From Freelancing to Passive Income • One Time to Full Time",
+        }
+    },
+    {
+        "section_id": "library_banner",
+        "content": {
+            "badge": "100% Free · MoneyRules Library",
+            "headline": "10 FREE Financial Guides, Yours to Keep",
+            "description": "Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.",
+            "cta_primary": "Get My Free Guides",
+            "cta_secondary": "or grab the £12.99 Premium Pack →",
+        }
+    },
+    {
+        "section_id": "free_resources",
+        "content": {
+            "title": "MoneyRules Library — 10 Free Guides",
+            "subtitle": "Professional Word documents you can download, edit and print",
         }
     },
     {

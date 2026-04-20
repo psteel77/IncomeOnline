@@ -8,6 +8,7 @@ import { Textarea } from '../components/ui/textarea';
 import { LogOut, Save, Home, Loader2, CheckCircle2, AlertCircle, Plus, Trash2, Edit2, X, ChevronDown, ChevronUp, FileText, Download } from 'lucide-react';
 import axios from 'axios';
 import SitemapPingCard from '../components/admin/SitemapPingCard';
+import SubscribersCard from '../components/admin/SubscribersCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -303,13 +304,16 @@ const AdminDashboard = () => {
         {/* SEO / Sitemap Ping */}
         <SitemapPingCard />
 
+        {/* Subscribers (captured emails from Free Resources gateway) */}
+        <SubscribersCard />
+
         {/* Hero Section */}
         <Card>
           <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => toggleSection('hero')}>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Hero Section</CardTitle>
-                <CardDescription>Main heading and subheading on the homepage</CardDescription>
+                <CardDescription>Badge, headline and subtitle above the search bar</CardDescription>
               </div>
               {expandedSections['hero'] ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
             </div>
@@ -317,33 +321,191 @@ const AdminDashboard = () => {
           {expandedSections['hero'] && (
             <CardContent className="space-y-4 border-t pt-4">
               <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Badge Text</label>
+                <Input
+                  data-testid="hero-badge-input"
+                  value={content.hero?.badge || ''}
+                  onChange={(e) => updateSectionField('hero', 'badge', e.target.value)}
+                  placeholder="199+ Verified Earning Platforms"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Headline Line 1 (dark)</label>
+                  <Input
+                    data-testid="hero-headline1-input"
+                    value={content.hero?.headline_line1 || ''}
+                    onChange={(e) => updateSectionField('hero', 'headline_line1', e.target.value)}
+                    placeholder="Discover the Best Ways to"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Headline Line 2 (gradient)</label>
+                  <Input
+                    data-testid="hero-headline2-input"
+                    value={content.hero?.headline_line2 || ''}
+                    onChange={(e) => updateSectionField('hero', 'headline_line2', e.target.value)}
+                    placeholder="Earn Money Online"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Subtitle Line 1</label>
+                <Input
+                  data-testid="hero-subtitle1-input"
+                  value={content.hero?.subtitle_line1 || ''}
+                  onChange={(e) => updateSectionField('hero', 'subtitle_line1', e.target.value)}
+                  placeholder="Your comprehensive directory of legitimate online earning opportunities"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Subtitle Line 2</label>
+                <Input
+                  data-testid="hero-subtitle2-input"
+                  value={content.hero?.subtitle_line2 || ''}
+                  onChange={(e) => updateSectionField('hero', 'subtitle_line2', e.target.value)}
+                  placeholder="From Freelancing to Passive Income • One Time to Full Time"
+                />
+              </div>
+              <div className="pt-2 border-t border-slate-200">
+                <p className="text-xs text-slate-500 mb-3">Legacy fields (used by older components)</p>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Legacy Title</label>
+                  <Input
+                    value={content.hero?.title || ''}
+                    onChange={(e) => updateSectionField('hero', 'title', e.target.value)}
+                    placeholder="Legacy combined title"
+                  />
+                </div>
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Legacy Subtitle</label>
+                  <Textarea
+                    value={content.hero?.subtitle || ''}
+                    onChange={(e) => updateSectionField('hero', 'subtitle', e.target.value)}
+                    placeholder="Legacy combined subtitle"
+                    rows={2}
+                  />
+                </div>
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">CTA Button Text</label>
+                  <Input
+                    value={content.hero?.cta_text || ''}
+                    onChange={(e) => updateSectionField('hero', 'cta_text', e.target.value)}
+                    placeholder="Get Started"
+                  />
+                </div>
+              </div>
+              <Button data-testid="save-hero-btn" onClick={() => saveSection('hero')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Hero Section'}
+              </Button>
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Library Banner Section */}
+        <Card>
+          <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => toggleSection('library_banner')}>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Library Banner</CardTitle>
+                <CardDescription>Purple/pink banner directly below the hero</CardDescription>
+              </div>
+              {expandedSections['library_banner'] ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+            </div>
+          </CardHeader>
+          {expandedSections['library_banner'] && (
+            <CardContent className="space-y-4 border-t pt-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Badge (small pill text)</label>
+                <Input
+                  data-testid="banner-badge-input"
+                  value={content.library_banner?.badge || ''}
+                  onChange={(e) => updateSectionField('library_banner', 'badge', e.target.value)}
+                  placeholder="100% Free · MoneyRules Library"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Headline (use {'{count}'} for guide count)</label>
+                <Input
+                  data-testid="banner-headline-input"
+                  value={content.library_banner?.headline || ''}
+                  onChange={(e) => updateSectionField('library_banner', 'headline', e.target.value)}
+                  placeholder="{count} FREE Financial Guides, Yours to Keep"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                <Textarea
+                  data-testid="banner-description-input"
+                  value={content.library_banner?.description || ''}
+                  onChange={(e) => updateSectionField('library_banner', 'description', e.target.value)}
+                  rows={2}
+                  placeholder="Download print-ready Word documents..."
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Primary CTA Button</label>
+                  <Input
+                    data-testid="banner-cta-primary-input"
+                    value={content.library_banner?.cta_primary || ''}
+                    onChange={(e) => updateSectionField('library_banner', 'cta_primary', e.target.value)}
+                    placeholder="Get My Free Guides"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Secondary Link</label>
+                  <Input
+                    data-testid="banner-cta-secondary-input"
+                    value={content.library_banner?.cta_secondary || ''}
+                    onChange={(e) => updateSectionField('library_banner', 'cta_secondary', e.target.value)}
+                    placeholder="or grab the £12.99 Premium Pack →"
+                  />
+                </div>
+              </div>
+              <Button data-testid="save-banner-btn" onClick={() => saveSection('library_banner')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? 'Saving...' : 'Save Library Banner'}
+              </Button>
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Free Resources Section */}
+        <Card>
+          <CardHeader className="cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => toggleSection('free_resources')}>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Free Resources Heading</CardTitle>
+                <CardDescription>Title and subtitle above the 10 guides grid</CardDescription>
+              </div>
+              {expandedSections['free_resources'] ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+            </div>
+          </CardHeader>
+          {expandedSections['free_resources'] && (
+            <CardContent className="space-y-4 border-t pt-4">
+              <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Title</label>
                 <Input
-                  value={content.hero?.title || ''}
-                  onChange={(e) => updateSectionField('hero', 'title', e.target.value)}
-                  placeholder="Enter hero title"
+                  data-testid="free-resources-title-input"
+                  value={content.free_resources?.title || ''}
+                  onChange={(e) => updateSectionField('free_resources', 'title', e.target.value)}
+                  placeholder="MoneyRules Library — 10 Free Guides"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Subtitle</label>
-                <Textarea
-                  value={content.hero?.subtitle || ''}
-                  onChange={(e) => updateSectionField('hero', 'subtitle', e.target.value)}
-                  placeholder="Enter hero subtitle"
-                  rows={3}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">CTA Button Text</label>
                 <Input
-                  value={content.hero?.cta_text || ''}
-                  onChange={(e) => updateSectionField('hero', 'cta_text', e.target.value)}
-                  placeholder="Enter button text"
+                  data-testid="free-resources-subtitle-input"
+                  value={content.free_resources?.subtitle || ''}
+                  onChange={(e) => updateSectionField('free_resources', 'subtitle', e.target.value)}
+                  placeholder="Professional Word documents you can download, edit and print"
                 />
               </div>
-              <Button onClick={() => saveSection('hero')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Button data-testid="save-free-resources-btn" onClick={() => saveSection('free_resources')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Save className="h-4 w-4 mr-2" />
-                {saving ? 'Saving...' : 'Save Hero Section'}
+                {saving ? 'Saving...' : 'Save Free Resources'}
               </Button>
             </CardContent>
           )}
