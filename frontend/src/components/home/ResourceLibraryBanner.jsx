@@ -44,30 +44,43 @@ const ResourceLibraryBanner = ({ count = 7 }) => {
 
           {/* Copy */}
           <div className="flex-1 text-center md:text-left">
-            <div className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm border border-white/30 rounded-full px-3 py-1 mb-2">
+            <div className="inline-flex items-center gap-1.5 bg-amber-300 text-amber-900 rounded-full px-3 py-1 mb-2 shadow-md">
               <Sparkles className="h-3.5 w-3.5" />
-              <span className="text-xs font-semibold uppercase tracking-wider">MoneyRules Library</span>
+              <span className="text-xs font-extrabold uppercase tracking-widest">100% Free · MoneyRules Library</span>
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-1.5 leading-tight">
-              {count} Free Financial Guides,
-              <span className="block sm:inline"> Professionally Written.</span>
+              {count} <span className="bg-white text-purple-700 px-2 rounded-md">FREE</span> Financial Guides,
+              <span className="block sm:inline"> Yours to Keep.</span>
             </h2>
             <p className="text-sm sm:text-base text-white/90 max-w-2xl">
-              Download print-ready Word documents on investing, budgeting, debt, tax, passive income and more — all free, all editable, all yours.
+              Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.
             </p>
           </div>
 
           {/* CTA */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex flex-col gap-2">
             <Button
               onClick={scrollToLibrary}
               size="lg"
               data-testid="library-banner-cta"
               className="bg-white text-purple-700 hover:bg-purple-50 font-bold text-base px-6 py-6 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 group"
             >
-              Browse the Library
+              Get My Free Guides
               <ChevronDown className="ml-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
             </Button>
+            <button
+              onClick={() => {
+                const el = document.getElementById('premium-pack');
+                if (el) {
+                  const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                  window.scrollTo({ top, behavior: 'smooth' });
+                }
+              }}
+              data-testid="library-banner-premium-link"
+              className="text-xs font-semibold text-white/90 hover:text-white underline underline-offset-2 text-center transition-colors"
+            >
+              or grab the £12.99 Premium Pack →
+            </button>
           </div>
         </div>
       </div>

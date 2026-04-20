@@ -13,6 +13,7 @@ import PlatformPreview from '../components/home/PlatformPreview';
 import DonationSection from '../components/home/DonationSection';
 import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
 import ResourceLibraryBanner from '../components/home/ResourceLibraryBanner';
+import PremiumPackSection from '../components/home/PremiumPackSection';
 import useSEO from '../hooks/useSEO';
 import useLibraryProgress from '../hooks/useLibraryProgress';
 
@@ -279,7 +280,7 @@ const Home = () => {
       />
 
       {/* Resource Library Banner — prominent, animated, below hero */}
-      <ResourceLibraryBanner count={7} />
+      <ResourceLibraryBanner count={10} />
 
       {/* Categories Section - Only show when authenticated */}
       {!authLoading && isAuthenticated && (
@@ -674,7 +675,7 @@ const Home = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3">
-              MoneyRules Library — 7 Free Guides
+              MoneyRules Library — 10 Free Guides
             </h2>
             <p className="text-base sm:text-lg text-slate-600 mb-5">Professional Word documents you can download, edit and print</p>
 
@@ -690,23 +691,23 @@ const Home = () => {
                     Your library progress
                   </span>
                   <span data-testid="library-progress-count">
-                    {libProgress.downloadedCount} of 7 downloaded
+                    {libProgress.downloadedCount} of 10 downloaded
                   </span>
                 </div>
                 <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                   <div
                     className="h-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${Math.min(100, (libProgress.downloadedCount / 7) * 100)}%` }}
+                    style={{ width: `${Math.min(100, (libProgress.downloadedCount / 10) * 100)}%` }}
                   />
                 </div>
-                {libProgress.downloadedCount === 7 ? (
+                {libProgress.downloadedCount === 10 ? (
                   <p className="mt-3 text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-600 flex items-center justify-center gap-1.5">
                     <Sparkles className="h-4 w-4 text-pink-500" />
-                    Library complete — well done!
+                    Library complete — time to upgrade to the Premium Pack!
                   </p>
                 ) : (
                   <p className="mt-2 text-xs text-slate-500">
-                    {7 - libProgress.downloadedCount} guide{7 - libProgress.downloadedCount === 1 ? '' : 's'} left to unlock
+                    {10 - libProgress.downloadedCount} guide{10 - libProgress.downloadedCount === 1 ? '' : 's'} left to unlock
                   </p>
                 )}
               </div>
@@ -778,6 +779,33 @@ const Home = () => {
                 iconBg: 'from-amber-600 to-orange-600',
                 btn: 'from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700',
               },
+              {
+                key: 'credit-score',
+                title: 'UK Credit Score',
+                subtitle: 'Masterclass',
+                desc: 'Understand the 3 bureaus, what moves your score, and 7 proven lifts in 90 days. Includes credit repair playbook.',
+                accent: 'from-sky-500 to-blue-600',
+                iconBg: 'from-sky-600 to-blue-600',
+                btn: 'from-sky-600 to-blue-600 hover:from-sky-700 hover:to-blue-700',
+              },
+              {
+                key: 'isa-vs-sipp',
+                title: 'ISA vs SIPP',
+                subtitle: 'Tax-Efficient Investing',
+                desc: 'Which UK wrapper when, with worked tax relief numbers. Includes LISA deep-dive and 5 life-stage scenarios.',
+                accent: 'from-violet-500 to-fuchsia-600',
+                iconBg: 'from-violet-600 to-fuchsia-600',
+                btn: 'from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700',
+              },
+              {
+                key: 'side-hustle-quickstart',
+                title: 'Side-Hustle Quick-Start',
+                subtitle: 'First Payment in 30 Days',
+                desc: '7 side-hustle categories with real earnings, how to pick yours in 15 minutes, and a day-by-day launch plan.',
+                accent: 'from-lime-500 to-green-600',
+                iconBg: 'from-lime-600 to-green-600',
+                btn: 'from-lime-600 to-green-600 hover:from-lime-700 hover:to-green-700',
+              },
             ].map((g) => {
               const isDone = libProgress.downloaded.has(g.key);
               return (
@@ -828,6 +856,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Premium Pack Section — $12.99 upgrade */}
+      <PremiumPackSection />
 
       {/* Donation Section - Always visible */}
       <DonationSection />

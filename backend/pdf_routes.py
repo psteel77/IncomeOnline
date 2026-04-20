@@ -416,6 +416,119 @@ async def download_uk_tax_basics():
     )
 
 
+@router.get("/credit-score")
+async def download_credit_score():
+    from generate_additional_guides import generate_credit_score_document
+    return _serve_docx(
+        'UK_Credit_Score_Masterclass.docx',
+        'UK_Credit_Score_Masterclass.docx',
+        generate_credit_score_document,
+    )
+
+
+@router.get("/isa-vs-sipp")
+async def download_isa_vs_sipp():
+    from generate_additional_guides import generate_isa_vs_sipp_document
+    return _serve_docx(
+        'ISA_vs_SIPP_Complete_Guide.docx',
+        'ISA_vs_SIPP_Complete_Guide.docx',
+        generate_isa_vs_sipp_document,
+    )
+
+
+@router.get("/side-hustle-quickstart")
+async def download_side_hustle():
+    from generate_additional_guides import generate_side_hustle_document
+    return _serve_docx(
+        'Side_Hustle_Quick_Start_Guide.docx',
+        'Side_Hustle_Quick_Start_Guide.docx',
+        generate_side_hustle_document,
+    )
+
+
+# ---------------------------------------------------------------
+# Premium Pack ($12.99)
+# ---------------------------------------------------------------
+
+@router.get("/premium-pack")
+async def download_premium_pack(token: str = ""):
+    """
+    Download the MoneyRules Premium Pack ZIP.
+    Requires a valid purchase token (issued after successful PayPal payment).
+    Token is a one-time-use value stored in `premium_purchases`.
+    """
+    from server import db
+    token_clean = (token or '').strip()
+    if not token_clean:
+        raise HTTPException(status_code=403, detail="Missing purchase token")
+
+    purchase = await db.premium_purchases.find_one({'token': token_clean}, {"_id": 0})
+    if not purchase:
+        raise HTTPException(status_code=403, detail="Invalid or expired token")
+
+    # Track the download
+    await db.premium_purchases.update_one(
+        {'token': token_clean},
+        {'$inc': {'download_count': 1},
+         '$set': {'last_downloaded_at': datetime.now(timezone.utc).isoformat()}}
+    )
+
+    pack_path = os.path.join(os.path.dirname(__file__), 'static', 'MoneyRules_Premium_Pack.zip')
+    if not os.path.exists(pack_path):
+        # Build on demand if missing
+        from generate_premium_pack import build_premium_pack
+        build_premium_pack()
+
+    return FileResponse(
+        path=pack_path,
+        media_type='application/zip',
+        filename='MoneyRules_Premium_Pack.zip',
+        headers={'Content-Disposition': 'attachment; filename="MoneyRules_Premium_Pack.zip"'},
+    )
+
+
+class PremiumPurchaseRequest(BaseModel):
+    email: EmailStr
+    paypal_order_id: str = ""
+    amount: str = "12.99"
+    currency: str = "USD"
+
+
+@router.post("/premium-pack/purchase")
+async def record_premium_purchase(payload: PremiumPurchaseRequest):
+    """
+    Called by the frontend after PayPal payment succeeds. Records the purchase
+    and issues a one-time download token the frontend can use to fetch the ZIP.
+    """
+    from server import db
+    now = datetime.now(timezone.utc).isoformat()
+    token = str(uuid.uuid4())
+    await db.premium_purchases.insert_one({
+        'id': str(uuid.uuid4()),
+        'token': token,
+        'email': payload.email.lower().strip(),
+        'paypal_order_id': payload.paypal_order_id,
+        'amount': payload.amount,
+        'currency': payload.currency,
+        'created_at': now,
+        'download_count': 0,
+    })
+    return {
+        'success': True,
+        'download_url': f'/api/pdf/premium-pack?token={token}',
+        'token': token,
+    }
+
+
+@router.get("/premium-pack/purchases")
+async def list_premium_purchases(limit: int = 500):
+    """Admin list of premium pack purchases."""
+    from server import db
+    purchases = await db.premium_purchases.find({}, {"_id": 0}).sort('created_at', -1).to_list(limit)
+    total = await db.premium_purchases.count_documents({})
+    return {'total': total, 'purchases': purchases}
+
+
 # ---------------------------------------------------------------
 # Email-capture gateway for Free Resources
 # ---------------------------------------------------------------
@@ -477,6 +590,18 @@ RESOURCE_MAP = {
     'uk-tax-basics': {
         'title': 'UK Tax Basics for Freelancers & Side-Hustlers',
         'download_path': '/api/pdf/uk-tax-basics',
+    },
+    'credit-score': {
+        'title': 'UK Credit Score Masterclass',
+        'download_path': '/api/pdf/credit-score',
+    },
+    'isa-vs-sipp': {
+        'title': 'ISA vs SIPP — Tax-Efficient Investing',
+        'download_path': '/api/pdf/isa-vs-sipp',
+    },
+    'side-hustle-quickstart': {
+        'title': 'The Side-Hustle Quick-Start Guide',
+        'download_path': '/api/pdf/side-hustle-quickstart',
     },
 }
 
