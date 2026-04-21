@@ -15,7 +15,7 @@ const ResourceLibraryBanner = ({ count = 10, content }) => {
   const rawHeadline = cms.headline || '{count} FREE Financial Guides, Yours to Keep';
   const description = cms.description || 'Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.';
   const ctaPrimary = cms.cta_primary || 'Get My Free Guides';
-  const ctaSecondary = cms.cta_secondary || 'or grab the £12.99 Premium Pack →';
+  const ctaSecondary = cms.cta_secondary || 'or grab the $12.99 Premium Pack →';
 
   // Replace {count} and highlight the FREE word if it's in the headline
   const headlineText = rawHeadline.replace('{count}', String(count));

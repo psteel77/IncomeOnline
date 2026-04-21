@@ -13,6 +13,20 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Mobile overflow safety net — prevents any floating/blur decoration or long
+   non-wrapping word from introducing a horizontal scrollbar. Fixes "text
+   running off the right edge of the screen" on phones. */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Long words / URLs / em-dashes in headings wrap instead of overflowing. */
+h1, h2, h3, h4 {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 code {
     font-family:
         source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;

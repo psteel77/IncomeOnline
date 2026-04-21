@@ -9,7 +9,11 @@ import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
-const PAYPAL_URL = process.env.REACT_APP_PAYPAL_PREMIUM_PACK_URL;
+// PayPal NCP link — env var is preferred (lets you swap the link without a
+// rebuild) but we fall back to the production link so a forgotten Vercel env
+// var never leaves the Premium Pack section unclickable on mobile/desktop.
+const PAYPAL_NCP_FALLBACK = 'https://www.paypal.com/ncp/payment/JDBV4RABDSM96';
+const PAYPAL_URL = process.env.REACT_APP_PAYPAL_PREMIUM_PACK_URL || PAYPAL_NCP_FALLBACK;
 
 const PACK_CONTENTS = [
   { icon: BookOpenCheck, text: 'All 10 free MoneyRules Word guides (100+ pages total)' },
@@ -162,19 +166,13 @@ const PremiumPackSection = () => {
                       onClick={handleOpenPayPal}
                       size="lg"
                       data-testid="premium-pay-btn"
-                      className="w-full bg-gradient-to-r from-[#003087] to-[#0070ba] hover:from-[#002060] hover:to-[#005ea6] text-white font-bold text-base py-6 shadow-lg hover:shadow-xl transition-all duration-300 group"
+                      className="w-full max-w-full bg-gradient-to-r from-[#003087] to-[#0070ba] hover:from-[#002060] hover:to-[#005ea6] text-white font-bold text-sm sm:text-base py-5 sm:py-6 px-3 sm:px-4 shadow-lg hover:shadow-xl transition-all duration-300 group whitespace-normal break-words"
                     >
-                      Pay $12.99 via PayPal
-                      <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                      <span className="sm:hidden">Pay $12.99 · PayPal</span>
+                      <span className="hidden sm:inline">Pay $12.99 via PayPal</span>
+                      <ExternalLink className="ml-2 h-4 w-4 flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
                     </Button>
-                  ) : (
-                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900" data-testid="premium-paypal-missing">
-                      <p className="font-semibold mb-1">Setup required:</p>
-                      <p className="leading-relaxed">
-                        Add your PayPal payment link to <code className="bg-amber-100 px-1 rounded">REACT_APP_PAYPAL_PREMIUM_PACK_URL</code> in <code className="bg-amber-100 px-1 rounded">.env</code>.
-                      </p>
-                    </div>
-                  )}
+                  ) : null}
                 </>
               )}
 

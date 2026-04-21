@@ -440,7 +440,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
       <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Your MoneyRules guide is attached</h1>
       <p style="font-size: 16px; line-height: 1.6;">Thank you for downloading <strong>{resource_title}</strong> from Income Online.</p>
       <p style="font-size: 15px; line-height: 1.6;">Open the attachment — it's a print-ready Word document you can edit, annotate, and keep forever.</p>
-      <p style="font-size: 15px; line-height: 1.6;">When you're ready to go deeper, our <a href="{frontend_url}/#premium-pack" style="color:#7c3aed;">£12.99 Premium Pack</a> bundles all 10 free guides plus 2 exclusive premium guides and 5 editable Excel spreadsheets.</p>
+      <p style="font-size: 15px; line-height: 1.6;">When you're ready to go deeper, our <a href="{frontend_url}/#premium-pack" style="color:#7c3aed;">$12.99 Premium Pack</a> bundles all 10 free guides plus 2 exclusive premium guides and 5 editable Excel spreadsheets.</p>
       <p style="font-size: 14px; color: #6b7280; margin-top: 32px;">Sent with love from Income Online · <a href="{frontend_url}" style="color:#7c3aed;">www.incomeonline.info</a></p>
     </div>
     """
@@ -448,7 +448,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         f"Your MoneyRules guide is attached\n\n"
         f"Thank you for downloading '{resource_title}' from Income Online.\n"
         f"Open the attachment — it's a print-ready Word document you can edit, annotate, and keep forever.\n\n"
-        f"Want to go deeper? Upgrade to the £12.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
+        f"Want to go deeper? Upgrade to the $12.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
         f"— Income Online · {frontend_url}\n"
     )
 

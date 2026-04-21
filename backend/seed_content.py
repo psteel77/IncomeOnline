@@ -26,7 +26,7 @@ content_sections = [
             "headline": "10 FREE Financial Guides, Yours to Keep",
             "description": "Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.",
             "cta_primary": "Get My Free Guides",
-            "cta_secondary": "or grab the £12.99 Premium Pack →",
+            "cta_secondary": "or grab the $12.99 Premium Pack →",
         }
     },
     {

@@ -460,7 +460,7 @@ const AdminDashboard = () => {
                     data-testid="banner-cta-secondary-input"
                     value={content.library_banner?.cta_secondary || ''}
                     onChange={(e) => updateSectionField('library_banner', 'cta_secondary', e.target.value)}
-                    placeholder="or grab the £12.99 Premium Pack →"
+                    placeholder="or grab the $12.99 Premium Pack →"
                   />
                 </div>
               </div>
