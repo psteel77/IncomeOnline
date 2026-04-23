@@ -171,7 +171,7 @@ const CategoryPreview = () => {
                 Get full access to detailed information, ratings, direct links, and earning strategies for all <span className="font-semibold text-purple-600">199+ platforms</span>
               </p>
               <Button 
-                className="font-bold text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
+                className="font-bold text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-5 sm:py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300 max-w-full whitespace-normal break-words h-auto leading-tight"
                 onClick={() => {
                   const paypalArea = document.getElementById('paypal-donation-area');
                   if (paypalArea) {
@@ -184,7 +184,8 @@ const CategoryPreview = () => {
                   }
                 }}
               >
-                🔓 Make a Donation to Unlock
+                <span className="inline sm:hidden">🔓 Donate to Unlock</span>
+                <span className="hidden sm:inline">🔓 Make a Donation to Unlock</span>
               </Button>
               <p className="text-sm text-gray-500 mt-4">
                 Already donated? Check your email for the Access All Areas link

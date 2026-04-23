@@ -128,7 +128,7 @@ const PlatformPreview = () => {
           </p>
           <Button 
             size="lg"
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-8 py-6 border-0 rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300"
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm sm:text-base md:text-lg px-4 sm:px-6 md:px-8 py-5 sm:py-6 border-0 rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all duration-300 max-w-full whitespace-normal h-auto leading-tight"
             onClick={() => {
               const paypalArea = document.getElementById('paypal-donation-area');
               if (paypalArea) {

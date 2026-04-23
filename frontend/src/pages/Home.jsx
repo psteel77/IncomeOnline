@@ -857,9 +857,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Premium Pack Section — $12.99 upgrade */}
-      <PremiumPackSection />
-
       {/* Donation Section - Always visible */}
       <DonationSection />
 
@@ -899,6 +896,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Premium Pack Section — $12.99 upgrade (placed after main CTA) */}
+      <PremiumPackSection />
 
       {/* Footer */}
       <footer className="text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900">
