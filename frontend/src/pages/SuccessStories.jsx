@@ -938,17 +938,20 @@ const SuccessStories = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 shadow-lg bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 text-white hover:bg-white/10"
+              className="flex items-center gap-2 text-white hover:bg-white/10 flex-shrink-0"
             >
               <ArrowLeft className="h-5 w-5" />
-              Back to Home
+              <span className="hidden sm:inline">Back to Home</span>
+              <span className="sm:hidden">Back</span>
             </Button>
-            <h1 className="text-2xl font-bold text-white">Success Stories</h1>
-            <div className="w-32"></div>
+            <h1 className="text-lg sm:text-2xl font-bold text-white truncate text-center flex-1 min-w-0">
+              Success Stories
+            </h1>
+            <div className="hidden sm:block w-32 flex-shrink-0"></div>
           </div>
         </div>
       </header>
@@ -1058,20 +1061,20 @@ const SuccessStories = () => {
                     </div>
 
                     {/* Key Metrics */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-green-50 p-3 rounded-lg">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="bg-green-50 p-3 rounded-lg min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <DollarSign className="h-4 w-4 text-green-600" />
                           <span className="text-sm font-semibold text-green-800">Earnings</span>
                         </div>
-                        <p className="text-lg font-bold text-green-700">{story.earnings}</p>
+                        <p className="text-base sm:text-lg font-bold text-green-700 break-words">{story.earnings}</p>
                       </div>
-                      <div className="bg-blue-50 p-3 rounded-lg">
+                      <div className="bg-blue-50 p-3 rounded-lg min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <TrendingUp className="h-4 w-4" style={{ color: '#7c3aed' }} />
                           <span className="text-sm font-semibold" style={{ color: '#7c3aed' }}>Timeline</span>
                         </div>
-                        <p className="text-lg font-bold" style={{ color: '#7c3aed' }}>{story.timeline}</p>
+                        <p className="text-base sm:text-lg font-bold break-words" style={{ color: '#7c3aed' }}>{story.timeline}</p>
                       </div>
                     </div>
 
