@@ -1,54 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Shield, Heart, Lock, Sparkles, CheckCircle } from 'lucide-react';
+import { Shield, Heart, Lock, Sparkles } from 'lucide-react';
+import PayPalDonateButton from '../PayPalDonateButton';
 
 const DonationSection = () => {
-  const paypalLoaded = useRef(false);
-
-  useEffect(() => {
-    // Load PayPal SDK for donation button
-    if (paypalLoaded.current) return;
-    
-    const existingScript = document.querySelector('script[src*="paypal.com/sdk"]');
-    if (existingScript) {
-      paypalLoaded.current = true;
-      if (window.paypal && window.paypal.HostedButtons) {
-        setTimeout(() => {
-          window.paypal.HostedButtons({
-            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-donation").then(() => {
-            console.log('PayPal donation button rendered successfully');
-          }).catch((error) => {
-            console.log('PayPal donation button render error:', error);
-          });
-        }, 100);
-      }
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&components=hosted-buttons&disable-funding=venmo&currency=USD`;
-    script.async = true;
-    script.id = 'paypal-sdk-donation';
-    
-    script.onload = () => {
-      paypalLoaded.current = true;
-      setTimeout(() => {
-        if (window.paypal && window.paypal.HostedButtons) {
-          window.paypal.HostedButtons({
-            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-donation").then(() => {
-            console.log('PayPal donation button rendered successfully');
-          }).catch((error) => {
-            console.log('PayPal donation button render error:', error);
-          });
-        }
-      }, 100);
-    };
-    
-    document.head.appendChild(script);
-  }, []);
-
   return (
     <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full">
       {/* Background */}
@@ -128,24 +83,9 @@ const DonationSection = () => {
                   </p>
                 </div>
                 
-                {/* PayPal Button */}
+                {/* PayPal Button (JS SDK + onApprove → auto-registers donor) */}
                 <div className="relative z-0 w-full max-w-full overflow-hidden">
-                  <style>{`
-                    #paypal-container-donation {
-                      width: 100%;
-                      max-width: 100%;
-                      overflow: hidden;
-                    }
-                    #paypal-container-donation iframe {
-                      width: 100% !important;
-                      max-width: 100% !important;
-                    }
-                    #paypal-container-donation .paypal-button-container {
-                      width: 100% !important;
-                      max-width: 100% !important;
-                    }
-                  `}</style>
-                  <div id="paypal-container-donation" className="w-full max-w-full relative z-0"></div>
+                  <PayPalDonateButton />
                 </div>
               </div>
 

@@ -1,49 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { TrendingUp, Heart, Gift, Star } from 'lucide-react';
+import { Heart, Gift, Star } from 'lucide-react';
+import PayPalDonateButton from '../components/PayPalDonateButton';
 
 const Donate = () => {
-  useEffect(() => {
-    // Check if script already loaded
-    if (document.querySelector('script[src*="paypal.com/sdk"]')) {
-      // Script already exists, just render button
-      if (window.paypal && window.paypal.HostedButtons) {
-        window.paypal.HostedButtons({
-          hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-        }).render("#paypal-container-8M5AKKB9LJW3S").catch((error) => {
-          console.log('PayPal button render error:', error);
-        });
-      }
-      return;
-    }
-
-    // Load PayPal SDK script
-    const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}&components=hosted-buttons&disable-funding=venmo&currency=USD`;
-    script.async = true;
-    script.id = 'paypal-sdk';
-    
-    script.onload = () => {
-      // Render PayPal button after SDK loads
-      setTimeout(() => {
-        if (window.paypal && window.paypal.HostedButtons) {
-          window.paypal.HostedButtons({
-            hostedButtonId: process.env.REACT_APP_PAYPAL_BUTTON_ID,
-          }).render("#paypal-container-8M5AKKB9LJW3S").catch((error) => {
-            console.log('PayPal button render error:', error);
-          });
-        }
-      }, 100);
-    };
-    
-    script.onerror = () => {
-      console.error('Failed to load PayPal SDK');
-    };
-    
-    document.head.appendChild(script);
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-purple-50/30 to-white">
       <Helmet>
@@ -150,9 +111,11 @@ const Donate = () => {
                   </p>
                 </div>
                 
-                {/* PayPal Button */}
+                {/* PayPal Button (JS SDK + onApprove → auto-registers donor) */}
                 <div className="flex justify-center items-center min-h-[60px]">
-                  <div id="paypal-container-8M5AKKB9LJW3S" className="w-full max-w-md"></div>
+                  <div className="w-full max-w-md">
+                    <PayPalDonateButton />
+                  </div>
                 </div>
               </div>
 
