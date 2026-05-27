@@ -1,7 +1,15 @@
 import React from 'react';
 import { Input } from '../ui/input';
-import { Search, Sparkles, TrendingUp, Users, DollarSign } from 'lucide-react';
+import { Search, Sparkles, TrendingUp, Users, DollarSign, BookOpenCheck } from 'lucide-react';
 import AccessGate from '../AccessGate';
+
+const scrollToFreeGuides = () => {
+  const el = document.getElementById('free-resources');
+  if (el) {
+    const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+};
 
 const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSearchTerm, stats }) => {
   const hero = content?.hero || {};
@@ -26,9 +34,25 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
 
       <div className="max-w-7xl mx-auto text-center relative z-10">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 mb-6 slide-up" data-testid="hero-badge">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 mb-4 slide-up" data-testid="hero-badge">
           <Sparkles className="h-4 w-4 text-purple-600" />
           <span className="text-sm font-medium text-purple-700">{badgeText}</span>
+        </div>
+
+        {/* Free MoneyRules Guides callout */}
+        <div className="mb-6 slide-up slide-up-delay-1">
+          <button
+            type="button"
+            onClick={scrollToFreeGuides}
+            data-testid="hero-free-guides-cta"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-300 via-orange-300 to-pink-300 text-amber-900 border border-amber-400 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+          >
+            <BookOpenCheck className="h-4 w-4" />
+            <span className="text-sm font-extrabold uppercase tracking-wider">
+              Free MoneyRules Guides
+            </span>
+            <span className="text-xs font-semibold opacity-80">↓</span>
+          </button>
         </div>
 
         {/* Main Heading */}
@@ -97,13 +121,6 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
           </div>
         )}
 
-        {/* Scroll Indicator */}
-        <div className="mt-16 bounce-animation">
-          <div className="w-8 h-12 mx-auto border-2 border-purple-300 rounded-full flex justify-center pt-2">
-            <div className="w-2 h-3 bg-purple-500 rounded-full animate-pulse"></div>
-          </div>
-          <p className="text-sm text-gray-500 mt-2">Scroll to explore</p>
-        </div>
       </div>
     </section>
   );

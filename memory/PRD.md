@@ -21,7 +21,14 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
-### Completed (Feb 2026 — current session)
+### Completed (27 May 2026 — current session)
+- **Workspace restored**: Boilerplate workspace was missing IncomeOnline code. Re-cloned `psteel77/IncomeOnline` (main, `b27d94c`) into `/app`, preserved this container's `.env` files, added local `JWT_SECRET_KEY` + `FRONTEND_URL` to backend `.env` so backend boots.
+- **Hero: removed "Scroll to explore" indicator** (`components/home/HeroSection.jsx`) — deleted the bouncing scroll-mouse glyph + label at the bottom of the hero.
+- **Hero: added "Free MoneyRules Guides" pill** (`components/home/HeroSection.jsx`) — new amber/orange CTA below the "199+ Verified Earning Platforms" badge; click scrolls to existing `#free-resources` section. Used canonical brand spelling "MoneyRules" (user's "MonsyRules" assumed typo).
+- **Donation section mobile overflow fixed** (`components/home/DonationSection.jsx`) — reduced nested mobile padding (section/card/inner cards) and added `max-w-full overflow-hidden` + iframe width caps in the PayPal style block. Verified `scrollWidth == clientWidth == 390` at every scroll position on 390×844 viewport.
+- **Success Stories card overlap fixed** (`pages/SuccessStories.jsx`) — header flex now uses `gap-3 min-w-0 flex-1` on the title block and `flex-shrink-0 whitespace-nowrap` on the Verified badge; long names no longer crash into the badge. Before/After grid stacks on mobile (`grid-cols-1 sm:grid-cols-2`) with `break-words`.
+
+### Completed (Feb 2026)
 - **Hardcoded text moved to CMS (a)**: Hero section now reads `badge`, `headline_line1`, `headline_line2`, `subtitle_line1`, `subtitle_line2` from CMS with fallbacks. New CMS sections added: `library_banner` (badge/headline/description/cta_primary/cta_secondary) and `free_resources` (title/subtitle). Admin Dashboard expanded with edit forms for all 3. `POST /api/seed-content` is now idempotent — adds missing sections without clobbering admin edits.
 - **Admin Subscribers page (b)**: New `SubscribersCard` in `/admin` dashboard shows captured emails in a table with filter, totals (total / newsletter opt-in), and CSV export (`resource_subscribers_YYYY-MM-DD.csv`).
 - **Mailgun email-delivery of guides (d)**: Free Resources dialog now has an "Email me the guide" checkbox. When checked, POST `/api/pdf/resources/request-download` with `deliver_via_email=true` attaches the `.docx` and emails it via Mailgun (`send_resource_email` in `email_service.py`). Response includes `email_delivery: "sent" | "failed" | "skipped"`.

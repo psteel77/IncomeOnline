@@ -50,7 +50,7 @@ const DonationSection = () => {
   }, []);
 
   return (
-    <section id="support" className="py-20 px-2 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden">
+    <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900"></div>
       <div className="absolute top-0 left-0 w-full h-full">
@@ -77,10 +77,10 @@ const DonationSection = () => {
         <div className="max-w-3xl mx-auto">
           <Card className="border-0 shadow-2xl overflow-hidden bg-white/10 backdrop-blur-lg">
             <div className="h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"></div>
-            <CardContent className="px-6 sm:px-8 md:px-10 py-8">
+            <CardContent className="px-3 sm:px-6 md:px-8 lg:px-10 py-8">
               
               {/* Trust Factors */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-white/20">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 mb-6 border border-white/20">
                 <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                   <Shield className="h-5 w-5 text-emerald-400" />
                   3-Factor Peace of Mind
@@ -104,7 +104,7 @@ const DonationSection = () => {
               </div>
 
               {/* Value Proposition */}
-              <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-amber-500/30">
+              <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-sm rounded-2xl p-4 sm:p-6 mb-6 border border-amber-500/30">
                 <div className="flex items-start gap-3">
                   <Sparkles className="h-6 w-6 text-amber-400 flex-shrink-0 mt-1" />
                   <div>
@@ -117,7 +117,7 @@ const DonationSection = () => {
               </div>
 
               {/* PayPal Section */}
-              <div id="paypal-donation-area" className="bg-white rounded-2xl p-6 mb-6 shadow-lg">
+              <div id="paypal-donation-area" className="bg-white rounded-2xl p-3 sm:p-6 mb-6 shadow-lg overflow-hidden">
                 <div className="text-center mb-4">
                   <Lock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
                   <p className="font-bold text-gray-800 text-lg">
@@ -129,19 +129,23 @@ const DonationSection = () => {
                 </div>
                 
                 {/* PayPal Button */}
-                <div className="relative z-0">
+                <div className="relative z-0 w-full max-w-full overflow-hidden">
                   <style>{`
                     #paypal-container-donation {
                       width: 100%;
+                      max-width: 100%;
+                      overflow: hidden;
                     }
                     #paypal-container-donation iframe {
                       width: 100% !important;
+                      max-width: 100% !important;
                     }
                     #paypal-container-donation .paypal-button-container {
                       width: 100% !important;
+                      max-width: 100% !important;
                     }
                   `}</style>
-                  <div id="paypal-container-donation" className="w-full relative z-0"></div>
+                  <div id="paypal-container-donation" className="w-full max-w-full relative z-0"></div>
                 </div>
               </div>
 

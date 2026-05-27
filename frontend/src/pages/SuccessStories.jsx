@@ -1018,9 +1018,9 @@ const SuccessStories = () => {
                 style={{ borderColor: '#8b5cf6' }}
               >
                 <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <CardTitle className="text-2xl mb-2" style={{ color: '#7c3aed' }}>
+                  <div className="flex items-start justify-between mb-2 gap-3">
+                    <div className="min-w-0 flex-1">
+                      <CardTitle className="text-xl sm:text-2xl mb-2 break-words" style={{ color: '#7c3aed' }}>
                         {story.name}
                       </CardTitle>
                       <div className="flex gap-2 mb-3 flex-wrap">
@@ -1031,21 +1031,21 @@ const SuccessStories = () => {
                       </div>
                     </div>
                     {story.verified && (
-                      <Badge className="bg-green-600">
+                      <Badge className="bg-green-600 flex-shrink-0 whitespace-nowrap">
                         <Star className="mr-1 h-3 w-3" />
                         Verified
                       </Badge>
                     )}
                   </div>
                   <CardDescription className="text-base">
-                    <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                       <div>
                         <span className="font-semibold text-red-600">Before:</span>
-                        <p className="text-slate-600">{story.before}</p>
+                        <p className="text-slate-600 break-words">{story.before}</p>
                       </div>
                       <div>
                         <span className="font-semibold text-green-600">After:</span>
-                        <p className="text-slate-600">{story.after}</p>
+                        <p className="text-slate-600 break-words">{story.after}</p>
                       </div>
                     </div>
                   </CardDescription>
