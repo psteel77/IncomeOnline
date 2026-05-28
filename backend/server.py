@@ -6,10 +6,11 @@ import os
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-from fastapi import FastAPI, APIRouter, Request, Header
+from fastapi import FastAPI, APIRouter, Request, Header, Depends, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import logging
+import requests
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid
@@ -17,13 +18,20 @@ from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
 from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email
-from cms_routes import router as cms_router
+from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
 from seed_content import content_sections
 
 # Subscription duration in days
 SUBSCRIPTION_DURATION_DAYS = 365
+
+# Expected donation amount (USD) — used to verify PayPal orders match what we charge.
+EXPECTED_DONATION_USD = "12.99"
+
+# PayPal REST API base. Default = LIVE. Override to "https://api-m.sandbox.paypal.com"
+# in Railway env for sandbox testing.
+PAYPAL_API_BASE = os.environ.get('PAYPAL_API_BASE', 'https://api-m.paypal.com').rstrip('/')
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -556,82 +564,189 @@ async def check_auth(authorization: str = Header(None)):
         logging.error(f"Error in check_auth: {str(e)}")
         return {"authenticated": False, "email": None}
 
-@api_router.post("/auth/add-donor")
-async def add_donor(request: LoginRequest):
-    """Add a donor email after PayPal payment (with 12-month subscription)"""
+async def _upsert_donor(email: str) -> dict:
+    """
+    Shared helper: create a new donor, renew an active one, or reactivate an
+    expired one. Sends the welcome email for genuinely new accounts. Returns
+    a dict shaped {success, message}. Always lowercases email at the boundary.
+    """
+    email = (email or "").strip().lower()
+    if not email:
+        return {"success": False, "message": "email is required"}
+
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
+
+    existing_user = await db.users.find_one({"email": email})
+    expired_user = await db.expired_users.find_one({"email": email})
+
+    if existing_user:
+        await db.users.update_one(
+            {"email": email},
+            {"$set": {
+                "verified": True,
+                "donated_at": now.isoformat(),
+                "expires_at": expires_at.isoformat(),
+                "status": "active",
+                "warning_sent": False,
+            }},
+        )
+        return {"success": True, "message": "Subscription renewed for 12 months"}
+
+    if expired_user:
+        verification_token = str(uuid.uuid4())
+        reactivated_user = {
+            "email": email,
+            "verified": True,
+            "verification_token": verification_token,
+            "created_at": expired_user.get("created_at", now.isoformat()),
+            "donated_at": now.isoformat(),
+            "expires_at": expires_at.isoformat(),
+            "status": "active",
+            "warning_sent": False,
+            "last_login": None,
+            "previous_subscriptions": expired_user.get("previous_subscriptions", []) + [{
+                "donated_at": expired_user.get("original_donated_at"),
+                "expired_at": expired_user.get("expired_at"),
+            }],
+        }
+        await db.users.insert_one(reactivated_user)
+        await db.expired_users.delete_one({"email": email})
+        send_new_user_email(email, verification_token)
+        return {"success": True, "message": "Welcome back! Subscription renewed for 12 months"}
+
+    # Fresh donor
+    verification_token = str(uuid.uuid4())
+    new_user = {
+        "email": email,
+        "verified": True,
+        "verification_token": verification_token,
+        "created_at": now.isoformat(),
+        "donated_at": now.isoformat(),
+        "expires_at": expires_at.isoformat(),
+        "status": "active",
+        "warning_sent": False,
+        "last_login": None,
+    }
+    await db.users.insert_one(new_user)
+    send_new_user_email(email, verification_token)
+    return {"success": True, "message": "Donor added with 12-month subscription"}
+
+
+def _get_paypal_access_token() -> Optional[str]:
+    """Fetch an OAuth2 access token for the PayPal REST API."""
+    client_id = os.environ.get("PAYPAL_CLIENT_ID")
+    client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
+    if not client_id or not client_secret:
+        logging.error("PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET not set; cannot verify orders")
+        return None
     try:
-        email = request.email.lower()
-        now = datetime.now(timezone.utc)
-        expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
-        
-        existing_user = await db.users.find_one({"email": email})
-        
-        # Also check expired_users for renewals
-        expired_user = await db.expired_users.find_one({"email": email})
-        
-        if existing_user:
-            # Renew existing subscription
-            await db.users.update_one(
-                {"email": email},
-                {"$set": {
-                    "verified": True,
-                    "donated_at": now.isoformat(),
-                    "expires_at": expires_at.isoformat(),
-                    "status": "active",
-                    "warning_sent": False
-                }}
-            )
-            return {"success": True, "message": "Subscription renewed for 12 months"}
-        elif expired_user:
-            # Reactivate expired user
-            verification_token = str(uuid.uuid4())
-            reactivated_user = {
-                "email": email,
-                "verified": True,
-                "verification_token": verification_token,
-                "created_at": expired_user.get('created_at', now.isoformat()),
-                "donated_at": now.isoformat(),
-                "expires_at": expires_at.isoformat(),
-                "status": "active",
-                "warning_sent": False,
-                "last_login": None,
-                "previous_subscriptions": expired_user.get('previous_subscriptions', []) + [{
-                    "donated_at": expired_user.get('original_donated_at'),
-                    "expired_at": expired_user.get('expired_at')
-                }]
-            }
-            
-            await db.users.insert_one(reactivated_user)
-            
-            # Remove from expired_users
-            await db.expired_users.delete_one({"email": email})
-            
-            # Send welcome email
-            send_new_user_email(email, verification_token)
-            
-            return {"success": True, "message": "Welcome back! Subscription renewed for 12 months"}
-        else:
-            # New user
-            verification_token = str(uuid.uuid4())
-            new_user = {
-                "email": email,
-                "verified": True,
-                "verification_token": verification_token,
-                "created_at": now.isoformat(),
-                "donated_at": now.isoformat(),
-                "expires_at": expires_at.isoformat(),
-                "status": "active",
-                "warning_sent": False,
-                "last_login": None
-            }
-            
-            await db.users.insert_one(new_user)
-            
-            # Send welcome email to donor with verification link
-            send_new_user_email(email, verification_token)
-            
-            return {"success": True, "message": "Donor added with 12-month subscription"}
-            
+        resp = requests.post(
+            f"{PAYPAL_API_BASE}/v1/oauth2/token",
+            auth=(client_id, client_secret),
+            data={"grant_type": "client_credentials"},
+            headers={"Accept": "application/json", "Accept-Language": "en_US"},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        return resp.json().get("access_token")
+    except Exception as e:
+        logging.error(f"PayPal token request failed: {e}")
+        return None
+
+
+def _fetch_paypal_order(order_id: str) -> Optional[dict]:
+    """Fetch full order details from PayPal. Returns None on any failure."""
+    token = _get_paypal_access_token()
+    if not token:
+        return None
+    try:
+        resp = requests.get(
+            f"{PAYPAL_API_BASE}/v2/checkout/orders/{order_id}",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        logging.error(f"PayPal order fetch failed for {order_id}: {e}")
+        return None
+
+
+class PayPalRegisterRequest(BaseModel):
+    order_id: str
+
+
+@api_router.post("/paypal/register-donor")
+async def register_donor_via_paypal(request: PayPalRegisterRequest):
+    """
+    Public endpoint called by the PayPal SDK onApprove callback. We re-fetch
+    the order from PayPal server-side (so we trust PayPal's response, not
+    whatever the browser sent) to confirm:
+      - the order was actually completed
+      - the captured amount matches what we charge
+      - the payer email comes from PayPal directly
+
+    Only then do we create / renew the donor record.
+    """
+    order_id = (request.order_id or "").strip()
+    if not order_id:
+        raise HTTPException(status_code=400, detail="order_id is required")
+
+    order = _fetch_paypal_order(order_id)
+    if not order:
+        raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
+
+    status = (order.get("status") or "").upper()
+    if status != "COMPLETED":
+        raise HTTPException(
+            status_code=400,
+            detail=f"PayPal order is not in COMPLETED state (status={status})",
+        )
+
+    purchase_units = order.get("purchase_units") or []
+    if not purchase_units:
+        raise HTTPException(status_code=400, detail="PayPal order has no purchase units")
+
+    captures = (purchase_units[0].get("payments") or {}).get("captures") or []
+    if not captures:
+        raise HTTPException(status_code=400, detail="PayPal order has no captures")
+
+    capture = captures[0]
+    amount = capture.get("amount") or {}
+    paid_value = str(amount.get("value", ""))
+    paid_currency = (amount.get("currency_code") or "").upper()
+
+    if paid_currency != "USD" or paid_value != EXPECTED_DONATION_USD:
+        logging.warning(
+            f"PayPal order {order_id} amount mismatch: {paid_currency} {paid_value} "
+            f"(expected USD {EXPECTED_DONATION_USD})"
+        )
+        raise HTTPException(
+            status_code=400,
+            detail=f"Donation amount {paid_currency} {paid_value} does not match expected {EXPECTED_DONATION_USD} USD",
+        )
+
+    payer_email = (order.get("payer") or {}).get("email_address")
+    if not payer_email:
+        raise HTTPException(status_code=400, detail="PayPal order has no payer email")
+
+    result = await _upsert_donor(payer_email)
+    return {**result, "email": payer_email.lower(), "order_id": order_id}
+
+
+@api_router.post("/auth/add-donor")
+async def add_donor(
+    request: LoginRequest,
+    admin_username: str = Depends(get_admin_user),
+):
+    """
+    Admin-only manual donor entry. Public donor registration is now done via
+    /api/paypal/register-donor after PayPal-side order verification.
+    """
+    try:
+        logging.info(f"Admin {admin_username} manually adding donor {request.email}")
+        return await _upsert_donor(request.email)
     except Exception as e:
         logging.error(f"Error in add_donor: {str(e)}")
         return {"success": False, "message": str(e)}

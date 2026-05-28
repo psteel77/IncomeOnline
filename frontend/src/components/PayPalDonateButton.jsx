@@ -91,24 +91,34 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
             setErrorMsg('');
             try {
               const details = await actions.order.capture();
-              const email = details?.payer?.email_address?.toLowerCase();
+              const orderID = data.orderID;
 
-              if (!email) {
-                throw new Error('PayPal did not return a payer email. Please contact support.');
+              if (!orderID) {
+                throw new Error('PayPal did not return an order ID. Please contact support.');
               }
 
-              // Register / renew the donor in our backend (12-month subscription).
-              await axios.post(`${API}/auth/add-donor`, { email });
+              // Register / renew the donor by sending only the order ID.
+              // Backend re-fetches the order from PayPal server-side, verifies
+              // status + amount, extracts payer email from PayPal's response.
+              const resp = await axios.post(`${API}/paypal/register-donor`, {
+                order_id: orderID,
+              });
 
-              setDonorEmail(email);
+              const verifiedEmail =
+                resp?.data?.email ||
+                details?.payer?.email_address?.toLowerCase() ||
+                '';
+
+              setDonorEmail(verifiedEmail);
               setStatus('success');
               if (typeof onSuccess === 'function') {
-                onSuccess({ email, orderId: data.orderID, details });
+                onSuccess({ email: verifiedEmail, orderId: orderID, details });
               }
             } catch (err) {
               console.error('Donation completion failed:', err);
               setErrorMsg(
-                err?.response?.data?.message ||
+                err?.response?.data?.detail ||
+                  err?.response?.data?.message ||
                   err?.message ||
                   'We received your payment but could not register your access. Please contact support with your PayPal transaction ID.'
               );
