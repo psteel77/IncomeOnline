@@ -331,3 +331,68 @@ async def get_all_categories_admin(username: str = Depends(get_admin_user)):
     except Exception as e:
         logging.error(f"Error fetching categories: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# -----------------------------------------------------------------------------
+# Admin: get a verification link for any donor (email-bypass / break-glass)
+#
+# When the configured email provider (Mailgun, etc.) is unavailable or in
+# sandbox mode, the welcome / returning-user email never reaches the donor.
+# This endpoint lets an authenticated admin retrieve a fresh verification URL
+# for a given email, so the admin can deliver it manually (Slack, SMS, etc.).
+# Rotates the user's verification_token so any old link is invalidated.
+# -----------------------------------------------------------------------------
+import uuid as _uuid
+
+
+class VerifyLinkRequest(BaseModel):
+    email: str
+
+
+@router.post("/get-verify-link")
+async def admin_get_verify_link(
+    request: VerifyLinkRequest,
+    username: str = Depends(get_admin_user),
+):
+    from server import db
+
+    email = request.email.strip().lower()
+    if not email:
+        raise HTTPException(status_code=400, detail="email is required")
+
+    # Look up in active users first, then expired.
+    user_collection = "users"
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    if not user:
+        user = await db.expired_users.find_one({"email": email}, {"_id": 0})
+        if user:
+            user_collection = "expired_users"
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No record found for {email} in users or expired_users",
+        )
+
+    # Rotate the verification token so any previously leaked link is dead.
+    new_token = str(_uuid.uuid4())
+    await getattr(db, user_collection).update_one(
+        {"email": email},
+        {"$set": {"verification_token": new_token, "verified": True}},
+    )
+
+    frontend_url = os.environ.get("FRONTEND_URL", "https://www.incomeonline.info").rstrip("/")
+    verify_url = f"{frontend_url}/verify?token={new_token}"
+
+    logging.info(
+        f"Admin {username} requested verify link for {email} (collection={user_collection})"
+    )
+
+    return {
+        "success": True,
+        "email": email,
+        "collection": user_collection,
+        "verify_url": verify_url,
+        "expires_at": user.get("expires_at"),
+        "donated_at": user.get("donated_at"),
+    }
