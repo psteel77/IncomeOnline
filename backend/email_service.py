@@ -24,8 +24,14 @@ def _send_via_resend(to_email, subject, html, text, attachments=None):
     api_key = os.environ.get("RESEND_API_KEY")
     from_addr = os.environ.get("RESEND_FROM_EMAIL", RESEND_FROM_DEFAULT)
 
+    # Unmistakable boot-time-style logging so the line is easy to find in
+    # provider log streams when diagnosing delivery problems.
+    print(f"[RESEND] _send_via_resend called: to={to_email} subject={subject!r}", flush=True)
+    print(f"[RESEND] api_key set? {bool(api_key)}  from={from_addr!r}", flush=True)
+
     if not api_key:
         logger.error("RESEND_API_KEY not set in environment; email not sent")
+        print("[RESEND] ABORT: RESEND_API_KEY env var is empty or missing", flush=True)
         return False
 
     resend.api_key = api_key
@@ -51,9 +57,11 @@ def _send_via_resend(to_email, subject, html, text, attachments=None):
         result = resend.Emails.send(params)
         message_id = result.get("id", "unknown") if isinstance(result, dict) else "unknown"
         logger.info(f"✅ Resend delivered to {to_email} · subject='{subject}' · id={message_id}")
+        print(f"[RESEND] SUCCESS id={message_id}", flush=True)
         return True
     except Exception as e:
         logger.error(f"❌ Resend send failed for {to_email}: {e}")
+        print(f"[RESEND] EXCEPTION: {type(e).__name__}: {e}", flush=True)
         return False
 
 
