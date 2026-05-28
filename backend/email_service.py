@@ -1,9 +1,61 @@
 import os
 import logging
-import requests
+import base64
 from pathlib import Path
 
+import resend
+
 logger = logging.getLogger(__name__)
+
+# Resend configuration (replaces Mailgun)
+# RESEND_API_KEY     - required, from https://resend.com/api-keys
+# RESEND_FROM_EMAIL  - required, must be on a domain verified in Resend.
+#                      Format: "Display Name <noreply@yourdomain.com>" or "noreply@yourdomain.com"
+RESEND_FROM_DEFAULT = "Income Online <noreply@incomeonline.info>"
+
+
+def _send_via_resend(to_email, subject, html, text, attachments=None):
+    """
+    Single helper that talks to Resend.
+
+    Returns True on success, False (with logged error) on any failure.
+    `attachments` is an optional list of dicts: [{"filename": str, "content_bytes": bytes}]
+    """
+    api_key = os.environ.get("RESEND_API_KEY")
+    from_addr = os.environ.get("RESEND_FROM_EMAIL", RESEND_FROM_DEFAULT)
+
+    if not api_key:
+        logger.error("RESEND_API_KEY not set in environment; email not sent")
+        return False
+
+    resend.api_key = api_key
+
+    params = {
+        "from": from_addr,
+        "to": [to_email],
+        "subject": subject,
+        "html": html,
+        "text": text,
+    }
+
+    if attachments:
+        params["attachments"] = [
+            {
+                "filename": a["filename"],
+                "content": base64.b64encode(a["content_bytes"]).decode("ascii"),
+            }
+            for a in attachments
+        ]
+
+    try:
+        result = resend.Emails.send(params)
+        message_id = result.get("id", "unknown") if isinstance(result, dict) else "unknown"
+        logger.info(f"✅ Resend delivered to {to_email} · subject='{subject}' · id={message_id}")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Resend send failed for {to_email}: {e}")
+        return False
+
 
 def load_email_template(template_name):
     """Load an email template from the email_templates directory"""
@@ -114,105 +166,37 @@ def send_new_user_email(email, verification_token):
     """
     Send Email Template 1 (Welcome!) to NEW users after PayPal donation
     """
-    api_key = os.environ.get('MAILGUN_API_KEY')
-    domain = os.environ.get('MAILGUN_DOMAIN')
-    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
-    
-    if not api_key or not domain:
-        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
-        return False
-    
-    # Prepare Email Template 1
     email_data = prepare_new_user_email(email, verification_token)
-    
     frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
-    
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
-    
-    try:
-        response = requests.post(
-            api_url,
-            auth=("api", api_key),
-            data={
-                "from": f"Income Online <{sender_email}>",
-                "to": email,
-                "subject": email_data['subject'],
-                "html": email_data['html'],
-                "text": email_data['text']
-            },
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        result = response.json()
-        message_id = result.get('id', 'unknown')
-        
-        logger.info(f"✅ Email Template 1 (NEW user) sent via Mailgun to {email}. Message ID: {message_id}")
-        logger.info(f"Verification link: {verification_link}")
-        
-        return True
-        
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send email via Mailgun: {str(e)}")
-        if hasattr(e, 'response') and e.response is not None:
-            logger.error(f"Response: {e.response.text}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error sending email: {str(e)}")
-        return False
+
+    ok = _send_via_resend(
+        to_email=email,
+        subject=email_data['subject'],
+        html=email_data['html'],
+        text=email_data['text'],
+    )
+    if ok:
+        logger.info(f"Email Template 1 (NEW user) verification link: {verification_link}")
+    return ok
 
 def send_returning_user_email(email, verification_token):
     """
     Send Email Template 2 (Welcome back!) to RETURNING users requesting magic link
     """
-    api_key = os.environ.get('MAILGUN_API_KEY')
-    domain = os.environ.get('MAILGUN_DOMAIN')
-    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
-    
-    if not api_key or not domain:
-        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
-        return False
-    
-    # Prepare Email Template 2
     email_data = prepare_returning_user_email(email, verification_token)
-    
     frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
-    
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
-    
-    try:
-        response = requests.post(
-            api_url,
-            auth=("api", api_key),
-            data={
-                "from": f"Income Online <{sender_email}>",
-                "to": email,
-                "subject": email_data['subject'],
-                "html": email_data['html'],
-                "text": email_data['text']
-            },
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        result = response.json()
-        message_id = result.get('id', 'unknown')
-        
-        logger.info(f"✅ Email Template 2 (RETURNING user) sent via Mailgun to {email}. Message ID: {message_id}")
-        logger.info(f"Verification link: {verification_link}")
-        
-        return True
-        
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send email via Mailgun: {str(e)}")
-        if hasattr(e, 'response') and e.response is not None:
-            logger.error(f"Response: {e.response.text}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error sending email: {str(e)}")
-        return False
+
+    ok = _send_via_resend(
+        to_email=email,
+        subject=email_data['subject'],
+        html=email_data['html'],
+        text=email_data['text'],
+    )
+    if ok:
+        logger.info(f"Email Template 2 (RETURNING user) verification link: {verification_link}")
+    return ok
 
 
 def prepare_expired_email(email):
@@ -327,88 +311,26 @@ def send_expired_email(email):
     """
     Send Email Template 3 to users whose subscription has expired
     """
-    api_key = os.environ.get('MAILGUN_API_KEY')
-    domain = os.environ.get('MAILGUN_DOMAIN')
-    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
-    
-    if not api_key or not domain:
-        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
-        return False
-    
     email_data = prepare_expired_email(email)
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
-    
-    try:
-        response = requests.post(
-            api_url,
-            auth=("api", api_key),
-            data={
-                "from": f"Income Online <{sender_email}>",
-                "to": email,
-                "subject": email_data['subject'],
-                "html": email_data['html'],
-                "text": email_data['text']
-            },
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        result = response.json()
-        message_id = result.get('id', 'unknown')
-        
-        logger.info(f"✅ Email Template 3 (EXPIRED) sent via Mailgun to {email}. Message ID: {message_id}")
-        return True
-        
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send expired email via Mailgun: {str(e)}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error sending expired email: {str(e)}")
-        return False
+    return _send_via_resend(
+        to_email=email,
+        subject=email_data['subject'],
+        html=email_data['html'],
+        text=email_data['text'],
+    )
 
 
 def send_expiry_warning_email(email, expiry_date):
     """
     Send Email Template 4 - 7 day warning before expiry
     """
-    api_key = os.environ.get('MAILGUN_API_KEY')
-    domain = os.environ.get('MAILGUN_DOMAIN')
-    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
-    
-    if not api_key or not domain:
-        logger.error("MAILGUN_API_KEY and MAILGUN_DOMAIN not set in environment")
-        return False
-    
     email_data = prepare_expiry_warning_email(email, expiry_date)
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
-    
-    try:
-        response = requests.post(
-            api_url,
-            auth=("api", api_key),
-            data={
-                "from": f"Income Online <{sender_email}>",
-                "to": email,
-                "subject": email_data['subject'],
-                "html": email_data['html'],
-                "text": email_data['text']
-            },
-            timeout=10
-        )
-        response.raise_for_status()
-        
-        result = response.json()
-        message_id = result.get('id', 'unknown')
-        
-        logger.info(f"✅ Email Template 4 (EXPIRY WARNING) sent via Mailgun to {email}. Message ID: {message_id}")
-        return True
-        
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to send expiry warning email via Mailgun: {str(e)}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error sending expiry warning email: {str(e)}")
-        return False
+    return _send_via_resend(
+        to_email=email,
+        subject=email_data['subject'],
+        html=email_data['html'],
+        text=email_data['text'],
+    )
 
 
 DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -421,14 +343,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
     Used by the Free Resources gateway when the visitor chooses "Email me the guide"
     instead of an in-browser download.
     """
-    api_key = os.environ.get('MAILGUN_API_KEY')
-    domain = os.environ.get('MAILGUN_DOMAIN')
-    sender_email = os.environ.get('MAILGUN_SENDER_EMAIL')
     frontend_url = os.environ.get('FRONTEND_URL', 'https://www.incomeonline.info')
-
-    if not api_key or not domain or not sender_email:
-        logger.error("Mailgun credentials missing; cannot send resource email")
-        return False
 
     if not os.path.exists(attachment_path):
         logger.error(f"Resource attachment missing on disk: {attachment_path}")
@@ -452,32 +367,17 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         f"— Income Online · {frontend_url}\n"
     )
 
-    api_url = f"https://api.mailgun.net/v3/{domain}/messages"
     try:
         with open(attachment_path, 'rb') as fh:
-            response = requests.post(
-                api_url,
-                auth=("api", api_key),
-                data={
-                    "from": f"Income Online <{sender_email}>",
-                    "to": email,
-                    "subject": subject,
-                    "html": html,
-                    "text": text,
-                },
-                files=[("attachment", (attachment_filename, fh.read(), DOCX_MIME))],
-                timeout=30,
-            )
-            response.raise_for_status()
+            file_bytes = fh.read()
+    except OSError as e:
+        logger.error(f"❌ Could not read resource attachment {attachment_path}: {e}")
+        return False
 
-        result = response.json()
-        logger.info(f"✅ Resource email sent via Mailgun to {email} · {resource_title} · ID: {result.get('id', 'unknown')}")
-        return True
-    except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to email resource guide: {str(e)}")
-        if hasattr(e, 'response') and e.response is not None:
-            logger.error(f"Mailgun response: {e.response.text[:500]}")
-        return False
-    except Exception as e:
-        logger.error(f"❌ Unexpected error emailing resource guide: {str(e)}")
-        return False
+    return _send_via_resend(
+        to_email=email,
+        subject=subject,
+        html=html,
+        text=text,
+        attachments=[{"filename": attachment_filename, "content_bytes": file_bytes}],
+    )
