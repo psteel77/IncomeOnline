@@ -401,18 +401,19 @@ def send_abandoned_donation_email(email: str) -> bool:
     # click the PayPal button when they arrive — no re-typing.
     resume_link = f"{frontend_url}/#support?resume={email}"
 
-    subject = "You almost unlocked Income Online — your spot is still saved"
+    subject = "Don't waste another day — your Income Online access is one click away"
 
     html = f"""
     <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; color: #1f2937;">
-      <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Your access is one click away</h1>
-      <p style="font-size: 16px; line-height: 1.6;">Hi there 👋,</p>
-      <p style="font-size: 16px; line-height: 1.6;">
-        We noticed you started a donation on Income Online a little earlier but didn't quite finish it — no problem,
-        these things happen. Your spot is still saved.
+      <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Get on your earning journey TODAY</h1>
+      <p style="font-size: 17px; line-height: 1.6;">
+        Your access to <strong>thousands of online earning opportunities</strong> is just one click away.
+      </p>
+      <p style="font-size: 17px; line-height: 1.6; font-weight: 600; color: #7c3aed;">
+        Why waste anymore time?
       </p>
       <p style="font-size: 16px; line-height: 1.6;">
-        For a one-time donation of <strong>$12.99</strong> you'll get <strong>12 full months</strong> of access to:
+        For a one-time donation of <strong>$12.99</strong> you'll get <strong>12 full months</strong> of:
       </p>
       <ul style="font-size: 15px; line-height: 1.8; padding-left: 20px;">
         <li>199+ verified online earning platforms</li>
@@ -421,7 +422,7 @@ def send_abandoned_donation_email(email: str) -> bool:
       </ul>
       <p style="margin: 28px 0; text-align: center;">
         <a href="{resume_link}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(90deg,#7c3aed,#db2777); color: #ffffff; font-weight: 700; text-decoration: none; border-radius: 999px; font-size: 16px;">
-          ▶ Finish my donation
+          ▶ Get on my earning journey
         </a>
       </p>
       <p style="font-size: 14px; color: #6b7280;">
@@ -434,14 +435,14 @@ def send_abandoned_donation_email(email: str) -> bool:
     """
 
     text = (
-        "Your access is one click away\n\n"
-        "We noticed you started a donation on Income Online but didn't quite finish — no problem.\n"
-        "Your spot is still saved.\n\n"
-        "For a one-time $12.99 you'll get 12 full months of access:\n"
+        "Get on your earning journey TODAY\n\n"
+        "Your access to thousands of online earning opportunities is just one click away.\n"
+        "Why waste anymore time?\n\n"
+        "For a one-time $12.99 you'll get 12 full months of:\n"
         "  • 199+ verified online earning platforms\n"
         "  • Ratings, payouts, category filters\n"
         "  • 10 free MoneyRules guides + 2 premium + 5 editable spreadsheets\n\n"
-        f"Finish your donation: {resume_link}\n\n"
+        f"Get on my earning journey: {resume_link}\n\n"
         "If you didn't start a donation, you can safely ignore this email.\n"
         f"— Income Online · {frontend_url}\n"
     )
