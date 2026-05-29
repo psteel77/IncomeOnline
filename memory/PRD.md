@@ -21,12 +21,40 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
-### Completed (27 May 2026 — current session)
+### Completed (28 May 2026 — current session, second half)
+- **Success Stories mobile polish**: Fixed character-by-character header wrap (`Back` button + truncated `Success Stories` title); Earnings/Timeline cards now stack on mobile so long strings like `$8,000-$12,000/month` don't clip (`pages/SuccessStories.jsx`).
+- **PayPal flow migrated from Hosted Buttons to JS SDK** (`components/PayPalDonateButton.jsx`, `DonationSection.jsx`, `Donate.jsx`, `package.json` → adds `@paypal/react-paypal-js@9.x`). Hosted buttons gave no `onApprove` callback so donors were never registered (root cause of the original "Returning User: email not found" bug).
+- **Server-side PayPal order verification** (`backend/server.py` → new endpoint `POST /api/paypal/register-donor`). Frontend `onApprove` now sends only `order_id`; backend re-fetches the order from PayPal REST API, verifies `status=COMPLETED` + amount `12.99 USD`, extracts payer email from PayPal's response, then creates / renews user. **Browser cannot fake a donation.**
+- **`POST /api/auth/add-donor` locked down**: was unauthenticated (anyone could POST an email and get 12 months of access). Now requires admin Bearer token via `Depends(get_admin_user)`. Kept available for manual donor entry by admins.
+- **Email service migrated from Mailgun → Resend** (`backend/email_service.py`, adds `resend==2.19.0` to `requirements.txt`). Mailgun account was inaccessible (lost 2FA). Resend account is paul-steel's; uses test-mode `onboarding@resend.dev` until a custom domain is verified.
+- **Break-glass admin verify-link endpoint** (`backend/cms_routes.py` → `POST /api/cms/get-verify-link`). Admin-only. Rotates user's `verification_token` and returns the full `/verify?token=...` URL — lets us unblock users when email delivery is down.
+- **`paul-steel@outlook.com` registered as donor** in production MongoDB Atlas (1-year subscription).
+- **User successfully logged into live site** using break-glass verify URL.
+
+### Completed (27 May 2026)
 - **Workspace restored**: Boilerplate workspace was missing IncomeOnline code. Re-cloned `psteel77/IncomeOnline` (main, `b27d94c`) into `/app`, preserved this container's `.env` files, added local `JWT_SECRET_KEY` + `FRONTEND_URL` to backend `.env` so backend boots.
 - **Hero: removed "Scroll to explore" indicator** (`components/home/HeroSection.jsx`) — deleted the bouncing scroll-mouse glyph + label at the bottom of the hero.
 - **Hero: added "Free MoneyRules Guides" pill** (`components/home/HeroSection.jsx`) — new amber/orange CTA below the "199+ Verified Earning Platforms" badge; click scrolls to existing `#free-resources` section. Used canonical brand spelling "MoneyRules" (user's "MonsyRules" assumed typo).
 - **Donation section mobile overflow fixed** (`components/home/DonationSection.jsx`) — reduced nested mobile padding (section/card/inner cards) and added `max-w-full overflow-hidden` + iframe width caps in the PayPal style block. Verified `scrollWidth == clientWidth == 390` at every scroll position on 390×844 viewport.
 - **Success Stories card overlap fixed** (`pages/SuccessStories.jsx`) — header flex now uses `gap-3 min-w-0 flex-1` on the title block and `flex-shrink-0 whitespace-nowrap` on the Verified badge; long names no longer crash into the badge. Before/After grid stacks on mobile (`grid-cols-1 sm:grid-cols-2`) with `break-words`.
+
+## Required Railway env vars (production backend)
+- `MONGO_URL`, `DB_NAME` — MongoDB Atlas connection
+- `JWT_SECRET_KEY` — for admin JWT signing
+- `FRONTEND_URL=https://www.incomeonline.info` — used in email links
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH` — admin login (fallback `admin` / `Gulluk*9` is hardcoded in `cms_routes.py:21`)
+- `RESEND_API_KEY` — Resend transactional email
+- `RESEND_FROM_EMAIL` — sender address; currently `onboarding@resend.dev` (test mode); change to `Income Online <noreply@<verified-domain>>` once a domain is verified
+- `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET` — for server-side order verification (live credentials)
+- Optional: `PAYPAL_API_BASE=https://api-m.sandbox.paypal.com` to use sandbox
+
+## Open backlog / next steps
+1. **🔴 Verify a Resend custom domain** (e.g. `mg.incomeonline.info`) — without it, real donors don't receive welcome emails. DNS work needed at user's registrar + Resend dashboard.
+2. **🟡 End-to-end PayPal donation test** — either sandbox flow or live $12.99 + self-refund — to confirm `onApprove → /api/paypal/register-donor → _upsert_donor` chain works on real PayPal data.
+3. **🟢 Delete leftover `MAILGUN_DOMAIN` env var** from Railway (unused now).
+4. **🟢 Consider deleting unused `/api/paypal/ipn` endpoint** — IPN was the old broken pipeline; the new PayPal SDK flow doesn't need it. Keeping it is harmless but dead code.
+
+
 
 ### Completed (Feb 2026)
 - **Hardcoded text moved to CMS (a)**: Hero section now reads `badge`, `headline_line1`, `headline_line2`, `subtitle_line1`, `subtitle_line2` from CMS with fallbacks. New CMS sections added: `library_banner` (badge/headline/description/cta_primary/cta_secondary) and `free_resources` (title/subtitle). Admin Dashboard expanded with edit forms for all 3. `POST /api/seed-content` is now idempotent — adds missing sections without clobbering admin edits.
