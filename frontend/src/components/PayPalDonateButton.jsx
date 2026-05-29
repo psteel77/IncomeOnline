@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { CheckCircle, AlertCircle, Mail } from 'lucide-react';
 import axios from 'axios';
@@ -9,21 +9,42 @@ const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const DONATION_AMOUNT = '12.99';
 const DONATION_CURRENCY = 'USD';
 
-/**
- * Drop-in replacement for the legacy PayPal Hosted Button.
- *
- * Why: Hosted Buttons give no JS callback, so we had no way to register the
- * donor on success — the server only learned about the payment via PayPal IPN,
- * which was unreliable. With the JS SDK + onApprove we capture the order
- * client-side, extract the payer email from PayPal's response, and call our
- * own /api/auth/add-donor endpoint to create the user with a 12-month
- * subscription. The donor then immediately gets the welcome email with the
- * verification link.
- */
+// Simple RFC 5322-lite check — good enough to avoid sending recovery emails
+// to garbage strings. Backend re-validates via Pydantic EmailStr.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
   const [status, setStatus] = useState('idle'); // idle | processing | success | error
   const [donorEmail, setDonorEmail] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+
+  // If the donor lands here from an abandoned-donation recovery email, the
+  // URL fragment looks like `#support?resume=foo@bar.com`. Pre-fill so they
+  // don't re-type.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash || '';
+    const match = hash.match(/[?&]resume=([^&]+)/);
+    if (match) {
+      try {
+        setRecoveryEmail(decodeURIComponent(match[1]));
+      } catch {
+        // ignore malformed value
+      }
+    }
+  }, []);
+
+  const captureIntent = async () => {
+    const email = recoveryEmail.trim().toLowerCase();
+    if (!EMAIL_RE.test(email)) return;
+    try {
+      await axios.post(`${API}/paypal/intent`, { email });
+    } catch (err) {
+      // Non-blocking; the donation flow proceeds even if intent capture fails.
+      console.warn('Donation intent capture failed:', err?.message || err);
+    }
+  };
 
   if (!PAYPAL_CLIENT_ID) {
     return (
@@ -59,6 +80,26 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
 
   return (
     <div className="space-y-3">
+      {/* Optional recovery email — captures intent so we can email the donor if they don't complete */}
+      <label className="block text-left">
+        <span className="block text-sm font-semibold text-gray-700 mb-1">
+          Email (optional)
+          <span className="ml-1 text-xs font-normal text-gray-500">
+            — we'll save your place if you don't finish
+          </span>
+        </span>
+        <input
+          type="email"
+          value={recoveryEmail}
+          onChange={(e) => setRecoveryEmail(e.target.value)}
+          placeholder="you@example.com"
+          autoComplete="email"
+          inputMode="email"
+          data-testid="donation-recovery-email"
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
+        />
+      </label>
+
       <PayPalScriptProvider
         options={{
           'client-id': PAYPAL_CLIENT_ID,
@@ -71,6 +112,12 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           style={{ layout: 'vertical', shape: 'rect', label: 'donate' }}
           disabled={status === 'processing'}
           forceReRender={[amount]}
+          onClick={(data, actions) => {
+            // Fire-and-forget: record the intent the moment they open the
+            // PayPal popup. We don't block opening if it fails.
+            captureIntent();
+            return actions.resolve();
+          }}
           createOrder={(data, actions) =>
             actions.order.create({
               intent: 'CAPTURE',

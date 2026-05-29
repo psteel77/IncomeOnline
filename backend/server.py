@@ -17,7 +17,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
-from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email
+from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email, send_abandoned_donation_email
 from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
@@ -732,7 +732,121 @@ async def register_donor_via_paypal(request: PayPalRegisterRequest):
         raise HTTPException(status_code=400, detail="PayPal order has no payer email")
 
     result = await _upsert_donor(payer_email)
+
+    # Mark any matching donation intent as converted so we never send a
+    # recovery email to someone who actually completed the donation.
+    try:
+        await db.donation_intents.update_many(
+            {"email": payer_email.lower(), "status": {"$in": ["pending", "recovery_sent"]}},
+            {"$set": {"status": "converted", "converted_at": datetime.now(timezone.utc).isoformat()}},
+        )
+    except Exception as e:
+        logging.warning(f"Could not mark donation intent converted for {payer_email}: {e}")
+
     return {**result, "email": payer_email.lower(), "order_id": order_id}
+
+
+# -----------------------------------------------------------------------------
+# Abandoned-donation recovery
+# -----------------------------------------------------------------------------
+# When a visitor clicks the PayPal button after typing their email but never
+# completes the order (closes the popup, bank declines, etc.), we never get
+# an onApprove callback. /api/paypal/intent captures their email at the moment
+# they open the PayPal popup so we can email them a "Forgot something?" link
+# later via /api/paypal/run-recovery (admin-triggered or scheduled).
+
+class DonationIntentRequest(BaseModel):
+    email: EmailStr
+
+
+@api_router.post("/paypal/intent")
+async def record_donation_intent(request: DonationIntentRequest):
+    """Public — capture an email the moment someone opens the PayPal popup."""
+    email = request.email.strip().lower()
+    now = datetime.now(timezone.utc)
+
+    # Skip if this email already has an active subscription (no point recovering).
+    if await db.users.find_one({"email": email}):
+        return {"success": True, "skipped": "already_subscribed"}
+
+    # Upsert by email — one intent per visitor at a time.
+    await db.donation_intents.update_one(
+        {"email": email},
+        {
+            "$set": {
+                "email": email,
+                "last_seen_at": now.isoformat(),
+                "status": "pending",
+            },
+            "$setOnInsert": {"created_at": now.isoformat()},
+        },
+        upsert=True,
+    )
+    return {"success": True}
+
+
+@api_router.post("/paypal/run-recovery")
+async def run_abandoned_donation_recovery(
+    admin_username: str = Depends(get_admin_user),
+    delay_hours: int = 2,
+    max_emails: int = 50,
+):
+    """
+    Admin-only — find donation intents older than `delay_hours` that haven't
+    converted, haven't already received a recovery email, and aren't already
+    subscribed; send the recovery email; mark them `recovery_sent`.
+
+    Idempotent: an intent only gets ONE recovery email regardless of how many
+    times this is called.
+    """
+    now = datetime.now(timezone.utc)
+    cutoff = (now - timedelta(hours=delay_hours)).isoformat()
+
+    cursor = db.donation_intents.find(
+        {"status": "pending", "created_at": {"$lte": cutoff}},
+        {"_id": 0},
+    ).limit(max_emails)
+    intents = await cursor.to_list(length=max_emails)
+
+    sent, skipped, failed = [], [], []
+    for intent in intents:
+        email = intent["email"]
+        # Safety: skip if they've since subscribed.
+        if await db.users.find_one({"email": email}):
+            await db.donation_intents.update_one(
+                {"email": email},
+                {"$set": {"status": "converted", "converted_at": now.isoformat()}},
+            )
+            skipped.append(email)
+            continue
+        ok = send_abandoned_donation_email(email)
+        if ok:
+            await db.donation_intents.update_one(
+                {"email": email},
+                {"$set": {"status": "recovery_sent", "recovery_sent_at": now.isoformat()}},
+            )
+            sent.append(email)
+        else:
+            failed.append(email)
+
+    logging.info(
+        f"Admin {admin_username} ran donation recovery: sent={len(sent)} "
+        f"skipped={len(skipped)} failed={len(failed)}"
+    )
+    return {
+        "sent": sent,
+        "skipped_already_subscribed": skipped,
+        "failed": failed,
+        "scanned": len(intents),
+    }
+
+
+@api_router.get("/paypal/intents")
+async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
+    """Admin-only — list recent donation intents for visibility."""
+    cursor = db.donation_intents.find({}, {"_id": 0}).sort("created_at", -1).limit(100)
+    intents = await cursor.to_list(length=100)
+    return {"count": len(intents), "intents": intents}
 
 
 @api_router.post("/auth/add-donor")
@@ -750,106 +864,6 @@ async def add_donor(
     except Exception as e:
         logging.error(f"Error in add_donor: {str(e)}")
         return {"success": False, "message": str(e)}
-
-@api_router.post("/paypal/ipn")
-async def paypal_ipn(request: Request):
-    """Handle PayPal Instant Payment Notification (with 12-month subscription)"""
-    try:
-        # Get the raw body
-        body = await request.body()
-        
-        # Log the IPN for debugging
-        logging.info(f"PayPal IPN received: {body.decode()}")
-        
-        # Parse form data
-        form_data = await request.form()
-        
-        # Extract payer email
-        payer_email = form_data.get("payer_email") or form_data.get("receiver_email")
-        payment_status = form_data.get("payment_status")
-        txn_id = form_data.get("txn_id")
-        
-        logging.info(f"PayPal payment - Email: {payer_email}, Status: {payment_status}, TXN: {txn_id}")
-        
-        # Only process completed payments
-        if payment_status == "Completed" and payer_email:
-            email = payer_email.lower()
-            now = datetime.now(timezone.utc)
-            expires_at = now + timedelta(days=SUBSCRIPTION_DURATION_DAYS)
-            
-            # Check if user exists in active users
-            existing_user = await db.users.find_one({"email": email})
-            
-            # Check if user is in expired_users (renewal)
-            expired_user = await db.expired_users.find_one({"email": email})
-            
-            if existing_user:
-                # Renew existing user subscription
-                await db.users.update_one(
-                    {"email": email},
-                    {"$set": {
-                        "verified": True,
-                        "donated_at": now.isoformat(),
-                        "expires_at": expires_at.isoformat(),
-                        "status": "active",
-                        "warning_sent": False
-                    }}
-                )
-                logging.info(f"Renewed subscription for existing donor: {email}")
-            elif expired_user:
-                # Reactivate expired user
-                verification_token = str(uuid.uuid4())
-                reactivated_user = {
-                    "email": email,
-                    "verified": True,
-                    "verification_token": verification_token,
-                    "created_at": expired_user.get('created_at', now.isoformat()),
-                    "donated_at": now.isoformat(),
-                    "expires_at": expires_at.isoformat(),
-                    "status": "active",
-                    "warning_sent": False,
-                    "last_login": None,
-                    "previous_subscriptions": expired_user.get('previous_subscriptions', []) + [{
-                        "donated_at": expired_user.get('original_donated_at'),
-                        "expired_at": expired_user.get('expired_at')
-                    }]
-                }
-                
-                await db.users.insert_one(reactivated_user)
-                await db.expired_users.delete_one({"email": email})
-                
-                # Send welcome back email
-                send_new_user_email(email, verification_token)
-                
-                logging.info(f"Reactivated expired user: {email}")
-            else:
-                # Create new user with subscription
-                verification_token = str(uuid.uuid4())
-                new_user = {
-                    "email": email,
-                    "verified": True,
-                    "verification_token": verification_token,
-                    "created_at": now.isoformat(),
-                    "donated_at": now.isoformat(),
-                    "expires_at": expires_at.isoformat(),
-                    "status": "active",
-                    "warning_sent": False,
-                    "last_login": None
-                }
-                
-                await db.users.insert_one(new_user)
-                
-                # Send Email Template 1 (Welcome!) for NEW donors
-                send_new_user_email(email, verification_token)
-                
-                logging.info(f"Created new donor and sent Email Template 1: {email}")
-        
-        return {"status": "success"}
-        
-    except Exception as e:
-        logging.error(f"Error in PayPal IPN: {str(e)}")
-        return {"status": "error", "message": str(e)}
-
 
 @api_router.post("/subscription/process-expirations")
 async def process_subscription_expirations():

@@ -21,7 +21,21 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
-### Completed (28 May 2026 — current session, second half)
+### Completed (29 May 2026 — current session, third half)
+- **Removed dead `/api/paypal/ipn` endpoint** (`backend/server.py`) — superseded by the new PayPal SDK flow. Now returns 404.
+- **Abandoned-donation recovery system** (smart conversion lift, ~8–15% recovery typical):
+  - New `db.donation_intents` MongoDB collection — stores `{email, created_at, last_seen_at, status, recovery_sent_at, converted_at}`.
+  - `POST /api/paypal/intent` (public) — captures email when visitor opens the PayPal popup.
+  - `GET /api/paypal/intents` (admin-only) — lists recent intents for visibility.
+  - `POST /api/paypal/run-recovery?delay_hours=2&max_emails=50` (admin-only) — finds intents older than X hours that haven't converted, sends recovery email, marks `recovery_sent`. Idempotent.
+  - New email template `send_abandoned_donation_email()` in `email_service.py` — branded "Your access is one click away" with a one-click resume link.
+  - Frontend `PayPalDonateButton.jsx`:
+    - New optional email input field above the PayPal button ("we'll save your place if you don't finish").
+    - PayPal `onClick` callback fires `captureIntent()` so the moment a visitor opens the PayPal popup their email is stored as a pending intent.
+    - On-mount URL-hash parser — if the donor arrives from a recovery email link (`#support?resume=foo@bar.com`), the field is pre-filled.
+  - `/api/paypal/register-donor` automatically marks matching intents as `converted` on success — guarantees a completed donor never receives a recovery email.
+
+### Completed (28 May 2026)
 - **Success Stories mobile polish**: Fixed character-by-character header wrap (`Back` button + truncated `Success Stories` title); Earnings/Timeline cards now stack on mobile so long strings like `$8,000-$12,000/month` don't clip (`pages/SuccessStories.jsx`).
 - **PayPal flow migrated from Hosted Buttons to JS SDK** (`components/PayPalDonateButton.jsx`, `DonationSection.jsx`, `Donate.jsx`, `package.json` → adds `@paypal/react-paypal-js@9.x`). Hosted buttons gave no `onApprove` callback so donors were never registered (root cause of the original "Returning User: email not found" bug).
 - **Server-side PayPal order verification** (`backend/server.py` → new endpoint `POST /api/paypal/register-donor`). Frontend `onApprove` now sends only `order_id`; backend re-fetches the order from PayPal REST API, verifies `status=COMPLETED` + amount `12.99 USD`, extracts payer email from PayPal's response, then creates / renews user. **Browser cannot fake a donation.**

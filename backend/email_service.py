@@ -389,3 +389,61 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         text=text,
         attachments=[{"filename": attachment_filename, "content_bytes": file_bytes}],
     )
+
+
+def send_abandoned_donation_email(email: str) -> bool:
+    """
+    Send a friendly recovery email to visitors who opened the PayPal popup
+    but never completed the donation. Triggered from /api/paypal/run-recovery.
+    """
+    frontend_url = os.environ.get("FRONTEND_URL", "https://www.incomeonline.info")
+    # Pre-fill the visitor's email on the resume link so they only need to
+    # click the PayPal button when they arrive — no re-typing.
+    resume_link = f"{frontend_url}/#support?resume={email}"
+
+    subject = "You almost unlocked Income Online — your spot is still saved"
+
+    html = f"""
+    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; color: #1f2937;">
+      <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Your access is one click away</h1>
+      <p style="font-size: 16px; line-height: 1.6;">Hi there 👋,</p>
+      <p style="font-size: 16px; line-height: 1.6;">
+        We noticed you started a donation on Income Online a little earlier but didn't quite finish it — no problem,
+        these things happen. Your spot is still saved.
+      </p>
+      <p style="font-size: 16px; line-height: 1.6;">
+        For a one-time donation of <strong>$12.99</strong> you'll get <strong>12 full months</strong> of access to:
+      </p>
+      <ul style="font-size: 15px; line-height: 1.8; padding-left: 20px;">
+        <li>199+ verified online earning platforms</li>
+        <li>Detailed ratings, payouts and category filters</li>
+        <li>10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets</li>
+      </ul>
+      <p style="margin: 28px 0; text-align: center;">
+        <a href="{resume_link}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(90deg,#7c3aed,#db2777); color: #ffffff; font-weight: 700; text-decoration: none; border-radius: 999px; font-size: 16px;">
+          ▶ Finish my donation
+        </a>
+      </p>
+      <p style="font-size: 14px; color: #6b7280;">
+        If you didn't start a donation, you can safely ignore this — we won't email you again about this.
+      </p>
+      <p style="font-size: 14px; color: #6b7280; margin-top: 32px;">
+        Income Online · <a href="{frontend_url}" style="color:#7c3aed;">{frontend_url}</a>
+      </p>
+    </div>
+    """
+
+    text = (
+        "Your access is one click away\n\n"
+        "We noticed you started a donation on Income Online but didn't quite finish — no problem.\n"
+        "Your spot is still saved.\n\n"
+        "For a one-time $12.99 you'll get 12 full months of access:\n"
+        "  • 199+ verified online earning platforms\n"
+        "  • Ratings, payouts, category filters\n"
+        "  • 10 free MoneyRules guides + 2 premium + 5 editable spreadsheets\n\n"
+        f"Finish your donation: {resume_link}\n\n"
+        "If you didn't start a donation, you can safely ignore this email.\n"
+        f"— Income Online · {frontend_url}\n"
+    )
+
+    return _send_via_resend(to_email=email, subject=subject, html=html, text=text)
