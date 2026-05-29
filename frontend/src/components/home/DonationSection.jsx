@@ -78,11 +78,21 @@ const DonationSection = () => {
                   <p className="font-bold text-gray-800 text-lg">
                     Secure Payment via PayPal
                   </p>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 text-sm mb-3">
                     Get 12 months unlimited access
                   </p>
+
+                  {/* Visible price — set so visitors know exactly what they're paying before opening PayPal */}
+                  <div className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 via-pink-100 to-amber-100 border border-purple-200">
+                    <span className="text-xs font-semibold text-purple-700 uppercase tracking-wider">One-time</span>
+                    <span className="text-3xl font-extrabold text-purple-700">$9.99</span>
+                    <span className="text-sm font-semibold text-purple-700">USD</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Recover the cost on day one — every job after that is profit.
+                  </p>
                 </div>
-                
+
                 {/* PayPal Button (JS SDK + onApprove → auto-registers donor) */}
                 <div className="relative z-0 w-full max-w-full overflow-hidden">
                   <PayPalDonateButton />
