@@ -22,6 +22,7 @@ A comprehensive website for discovering online earning opportunities. Features i
 ## What's Been Implemented
 
 ### Completed (29 May 2026 — current session, third half)
+- **Pricing bug fixed**: Platform-access donation was incorrectly coded as `$12.99` (which is actually the separate Premium Pack price). Now correctly **$9.99** for platform access. Updated `EXPECTED_DONATION_USD` in `server.py`, `DONATION_AMOUNT` in `PayPalDonateButton.jsx`, and the abandoned-donation email copy. The 14 other `$12.99` references in code (Premium Pack section, resource email upsells, admin CMS) are correctly tagged and unchanged.
 - **Removed dead `/api/paypal/ipn` endpoint** (`backend/server.py`) — superseded by the new PayPal SDK flow. Now returns 404.
 - **Abandoned-donation recovery system** (smart conversion lift, ~8–15% recovery typical):
   - New `db.donation_intents` MongoDB collection — stores `{email, created_at, last_seen_at, status, recovery_sent_at, converted_at}`.
@@ -38,7 +39,7 @@ A comprehensive website for discovering online earning opportunities. Features i
 ### Completed (28 May 2026)
 - **Success Stories mobile polish**: Fixed character-by-character header wrap (`Back` button + truncated `Success Stories` title); Earnings/Timeline cards now stack on mobile so long strings like `$8,000-$12,000/month` don't clip (`pages/SuccessStories.jsx`).
 - **PayPal flow migrated from Hosted Buttons to JS SDK** (`components/PayPalDonateButton.jsx`, `DonationSection.jsx`, `Donate.jsx`, `package.json` → adds `@paypal/react-paypal-js@9.x`). Hosted buttons gave no `onApprove` callback so donors were never registered (root cause of the original "Returning User: email not found" bug).
-- **Server-side PayPal order verification** (`backend/server.py` → new endpoint `POST /api/paypal/register-donor`). Frontend `onApprove` now sends only `order_id`; backend re-fetches the order from PayPal REST API, verifies `status=COMPLETED` + amount `12.99 USD`, extracts payer email from PayPal's response, then creates / renews user. **Browser cannot fake a donation.**
+- **Server-side PayPal order verification** (`backend/server.py` → new endpoint `POST /api/paypal/register-donor`). Frontend `onApprove` now sends only `order_id`; backend re-fetches the order from PayPal REST API, verifies `status=COMPLETED` + amount `9.99 USD`, extracts payer email from PayPal's response, then creates / renews user. **Browser cannot fake a donation.**
 - **`POST /api/auth/add-donor` locked down**: was unauthenticated (anyone could POST an email and get 12 months of access). Now requires admin Bearer token via `Depends(get_admin_user)`. Kept available for manual donor entry by admins.
 - **Email service migrated from Mailgun → Resend** (`backend/email_service.py`, adds `resend==2.19.0` to `requirements.txt`). Mailgun account was inaccessible (lost 2FA). Resend account is paul-steel's; uses test-mode `onboarding@resend.dev` until a custom domain is verified.
 - **Break-glass admin verify-link endpoint** (`backend/cms_routes.py` → `POST /api/cms/get-verify-link`). Admin-only. Rotates user's `verification_token` and returns the full `/verify?token=...` URL — lets us unblock users when email delivery is down.

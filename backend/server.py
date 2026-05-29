@@ -27,7 +27,9 @@ from seed_content import content_sections
 SUBSCRIPTION_DURATION_DAYS = 365
 
 # Expected donation amount (USD) — used to verify PayPal orders match what we charge.
-EXPECTED_DONATION_USD = "12.99"
+# This is the PLATFORM ACCESS donation. The separate Premium Pack ($12.99) is
+# handled in pdf_routes.py.
+EXPECTED_DONATION_USD = "9.99"
 
 # PayPal REST API base. Default = LIVE. Override to "https://api-m.sandbox.paypal.com"
 # in Railway env for sandbox testing.

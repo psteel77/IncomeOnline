@@ -413,7 +413,7 @@ def send_abandoned_donation_email(email: str) -> bool:
         Why waste anymore time?
       </p>
       <p style="font-size: 16px; line-height: 1.6;">
-        For a one-time donation of <strong>$12.99</strong> you'll get <strong>12 full months</strong> of:
+        For a one-time donation of <strong>$9.99</strong> you'll get <strong>12 full months</strong> of:
       </p>
       <ul style="font-size: 15px; line-height: 1.8; padding-left: 20px;">
         <li>199+ verified online earning platforms</li>
@@ -424,6 +424,9 @@ def send_abandoned_donation_email(email: str) -> bool:
         <a href="{resume_link}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(90deg,#7c3aed,#db2777); color: #ffffff; font-weight: 700; text-decoration: none; border-radius: 999px; font-size: 16px;">
           ▶ Get on my earning journey
         </a>
+      </p>
+      <p style="font-size: 15px; line-height: 1.6; color: #1f2937; padding: 14px 16px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
+        <strong>P.S.</strong> You can recover the $9.99 cost of your donation on day one — then every job is profit! 🚀
       </p>
       <p style="font-size: 14px; color: #6b7280;">
         If you didn't start a donation, you can safely ignore this — we won't email you again about this.
@@ -438,11 +441,12 @@ def send_abandoned_donation_email(email: str) -> bool:
         "Get on your earning journey TODAY\n\n"
         "Your access to thousands of online earning opportunities is just one click away.\n"
         "Why waste anymore time?\n\n"
-        "For a one-time $12.99 you'll get 12 full months of:\n"
+        "For a one-time $9.99 you'll get 12 full months of:\n"
         "  • 199+ verified online earning platforms\n"
         "  • Ratings, payouts, category filters\n"
         "  • 10 free MoneyRules guides + 2 premium + 5 editable spreadsheets\n\n"
         f"Get on my earning journey: {resume_link}\n\n"
+        "P.S. You can recover the $9.99 cost of your donation on day one - then every job is profit!\n\n"
         "If you didn't start a donation, you can safely ignore this email.\n"
         f"— Income Online · {frontend_url}\n"
     )
