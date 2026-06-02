@@ -21,7 +21,14 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
-### Completed (29 May 2026 — current session, third half)
+### Completed (2 Jun 2026 — current session)
+- **Hero "Free Guides" pill is now CMS-editable (Item 4)**: New `hero` CMS fields `pill_enabled` (show/hide), `pill_label`, `pill_target` (dropdown: Free Guides Library `free-resources` / Donation `support` / How It Works `how-it-works`), and `pill_capture_email`. Admin Dashboard → Hero Section has a dedicated "Free Guides Pill" control block. `HeroSection.jsx` reads these with safe fallbacks (pill defaults ON, label "Free MoneyRules Guides", target `free-resources`).
+- **Hero pill email lead-capture (Item 6)**: When `pill_capture_email` is ON, clicking the pill opens `HeroLeadDialog.jsx` asking for an (optional) email before scrolling. Submit → `POST /api/leads/capture` (upserts into `resource_subscribers` with `newsletter_opt_in=true` + `lead_sources:['hero_pill']`, surfaced in the existing admin Subscribers card) → then scrolls to target. "Skip to guides" scrolls without capturing. When OFF, the pill scrolls directly (original behaviour).
+- **Mobile donation→unlock smoke test (Item 5)**: Verified at 390×844 — hero + `#support` donation section have no horizontal overflow/squeezing; `$9.99` price pill and Secure Payment card stay within viewport (12px symmetric margin). NOTE: a real PayPal **sandbox payment** could not be run in preview because `REACT_APP_PAYPAL_CLIENT_ID` is intentionally unset there (button shows "not configured" fallback) — needs user's sandbox client ID to test the live purchase path.
+- **`/admin` now redirects to `/admin/login`** (was an unmatched route).
+- Tested via testing agent: 7/7 backend + 9/9 frontend E2E scenarios pass. Test file: `/app/backend/tests/test_iteration4_hero_pill.py`.
+
+### Completed (29 May 2026 — previous session, third half)
 - **Pricing bug fixed**: Platform-access donation was incorrectly coded as `$12.99` (which is actually the separate Premium Pack price). Now correctly **$9.99** for platform access. Updated `EXPECTED_DONATION_USD` in `server.py`, `DONATION_AMOUNT` in `PayPalDonateButton.jsx`, and the abandoned-donation email copy. The 14 other `$12.99` references in code (Premium Pack section, resource email upsells, admin CMS) are correctly tagged and unchanged.
 - **Removed dead `/api/paypal/ipn` endpoint** (`backend/server.py`) — superseded by the new PayPal SDK flow. Now returns 404.
 - **Abandoned-donation recovery system** (smart conversion lift, ~8–15% recovery typical):

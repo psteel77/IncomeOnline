@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { AdminProvider } from "./contexts/AdminContext";
 import Home from "./pages/Home";
@@ -24,6 +24,7 @@ function App() {
               <Route path="/verify/:token" element={<Verify />} />
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/platforms/:slug" element={<PlatformDetail />} />
+              <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/pdf-view" element={<PDFView />} />
