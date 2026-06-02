@@ -1,0 +1,40 @@
+{
+  "summary": "End-to-end testing of the new CMS-editable hero pill (ITEM 4), hero lead-capture dialog (ITEM 6), and mobile donation/hero layout smoke test (ITEM 5). All 7 backend tests pass and all 9 frontend E2E scenarios pass. Final hero state restored to: pill_enabled=true, pill_label='Free MoneyRules Guides', pill_target=free-resources, pill_capture_email=false.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration4_hero_pill.py",
+    "/app/test_reports/pytest/pytest_results_iteration4.xml"
+  ],
+  "action_items": [
+    "Minor: review request states 'Login to admin (/admin)' but App.js exposes only /admin/login and /admin/dashboard. /admin returns 'No routes matched location /admin' (React Router warning). Consider adding a redirect from /admin -> /admin/login for usability, or update docs."
+  ],
+  "critical_code_review_comments": [
+    "HeroSection.handlePillClick correctly branches on pill_capture_email; scrollToTarget uses scrollIntoView - verified working for both #support and #free-resources targets.",
+    "Backend /api/leads/capture upserts subscriber by email; lead_sources is a list and idempotently appends new sources without duplicating rows (verified by test_capture_idempotent_appends_source).",
+    "CMS PUT endpoint expects payload wrapped in {content: ...}; AdminDashboard.saveSection sends it correctly. Admin auth gate (401/403 on unauth PUT) verified.",
+    "All four new pill_* fields are seeded by seed_content.py and surfaced through GET /api/content. AdminDashboard renders all four pill controls with correct data-testid attributes.",
+    "Mobile layout (390x844) clean: documentElement.scrollWidth == clientWidth == 390 at hero AND donation section; no overflowing descendants under #support; $9.99 price pill (l=12,r=378) and Secure Payment card (l=12,r=378) stay within viewport with 12px symmetric margin.",
+    "PayPal fallback box ('PayPal is not configured for this environment') renders cleanly inside the support card and does not overflow — behaves as expected per problem statement."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration4_hero_pill.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (7/7)",
+    "frontend": "100% (9/9 scenarios)"
+  },
+  "test_credentials": "admin / Gulluk*9 — works against POST /api/cms/login and /admin/login UI",
+  "seed_data_creation": "Test created subscriber rows with email pattern TEST_hero_*@example.com and one runtime test_pill_e2e_*@example.com via the lead-capture flow. These are non-destructive; they live in resource_subscribers and can be cleaned by prefix TEST_ / test_pill_e2e_.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Hero pill final state in DB: pill_enabled=true, pill_label='Free MoneyRules Guides', pill_target='free-resources', pill_capture_email=false. Admin routes are /admin/login and /admin/dashboard (NOT /admin). The CMS PUT endpoint is /api/cms/content/{section_id} and expects {content: {...}} body. The subscribers admin list endpoint is GET /api/pdf/resources/subscribers and returns {success, subscribers:[...]}.",
+  "rca_of_the_issue": "No bugs found. One documentation/UX nit: /admin does not redirect to /admin/login (React Router emits 'No routes matched' warning). Not blocking — direct navigation to /admin/login works."
+}

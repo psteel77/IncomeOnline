@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from '../ui/input';
 import { Search, Sparkles, TrendingUp, Users, DollarSign, BookOpenCheck } from 'lucide-react';
 import AccessGate from '../AccessGate';
+import HeroLeadDialog from './HeroLeadDialog';
 
-const scrollToFreeGuides = () => {
-  const el = document.getElementById('free-resources');
+const scrollToTarget = (targetId) => {
+  const el = document.getElementById(targetId || 'free-resources');
   if (el) {
     const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
     window.scrollTo({ top, behavior: 'smooth' });
@@ -18,6 +19,22 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
   const headlineLine2 = hero.headline_line2 || 'Earn Money Online';
   const subtitleLine1 = hero.subtitle_line1 || 'Your comprehensive directory of legitimate online earning opportunities';
   const subtitleLine2 = hero.subtitle_line2 || 'From Freelancing to Passive Income • One Time to Full Time';
+
+  // CMS-editable hero pill (label + scroll target + optional email capture)
+  const pillEnabled = hero.pill_enabled !== false; // default ON
+  const pillLabel = hero.pill_label || 'Free MoneyRules Guides';
+  const pillTarget = hero.pill_target || 'free-resources';
+  const pillCaptureEmail = hero.pill_capture_email === true;
+
+  const [leadDialogOpen, setLeadDialogOpen] = useState(false);
+
+  const handlePillClick = () => {
+    if (pillCaptureEmail) {
+      setLeadDialogOpen(true);
+    } else {
+      scrollToTarget(pillTarget);
+    }
+  };
 
   return (
     <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -39,21 +56,29 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
           <span className="text-sm font-medium text-purple-700">{badgeText}</span>
         </div>
 
-        {/* Free MoneyRules Guides callout */}
-        <div className="mb-6 slide-up slide-up-delay-1">
-          <button
-            type="button"
-            onClick={scrollToFreeGuides}
-            data-testid="hero-free-guides-cta"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-300 via-orange-300 to-pink-300 text-amber-900 border border-amber-400 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-          >
-            <BookOpenCheck className="h-4 w-4" />
-            <span className="text-sm font-extrabold uppercase tracking-wider">
-              Free MoneyRules Guides
-            </span>
-            <span className="text-xs font-semibold opacity-80">↓</span>
-          </button>
-        </div>
+        {/* Free MoneyRules Guides callout (CMS-editable label + target) */}
+        {pillEnabled && (
+          <div className="mb-6 slide-up slide-up-delay-1">
+            <button
+              type="button"
+              onClick={handlePillClick}
+              data-testid="hero-free-guides-cta"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-300 via-orange-300 to-pink-300 text-amber-900 border border-amber-400 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              <BookOpenCheck className="h-4 w-4" />
+              <span className="text-sm font-extrabold uppercase tracking-wider">
+                {pillLabel}
+              </span>
+              <span className="text-xs font-semibold opacity-80">↓</span>
+            </button>
+          </div>
+        )}
+
+        <HeroLeadDialog
+          open={leadDialogOpen}
+          onOpenChange={setLeadDialogOpen}
+          onContinue={() => scrollToTarget(pillTarget)}
+        />
 
         {/* Main Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up slide-up-delay-1" data-testid="hero-heading">

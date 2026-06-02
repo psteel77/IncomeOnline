@@ -17,6 +17,12 @@ content_sections = [
             "headline_line2": "Earn Money Online",
             "subtitle_line1": "Your comprehensive directory of legitimate online earning opportunities",
             "subtitle_line2": "From Freelancing to Passive Income • One Time to Full Time",
+            # Hero "Free MoneyRules Guides" pill (CMS-editable)
+            "pill_enabled": True,
+            "pill_label": "Free MoneyRules Guides",
+            "pill_target": "free-resources",
+            # When True, clicking the pill asks for an email (lead capture) before scrolling
+            "pill_capture_email": False,
         }
     },
     {

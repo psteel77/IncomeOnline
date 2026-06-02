@@ -851,6 +851,43 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
     return {"count": len(intents), "intents": intents}
 
 
+# -----------------------------------------------------------------------------
+# Hero-pill lead capture
+# -----------------------------------------------------------------------------
+# When a curious visitor clicks the hero "Free MoneyRules Guides" pill we can
+# (optionally, controlled via CMS) capture their email before scrolling them to
+# the guides. These are stored in `resource_subscribers` so they surface in the
+# existing admin Subscribers card and the newsletter list — turning curiosity
+# into a recoverable lead.
+
+class LeadCaptureRequest(BaseModel):
+    email: EmailStr
+    source: str = "hero_pill"
+
+
+@api_router.post("/leads/capture")
+async def capture_lead(request: LeadCaptureRequest):
+    """Public — capture a marketing lead (email) from a CTA such as the hero pill."""
+    email = request.email.strip().lower()
+    source = (request.source or "hero_pill").strip()[:50]
+    now = datetime.now(timezone.utc).isoformat()
+
+    await db.resource_subscribers.update_one(
+        {"email": email},
+        {
+            "$setOnInsert": {
+                "id": str(uuid.uuid4()),
+                "email": email,
+                "first_seen_at": now,
+            },
+            "$set": {"last_seen_at": now, "newsletter_opt_in": True},
+            "$addToSet": {"lead_sources": source},
+        },
+        upsert=True,
+    )
+    return {"success": True}
+
+
 @api_router.post("/auth/add-donor")
 async def add_donor(
     request: LoginRequest,

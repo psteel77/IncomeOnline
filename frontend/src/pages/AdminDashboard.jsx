@@ -367,6 +367,58 @@ const AdminDashboard = () => {
                   placeholder="From Freelancing to Passive Income • One Time to Full Time"
                 />
               </div>
+              <div className="pt-3 mt-1 border-t border-amber-200 bg-amber-50/40 -mx-6 px-6 py-4">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-semibold text-amber-800">"Free Guides" Pill</p>
+                  <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      data-testid="hero-pill-enabled-input"
+                      checked={content.hero?.pill_enabled !== false}
+                      onChange={(e) => updateSectionField('hero', 'pill_enabled', e.target.checked)}
+                      className="h-4 w-4 accent-amber-600"
+                    />
+                    Show pill
+                  </label>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Pill Label</label>
+                    <Input
+                      data-testid="hero-pill-label-input"
+                      value={content.hero?.pill_label ?? 'Free MoneyRules Guides'}
+                      onChange={(e) => updateSectionField('hero', 'pill_label', e.target.value)}
+                      placeholder="Free MoneyRules Guides"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Scrolls To</label>
+                    <select
+                      data-testid="hero-pill-target-input"
+                      value={content.hero?.pill_target || 'free-resources'}
+                      onChange={(e) => updateSectionField('hero', 'pill_target', e.target.value)}
+                      className="w-full h-10 rounded-md border border-slate-300 bg-white px-3 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                    >
+                      <option value="free-resources">Free Guides Library</option>
+                      <option value="support">Donation / Get Access</option>
+                      <option value="how-it-works">How It Works</option>
+                    </select>
+                  </div>
+                </div>
+                <label className="flex items-start gap-2 mt-3 text-sm text-slate-700 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    data-testid="hero-pill-capture-email-input"
+                    checked={content.hero?.pill_capture_email === true}
+                    onChange={(e) => updateSectionField('hero', 'pill_capture_email', e.target.checked)}
+                    className="mt-0.5 h-4 w-4 accent-amber-600"
+                  />
+                  <span>
+                    <span className="font-medium">Capture email before scrolling</span>
+                    <span className="block text-xs text-slate-500">Asks visitors for an email (optional) — turns clicks into recoverable leads. They can still skip to the guides.</span>
+                  </span>
+                </label>
+              </div>
               <div className="pt-2 border-t border-slate-200">
                 <p className="text-xs text-slate-500 mb-3">Legacy fields (used by older components)</p>
                 <div>
