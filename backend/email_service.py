@@ -179,11 +179,12 @@ def _premium_email(*, eyebrow: str, title: str, body_html: str, footer_note: str
       <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:18px; overflow:hidden;">
         <tr>
           <td bgcolor="{_BRAND_HEADER}" style="background-color:{_BRAND_HEADER}; padding:32px 40px 26px 40px;" align="center">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 18px auto;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto;">
               <tr><td bgcolor="#ffffff" align="center" style="background-color:#ffffff; border-radius:12px; padding:12px 18px;">
                 <img src="{logo_url}" width="140" alt="Income Online" style="display:block; max-width:140px; height:auto;"/>
               </td></tr>
             </table>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td height="14" style="font-size:0; line-height:14px; height:14px; mso-line-height-rule:exactly;">&nbsp;</td></tr></table>
             <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#c4b5fd; font-weight:bold;">{eyebrow}</div>
             <div style="font-family:'Trebuchet MS',Arial,Helvetica,sans-serif; font-size:28px; line-height:1.25; color:#ffffff; font-weight:bold; padding-top:8px;">{title}</div>
           </td>
@@ -553,13 +554,14 @@ def send_abandoned_donation_email(email: str) -> bool:
         <!-- ===== Hero header (deep purple) ===== -->
         <tr>
           <td bgcolor="#4c1d95" style="background-color:#4c1d95; padding:32px 40px 26px 40px;" align="center">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 18px auto;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto;">
               <tr>
                 <td bgcolor="#ffffff" align="center" style="background-color:#ffffff; border-radius:12px; padding:12px 18px;">
                   <img src="{logo_url}" width="140" alt="Income Online" style="display:block; max-width:140px; height:auto;"/>
                 </td>
               </tr>
             </table>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td height="14" style="font-size:0; line-height:14px; height:14px; mso-line-height-rule:exactly;">&nbsp;</td></tr></table>
             <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#c4b5fd; font-weight:bold;">You're almost in</div>
             <div style="font-family:'Trebuchet MS',Arial,Helvetica,sans-serif; font-size:30px; line-height:1.2; color:#ffffff; font-weight:bold; padding-top:8px;">Your access is one click away</div>
           </td>
