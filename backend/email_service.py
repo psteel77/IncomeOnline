@@ -424,86 +424,154 @@ def send_abandoned_donation_email(email: str) -> bool:
 
     html = f"""\
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <title>Your Income Online access is one click away</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style>
+  table {{ border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }}
+  img {{ border:0; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }}
+  body {{ margin:0; padding:0; width:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }}
+  a {{ text-decoration:none; }}
+</style>
 </head>
-<body style="margin:0; padding:0; background-color:#f3f4f6;">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f3f4f6;">
+<body style="margin:0; padding:0; background-color:#ece9fb;">
+<div style="display:none; max-height:0; overflow:hidden; opacity:0;">Your spot is saved — finish in one click and unlock 199+ verified ways to earn online.</div>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#ece9fb;">
   <tr>
-    <td align="center" style="padding:24px 12px;">
-      <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:12px; overflow:hidden; border:1px solid #e5e7eb;">
-        <!-- Brand header -->
+    <td align="center" style="padding:28px 12px;">
+      <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:18px; overflow:hidden;">
+
+        <!-- ===== Hero header (deep purple) ===== -->
         <tr>
-          <td align="center" bgcolor="#6d28d9" style="background-color:#6d28d9; padding:24px;">
-            <img src="{logo_url}" width="160" alt="Income Online" style="display:block; border:0; max-width:160px; height:auto;"/>
-          </td>
-        </tr>
-        <!-- Body -->
-        <tr>
-          <td style="padding:36px 40px 8px 40px; font-family:Arial,Helvetica,sans-serif;">
-            <h1 style="margin:0 0 16px 0; font-size:26px; line-height:1.25; color:#111827; font-weight:bold;">
-              You're one click from full access
-            </h1>
-            <p style="margin:0 0 16px 0; font-size:16px; line-height:1.6; color:#374151;">
-              You started unlocking <strong>199+ verified online earning platforms</strong> but didn't quite finish. Your spot is saved — pick up right where you left off.
-            </p>
-            <p style="margin:0 0 12px 0; font-size:16px; line-height:1.6; color:#374151;">
-              A one-time <strong>$9.99</strong> contribution gives you <strong>12 full months</strong> of:
-            </p>
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 8px 0;">
-              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; 199+ verified online earning platforms</td></tr>
-              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; Detailed ratings, payouts &amp; category filters</td></tr>
-              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; 10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets</td></tr>
-            </table>
-          </td>
-        </tr>
-        <!-- Bulletproof button -->
-        <tr>
-          <td align="center" style="padding:20px 40px 8px 40px;">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+          <td bgcolor="#4c1d95" style="background-color:#4c1d95; padding:32px 40px 26px 40px;" align="center">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 18px auto;">
               <tr>
-                <td align="center" bgcolor="#6d28d9" style="background-color:#6d28d9; border-radius:8px;">
-                  <a href="{resume_link}" target="_blank" style="display:inline-block; padding:15px 36px; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none; border-radius:8px;">
-                    Complete my $9.99 access &rarr;
-                  </a>
+                <td bgcolor="#ffffff" align="center" style="background-color:#ffffff; border-radius:12px; padding:12px 18px;">
+                  <img src="{logo_url}" width="140" alt="Income Online" style="display:block; max-width:140px; height:auto;"/>
                 </td>
               </tr>
             </table>
-            <p style="margin:14px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#9ca3af;">
-              Secure checkout via PayPal
+            <div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#c4b5fd; font-weight:bold;">You're almost in</div>
+            <div style="font-family:'Trebuchet MS',Arial,Helvetica,sans-serif; font-size:30px; line-height:1.2; color:#ffffff; font-weight:bold; padding-top:8px;">Your access is one click away</div>
+          </td>
+        </tr>
+        <!-- 3-colour brand accent stripe -->
+        <tr>
+          <td style="font-size:0; line-height:0;" height="6">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
+              <td bgcolor="#7c3aed" height="6" style="background-color:#7c3aed; font-size:0; line-height:0;">&nbsp;</td>
+              <td bgcolor="#db2777" height="6" style="background-color:#db2777; font-size:0; line-height:0;">&nbsp;</td>
+              <td bgcolor="#ea580c" height="6" style="background-color:#ea580c; font-size:0; line-height:0;">&nbsp;</td>
+            </tr></table>
+          </td>
+        </tr>
+
+        <!-- ===== Intro ===== -->
+        <tr>
+          <td style="padding:34px 40px 6px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <p style="margin:0 0 14px 0; font-size:17px; line-height:1.6; color:#1f2937;">
+              You started unlocking <strong style="color:#4c1d95;">199+ verified online earning platforms</strong> but didn't quite finish &mdash; and we saved your spot.
             </p>
           </td>
         </tr>
-        <!-- P.S. callout -->
+
+        <!-- ===== Price spotlight (tinted block for depth) ===== -->
         <tr>
-          <td style="padding:16px 40px 0 40px;">
-            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#fef3c7; border-radius:8px;">
+          <td style="padding:8px 40px 0 40px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f5f3ff" style="background-color:#f5f3ff; border-radius:14px;">
               <tr>
-                <td style="padding:14px 18px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.6; color:#92400e;">
-                  <strong>Worth it from day one:</strong> a single job from these platforms can more than cover the $9.99 — after that, it's all profit.
+                <td align="center" style="padding:26px 24px;">
+                  <div style="font-family:'Trebuchet MS',Arial,sans-serif; font-size:46px; line-height:1; color:#4c1d95; font-weight:bold;">$9.99</div>
+                  <div style="font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#6d28d9; padding-top:6px; font-weight:bold; letter-spacing:0.5px;">ONE-TIME &middot; 12 MONTHS FULL ACCESS</div>
+                  <!-- CTA button -->
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:22px auto 0 auto;">
+                    <tr><td align="center">
+                      <!--[if mso]>
+                      <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{resume_link}" style="height:52px;v-text-anchor:middle;width:300px;" arcsize="50%" stroke="f" fillcolor="#6d28d9">
+                      <w:anchorlock/>
+                      <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Complete my $9.99 access &rarr;</center>
+                      </v:roundrect>
+                      <![endif]-->
+                      <!--[if !mso]><!-- -->
+                      <a href="{resume_link}" target="_blank" style="display:inline-block; padding:16px 38px; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:bold; color:#ffffff; background-color:#6d28d9; border-radius:999px;">Complete my $9.99 access &rarr;</a>
+                      <!--<![endif]-->
+                    </td></tr>
+                  </table>
+                  <div style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#9ca3af; padding-top:12px;">&#128274; Secure checkout via PayPal</div>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
-        <!-- Footer -->
+
+        <!-- ===== What you get (icon rows) ===== -->
         <tr>
-          <td style="padding:28px 40px 36px 40px; font-family:Arial,Helvetica,sans-serif;">
-            <p style="margin:0 0 12px 0; font-size:13px; line-height:1.6; color:#9ca3af;">
-              If a button doesn't work, copy and paste this link into your browser:<br/>
+          <td style="padding:30px 40px 6px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <div style="font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#9ca3af; font-weight:bold; padding-bottom:14px;">What you unlock today</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td width="40" valign="top" style="padding:6px 0;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td width="28" height="28" align="center" valign="middle" bgcolor="#ede9fe" style="background-color:#ede9fe; border-radius:8px; font-family:Arial,sans-serif; font-size:15px; color:#6d28d9; font-weight:bold;">&#10003;</td></tr></table>
+                </td>
+                <td valign="middle" style="padding:6px 0 6px 12px; font-size:15px; line-height:1.5; color:#374151;"><strong style="color:#111827;">199+ verified platforms</strong> across freelancing, surveys, remote jobs &amp; more</td>
+              </tr>
+              <tr>
+                <td width="40" valign="top" style="padding:6px 0;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td width="28" height="28" align="center" valign="middle" bgcolor="#fce7f3" style="background-color:#fce7f3; border-radius:8px; font-family:Arial,sans-serif; font-size:15px; color:#db2777; font-weight:bold;">&#10003;</td></tr></table>
+                </td>
+                <td valign="middle" style="padding:6px 0 6px 12px; font-size:15px; line-height:1.5; color:#374151;"><strong style="color:#111827;">Ratings, payouts &amp; filters</strong> so you pick the right opportunity fast</td>
+              </tr>
+              <tr>
+                <td width="40" valign="top" style="padding:6px 0;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr><td width="28" height="28" align="center" valign="middle" bgcolor="#ffedd5" style="background-color:#ffedd5; border-radius:8px; font-family:Arial,sans-serif; font-size:15px; color:#ea580c; font-weight:bold;">&#10003;</td></tr></table>
+                </td>
+                <td valign="middle" style="padding:6px 0 6px 12px; font-size:15px; line-height:1.5; color:#374151;"><strong style="color:#111827;">12 bonus resources:</strong> 10 free + 2 premium MoneyRules guides &amp; 5 editable spreadsheets</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ===== Reassurance band (full-width tinted) ===== -->
+        <tr>
+          <td style="padding:26px 40px 4px 40px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#fffbeb" style="background-color:#fffbeb; border-radius:12px;">
+              <tr>
+                <td width="6" bgcolor="#f59e0b" style="background-color:#f59e0b; font-size:0; line-height:0;">&nbsp;</td>
+                <td style="padding:16px 20px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.6; color:#92400e;">
+                  <strong>Worth it from day one.</strong> A single job from these platforms can more than cover the $9.99 &mdash; everything after that is profit.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ===== Fallback link ===== -->
+        <tr>
+          <td style="padding:24px 40px 10px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <p style="margin:0; font-size:12px; line-height:1.6; color:#9ca3af;">
+              Button not working? Paste this into your browser:<br/>
               <a href="{resume_link}" style="color:#6d28d9; word-break:break-all;">{resume_link}</a>
             </p>
-            <hr style="border:none; border-top:1px solid #e5e7eb; margin:16px 0;"/>
-            <p style="margin:0; font-size:12px; line-height:1.6; color:#9ca3af;">
-              You're receiving this because you started a donation at Income Online. If that wasn't you, you can safely ignore this — we won't email you about it again.<br/>
-              Income Online &middot; <a href="{brand_url}" style="color:#6d28d9; text-decoration:none;">www.incomeonline.info</a>
+          </td>
+        </tr>
+
+        <!-- ===== Dark footer band ===== -->
+        <tr>
+          <td bgcolor="#2e1065" style="background-color:#2e1065; padding:24px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <p style="margin:0 0 6px 0; font-size:13px; color:#ffffff; font-weight:bold;">Income Online</p>
+            <p style="margin:0; font-size:12px; line-height:1.6; color:#a78bda;">
+              You're receiving this because you started a donation at Income Online. If that wasn't you, ignore this &mdash; we won't email you about it again.<br/>
+              <a href="{brand_url}" style="color:#c4b5fd;">www.incomeonline.info</a>
             </p>
           </td>
         </tr>
+
       </table>
     </td>
   </tr>
