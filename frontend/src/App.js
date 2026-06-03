@@ -8,6 +8,7 @@ import Verify from "./pages/Verify";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuccessStories from "./pages/SuccessStories";
+import SuccessStoryDetail from "./pages/SuccessStoryDetail";
 import PDFView from "./pages/PDFView";
 import PlatformDetail from "./pages/PlatformDetail";
 
@@ -23,6 +24,7 @@ function App() {
               <Route path="/verify" element={<Verify />} />
               <Route path="/verify/:token" element={<Verify />} />
               <Route path="/success-stories" element={<SuccessStories />} />
+              <Route path="/success-stories/:slug" element={<SuccessStoryDetail />} />
               <Route path="/platforms/:slug" element={<PlatformDetail />} />
               <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
               <Route path="/admin/login" element={<AdminLogin />} />

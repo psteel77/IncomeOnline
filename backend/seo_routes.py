@@ -528,42 +528,127 @@ async def render_donate():
                         headers={"Cache-Control": "public, max-age=3600"})
 
 
-# A curated, source-cited subset of the success stories shown on the React page —
-# enough unique content for crawlers without duplicating all 60 client-side entries.
-_SUCCESS_STORIES = [
-    ("Sarah M.", "Upwork", "Freelancing", "$4,500/month", "From $0 to $4,500/month in 6 months as a freelance graphic designer."),
-    ("James K.", "YouTube", "Digital Creators", "$8,000-$12,000/month", "Built a 500K-subscriber educational channel from scratch in 2 years."),
-    ("Emma L.", "Etsy", "E-commerce", "$3,500/month", "Turned a handmade-jewelry hobby into a full-time Etsy shop."),
-    ("Michael T.", "Fiverr", "Freelancing", "$2,800/month", "Went from $10 voice-over gigs to $200+ projects with a waiting list."),
-    ("Lisa P.", "Survey sites", "Surveys & Research", "$300-$500/month", "Earns the family grocery bill from surveys during nap times."),
-    ("David R.", "Amazon FBA", "E-commerce", "$6,000-$8,000/month", "Built a $6K/month business from a $500 starting investment."),
-    ("Marcus B.", "Prolific", "Surveys & Research", "$150-$200/month", "$7-11/hour completing academic research surveys as a student."),
-    ("Olivia N.", "We Work Remotely", "Remote Jobs", "$4,500+/month", "Found a fully remote tech role that pays more than her old office job."),
-    ("Rob Percival", "Udemy", "Teaching & Tutoring", "$2,000,000+ lifetime", "Became Udemy's all-time top-earning instructor with web-dev courses."),
-    ("Sophie C.", "Substack", "Digital Creators", "$40,000+/year", "Newsletter replaced her corporate salary at ~1,000 paid subscribers."),
-    ("David N.", "Toptal", "Freelancing", "$10,000+/month", "Joined Toptal's top 3% and now designs for Cisco, Nestlé and Google."),
-    ("Danny F.", "Deliveroo", "Gig Economy", "$2,000-$2,500/month", "Full-time delivery rider earning $22+/hour during peak times."),
-    ("Daniel W.", "Gumroad", "Digital Creators", "$11,000+ per ebook", "A single ebook has generated over $14,000 in sales."),
-    ("Ben A.", "Remote OK", "Remote Jobs", "$5,000+/month", "Landed a remote developer role in three weeks using salary stats to negotiate."),
-    ("George T.", "Skillshare", "Teaching & Tutoring", "$200-$500/month", "Earns royalties based on minutes watched by premium subscribers."),
-    ("Amanda J.", "Qmee", "Surveys & Research", "$50-$100/month", "Loves the no-minimum payout and instant PayPal withdrawals."),
-]
+# A source-cited set of success stories, loaded from the canonical data module
+# (shared with the human-facing React pages).
+from success_stories_data import get_all as _stories_all, get_by_slug as _story_by_slug, get_related as _story_related
+
+
+@router.get("/success-stories")
+async def list_success_stories():
+    """Full list of success stories (slugged) — used by the React list page."""
+    return {"stories": _stories_all(), "count": len(_stories_all())}
+
+
+@router.get("/success-story/{slug}")
+async def get_success_story(slug: str):
+    """A single success story by slug — used by the React detail page."""
+    story = _story_by_slug(slug)
+    if not story:
+        raise HTTPException(status_code=404, detail="Success story not found")
+    return {"story": story, "related": _story_related(story, 4)}
+
+
+@router.get("/render/success-story/{slug}")
+async def render_success_story(slug: str):
+    """Crawler-facing server-rendered HTML for a single success story."""
+    story = _story_by_slug(slug)
+    if not story:
+        notfound = (
+            '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
+            '<title>Success story not found | Income Online</title>'
+            '<meta name="robots" content="noindex, follow"/>'
+            f'<link rel="canonical" href="{SITE_URL}/success-stories"/></head>'
+            '<body><h1>Success story not found</h1>'
+            f'<p><a href="{SITE_URL}/success-stories">Read all success stories</a></p></body></html>'
+        )
+        return HTMLResponse(content=notfound, status_code=404)
+
+    name = _esc(story["name"])
+    platform = _esc(story["platform"])
+    category = _esc(story["category"])
+    canonical = f"{SITE_URL}/success-stories/{story['slug']}"
+    title = f"{name} — {story['earnings']} on {platform} | Success Story | Income Online"
+    meta_desc = (f"{name}'s success story: {story['before']} to {story['after']}. "
+                 f"Earnings: {story['earnings']} via {platform} in {story['timeline']}. {story['highlight']}.")[:300]
+
+    related = _story_related(story, 4)
+    related_html = "".join(
+        f'<li><a href="{SITE_URL}/success-stories/{r["slug"]}">{_esc(r["name"])} — {_esc(r["platform"])} ({_esc(r["earnings"])})</a></li>'
+        for r in related
+    )
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": title,
+        "description": meta_desc,
+        "url": canonical,
+        "articleSection": story["category"],
+        "publisher": {"@type": "Organization", "name": "Income Online", "url": SITE_URL},
+        "mainEntityOfPage": canonical,
+    }
+    if story.get("sourceUrl"):
+        json_ld["citation"] = story["sourceUrl"]
+
+    body = (
+        '<nav aria-label="Breadcrumb">'
+        f'<a href="{SITE_URL}/">Home</a> &rsaquo; '
+        f'<a href="{SITE_URL}/success-stories">Success Stories</a> &rsaquo; {name}</nav>'
+        f"<main><article><h1>{name}: {_esc(story['after'])}</h1>"
+        f"<p><strong>Platform:</strong> {platform} &middot; <strong>Category:</strong> {category} "
+        f"&middot; <strong>Timeline:</strong> {_esc(story['timeline'])}</p>"
+        f"<p><strong>Before:</strong> {_esc(story['before'])}<br/>"
+        f"<strong>After:</strong> {_esc(story['after'])}</p>"
+        f"<p><strong>Earnings:</strong> {_esc(story['earnings'])}</p>"
+        f"<p>{_esc(story['story'])}</p>"
+        f"<p><em>{_esc(story['highlight'])}</em></p>"
+        f"<p><strong>Source:</strong> {_esc(story['source'])} — "
+        f"<a href=\"{_esc(story['sourceUrl'])}\" rel=\"nofollow noopener\">view original source</a></p>"
+        f'<p><a href="{SITE_URL}/platforms/{slugify(story["platform"])}">See the {platform} platform details</a> '
+        f'or <a href="{SITE_URL}/donate">unlock the full directory for $9.99/yr</a>.</p>'
+        f"<h2>More success stories</h2><ul>{related_html}</ul>"
+        "</article></main>"
+    )
+    return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})
+
+
+@router.get("/success-stories-sitemap.xml")
+async def success_stories_sitemap():
+    """XML sitemap of all individual success-story landing pages."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for s in _stories_all():
+        lines.append('  <url>')
+        lines.append(f'    <loc>{SITE_URL}/success-stories/{s["slug"]}</loc>')
+        lines.append(f'    <lastmod>{today}</lastmod>')
+        lines.append('    <changefreq>monthly</changefreq>')
+        lines.append('    <priority>0.6</priority>')
+        lines.append('  </url>')
+    lines.append('</urlset>')
+    return Response(content="\n".join(lines), media_type="application/xml",
+                    headers={"Cache-Control": "public, max-age=3600"})
 
 
 @router.get("/render/success-stories")
 async def render_success_stories():
-    """Crawler-facing server-rendered /success-stories page."""
+    """Crawler-facing server-rendered /success-stories index page (links to each story)."""
     title = "Success Stories | Real People Earning Money Online | Income Online"
     meta_desc = (
-        "Read verified, source-cited success stories from real people earning money online — "
+        "Read 60+ verified, source-cited success stories from real people earning money online — "
         "from freelancing on Upwork to surveys on Prolific and courses on Udemy."
     )[:300]
     canonical = f"{SITE_URL}/success-stories"
 
     cards = "".join(
-        f"<article><h2>{_esc(name)} — {_esc(platform)} ({_esc(category)})</h2>"
-        f"<p><strong>Earnings:</strong> {_esc(earnings)}</p><p>{_esc(story)}</p></article>"
-        for (name, platform, category, earnings, story) in _SUCCESS_STORIES
+        f'<article><h2><a href="{SITE_URL}/success-stories/{s["slug"]}">'
+        f'{_esc(s["name"])} — {_esc(s["platform"])} ({_esc(s["category"])})</a></h2>'
+        f'<p><strong>Earnings:</strong> {_esc(s["earnings"])} &middot; <strong>Timeline:</strong> {_esc(s["timeline"])}</p>'
+        f'<p>{_esc(s["story"])}</p></article>'
+        for s in _stories_all()
     )
     body = (
         "<main><h1>Real People, Real Success</h1>"
