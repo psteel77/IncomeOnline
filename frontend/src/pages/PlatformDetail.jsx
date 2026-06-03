@@ -25,6 +25,7 @@ const PlatformDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [platform, setPlatform] = useState(null);
+  const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -32,11 +33,16 @@ const PlatformDetail = () => {
     let cancelled = false;
     setLoading(true);
     setError(false);
+    setRelated([]);
     axios
       .get(`${API}/seo/platform-by-slug/${encodeURIComponent(slug)}`)
       .then((res) => { if (!cancelled) setPlatform(res.data); })
       .catch(() => { if (!cancelled) setError(true); })
       .finally(() => { if (!cancelled) setLoading(false); });
+    axios
+      .get(`${API}/seo/related-platforms/${encodeURIComponent(slug)}?limit=6`)
+      .then((res) => { if (!cancelled) setRelated(res.data?.related || []); })
+      .catch(() => {});
     return () => { cancelled = true; };
   }, [slug]);
 
@@ -234,6 +240,46 @@ const PlatformDetail = () => {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Related platforms — internal links for SEO crawl depth + keep browsing */}
+        {related.length > 0 && (
+          <section className="mb-8" data-testid="related-platforms">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4">
+              Related platforms in {category}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {related.map((r) => (
+                <Link
+                  key={r.slug}
+                  to={`/platforms/${r.slug}`}
+                  className="group"
+                  data-testid={`related-platform-${r.slug}`}
+                >
+                  <Card className="border-0 shadow-md hover:shadow-xl transition-shadow h-full">
+                    <CardContent className="p-5">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <h3 className="font-bold text-slate-800 group-hover:text-purple-700 transition-colors truncate">
+                          {r.name}
+                        </h3>
+                        {r.rating && (
+                          <span className="flex items-center gap-1 text-sm text-slate-600 flex-shrink-0">
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                            {r.rating}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-slate-500 mb-3">{r.category}</p>
+                      <div className="flex items-center gap-1.5 text-sm font-semibold text-purple-700">
+                        <TrendingUp className="h-4 w-4" />
+                        {r.earningsPotential || '—'}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Convert CTA */}

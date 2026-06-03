@@ -21,6 +21,11 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (June 2026 — SEO bot-render extended + related platforms) [PENDING DEPLOY]
+- **Extended dynamic-rendering to homepage, /donate, /success-stories** (`backend/seo_routes.py`): new crawler-facing endpoints `GET /api/seo/render/home` (platforms grouped by category w/ internal links + WebSite JSON-LD), `/render/donate` (Product+Offer $9.99 schema), `/render/success-stories` (16 curated source-cited summaries + CollectionPage schema). `frontend/vercel.json` adds bot-UA rewrites for `/`, `/donate`, `/success-stories` (humans still get the React SPA).
+- **Related platforms (category-aware)**: new `GET /api/seo/related-platforms/{slug}?limit=6` (same-category first, then fill). `PlatformDetail.jsx` renders a "Related platforms in {category}" card grid before the CTA (internal links → crawl depth + longer sessions). Platform bot HTML now also links same-category platforms first via shared `_pick_related()`.
+- Tested locally (seeded 5 temp platforms in preview Mongo to verify grouping/related, then removed). Lint clean. **Needs "Save to Github" to deploy.**
+
 ### Completed (June 2026 — SEO DEPLOYED & VERIFIED LIVE)
 - **Deployed to production** (user clicked "Save to Github"): bot-renderer + vercel.json dot-exclusion are now LIVE.
 - Verified on `https://www.incomeonline.info`:

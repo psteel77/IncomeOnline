@@ -340,14 +340,245 @@ async def render_platform(slug: str):
         )
         return HTMLResponse(content=notfound, status_code=404)
 
-    # A handful of other platforms for internal linking / crawl depth.
-    related = [
-        p for p in platforms
-        if slugify(p.get("name") or "") != slug and p.get("name")
-    ][:12]
+    # Same-category platforms first for stronger internal linking / crawl depth.
+    related = _pick_related(platforms, slug, match.get("category") or "", limit=12)
 
     html_doc = _render_platform_html(match, related)
     return HTMLResponse(
         content=html_doc,
         headers={"Cache-Control": "public, max-age=3600"},
     )
+
+
+
+# =============================================================================
+# Category-aware related platforms (used by both bot HTML + the human React page)
+# =============================================================================
+
+def _pick_related(platforms: list, current_slug: str, current_category: str, limit: int = 6) -> list:
+    """Prefer same-category platforms, then fill from others, for internal linking."""
+    same_cat, others = [], []
+    for p in platforms:
+        s = slugify(p.get("name") or "")
+        if not s or s == current_slug:
+            continue
+        if (p.get("category") or "") == (current_category or ""):
+            same_cat.append(p)
+        else:
+            others.append(p)
+    return (same_cat + others)[:limit]
+
+
+@router.get("/related-platforms/{slug}")
+async def related_platforms(slug: str, limit: int = 6):
+    """Same-category platforms for the bottom of a platform page (humans + crawl depth)."""
+    from server import db
+    slug = slug.lower().strip()
+    platforms = await db.platforms.find({}, {"_id": 0}).to_list(5000)
+
+    current = next((p for p in platforms if slugify(p.get("name") or "") == slug), None)
+    if not current:
+        return {"related": [], "category": None}
+
+    related = _pick_related(platforms, slug, current.get("category") or "", max(1, min(limit, 12)))
+    out = [
+        {
+            "name": r.get("name"),
+            "slug": slugify(r.get("name") or ""),
+            "category": r.get("category"),
+            "earningsPotential": r.get("earningsPotential"),
+            "difficulty": r.get("difficulty"),
+            "rating": r.get("rating"),
+        }
+        for r in related
+    ]
+    return {"related": out, "category": current.get("category")}
+
+
+# =============================================================================
+# Crawler-facing server-rendered HTML for the homepage, /donate, /success-stories
+# (same dynamic-rendering pattern as platform pages; Vercel routes bots here)
+# =============================================================================
+
+def _doc(title: str, meta_desc: str, canonical: str, body: str, json_ld: dict | None = None) -> str:
+    import json as _json
+    ld = f'<script type="application/ld+json">{_json.dumps(json_ld)}</script>' if json_ld else ""
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{title}</title>
+<meta name="description" content="{meta_desc}"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="{canonical}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="{title}"/>
+<meta property="og:description" content="{meta_desc}"/>
+<meta property="og:url" content="{canonical}"/>
+<meta property="og:image" content="{SITE_URL}/earnhub-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="{title}"/>
+<meta name="twitter:description" content="{meta_desc}"/>
+{ld}
+</head>
+<body>
+<header><a href="{SITE_URL}/">Income Online</a></header>
+{body}
+<footer><a href="{SITE_URL}/">Browse all 199+ verified earning platforms</a> &middot; <a href="{SITE_URL}/donate">Unlock full access ($9.99/yr)</a> &middot; <a href="{SITE_URL}/success-stories">Success stories</a></footer>
+</body>
+</html>"""
+
+
+@router.get("/render/home")
+async def render_home():
+    """Crawler-facing server-rendered homepage built from the DB."""
+    from server import db
+    platforms = await db.platforms.find({}, {"_id": 0}).to_list(5000)
+
+    # Group platforms by category for rich, internally-linked content.
+    by_cat: dict[str, list] = {}
+    for p in platforms:
+        name = (p.get("name") or "").strip()
+        if not name:
+            continue
+        by_cat.setdefault(p.get("category") or "Other", []).append(p)
+
+    total = sum(len(v) for v in by_cat.values())
+    title = "Income Online | Discover 199+ Legitimate Ways to Earn Money Online"
+    meta_desc = (
+        f"Browse {total}+ verified online earning platforms across {len(by_cat)} categories — "
+        "freelancing, surveys, remote jobs, e-commerce, teaching, trading and more. "
+        "Real reviews, payment info and success stories."
+    )[:300]
+
+    sections = []
+    for category, items in sorted(by_cat.items(), key=lambda kv: -len(kv[1])):
+        links = "".join(
+            f'<li><a href="{SITE_URL}/platforms/{slugify(p.get("name") or "")}">{_esc(p.get("name"))}</a>'
+            f' — {_esc(p.get("earningsPotential"))}</li>'
+            for p in items[:25]
+        )
+        sections.append(
+            f'<section><h2>{_esc(category)} ({len(items)} platforms)</h2><ul>{links}</ul></section>'
+        )
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Income Online",
+        "url": SITE_URL,
+        "description": meta_desc,
+    }
+    body = (
+        f"<main><h1>Discover {total}+ Legitimate Ways to Earn Money Online</h1>"
+        "<p>Income Online is a curated directory of verified online earning platforms across "
+        f"{len(by_cat)} categories. Every listing includes earnings potential, difficulty, minimum "
+        "payout, payment methods and UK availability. We don't take platform commissions, so our "
+        "reviews stay unbiased.</p>"
+        '<p><a href="' + SITE_URL + '/donate">Unlock the full directory for a one-time $9.99 yearly contribution</a>, '
+        'or <a href="' + SITE_URL + '/success-stories">read real success stories</a>.</p>'
+        + "".join(sections) + "</main>"
+    )
+    return HTMLResponse(_doc(title, meta_desc, f"{SITE_URL}/", body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})
+
+
+@router.get("/render/donate")
+async def render_donate():
+    """Crawler-facing server-rendered /donate page."""
+    title = "Support Income Online — Unlock 199+ Earning Platforms for $9.99/yr"
+    meta_desc = (
+        "Make a one-time $9.99 yearly contribution to unlock full access to 199+ verified "
+        "online earning platforms — detailed reviews, payment info and real success stories. "
+        "Secure payment via PayPal."
+    )[:300]
+    canonical = f"{SITE_URL}/donate"
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Income Online — Full Directory Access (12 months)",
+        "description": meta_desc,
+        "url": canonical,
+        "offers": {
+            "@type": "Offer",
+            "price": "9.99",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": canonical,
+        },
+    }
+    body = (
+        "<main><h1>Support Income Online</h1>"
+        "<p>Your one-time <strong>$9.99</strong> contribution unlocks 12 months of full access to our "
+        "directory of 199+ verified online earning platforms, and keeps the directory free, live and "
+        "up to date for everyone.</p>"
+        "<h2>What you get</h2><ul>"
+        "<li>Full details for all 199+ platforms — earnings potential, difficulty, minimum payout and payment methods</li>"
+        "<li>12 months of access from the date of your contribution</li>"
+        "<li>Real, source-cited success stories to model your own journey on</li>"
+        "<li>New platforms and features funded by your support</li>"
+        "</ul>"
+        "<h2>Secure payment</h2><p>Payments are processed securely by PayPal. We never see or store "
+        "your payment information.</p>"
+        f'<p><a href="{canonical}">Make your $9.99 contribution</a> or '
+        f'<a href="{SITE_URL}/">browse the directory first</a>.</p></main>'
+    )
+    return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})
+
+
+# A curated, source-cited subset of the success stories shown on the React page —
+# enough unique content for crawlers without duplicating all 60 client-side entries.
+_SUCCESS_STORIES = [
+    ("Sarah M.", "Upwork", "Freelancing", "$4,500/month", "From $0 to $4,500/month in 6 months as a freelance graphic designer."),
+    ("James K.", "YouTube", "Digital Creators", "$8,000-$12,000/month", "Built a 500K-subscriber educational channel from scratch in 2 years."),
+    ("Emma L.", "Etsy", "E-commerce", "$3,500/month", "Turned a handmade-jewelry hobby into a full-time Etsy shop."),
+    ("Michael T.", "Fiverr", "Freelancing", "$2,800/month", "Went from $10 voice-over gigs to $200+ projects with a waiting list."),
+    ("Lisa P.", "Survey sites", "Surveys & Research", "$300-$500/month", "Earns the family grocery bill from surveys during nap times."),
+    ("David R.", "Amazon FBA", "E-commerce", "$6,000-$8,000/month", "Built a $6K/month business from a $500 starting investment."),
+    ("Marcus B.", "Prolific", "Surveys & Research", "$150-$200/month", "$7-11/hour completing academic research surveys as a student."),
+    ("Olivia N.", "We Work Remotely", "Remote Jobs", "$4,500+/month", "Found a fully remote tech role that pays more than her old office job."),
+    ("Rob Percival", "Udemy", "Teaching & Tutoring", "$2,000,000+ lifetime", "Became Udemy's all-time top-earning instructor with web-dev courses."),
+    ("Sophie C.", "Substack", "Digital Creators", "$40,000+/year", "Newsletter replaced her corporate salary at ~1,000 paid subscribers."),
+    ("David N.", "Toptal", "Freelancing", "$10,000+/month", "Joined Toptal's top 3% and now designs for Cisco, Nestlé and Google."),
+    ("Danny F.", "Deliveroo", "Gig Economy", "$2,000-$2,500/month", "Full-time delivery rider earning $22+/hour during peak times."),
+    ("Daniel W.", "Gumroad", "Digital Creators", "$11,000+ per ebook", "A single ebook has generated over $14,000 in sales."),
+    ("Ben A.", "Remote OK", "Remote Jobs", "$5,000+/month", "Landed a remote developer role in three weeks using salary stats to negotiate."),
+    ("George T.", "Skillshare", "Teaching & Tutoring", "$200-$500/month", "Earns royalties based on minutes watched by premium subscribers."),
+    ("Amanda J.", "Qmee", "Surveys & Research", "$50-$100/month", "Loves the no-minimum payout and instant PayPal withdrawals."),
+]
+
+
+@router.get("/render/success-stories")
+async def render_success_stories():
+    """Crawler-facing server-rendered /success-stories page."""
+    title = "Success Stories | Real People Earning Money Online | Income Online"
+    meta_desc = (
+        "Read verified, source-cited success stories from real people earning money online — "
+        "from freelancing on Upwork to surveys on Prolific and courses on Udemy."
+    )[:300]
+    canonical = f"{SITE_URL}/success-stories"
+
+    cards = "".join(
+        f"<article><h2>{_esc(name)} — {_esc(platform)} ({_esc(category)})</h2>"
+        f"<p><strong>Earnings:</strong> {_esc(earnings)}</p><p>{_esc(story)}</p></article>"
+        for (name, platform, category, earnings, story) in _SUCCESS_STORIES
+    )
+    body = (
+        "<main><h1>Real People, Real Success</h1>"
+        "<p>Genuine, source-cited success stories from people who used online platforms to transform "
+        "their income. Individual results vary; past performance doesn't guarantee future results.</p>"
+        + cards +
+        f'<p><a href="{SITE_URL}/">Browse the platforms these earners used</a> or '
+        f'<a href="{SITE_URL}/donate">unlock full access for $9.99/yr</a>.</p></main>'
+    )
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Income Online Success Stories",
+        "url": canonical,
+        "description": meta_desc,
+    }
+    return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})
