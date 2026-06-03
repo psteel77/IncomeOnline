@@ -22,6 +22,13 @@ from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
 from seed_content import content_sections
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+# Abandoned-donation recovery scheduler config (env-overridable)
+RECOVERY_SCHEDULER_ENABLED = os.environ.get('RECOVERY_SCHEDULER_ENABLED', 'true').lower() == 'true'
+RECOVERY_INTERVAL_HOURS = int(os.environ.get('RECOVERY_INTERVAL_HOURS', '1'))
+RECOVERY_DELAY_HOURS = int(os.environ.get('RECOVERY_DELAY_HOURS', '2'))
+RECOVERY_MAX_EMAILS = int(os.environ.get('RECOVERY_MAX_EMAILS', '50'))
 
 # Subscription duration in days
 SUBSCRIPTION_DURATION_DAYS = 365
@@ -787,19 +794,13 @@ async def record_donation_intent(request: DonationIntentRequest):
     return {"success": True}
 
 
-@api_router.post("/paypal/run-recovery")
-async def run_abandoned_donation_recovery(
-    admin_username: str = Depends(get_admin_user),
-    delay_hours: int = 2,
-    max_emails: int = 50,
-):
+async def _scan_and_recover(delay_hours: int = 2, max_emails: int = 50):
     """
-    Admin-only — find donation intents older than `delay_hours` that haven't
-    converted, haven't already received a recovery email, and aren't already
-    subscribed; send the recovery email; mark them `recovery_sent`.
-
-    Idempotent: an intent only gets ONE recovery email regardless of how many
-    times this is called.
+    Core abandoned-donation recovery scan (shared by the admin endpoint and the
+    hourly scheduler). Finds donation intents older than `delay_hours` that are
+    still pending, haven't already received a recovery email, and aren't already
+    subscribed; sends ONE recovery email each; marks them `recovery_sent`.
+    Idempotent.
     """
     now = datetime.now(timezone.utc)
     cutoff = (now - timedelta(hours=delay_hours)).isoformat()
@@ -831,16 +832,30 @@ async def run_abandoned_donation_recovery(
         else:
             failed.append(email)
 
-    logging.info(
-        f"Admin {admin_username} ran donation recovery: sent={len(sent)} "
-        f"skipped={len(skipped)} failed={len(failed)}"
-    )
     return {
         "sent": sent,
         "skipped_already_subscribed": skipped,
         "failed": failed,
         "scanned": len(intents),
     }
+
+
+@api_router.post("/paypal/run-recovery")
+async def run_abandoned_donation_recovery(
+    admin_username: str = Depends(get_admin_user),
+    delay_hours: int = 2,
+    max_emails: int = 50,
+):
+    """
+    Admin-only — manually trigger the abandoned-donation recovery scan.
+    (The same scan also runs automatically every hour via the scheduler.)
+    """
+    result = await _scan_and_recover(delay_hours=delay_hours, max_emails=max_emails)
+    logging.info(
+        f"Admin {admin_username} ran donation recovery: sent={len(result['sent'])} "
+        f"skipped={len(result['skipped_already_subscribed'])} failed={len(result['failed'])}"
+    )
+    return result
 
 
 @api_router.get("/paypal/intents")
@@ -1116,3 +1131,58 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+
+# -----------------------------------------------------------------------------
+# Hourly abandoned-donation recovery scheduler (in-process APScheduler)
+# -----------------------------------------------------------------------------
+# Runs the same scan as POST /api/paypal/run-recovery automatically, every
+# RECOVERY_INTERVAL_HOURS (default 1h). Lives inside the web process so it works
+# on Railway with no external cron. Idempotent — each intent gets one email.
+# NOTE: if you ever scale the backend to multiple replicas, run this on a single
+# instance (or set RECOVERY_SCHEDULER_ENABLED=false on the others) to avoid
+# duplicate sends.
+recovery_scheduler = AsyncIOScheduler(timezone="UTC")
+
+
+async def _recovery_job():
+    try:
+        result = await _scan_and_recover(
+            delay_hours=RECOVERY_DELAY_HOURS, max_emails=RECOVERY_MAX_EMAILS
+        )
+        if result["sent"] or result["failed"]:
+            logger.info(
+                f"[recovery-cron] sent={len(result['sent'])} "
+                f"skipped={len(result['skipped_already_subscribed'])} "
+                f"failed={len(result['failed'])} scanned={result['scanned']}"
+            )
+    except Exception as e:
+        logger.error(f"[recovery-cron] error: {e}")
+
+
+@app.on_event("startup")
+async def start_recovery_scheduler():
+    if not RECOVERY_SCHEDULER_ENABLED:
+        logger.info("[recovery-cron] disabled via RECOVERY_SCHEDULER_ENABLED=false")
+        return
+    recovery_scheduler.add_job(
+        _recovery_job,
+        "interval",
+        hours=RECOVERY_INTERVAL_HOURS,
+        id="abandoned_donation_recovery",
+        replace_existing=True,
+        coalesce=True,
+        max_instances=1,
+        misfire_grace_time=300,
+    )
+    recovery_scheduler.start()
+    logger.info(
+        f"[recovery-cron] started · every {RECOVERY_INTERVAL_HOURS}h · "
+        f"delay={RECOVERY_DELAY_HOURS}h · max={RECOVERY_MAX_EMAILS}/run"
+    )
+
+
+@app.on_event("shutdown")
+async def stop_recovery_scheduler():
+    if recovery_scheduler.running:
+        recovery_scheduler.shutdown(wait=False)

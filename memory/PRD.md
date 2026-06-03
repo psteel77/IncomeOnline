@@ -21,6 +21,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (3 Jun 2026 — automated donation recovery)
+- **Hourly abandoned-donation recovery now runs automatically** via an in-process APScheduler (`server.py`), no external cron needed (works inside the Railway web process). Refactored the scan into a shared `_scan_and_recover()` used by both the scheduler and the admin `POST /api/paypal/run-recovery` endpoint.
+- Config via env (defaults sensible): `RECOVERY_SCHEDULER_ENABLED=true`, `RECOVERY_INTERVAL_HOURS=1`, `RECOVERY_DELAY_HOURS=2`, `RECOVERY_MAX_EMAILS=50`. Idempotent (each intent gets one email, marked `recovery_sent`). Added `apscheduler==3.11.2`.
+- Tested: scheduler boots (`[recovery-cron] started`), and a manual run sent real recovery emails via Google SMTP + flipped intents to `recovery_sent`.
+- **Multi-replica note:** if backend ever scaled >1 instance, disable the scheduler on extras to avoid duplicate sends.
+
 ### Completed (3 Jun 2026 — subscriber broadcast)
 - **Admin "Broadcast to Subscribers" card** (`frontend/src/components/admin/BroadcastCard.jsx`, shown in AdminDashboard): subject + message → confirm dialog → sends a branded one-time email to all opted-in `resource_subscribers` (free-guide subscribers + hero-pill leads) via Google SMTP, paced for Gmail limits, with auto unsubscribe footer + List-Unsubscribe header.
 - Backend (`cms_routes.py`): `GET /api/cms/broadcast` (recipient count + last broadcast) and `POST /api/cms/broadcast` (admin-auth, queues background send, logs to `broadcasts` collection). Email template: `email_service.send_broadcast_email()` / `build_broadcast_content()`.
