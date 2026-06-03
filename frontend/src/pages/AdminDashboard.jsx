@@ -10,6 +10,7 @@ import axios from 'axios';
 import SitemapPingCard from '../components/admin/SitemapPingCard';
 import SubscribersCard from '../components/admin/SubscribersCard';
 import BroadcastCard from '../components/admin/BroadcastCard';
+import RecoveryStatsCard from '../components/admin/RecoveryStatsCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -307,6 +308,9 @@ const AdminDashboard = () => {
 
         {/* Subscribers (captured emails from Free Resources gateway) */}
         <SubscribersCard />
+
+        {/* Abandoned-donation recovery funnel stats + manual run */}
+        <RecoveryStatsCard />
 
         {/* Broadcast a one-time email to subscribers + hero-pill leads */}
         <BroadcastCard />

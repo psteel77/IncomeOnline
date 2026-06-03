@@ -866,6 +866,40 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
     return {"count": len(intents), "intents": intents}
 
 
+@api_router.get("/paypal/recovery-stats")
+async def recovery_stats(admin_username: str = Depends(get_admin_user)):
+    """Admin-only — aggregate stats for the abandoned-donation recovery funnel."""
+    di = db.donation_intents
+    total = await di.count_documents({})
+    pending = await di.count_documents({"status": "pending"})
+    recovery_sent = await di.count_documents({"status": "recovery_sent"})
+    converted = await di.count_documents({"status": "converted"})
+    converted_after_recovery = await di.count_documents(
+        {"status": "converted", "recovery_sent_at": {"$exists": True}}
+    )
+    price = float(EXPECTED_DONATION_USD)
+    # Everyone who has ever been emailed a recovery (still-sent + later-converted).
+    emailed = recovery_sent + converted_after_recovery
+
+    return {
+        "total_intents": total,
+        "pending": pending,
+        "recovery_sent": recovery_sent,
+        "converted": converted,
+        "converted_after_recovery": converted_after_recovery,
+        "conversion_rate": round((converted / total * 100), 1) if total else 0.0,
+        "recovery_conversion_rate": round((converted_after_recovery / emailed * 100), 1) if emailed else 0.0,
+        "revenue_rescued_usd": round(converted_after_recovery * price, 2),
+        "price_usd": price,
+        "scheduler": {
+            "enabled": RECOVERY_SCHEDULER_ENABLED,
+            "interval_hours": RECOVERY_INTERVAL_HOURS,
+            "delay_hours": RECOVERY_DELAY_HOURS,
+            "max_emails": RECOVERY_MAX_EMAILS,
+        },
+    }
+
+
 # -----------------------------------------------------------------------------
 # Hero-pill lead capture
 # -----------------------------------------------------------------------------

@@ -21,6 +21,11 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (3 Jun 2026 — recovery stats card)
+- **Admin "Donation Recovery" stats card** (`frontend/src/components/admin/RecoveryStatsCard.jsx`): shows Pending, Emails Sent, Rescued (converted-after-recovery), **Revenue Rescued ($)**, recovery conversion rate, live scheduler status, and a **"Run recovery now"** button (manual trigger).
+- Backend: `GET /api/paypal/recovery-stats` (admin-auth) aggregates the `donation_intents` funnel; revenue rescued = converted-after-recovery × $9.99.
+- Tested: endpoint counts + revenue calc verified (1 rescued = $9.99, 50% recovery conversion), 401 without auth, card renders in dashboard.
+
 ### Completed (3 Jun 2026 — automated donation recovery)
 - **Hourly abandoned-donation recovery now runs automatically** via an in-process APScheduler (`server.py`), no external cron needed (works inside the Railway web process). Refactored the scan into a shared `_scan_and_recover()` used by both the scheduler and the admin `POST /api/paypal/run-recovery` endpoint.
 - Config via env (defaults sensible): `RECOVERY_SCHEDULER_ENABLED=true`, `RECOVERY_INTERVAL_HOURS=1`, `RECOVERY_DELAY_HOURS=2`, `RECOVERY_MAX_EMAILS=50`. Idempotent (each intent gets one email, marked `recovery_sent`). Added `apscheduler==3.11.2`.
