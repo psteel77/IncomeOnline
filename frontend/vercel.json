@@ -7,6 +7,17 @@
       "source": "/platforms-sitemap.xml",
       "destination": "https://incomeonline-production.up.railway.app/api/seo/platforms-sitemap.xml"
     },
+    {
+      "source": "/platforms/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|[Ss]lurp|bing|Google|[Yy]andex|[Dd]uck|[Bb]aidu|facebookexternalhit|[Tt]witter|[Ll]inkedin|[Aa]pplebot|[Ee]mbedly|[Ww]hatsApp|[Tt]elegram).*"
+        }
+      ],
+      "destination": "https://incomeonline-production.up.railway.app/api/seo/render/platform/:slug"
+    },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ]
 }

@@ -21,6 +21,14 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (3 Jun 2026 — SEO: crawler-facing server rendering)
+- **Problem:** Site is a client-rendered React SPA → crawlers that don't run JS (Bing, Google's first pass) saw an empty shell for all 185 platform pages; every page also shared the homepage's generic `<title>`.
+- **Rejected approach:** Build-time prerendering (react-snap) — fails on React 19/Node 20, and the Vercel↔Railway cross-origin (CORS) split risked shipping `noindex` "Platform not found" pages. Removed it entirely (no build risk).
+- **Implemented (robust, build-safe):** **Dynamic rendering.** New backend endpoint `GET /api/seo/render/platform/{slug}` (in `seo_routes.py`) returns full server-rendered HTML from the DB — unique title, meta description, canonical, OG/Twitter, JSON-LD Product schema, and readable content + internal links. `frontend/vercel.json` rewrites **only search-engine bot user-agents** for `/platforms/:slug` to that endpoint; humans still get the React SPA at the same URL.
+- Tested: render endpoint returns correct unique HTML per platform (title/meta/JSON-LD/content), 404+noindex for unknown slugs, lint clean, frontend build verified.
+- **Needs user:** Save to Github (deploys backend endpoint + vercel.json), then submit sitemap in Google Search Console + Bing Webmaster Tools.
+- Per-page meta for humans/Google already existed via `useSEO` hook (client-side). `BingSiteAuth.xml` already present (Bing verification done).
+
 ### Completed (3 Jun 2026 — recovery stats card)
 - **Admin "Donation Recovery" stats card** (`frontend/src/components/admin/RecoveryStatsCard.jsx`): shows Pending, Emails Sent, Rescued (converted-after-recovery), **Revenue Rescued ($)**, recovery conversion rate, live scheduler status, and a **"Run recovery now"** button (manual trigger).
 - Backend: `GET /api/paypal/recovery-stats` (admin-auth) aggregates the `donation_intents` funnel; revenue rescued = converted-after-recovery × $9.99.
