@@ -35,6 +35,17 @@ Response includes `verify_url` — paste it into a browser to log in as that use
 - **MongoDB:** local in-container Mongo, mostly empty test data.
 - Admin credentials in preview are the same (`admin` / `Gulluk*9`).
 
+## Email delivery — Google Workspace SMTP (NEW, replaces Resend)
+- Email now sends via **Google Workspace SMTP** (`smtp.gmail.com:587`, STARTTLS) using a Google **App Password** — NOT Resend/Mailgun. This was the fix for the Wix "no subdomain MX" blocker (Google SMTP needs zero DNS changes because the domain already has Google MX + SPF + DKIM).
+- Env vars (set in `/app/backend/.env` for preview AND must be set on Railway for prod):
+  - `SMTP_HOST=smtp.gmail.com`
+  - `SMTP_PORT=587`
+  - `SMTP_USERNAME=welcome@incomeonline.info`
+  - `SMTP_PASSWORD=tkvazezdlhqauqnt` (16-char Google App Password, spaces removed)
+  - `SMTP_FROM=Income Online <welcome@incomeonline.info>`
+- Verified working: a live test email sent from preview was received in `paul-steel@outlook.com` (2026-06-03).
+- Code: `backend/email_service.py` → `_send_email()` (smtplib). All template functions unchanged.
+
 ## Notes
 - The PayPal flow on preview will show a "PayPal is not configured" fallback because `REACT_APP_PAYPAL_CLIENT_ID` is intentionally not set in this preview's `.env`. On production, the real PayPal SDK button renders.
-- Email (Resend) will not send from the preview either, because `RESEND_API_KEY` is not set in `/app/backend/.env`. That's intentional — only set on Railway.
+- Old Resend vars (`RESEND_API_KEY`, `RESEND_FROM_EMAIL`) are no longer used and can be deleted from Railway.
