@@ -21,6 +21,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (June 2026 — abandoned-donation email redesign) [PENDING DEPLOY]
+- **Fixed the abandoned-donation recovery email** (`email_service.py send_abandoned_donation_email`): the old version used a gradient-clipped headline (`color:transparent`, invisible in Gmail/Outlook) and a CSS `linear-gradient` button background (dropped by Gmail/Outlook → button looked like unclickable plain text). User reported "nowhere to click + cheap/scammy".
+- Rebuilt as a professional, email-client-safe template: table-based layout, web-safe fonts, solid brand-purple header w/ logo, a **bulletproof button** (`bgcolor` on td so it renders in Outlook), plain-text fallback link, PayPal trust cue, clean footer → `www.incomeonline.info`. Updated the plain-text alternative too.
+- Verified by rendering the HTML (screenshot) + sent a live test to paul-steel@outlook.com via Google SMTP (SUCCESS). **Needs "Save to Github" to deploy.**
+- NOTE: this is the *recovery* email, distinct from the "Returning User" magic-link email (`template_2_returning_user.html`).
+
 ### Completed (June 2026 — story-page email lead magnet) [PENDING DEPLOY]
 - Added an inline email-capture card (`frontend/src/components/story/StoryLeadCapture.jsx`) to every success-story page (`SuccessStoryDetail.jsx`) — "Get the free guide that helps earners like this". Submits to the existing `POST /api/leads/capture` with `source: 'success_story'`, upserting into `resource_subscribers` (newsletter_opt_in, surfaced in admin Subscribers card + broadcastable). Shows a success state; prefills/persists email via localStorage.
 - Tested: UI renders, submit → success state, lead persisted with `lead_sources:['success_story']` (verified in Mongo, test record cleaned). Lint clean. **Needs "Save to Github" to deploy.**

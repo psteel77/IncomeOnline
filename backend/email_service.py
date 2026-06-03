@@ -417,55 +417,113 @@ def send_abandoned_donation_email(email: str) -> bool:
     # Pre-fill the visitor's email on the resume link so they only need to
     # click the PayPal button when they arrive — no re-typing.
     resume_link = f"{frontend_url}/#support?resume={email}"
+    brand_url = "https://www.incomeonline.info"
+    logo_url = f"{frontend_url}/earnhub-logo.png"
 
-    subject = "Don't waste another day — your Income Online access is one click away"
+    subject = "Your Income Online access is one click away"
 
-    html = f"""
-    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; color: #1f2937;">
-      <h1 style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 28px; margin: 0 0 12px;">Get on your earning journey TODAY</h1>
-      <p style="font-size: 17px; line-height: 1.6;">
-        Your access to <strong>thousands of online earning opportunities</strong> is just one click away.
-      </p>
-      <p style="font-size: 17px; line-height: 1.6; font-weight: 600; color: #7c3aed;">
-        Why waste anymore time?
-      </p>
-      <p style="font-size: 16px; line-height: 1.6;">
-        For a one-time donation of <strong>$9.99</strong> you'll get <strong>12 full months</strong> of:
-      </p>
-      <ul style="font-size: 15px; line-height: 1.8; padding-left: 20px;">
-        <li>199+ verified online earning platforms</li>
-        <li>Detailed ratings, payouts and category filters</li>
-        <li>10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets</li>
-      </ul>
-      <p style="margin: 28px 0; text-align: center;">
-        <a href="{resume_link}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(90deg,#7c3aed,#db2777); color: #ffffff; font-weight: 700; text-decoration: none; border-radius: 999px; font-size: 16px;">
-          ▶ Get on my earning journey
-        </a>
-      </p>
-      <p style="font-size: 15px; line-height: 1.6; color: #1f2937; padding: 14px 16px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
-        <strong>P.S.</strong> You can recover the $9.99 cost of your donation on day one — then every job is profit! 🚀
-      </p>
-      <p style="font-size: 14px; color: #6b7280;">
-        If you didn't start a donation, you can safely ignore this — we won't email you again about this.
-      </p>
-      <p style="font-size: 14px; color: #6b7280; margin-top: 32px;">
-        Income Online · <a href="{frontend_url}" style="color:#7c3aed;">{frontend_url}</a>
-      </p>
-    </div>
-    """
+    html = f"""\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>Your Income Online access is one click away</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f3f4f6;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f3f4f6;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:12px; overflow:hidden; border:1px solid #e5e7eb;">
+        <!-- Brand header -->
+        <tr>
+          <td align="center" bgcolor="#6d28d9" style="background-color:#6d28d9; padding:24px;">
+            <img src="{logo_url}" width="160" alt="Income Online" style="display:block; border:0; max-width:160px; height:auto;"/>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px 8px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <h1 style="margin:0 0 16px 0; font-size:26px; line-height:1.25; color:#111827; font-weight:bold;">
+              You're one click from full access
+            </h1>
+            <p style="margin:0 0 16px 0; font-size:16px; line-height:1.6; color:#374151;">
+              You started unlocking <strong>199+ verified online earning platforms</strong> but didn't quite finish. Your spot is saved — pick up right where you left off.
+            </p>
+            <p style="margin:0 0 12px 0; font-size:16px; line-height:1.6; color:#374151;">
+              A one-time <strong>$9.99</strong> contribution gives you <strong>12 full months</strong> of:
+            </p>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 8px 0;">
+              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; 199+ verified online earning platforms</td></tr>
+              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; Detailed ratings, payouts &amp; category filters</td></tr>
+              <tr><td style="padding:4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:1.5; color:#374151;">&#10003;&nbsp; 10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets</td></tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Bulletproof button -->
+        <tr>
+          <td align="center" style="padding:20px 40px 8px 40px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+              <tr>
+                <td align="center" bgcolor="#6d28d9" style="background-color:#6d28d9; border-radius:8px;">
+                  <a href="{resume_link}" target="_blank" style="display:inline-block; padding:15px 36px; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:bold; color:#ffffff; text-decoration:none; border-radius:8px;">
+                    Complete my $9.99 access &rarr;
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:14px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#9ca3af;">
+              Secure checkout via PayPal
+            </p>
+          </td>
+        </tr>
+        <!-- P.S. callout -->
+        <tr>
+          <td style="padding:16px 40px 0 40px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#fef3c7; border-radius:8px;">
+              <tr>
+                <td style="padding:14px 18px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.6; color:#92400e;">
+                  <strong>Worth it from day one:</strong> a single job from these platforms can more than cover the $9.99 — after that, it's all profit.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="padding:28px 40px 36px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <p style="margin:0 0 12px 0; font-size:13px; line-height:1.6; color:#9ca3af;">
+              If a button doesn't work, copy and paste this link into your browser:<br/>
+              <a href="{resume_link}" style="color:#6d28d9; word-break:break-all;">{resume_link}</a>
+            </p>
+            <hr style="border:none; border-top:1px solid #e5e7eb; margin:16px 0;"/>
+            <p style="margin:0; font-size:12px; line-height:1.6; color:#9ca3af;">
+              You're receiving this because you started a donation at Income Online. If that wasn't you, you can safely ignore this — we won't email you about it again.<br/>
+              Income Online &middot; <a href="{brand_url}" style="color:#6d28d9; text-decoration:none;">www.incomeonline.info</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+"""
 
     text = (
-        "Get on your earning journey TODAY\n\n"
-        "Your access to thousands of online earning opportunities is just one click away.\n"
-        "Why waste anymore time?\n\n"
-        "For a one-time $9.99 you'll get 12 full months of:\n"
-        "  • 199+ verified online earning platforms\n"
-        "  • Ratings, payouts, category filters\n"
-        "  • 10 free MoneyRules guides + 2 premium + 5 editable spreadsheets\n\n"
-        f"Get on my earning journey: {resume_link}\n\n"
-        "P.S. You can recover the $9.99 cost of your donation on day one - then every job is profit!\n\n"
+        "You're one click from full access\n\n"
+        "You started unlocking 199+ verified online earning platforms but didn't quite finish. "
+        "Your spot is saved.\n\n"
+        "A one-time $9.99 contribution gives you 12 full months of:\n"
+        "  - 199+ verified online earning platforms\n"
+        "  - Detailed ratings, payouts & category filters\n"
+        "  - 10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets\n\n"
+        f"Complete your $9.99 access here: {resume_link}\n\n"
+        "Worth it from day one: a single job from these platforms can more than cover the $9.99.\n\n"
         "If you didn't start a donation, you can safely ignore this email.\n"
-        f"— Income Online · {frontend_url}\n"
+        f"- Income Online | {brand_url}\n"
     )
 
     return _send_email(to_email=email, subject=subject, html=html, text=text)
