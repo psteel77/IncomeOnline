@@ -21,6 +21,15 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (June 2026 — SEO DEPLOYED & VERIFIED LIVE)
+- **Deployed to production** (user clicked "Save to Github"): bot-renderer + vercel.json dot-exclusion are now LIVE.
+- Verified on `https://www.incomeonline.info`:
+  - `GET /platforms/upwork` with Googlebot UA → returns unique server-rendered HTML (title "Upwork Review — Freelancing | Earn Money Online | Income Online"). ✅
+  - `/google15cd92b16f0de7bf.html` now serves correct plain text `google-site-verification: google15cd92b16f0de7bf.html` (was previously serving the SPA shell due to a stale Vercel edge-cache on the bare path; cleared after deploy). ✅
+  - `/sitemap.xml` (index) + `/platforms-sitemap.xml` (185 URLs) → HTTP 200. ✅
+- **GSC path resolved**: user must use the **URL-prefix** property `https://www.incomeonline.info/` with the **HTML file** method → VERIFY (now passes). Then submit `sitemap.xml`. The "Domain"/DNS method was the wrong path (avoids Wix DNS).
+- **Pending user action**: click VERIFY in GSC + submit sitemap; optionally submit same sitemap in Bing.
+
 ### Completed (3 Jun 2026 — SEO: crawler-facing server rendering)
 - **Problem:** Site is a client-rendered React SPA → crawlers that don't run JS (Bing, Google's first pass) saw an empty shell for all 185 platform pages; every page also shared the homepage's generic `<title>`.
 - **Rejected approach:** Build-time prerendering (react-snap) — fails on React 19/Node 20, and the Vercel↔Railway cross-origin (CORS) split risked shipping `noindex` "Platform not found" pages. Removed it entirely (no build risk).
