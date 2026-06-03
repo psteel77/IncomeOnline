@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { LifeBuoy, Loader2, RefreshCw, Clock, MailCheck, CheckCircle2, DollarSign, AlertCircle, Play } from 'lucide-react';
+import { LifeBuoy, Loader2, RefreshCw, Clock, MailCheck, CheckCircle2, DollarSign, AlertCircle, Play, FlaskConical } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -100,6 +100,29 @@ const RecoveryStatsCard = () => {
               </span>
               <span>{stats.converted} total converted · {stats.total_intents} intents</span>
             </div>
+
+            {Array.isArray(stats.subject_ab_test) && stats.subject_ab_test.length > 0 && (
+              <div className="border-t pt-3" data-testid="recovery-ab-test">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                  <FlaskConical className="h-4 w-4 text-purple-600" /> Subject line A/B test
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {stats.subject_ab_test.map((v) => (
+                    <div key={v.variant} className="rounded-lg border border-slate-200 p-3 bg-white" data-testid={`recovery-ab-variant-${v.variant}`}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-bold text-purple-700 bg-purple-50 rounded px-1.5 py-0.5">Variant {v.variant}</span>
+                        <span className="text-xs text-slate-400">{v.emailed} emailed</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-snug mb-2 line-clamp-2">"{v.subject}"</p>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-emerald-600">{v.conversion_rate}%</span>
+                        <span className="text-xs text-slate-400">{v.converted} converted · ${v.revenue_rescued_usd.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {result && (
               <div

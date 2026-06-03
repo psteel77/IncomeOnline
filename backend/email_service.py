@@ -1,10 +1,58 @@
 import os
+import re
+import hashlib
 import logging
 import smtplib
 from pathlib import Path
 from email.message import EmailMessage
 
 logger = logging.getLogger(__name__)
+
+
+def _friendly_name(email: str) -> str:
+    """Derive a friendly first name from an email local-part.
+
+    e.g. paul-steel@outlook.com -> "Paul", john.doe@x.com -> "John".
+    Returns "" when nothing usable can be extracted (so callers fall back to a
+    generic greeting). Junk/numeric/very-short tokens are rejected.
+    """
+    if not email or "@" not in email:
+        return ""
+    local = email.split("@", 1)[0]
+    token = re.split(r"[._+\-0-9]+", local)[0].strip()
+    if len(token) < 2 or not token.isalpha():
+        return ""
+    generic = {"info", "admin", "hello", "team", "mail", "email", "contact",
+               "support", "sales", "no", "noreply", "donotreply", "user"}
+    if token.lower() in generic:
+        return ""
+    return token[:1].upper() + token[1:].lower()
+
+
+def _greeting(email: str) -> str:
+    """A personalized greeting line that gracefully falls back to "Hi there,"."""
+    name = _friendly_name(email)
+    return f"Hi {name}," if name else "Hi there,"
+
+
+# -----------------------------------------------------------------------------
+# Abandoned-donation recovery — subject-line A/B test
+# -----------------------------------------------------------------------------
+# Each recipient is deterministically (and evenly) bucketed into one variant by
+# hashing their email, so a given person always sees the same subject. The
+# chosen variant key is recorded on their donation_intent so recovery-stats can
+# report which subject converts better.
+RECOVERY_SUBJECT_VARIANTS = {
+    "A": "Your Income Online access is one click away",
+    "B": "You left 199+ ways to earn online — finish in one click",
+}
+
+
+def pick_recovery_subject(email: str):
+    """Return (variant_key, subject) deterministically bucketed by email."""
+    digest = hashlib.md5((email or "").strip().lower().encode("utf-8")).hexdigest()
+    key = "A" if int(digest, 16) % 2 == 0 else "B"
+    return key, RECOVERY_SUBJECT_VARIANTS[key]
 
 # -----------------------------------------------------------------------------
 # Email delivery via Google Workspace SMTP (smtp.gmail.com)
@@ -223,6 +271,7 @@ def prepare_new_user_email(email, verification_token):
     verification_link = f"{frontend_url}/verify?token={verification_token}"
 
     body = (
+        f'<p style="margin:0 0 12px 0; font-size:17px; line-height:1.6; color:#1f2937;">{_greeting(email)}</p>'
         '<p style="margin:0 0 16px 0; font-size:17px; line-height:1.6; color:#1f2937;">'
         'Thank you for your donation &mdash; welcome to <strong style="color:#4c1d95;">Income Online</strong>! '
         'You\'re one click from unlocking everything.</p>'
@@ -248,6 +297,8 @@ def prepare_new_user_email(email, verification_token):
         'subject': 'Welcome to Income Online! Verify to unlock access',
         'html': html_content,
         'text': f'''Welcome to Income Online!
+
+{_greeting(email)}
 
 Thank you for your donation. Verify your email to unlock 12 months of full access to 199+ verified earning platforms:
 
@@ -512,10 +563,13 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
     )
 
 
-def send_abandoned_donation_email(email: str) -> bool:
+def send_abandoned_donation_email(email: str, subject: str = None) -> bool:
     """
     Send a friendly recovery email to visitors who opened the PayPal popup
     but never completed the donation. Triggered from /api/paypal/run-recovery.
+
+    `subject` lets the caller pass an A/B-test variant (see pick_recovery_subject).
+    When omitted, a variant is chosen deterministically from the email.
     """
     frontend_url = os.environ.get("FRONTEND_URL", "https://www.incomeonline.info")
     # Pre-fill the visitor's email on the resume link so they only need to
@@ -524,7 +578,8 @@ def send_abandoned_donation_email(email: str) -> bool:
     brand_url = "https://www.incomeonline.info"
     logo_url = f"{frontend_url}/earnhub-logo.png"
 
-    subject = "Your Income Online access is one click away"
+    if subject is None:
+        _, subject = pick_recovery_subject(email)
 
     html = f"""\
 <!DOCTYPE html>
@@ -580,6 +635,7 @@ def send_abandoned_donation_email(email: str) -> bool:
         <!-- ===== Intro ===== -->
         <tr>
           <td style="padding:34px 40px 6px 40px; font-family:Arial,Helvetica,sans-serif;">
+            <p style="margin:0 0 12px 0; font-size:17px; line-height:1.6; color:#1f2937;">{_greeting(email)}</p>
             <p style="margin:0 0 14px 0; font-size:17px; line-height:1.6; color:#1f2937;">
               You started unlocking <strong style="color:#4c1d95;">199+ verified online earning platforms</strong> but didn't quite finish &mdash; and we saved your spot.
             </p>
@@ -687,6 +743,7 @@ def send_abandoned_donation_email(email: str) -> bool:
 
     text = (
         "You're one click from full access\n\n"
+        f"{_greeting(email)}\n\n"
         "You started unlocking 199+ verified online earning platforms but didn't quite finish. "
         "Your spot is saved.\n\n"
         "A one-time $9.99 contribution gives you 12 full months of:\n"

@@ -11,6 +11,7 @@ import SitemapPingCard from '../components/admin/SitemapPingCard';
 import SubscribersCard from '../components/admin/SubscribersCard';
 import BroadcastCard from '../components/admin/BroadcastCard';
 import RecoveryStatsCard from '../components/admin/RecoveryStatsCard';
+import LeadSourcesCard from '../components/admin/LeadSourcesCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -308,6 +309,9 @@ const AdminDashboard = () => {
 
         {/* Subscribers (captured emails from Free Resources gateway) */}
         <SubscribersCard />
+
+        {/* Leads-by-source breakdown (hero pill vs success story vs free guide) */}
+        <LeadSourcesCard />
 
         {/* Abandoned-donation recovery funnel stats + manual run */}
         <RecoveryStatsCard />

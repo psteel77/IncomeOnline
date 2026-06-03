@@ -17,7 +17,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
-from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email, send_abandoned_donation_email
+from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email, send_abandoned_donation_email, pick_recovery_subject, RECOVERY_SUBJECT_VARIANTS
 from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
@@ -824,9 +824,14 @@ async def _scan_and_recover(delay_hours: int = 2, max_emails: int = 50):
             continue
         ok = send_abandoned_donation_email(email)
         if ok:
+            variant, _subject = pick_recovery_subject(email)
             await db.donation_intents.update_one(
                 {"email": email},
-                {"$set": {"status": "recovery_sent", "recovery_sent_at": now.isoformat()}},
+                {"$set": {
+                    "status": "recovery_sent",
+                    "recovery_sent_at": now.isoformat(),
+                    "recovery_subject_variant": variant,
+                }},
             )
             sent.append(email)
         else:
@@ -881,6 +886,25 @@ async def recovery_stats(admin_username: str = Depends(get_admin_user)):
     # Everyone who has ever been emailed a recovery (still-sent + later-converted).
     emailed = recovery_sent + converted_after_recovery
 
+    # Subject-line A/B test breakdown: for each variant, how many were emailed
+    # and how many of those went on to convert.
+    subject_ab_test = []
+    for key, subject_text in RECOVERY_SUBJECT_VARIANTS.items():
+        v_emailed = await di.count_documents(
+            {"recovery_subject_variant": key, "recovery_sent_at": {"$exists": True}}
+        )
+        v_converted = await di.count_documents(
+            {"recovery_subject_variant": key, "status": "converted", "recovery_sent_at": {"$exists": True}}
+        )
+        subject_ab_test.append({
+            "variant": key,
+            "subject": subject_text,
+            "emailed": v_emailed,
+            "converted": v_converted,
+            "conversion_rate": round((v_converted / v_emailed * 100), 1) if v_emailed else 0.0,
+            "revenue_rescued_usd": round(v_converted * price, 2),
+        })
+
     return {
         "total_intents": total,
         "pending": pending,
@@ -891,6 +915,7 @@ async def recovery_stats(admin_username: str = Depends(get_admin_user)):
         "recovery_conversion_rate": round((converted_after_recovery / emailed * 100), 1) if emailed else 0.0,
         "revenue_rescued_usd": round(converted_after_recovery * price, 2),
         "price_usd": price,
+        "subject_ab_test": subject_ab_test,
         "scheduler": {
             "enabled": RECOVERY_SCHEDULER_ENABLED,
             "interval_hours": RECOVERY_INTERVAL_HOURS,
@@ -937,7 +962,66 @@ async def capture_lead(request: LeadCaptureRequest):
     return {"success": True}
 
 
-@api_router.post("/auth/add-donor")
+@api_router.get("/leads/by-source")
+async def leads_by_source(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only — breakdown of captured leads by acquisition source so we can see
+    which SEO/CTA surfaces convert best (hero_pill vs success_story vs free-guide).
+    A lead can belong to multiple sources, so source counts may sum to more than
+    the unique-subscriber total.
+    """
+    subs = db.resource_subscribers
+
+    total = await subs.count_documents({})
+    opted_in = await subs.count_documents({"newsletter_opt_in": True})
+
+    # Tagged lead sources (hero_pill, success_story, ...) via the lead_sources array.
+    pipeline = [
+        {"$match": {"lead_sources": {"$exists": True, "$ne": []}}},
+        {"$unwind": "$lead_sources"},
+        {"$group": {
+            "_id": "$lead_sources",
+            "count": {"$sum": 1},
+            "opted_in": {"$sum": {"$cond": [{"$eq": ["$newsletter_opt_in", True]}, 1, 0]}},
+        }},
+    ]
+    tagged = {row["_id"]: {"count": row["count"], "opted_in": row["opted_in"]}
+              async for row in subs.aggregate(pipeline)}
+
+    # Free-guide downloaders are identified by having downloaded a resource
+    # (they aren't always tagged with a lead_source).
+    free_guide_filter = {"resources_downloaded.0": {"$exists": True}}
+    free_guide_count = await subs.count_documents(free_guide_filter)
+    free_guide_opted = await subs.count_documents({**free_guide_filter, "newsletter_opt_in": True})
+    if free_guide_count:
+        existing = tagged.get("free-guide", {"count": 0, "opted_in": 0})
+        tagged["free-guide"] = {
+            "count": existing["count"] + free_guide_count,
+            "opted_in": existing["opted_in"] + free_guide_opted,
+        }
+
+    # Friendly labels for known sources.
+    labels = {
+        "hero_pill": "Hero Pill",
+        "success_story": "Success Story",
+        "free-guide": "Free Guide Download",
+    }
+    sources = [
+        {
+            "source": key,
+            "label": labels.get(key, key.replace("_", " ").title()),
+            "count": data["count"],
+            "opted_in": data["opted_in"],
+        }
+        for key, data in tagged.items()
+    ]
+    sources.sort(key=lambda s: s["count"], reverse=True)
+
+    return {
+        "total_subscribers": total,
+        "newsletter_opt_in_count": opted_in,
+        "sources": sources,
+    }
 async def add_donor(
     request: LoginRequest,
     admin_username: str = Depends(get_admin_user),
