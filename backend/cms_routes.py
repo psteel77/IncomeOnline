@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, Depends, Header
+from fastapi import APIRouter, HTTPException, Depends, Header, BackgroundTasks
+import asyncio
 from motor.motor_asyncio import AsyncIOMotorDatabase
 import os
 import logging
@@ -395,4 +396,110 @@ async def admin_get_verify_link(
         "verify_url": verify_url,
         "expires_at": user.get("expires_at"),
         "donated_at": user.get("donated_at"),
+    }
+
+
+# -----------------------------------------------------------------------------
+# Admin: broadcast a one-time email to all opted-in subscribers / leads
+# -----------------------------------------------------------------------------
+# Sends a custom subject + message (e.g. "New platforms added!") to everyone in
+# `resource_subscribers` who hasn't opted out. Delivery happens in the background
+# via Google Workspace SMTP, paced gently to respect Gmail limits. A log of each
+# broadcast is stored in `broadcasts` so the admin can see progress/history.
+
+class BroadcastRequest(BaseModel):
+    subject: str
+    message: str
+
+
+async def _broadcast_worker(recipients, subject, message, broadcast_id):
+    from server import db
+    from email_service import send_broadcast_email
+
+    sent = 0
+    failed = 0
+    for email in recipients:
+        try:
+            ok = await asyncio.to_thread(send_broadcast_email, email, subject, message)
+            if ok:
+                sent += 1
+            else:
+                failed += 1
+        except Exception as e:  # never let one bad address kill the run
+            failed += 1
+            logging.error(f"Broadcast send error to {email}: {e}")
+        # Gentle pacing to stay well under Gmail's per-second/day limits.
+        await asyncio.sleep(0.4)
+        await db.broadcasts.update_one(
+            {"id": broadcast_id},
+            {"$set": {"sent_count": sent, "failed_count": failed}},
+        )
+
+    await db.broadcasts.update_one(
+        {"id": broadcast_id},
+        {"$set": {
+            "status": "completed",
+            "sent_count": sent,
+            "failed_count": failed,
+            "completed_at": datetime.now(timezone.utc).isoformat(),
+        }},
+    )
+    logging.info(f"Broadcast {broadcast_id} complete: sent={sent} failed={failed}")
+
+
+@router.get("/broadcast")
+async def broadcast_info(username: str = Depends(get_admin_user)):
+    """Recipient count + most recent broadcast (for the admin UI)."""
+    from server import db
+
+    recipient_count = await db.resource_subscribers.count_documents(
+        {"newsletter_opt_in": {"$ne": False}}
+    )
+    last = await db.broadcasts.find_one({}, {"_id": 0}, sort=[("created_at", -1)])
+    return {"success": True, "recipient_count": recipient_count, "last_broadcast": last}
+
+
+@router.post("/broadcast")
+async def send_broadcast(
+    request: BroadcastRequest,
+    background_tasks: BackgroundTasks,
+    username: str = Depends(get_admin_user),
+):
+    """Queue a one-time broadcast to all opted-in subscribers."""
+    from server import db
+
+    subject = (request.subject or "").strip()
+    message = (request.message or "").strip()
+    if not subject or not message:
+        raise HTTPException(status_code=400, detail="Subject and message are required")
+
+    docs = await db.resource_subscribers.find(
+        {"newsletter_opt_in": {"$ne": False}}, {"_id": 0, "email": 1}
+    ).to_list(10000)
+    recipients = sorted({d["email"].strip().lower() for d in docs if d.get("email")})
+
+    if not recipients:
+        raise HTTPException(status_code=400, detail="No subscribers to send to")
+
+    broadcast_id = str(_uuid.uuid4())
+    await db.broadcasts.insert_one({
+        "id": broadcast_id,
+        "subject": subject,
+        "message": message,
+        "recipient_count": len(recipients),
+        "sent_count": 0,
+        "failed_count": 0,
+        "status": "sending",
+        "created_by": username,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    background_tasks.add_task(_broadcast_worker, recipients, subject, message, broadcast_id)
+
+    logging.info(f"Admin {username} queued broadcast {broadcast_id} to {len(recipients)} recipients")
+    return {
+        "success": True,
+        "queued": len(recipients),
+        "broadcast_id": broadcast_id,
+        "message": f"Broadcasting to {len(recipients)} subscribers",
     }

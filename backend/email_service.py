@@ -24,12 +24,13 @@ logger = logging.getLogger(__name__)
 SMTP_FROM_DEFAULT = "Income Online <welcome@incomeonline.info>"
 
 
-def _send_email(to_email, subject, html, text, attachments=None):
+def _send_email(to_email, subject, html, text, attachments=None, extra_headers=None):
     """
     Send an email via Google Workspace SMTP.
 
     Returns True on success, False (with logged error) on any failure.
     `attachments` is an optional list of dicts: [{"filename": str, "content_bytes": bytes}]
+    `extra_headers` is an optional dict of additional headers (e.g. List-Unsubscribe).
     """
     host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
     port = int(os.environ.get("SMTP_PORT", "587"))
@@ -50,6 +51,9 @@ def _send_email(to_email, subject, html, text, attachments=None):
     msg["From"] = from_addr
     msg["To"] = to_email
     msg["Reply-To"] = from_addr
+    if extra_headers:
+        for key, value in extra_headers.items():
+            msg[key] = value
     msg.set_content(text or "")
     msg.add_alternative(html, subtype="html")
 
@@ -465,3 +469,58 @@ def send_abandoned_donation_email(email: str) -> bool:
     )
 
     return _send_email(to_email=email, subject=subject, html=html, text=text)
+
+
+import html as _html
+
+
+def build_broadcast_content(subject: str, message: str):
+    """Wrap an admin broadcast message in a branded HTML shell + plain-text version."""
+    frontend_url = os.environ.get("FRONTEND_URL", "https://www.incomeonline.info").rstrip("/")
+    unsubscribe_mailto = "mailto:welcome@incomeonline.info?subject=Unsubscribe"
+
+    # Convert the plain message into HTML paragraphs, preserving line breaks and
+    # escaping any HTML so admin input can't break the layout.
+    blocks = [b for b in message.split("\n\n") if b.strip()]
+    paragraphs = "".join(
+        f'<p style="font-size:16px;line-height:1.7;margin:0 0 16px;color:#1f2937;">'
+        f'{_html.escape(b.strip()).replace(chr(10), "<br/>")}</p>'
+        for b in blocks
+    ) or f'<p style="font-size:16px;line-height:1.7;color:#1f2937;">{_html.escape(message)}</p>'
+
+    html_body = f"""
+    <div style="font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 0; background:#ffffff;">
+      <div style="background: linear-gradient(90deg,#7c3aed,#db2777,#ea580c); padding: 24px 28px;">
+        <h1 style="margin:0; color:#ffffff; font-size:22px; letter-spacing:0.5px;">Income Online</h1>
+      </div>
+      <div style="padding: 28px;">
+        {paragraphs}
+        <div style="margin-top:28px; text-align:center;">
+          <a href="{frontend_url}" style="display:inline-block; padding:12px 26px; background:linear-gradient(90deg,#7c3aed,#db2777); color:#ffffff; font-weight:700; text-decoration:none; border-radius:999px; font-size:15px;">Visit Income Online</a>
+        </div>
+      </div>
+      <div style="padding: 18px 28px; border-top:1px solid #eee; color:#9ca3af; font-size:12px; line-height:1.6;">
+        You're receiving this because you signed up for free guides or updates at Income Online.<br/>
+        <a href="{unsubscribe_mailto}" style="color:#9ca3af;">Unsubscribe</a> · <a href="{frontend_url}" style="color:#9ca3af;">{frontend_url}</a>
+      </div>
+    </div>
+    """
+
+    text_body = (
+        f"{message}\n\n"
+        f"—\nIncome Online · {frontend_url}\n"
+        f"Unsubscribe: reply to this email with the word 'Unsubscribe'.\n"
+    )
+    return html_body, text_body
+
+
+def send_broadcast_email(email: str, subject: str, message: str) -> bool:
+    """Send a one-time admin broadcast to a single subscriber."""
+    html_body, text_body = build_broadcast_content(subject, message)
+    return _send_email(
+        to_email=email,
+        subject=subject,
+        html=html_body,
+        text=text_body,
+        extra_headers={"List-Unsubscribe": "<mailto:welcome@incomeonline.info?subject=Unsubscribe>"},
+    )

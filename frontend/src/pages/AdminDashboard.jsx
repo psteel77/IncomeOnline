@@ -9,6 +9,7 @@ import { LogOut, Save, Home, Loader2, CheckCircle2, AlertCircle, Plus, Trash2, E
 import axios from 'axios';
 import SitemapPingCard from '../components/admin/SitemapPingCard';
 import SubscribersCard from '../components/admin/SubscribersCard';
+import BroadcastCard from '../components/admin/BroadcastCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -306,6 +307,9 @@ const AdminDashboard = () => {
 
         {/* Subscribers (captured emails from Free Resources gateway) */}
         <SubscribersCard />
+
+        {/* Broadcast a one-time email to subscribers + hero-pill leads */}
+        <BroadcastCard />
 
         {/* Hero Section */}
         <Card>

@@ -21,6 +21,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (3 Jun 2026 — subscriber broadcast)
+- **Admin "Broadcast to Subscribers" card** (`frontend/src/components/admin/BroadcastCard.jsx`, shown in AdminDashboard): subject + message → confirm dialog → sends a branded one-time email to all opted-in `resource_subscribers` (free-guide subscribers + hero-pill leads) via Google SMTP, paced for Gmail limits, with auto unsubscribe footer + List-Unsubscribe header.
+- Backend (`cms_routes.py`): `GET /api/cms/broadcast` (recipient count + last broadcast) and `POST /api/cms/broadcast` (admin-auth, queues background send, logs to `broadcasts` collection). Email template: `email_service.send_broadcast_email()` / `build_broadcast_content()`.
+- Tested: auth (401)/validation (400), recipient count, and a real branded broadcast email delivered via Google SMTP. Card renders with live recipient count.
+- **Production note:** needs "Save to Github" to deploy (no new env vars — reuses the SMTP config already on Railway).
+
 ### Completed (3 Jun 2026 — email delivery FIXED)
 - **Migrated email delivery from Resend → Google Workspace SMTP** (`backend/email_service.py` `_send_email()` via smtplib, `smtp.gmail.com:587` STARTTLS + App Password). This resolves the long-standing P0 blocker: the Wix registrar refuses subdomain MX records, which both Mailgun and Resend required for verification. Google SMTP needs **zero DNS changes** because `incomeonline.info` already has Google MX + SPF (`include:_spf.google.com`) + DKIM, so mail passes SPF/DKIM/DMARC automatically.
 - Sender: `welcome@incomeonline.info`. All existing templates (new-user, returning-user, expired, expiry-warning, resource attachment, abandoned-donation) preserved — only the transport swapped.
