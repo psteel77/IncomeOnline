@@ -1,67 +1,80 @@
 import os
 import logging
-import base64
+import smtplib
 from pathlib import Path
-
-import resend
+from email.message import EmailMessage
 
 logger = logging.getLogger(__name__)
 
-# Resend configuration (replaces Mailgun)
-# RESEND_API_KEY     - required, from https://resend.com/api-keys
-# RESEND_FROM_EMAIL  - required, must be on a domain verified in Resend.
-#                      Format: "Display Name <noreply@yourdomain.com>" or "noreply@yourdomain.com"
-RESEND_FROM_DEFAULT = "Income Online <noreply@incomeonline.info>"
+# -----------------------------------------------------------------------------
+# Email delivery via Google Workspace SMTP (smtp.gmail.com)
+# -----------------------------------------------------------------------------
+# The sending domain (incomeonline.info) is already on Google Workspace with
+# Google MX + SPF (include:_spf.google.com) and Google-managed DKIM, so mail
+# sent through Gmail's authenticated SMTP passes SPF/DKIM/DMARC with NO extra
+# DNS records. This replaces the previous Resend integration which required a
+# subdomain MX record that the Wix registrar would not allow.
+#
+# Required env vars:
+#   SMTP_HOST      (default smtp.gmail.com)
+#   SMTP_PORT      (default 587, STARTTLS)
+#   SMTP_USERNAME  full Workspace address, e.g. welcome@incomeonline.info
+#   SMTP_PASSWORD  16-char Google App Password (NOT the normal password)
+#   SMTP_FROM      "Display Name <welcome@incomeonline.info>" (defaults to username)
+SMTP_FROM_DEFAULT = "Income Online <welcome@incomeonline.info>"
 
 
-def _send_via_resend(to_email, subject, html, text, attachments=None):
+def _send_email(to_email, subject, html, text, attachments=None):
     """
-    Single helper that talks to Resend.
+    Send an email via Google Workspace SMTP.
 
     Returns True on success, False (with logged error) on any failure.
     `attachments` is an optional list of dicts: [{"filename": str, "content_bytes": bytes}]
     """
-    api_key = os.environ.get("RESEND_API_KEY")
-    from_addr = os.environ.get("RESEND_FROM_EMAIL", RESEND_FROM_DEFAULT)
+    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+    port = int(os.environ.get("SMTP_PORT", "587"))
+    username = os.environ.get("SMTP_USERNAME")
+    password = os.environ.get("SMTP_PASSWORD")
+    from_addr = os.environ.get("SMTP_FROM") or username or SMTP_FROM_DEFAULT
 
-    # Unmistakable boot-time-style logging so the line is easy to find in
-    # provider log streams when diagnosing delivery problems.
-    print(f"[RESEND] _send_via_resend called: to={to_email} subject={subject!r}", flush=True)
-    print(f"[RESEND] api_key set? {bool(api_key)}  from={from_addr!r}", flush=True)
+    print(f"[SMTP] _send_email called: to={to_email} subject={subject!r}", flush=True)
+    print(f"[SMTP] host={host}:{port} user set? {bool(username)} from={from_addr!r}", flush=True)
 
-    if not api_key:
-        logger.error("RESEND_API_KEY not set in environment; email not sent")
-        print("[RESEND] ABORT: RESEND_API_KEY env var is empty or missing", flush=True)
+    if not username or not password:
+        logger.error("SMTP_USERNAME/SMTP_PASSWORD not set in environment; email not sent")
+        print("[SMTP] ABORT: SMTP credentials missing", flush=True)
         return False
 
-    resend.api_key = api_key
-
-    params = {
-        "from": from_addr,
-        "to": [to_email],
-        "subject": subject,
-        "html": html,
-        "text": text,
-    }
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = from_addr
+    msg["To"] = to_email
+    msg["Reply-To"] = from_addr
+    msg.set_content(text or "")
+    msg.add_alternative(html, subtype="html")
 
     if attachments:
-        params["attachments"] = [
-            {
-                "filename": a["filename"],
-                "content": base64.b64encode(a["content_bytes"]).decode("ascii"),
-            }
-            for a in attachments
-        ]
+        for a in attachments:
+            msg.add_attachment(
+                a["content_bytes"],
+                maintype="application",
+                subtype="octet-stream",
+                filename=a["filename"],
+            )
 
     try:
-        result = resend.Emails.send(params)
-        message_id = result.get("id", "unknown") if isinstance(result, dict) else "unknown"
-        logger.info(f"✅ Resend delivered to {to_email} · subject='{subject}' · id={message_id}")
-        print(f"[RESEND] SUCCESS id={message_id}", flush=True)
+        with smtplib.SMTP(host, port, timeout=30) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(username, password)
+            server.send_message(msg)
+        logger.info(f"✅ SMTP delivered to {to_email} · subject='{subject}'")
+        print("[SMTP] SUCCESS", flush=True)
         return True
     except Exception as e:
-        logger.error(f"❌ Resend send failed for {to_email}: {e}")
-        print(f"[RESEND] EXCEPTION: {type(e).__name__}: {e}", flush=True)
+        logger.error(f"❌ SMTP send failed for {to_email}: {e}")
+        print(f"[SMTP] EXCEPTION: {type(e).__name__}: {e}", flush=True)
         return False
 
 
@@ -178,7 +191,7 @@ def send_new_user_email(email, verification_token):
     frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
 
-    ok = _send_via_resend(
+    ok = _send_email(
         to_email=email,
         subject=email_data['subject'],
         html=email_data['html'],
@@ -196,7 +209,7 @@ def send_returning_user_email(email, verification_token):
     frontend_url = os.environ['FRONTEND_URL']
     verification_link = f"{frontend_url}/verify?token={verification_token}"
 
-    ok = _send_via_resend(
+    ok = _send_email(
         to_email=email,
         subject=email_data['subject'],
         html=email_data['html'],
@@ -320,7 +333,7 @@ def send_expired_email(email):
     Send Email Template 3 to users whose subscription has expired
     """
     email_data = prepare_expired_email(email)
-    return _send_via_resend(
+    return _send_email(
         to_email=email,
         subject=email_data['subject'],
         html=email_data['html'],
@@ -333,7 +346,7 @@ def send_expiry_warning_email(email, expiry_date):
     Send Email Template 4 - 7 day warning before expiry
     """
     email_data = prepare_expiry_warning_email(email, expiry_date)
-    return _send_via_resend(
+    return _send_email(
         to_email=email,
         subject=email_data['subject'],
         html=email_data['html'],
@@ -382,7 +395,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         logger.error(f"❌ Could not read resource attachment {attachment_path}: {e}")
         return False
 
-    return _send_via_resend(
+    return _send_email(
         to_email=email,
         subject=subject,
         html=html,
@@ -451,4 +464,4 @@ def send_abandoned_donation_email(email: str) -> bool:
         f"— Income Online · {frontend_url}\n"
     )
 
-    return _send_via_resend(to_email=email, subject=subject, html=html, text=text)
+    return _send_email(to_email=email, subject=subject, html=html, text=text)
