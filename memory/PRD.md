@@ -21,6 +21,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (June 2026 — individual Success Story SEO landing pages) [PENDING DEPLOY]
+- **All 60 success stories are now deep-linkable SEO pages** at `/success-stories/{slug}` (e.g. `sarah-m-upwork`). Moved the 60 stories from the hardcoded React array into a single backend source of truth `backend/success_stories_data.py` (slug = slugify(name-platform), collision-safe; `get_all/get_by_slug/get_related`).
+- Backend (`seo_routes.py`): `GET /api/seo/success-stories` (list), `/success-story/{slug}` (single + related), `/render/success-story/{slug}` (crawler HTML w/ Article JSON-LD + breadcrumb + internal links, 404+noindex for unknown), `/success-stories-sitemap.xml` (60 URLs), and `/render/success-stories` now lists all 60 linking to each page.
+- Frontend: new `SuccessStoryDetail.jsx` (route `/success-stories/:slug`, useSEO Article schema, related grid, CTA); `SuccessStories.jsx` refactored to fetch from API with "Read full story" links; removed the 900-line hardcoded array. `vercel.json` adds bot rewrites for `/success-stories/:slug` + `/success-stories-sitemap.xml`; static `sitemap.xml` index references the new stories sitemap.
+- **Tested (iteration_5): 13/13 backend + 8/8 frontend E2E pass, zero issues** (`backend/tests/test_success_stories_seo.py`). **Needs "Save to Github" to deploy.**
+
 ### Completed (June 2026 — SEO bot-render extended + related platforms) [PENDING DEPLOY]
 - **Extended dynamic-rendering to homepage, /donate, /success-stories** (`backend/seo_routes.py`): new crawler-facing endpoints `GET /api/seo/render/home` (platforms grouped by category w/ internal links + WebSite JSON-LD), `/render/donate` (Product+Offer $9.99 schema), `/render/success-stories` (16 curated source-cited summaries + CollectionPage schema). `frontend/vercel.json` adds bot-UA rewrites for `/`, `/donate`, `/success-stories` (humans still get the React SPA).
 - **Related platforms (category-aware)**: new `GET /api/seo/related-platforms/{slug}?limit=6` (same-category first, then fill). `PlatformDetail.jsx` renders a "Related platforms in {category}" card grid before the CTA (internal links → crawl depth + longer sessions). Platform bot HTML now also links same-category platforms first via shared `_pick_related()`.
