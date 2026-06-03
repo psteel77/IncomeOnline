@@ -21,6 +21,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
+### Completed (June 2026 — full transactional email redesign) [PENDING DEPLOY]
+- Built shared premium-email helpers in `email_service.py` (`_premium_email` shell, `_cta_button`/`_cta_block` bulletproof VML button, `_features_block` colour-coded badges, `_callout_band`).
+- Refactored ALL transactional emails to the consistent layered style (hero band → brand accent stripe → structured body → dark footer; gridline-free with mso resets; clickable in Outlook): **new-user welcome, returning-user magic link, expired, 7-day expiry warning, free-guide resource email, admin broadcast** — plus the previously-redesigned abandoned-donation recovery email. Removed the old flat file-templates' usage (gradient-clip headlines that rendered invisible/scammy).
+- Verified by rendering all + sending live samples to paul-steel@outlook.com (all SMTP SUCCESS). Lint clean. **Needs "Save to Github" to deploy.**
+- Note: `load_email_template` + `email_templates/*.html` are now unused (left on disk, harmless).
+
 ### Completed (June 2026 — abandoned-donation email redesign) [PENDING DEPLOY]
 - **Fixed the abandoned-donation recovery email** (`email_service.py send_abandoned_donation_email`): the old version used a gradient-clipped headline (`color:transparent`, invisible in Gmail/Outlook) and a CSS `linear-gradient` button background (dropped by Gmail/Outlook → button looked like unclickable plain text). User reported "nowhere to click + cheap/scammy".
 - Rebuilt as a professional, email-client-safe template: table-based layout, web-safe fonts, solid brand-purple header w/ logo, a **bulletproof button** (`bgcolor` on td so it renders in Outlook), plain-text fallback link, PayPal trust cue, clean footer → `www.incomeonline.info`. Updated the plain-text alternative too.
