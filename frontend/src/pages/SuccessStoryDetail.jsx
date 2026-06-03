@@ -9,6 +9,7 @@ import {
   ArrowLeft, ChevronLeft, Loader2, XCircle, DollarSign,
   TrendingUp, Sparkles, ExternalLink, Star,
 } from 'lucide-react';
+import StoryLeadCapture from '../components/story/StoryLeadCapture';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -173,6 +174,11 @@ const SuccessStoryDetail = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Email lead magnet — converts SEO traffic into newsletter subscribers */}
+        <div className="mb-8">
+          <StoryLeadCapture platform={story.platform} />
+        </div>
 
         {related.length > 0 && (
           <section className="mb-8" data-testid="related-stories">

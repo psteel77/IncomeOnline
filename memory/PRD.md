@@ -21,7 +21,11 @@ A comprehensive website for discovering online earning opportunities. Features i
 
 ## What's Been Implemented
 
-### Completed (June 2026 — individual Success Story SEO landing pages) [PENDING DEPLOY]
+### Completed (June 2026 — story-page email lead magnet) [PENDING DEPLOY]
+- Added an inline email-capture card (`frontend/src/components/story/StoryLeadCapture.jsx`) to every success-story page (`SuccessStoryDetail.jsx`) — "Get the free guide that helps earners like this". Submits to the existing `POST /api/leads/capture` with `source: 'success_story'`, upserting into `resource_subscribers` (newsletter_opt_in, surfaced in admin Subscribers card + broadcastable). Shows a success state; prefills/persists email via localStorage.
+- Tested: UI renders, submit → success state, lead persisted with `lead_sources:['success_story']` (verified in Mongo, test record cleaned). Lint clean. **Needs "Save to Github" to deploy.**
+
+### Completed (June 2026 — individual Success Story SEO landing pages) [DEPLOYED & LIVE]
 - **All 60 success stories are now deep-linkable SEO pages** at `/success-stories/{slug}` (e.g. `sarah-m-upwork`). Moved the 60 stories from the hardcoded React array into a single backend source of truth `backend/success_stories_data.py` (slug = slugify(name-platform), collision-safe; `get_all/get_by_slug/get_related`).
 - Backend (`seo_routes.py`): `GET /api/seo/success-stories` (list), `/success-story/{slug}` (single + related), `/render/success-story/{slug}` (crawler HTML w/ Article JSON-LD + breadcrumb + internal links, 404+noindex for unknown), `/success-stories-sitemap.xml` (60 URLs), and `/render/success-stories` now lists all 60 linking to each page.
 - Frontend: new `SuccessStoryDetail.jsx` (route `/success-stories/:slug`, useSEO Article schema, related grid, CTA); `SuccessStories.jsx` refactored to fetch from API with "Read full story" links; removed the 900-line hardcoded array. `vercel.json` adds bot rewrites for `/success-stories/:slug` + `/success-stories-sitemap.xml`; static `sitemap.xml` index references the new stories sitemap.
