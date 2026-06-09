@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, EmailStr, Field
 import os
@@ -6,6 +6,7 @@ import uuid
 import logging
 from datetime import datetime, timezone
 from io import BytesIO
+from cms_routes import get_admin_user
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -364,15 +365,19 @@ async def download_side_hustle():
 
 
 # ---------------------------------------------------------------
-# Premium Pack ($12.99)
+# Premium Pack ($14.99) — superset of the $9.99 basic plan.
+# Tokens are ONLY issued by the PayPal-verified flow in
+# server.py (POST /api/paypal/register-premium). There is no
+# public token-issuer endpoint (that would let anyone download
+# the paid bundle for free).
 # ---------------------------------------------------------------
 
 @router.get("/premium-pack")
 async def download_premium_pack(token: str = ""):
     """
     Download the MoneyRules Premium Pack ZIP.
-    Requires a valid purchase token (issued after successful PayPal payment).
-    Token is a one-time-use value stored in `premium_purchases`.
+    Requires a valid purchase token (issued only after a server-verified
+    $14.99 PayPal payment via /api/paypal/register-premium).
     """
     from server import db
     token_clean = (token or '').strip()
@@ -404,42 +409,9 @@ async def download_premium_pack(token: str = ""):
     )
 
 
-class PremiumPurchaseRequest(BaseModel):
-    email: EmailStr
-    paypal_order_id: str = ""
-    amount: str = "14.99"
-    currency: str = "USD"
-
-
-@router.post("/premium-pack/purchase")
-async def record_premium_purchase(payload: PremiumPurchaseRequest):
-    """
-    Called by the frontend after PayPal payment succeeds. Records the purchase
-    and issues a one-time download token the frontend can use to fetch the ZIP.
-    """
-    from server import db
-    now = datetime.now(timezone.utc).isoformat()
-    token = str(uuid.uuid4())
-    await db.premium_purchases.insert_one({
-        'id': str(uuid.uuid4()),
-        'token': token,
-        'email': payload.email.lower().strip(),
-        'paypal_order_id': payload.paypal_order_id,
-        'amount': payload.amount,
-        'currency': payload.currency,
-        'created_at': now,
-        'download_count': 0,
-    })
-    return {
-        'success': True,
-        'download_url': f'/api/pdf/premium-pack?token={token}',
-        'token': token,
-    }
-
-
 @router.get("/premium-pack/purchases")
-async def list_premium_purchases(limit: int = 500):
-    """Admin list of premium pack purchases."""
+async def list_premium_purchases(limit: int = 500, admin=Depends(get_admin_user)):
+    """Admin-only list of premium pack purchases."""
     from server import db
     purchases = await db.premium_purchases.find({}, {"_id": 0}).sort('created_at', -1).to_list(limit)
     total = await db.premium_purchases.count_documents({})

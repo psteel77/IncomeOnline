@@ -2,18 +2,31 @@
 Backend tests for the new Premium Pack ($14.99) flow.
 
 Covers:
-  - POST /api/pdf/premium-pack/purchase (token issuer, default amount 14.99)
   - GET  /api/pdf/premium-pack?token=<valid|invalid|empty>
-  - GET  /api/pdf/premium-pack/purchases (admin list)
+  - GET  /api/pdf/premium-pack/purchases (admin-only list)
   - POST /api/paypal/register-premium (bad/empty/fake order_id)
   - Regression: free-guide PDF endpoints still serve application/pdf
+
+Note: download tokens are now ONLY issued by the PayPal-verified flow
+(server.py /api/paypal/register-premium). The old public token-issuer
+endpoint was removed. Tests seed a token directly into Mongo.
 """
 import os
+import uuid
+from datetime import datetime, timezone
+
 import pytest
 import requests
+from dotenv import load_dotenv
+from pymongo import MongoClient
+
+BACKEND_DIR = os.path.join(os.path.dirname(__file__), "..")
+load_dotenv(os.path.join(BACKEND_DIR, ".env"))
 
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://paypal-test-1.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
+ADMIN_USER = "admin"
+ADMIN_PASS = "Gulluk*9"
 
 
 @pytest.fixture(scope="module")
@@ -23,48 +36,57 @@ def session():
     return s
 
 
+@pytest.fixture(scope="module")
+def mongo():
+    client = MongoClient(os.environ["MONGO_URL"])
+    db = client[os.environ["DB_NAME"]]
+    yield db
+    # cleanup any test rows
+    db.premium_purchases.delete_many({"email": {"$regex": "^test_", "$options": "i"}})
+    client.close()
+
+
+@pytest.fixture()
+def premium_token(mongo):
+    token = str(uuid.uuid4())
+    mongo.premium_purchases.insert_one({
+        "id": str(uuid.uuid4()),
+        "token": token,
+        "email": "test_premium_seed@example.com",
+        "amount": "14.99",
+        "currency": "USD",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "download_count": 0,
+        "verified": True,
+    })
+    yield token
+    mongo.premium_purchases.delete_one({"token": token})
+
+
+@pytest.fixture(scope="module")
+def admin_token(session):
+    r = session.post(f"{API}/cms/login", json={"username": ADMIN_USER, "password": ADMIN_PASS})
+    assert r.status_code == 200, r.text
+    return r.json()["token"]
+
+
 # ---------------------------------------------------------------------------
-# Premium Pack purchase + download (token-issuer / unauthenticated audit path)
+# Premium Pack download (token-gated) + admin list
 # ---------------------------------------------------------------------------
 class TestPremiumPackPurchase:
-    def test_purchase_default_amount_is_14_99(self, session):
-        # No `amount` in body → must record 14.99
+    def test_public_token_issuer_is_removed(self, session):
+        # The old unauthenticated token issuer must no longer exist
         r = session.post(f"{API}/pdf/premium-pack/purchase",
-                         json={"email": "TEST_premium_default@example.com"})
-        assert r.status_code == 200, r.text
-        data = r.json()
-        assert data.get("success") is True
-        assert data.get("token")
-        assert data.get("download_url", "").startswith("/api/pdf/premium-pack?token=")
-        assert data["download_url"].endswith(data["token"])
+                         json={"email": "test_removed@example.com"})
+        assert r.status_code in (404, 405), r.text
 
-    def test_purchase_explicit_amount(self, session):
-        r = session.post(f"{API}/pdf/premium-pack/purchase", json={
-            "email": "TEST_premium_explicit@example.com",
-            "paypal_order_id": "TESTORDER_AUDIT_ONLY",
-            "amount": "14.99",
-            "currency": "USD",
-        })
-        assert r.status_code == 200, r.text
-        body = r.json()
-        assert body["success"] is True
-        assert body["token"]
-
-    def test_download_with_valid_token_returns_zip(self, session):
-        # 1) Get a token via purchase
-        r = session.post(f"{API}/pdf/premium-pack/purchase",
-                         json={"email": "TEST_premium_download@example.com"})
-        assert r.status_code == 200
-        token = r.json()["token"]
-
-        # 2) Download
-        d = session.get(f"{API}/pdf/premium-pack", params={"token": token})
+    def test_download_with_valid_token_returns_zip(self, session, premium_token):
+        d = session.get(f"{API}/pdf/premium-pack", params={"token": premium_token})
         assert d.status_code == 200, d.text[:300]
         ctype = d.headers.get("content-type", "")
         assert "application/zip" in ctype, f"unexpected content-type {ctype}"
         body = d.content
         assert len(body) > 400 * 1024, f"ZIP too small: {len(body)} bytes"
-        # ZIP magic bytes
         assert body[:2] == b"PK", "Response is not a ZIP file"
 
     def test_download_with_invalid_token_returns_403(self, session):
@@ -79,16 +101,19 @@ class TestPremiumPackPurchase:
         d = session.get(f"{API}/pdf/premium-pack")
         assert d.status_code == 403
 
-    def test_admin_purchases_listing(self, session):
+    def test_admin_purchases_requires_auth(self, session):
         r = session.get(f"{API}/pdf/premium-pack/purchases")
+        assert r.status_code in (401, 403), r.text
+
+    def test_admin_purchases_listing(self, session, admin_token):
+        r = session.get(f"{API}/pdf/premium-pack/purchases",
+                        headers={"Authorization": f"Bearer {admin_token}"})
         assert r.status_code == 200, r.text
         data = r.json()
         assert "total" in data
         assert "purchases" in data
         assert isinstance(data["purchases"], list)
         assert isinstance(data["total"], int)
-        # We just created some — must be > 0
-        assert data["total"] >= 1
 
 
 # ---------------------------------------------------------------------------
