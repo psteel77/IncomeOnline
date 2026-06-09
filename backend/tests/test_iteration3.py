@@ -16,7 +16,7 @@ API = f"{BASE_URL}/api"
 ADMIN_USER = "admin"
 ADMIN_PASS = "Gulluk*9"
 
-DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+DOCX_MIME = "application/pdf"
 
 
 # --------- Fixtures ---------
@@ -97,6 +97,12 @@ class TestCMSAdminUpdates:
                 "title": "legacy",
                 "subtitle": "legacy sub",
                 "cta_text": "Go",
+                # Preserve the hero pill_* CMS fields so we don't pollute them
+                # for other tests that read /api/content (test_iteration4_hero_pill).
+                "pill_enabled": True,
+                "pill_label": "FREE MONEYRULES GUIDES",
+                "pill_target": "free-resources",
+                "pill_capture_email": True,
             }
         }
         r = requests.put(f"{API}/cms/content/hero", json=payload, headers=auth_headers, timeout=15)
@@ -190,8 +196,8 @@ class TestResourceDownloadAndEmail:
 
 
 class TestSubscribersAdmin:
-    def test_subscribers_list(self, session):
-        r = session.get(f"{API}/pdf/resources/subscribers?limit=500", timeout=20)
+    def test_subscribers_list(self, session, auth_headers):
+        r = session.get(f"{API}/pdf/resources/subscribers?limit=500", headers=auth_headers, timeout=20)
         assert r.status_code == 200, r.text
         body = r.json()
         assert "total" in body
@@ -223,13 +229,13 @@ class TestRegression:
         assert body.get("total") == 10, f"Expected 10 resources, got {body.get('total')}"
         assert "rule-of-72" in body["downloaded"]
 
-    def test_rule72_docx_download(self, session):
+    def test_rule72_pdf_download(self, session):
         r = session.get(f"{API}/pdf/rule-of-72", timeout=30)
         assert r.status_code == 200, r.text
         assert r.headers.get("content-type", "").startswith(DOCX_MIME), r.headers.get("content-type")
         assert len(r.content) > 5000
 
-    def test_budget_docx_download(self, session):
+    def test_budget_pdf_download(self, session):
         r = session.get(f"{API}/pdf/budget-503020", timeout=30)
         assert r.status_code == 200, r.text
         assert r.headers.get("content-type", "").startswith(DOCX_MIME), r.headers.get("content-type")

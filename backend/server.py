@@ -1034,6 +1034,29 @@ async def recovery_stats(admin_username: str = Depends(get_admin_user)):
     }
 
 
+@api_router.post("/admin/migrate-currency-gbp")
+async def migrate_currency_gbp(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only, idempotent one-off: convert displayed currency $ -> £ in the
+    `earningsPotential` and `minPayout` fields of every platform. Safe to run
+    multiple times (only touches values that still contain '$'). Use this once
+    on production after deploying the UK/GBP changes.
+    """
+    updated = 0
+    cursor = db.platforms.find({}, {"_id": 1, "earningsPotential": 1, "minPayout": 1})
+    async for doc in cursor:
+        changes = {}
+        for field in ("earningsPotential", "minPayout"):
+            val = doc.get(field)
+            if isinstance(val, str) and "$" in val:
+                changes[field] = val.replace("$", "£")
+        if changes:
+            await db.platforms.update_one({"_id": doc["_id"]}, {"$set": changes})
+            updated += 1
+    total = await db.platforms.count_documents({})
+    return {"updated": updated, "total_platforms": total, "currency": "GBP"}
+
+
 @api_router.get("/admin/conversion-stats")
 async def conversion_stats(admin_username: str = Depends(get_admin_user)):
     """

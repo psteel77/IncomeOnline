@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Crown, Loader2, RefreshCw, DollarSign, ShoppingBag, Download, AlertCircle, TrendingUp, Users } from 'lucide-react';
+import { Crown, Loader2, RefreshCw, PoundSterling, ShoppingBag, Download, AlertCircle, TrendingUp, Users } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 const PREMIUM_PRICE = 14.99;
@@ -93,7 +93,7 @@ const PremiumPurchasesCard = () => {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <StatTile testid="premium-stat-count" icon={ShoppingBag} color="text-purple-600" label="Purchases" value={total} sub="verified PayPal buyers" />
-              <StatTile testid="premium-stat-revenue" icon={DollarSign} color="text-emerald-600" label="Revenue" value={`£${revenue.toFixed(2)}`} sub={`@ £${PREMIUM_PRICE.toFixed(2)} each`} />
+              <StatTile testid="premium-stat-revenue" icon={PoundSterling} color="text-emerald-600" label="Revenue" value={`£${revenue.toFixed(2)}`} sub={`@ £${PREMIUM_PRICE.toFixed(2)} each`} />
               <StatTile testid="premium-stat-downloads" icon={Download} color="text-blue-500" label="Downloads" value={downloads} sub="total pack downloads" />
             </div>
 
@@ -118,7 +118,7 @@ const PremiumPurchasesCard = () => {
                         <div className="text-xl font-bold text-purple-700">{conv.premium_buyers}</div>
                       </div>
                       <div className="text-center" data-testid="conv-total-revenue">
-                        <div className="flex items-center gap-1 text-emerald-600 text-xs uppercase tracking-wide"><DollarSign className="h-3.5 w-3.5" /> Total rev</div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-xs uppercase tracking-wide"><PoundSterling className="h-3.5 w-3.5" /> Total rev</div>
                         <div className="text-xl font-bold text-emerald-700">£{conv.total_revenue_usd.toFixed(2)}</div>
                       </div>
                     </div>

@@ -36,16 +36,16 @@ def auth_headers(admin_token):
 # ---------------------------- /api/leads/capture ----------------------------
 
 class TestLeadsCapture:
-    def test_capture_valid_email_returns_success(self):
+    def test_capture_valid_email_returns_success(self, auth_headers):
         email = f"TEST_hero_{uuid.uuid4().hex[:8]}@example.com"
         r = requests.post(f"{API}/leads/capture", json={"email": email, "source": "hero_pill"}, timeout=10)
         assert r.status_code == 200, r.text
         data = r.json()
         assert data.get("success") is True
 
-        # Verify persistence via subscribers admin endpoint
+        # Verify persistence via subscribers admin endpoint (admin-gated)
         time.sleep(0.2)
-        sub = requests.get(f"{API}/pdf/resources/subscribers", timeout=10)
+        sub = requests.get(f"{API}/pdf/resources/subscribers", headers=auth_headers, timeout=10)
         assert sub.status_code == 200, sub.text
         body = sub.json()
         # endpoint returns {success, subscribers:[...]} per iteration_3 notes
@@ -65,7 +65,7 @@ class TestLeadsCapture:
         r = requests.post(f"{API}/leads/capture", json={"source": "hero_pill"}, timeout=10)
         assert r.status_code == 422
 
-    def test_capture_idempotent_appends_source(self):
+    def test_capture_idempotent_appends_source(self, auth_headers):
         email = f"TEST_hero_idem_{uuid.uuid4().hex[:6]}@example.com"
         # First capture with hero_pill
         r1 = requests.post(f"{API}/leads/capture", json={"email": email, "source": "hero_pill"}, timeout=10)
@@ -74,7 +74,7 @@ class TestLeadsCapture:
         r2 = requests.post(f"{API}/leads/capture", json={"email": email, "source": "footer_form"}, timeout=10)
         assert r2.status_code == 200
 
-        sub = requests.get(f"{API}/pdf/resources/subscribers", timeout=10).json()
+        sub = requests.get(f"{API}/pdf/resources/subscribers", headers=auth_headers, timeout=10).json()
         subs = sub.get("subscribers") if isinstance(sub, dict) else sub
         rows = [s for s in subs if (s.get("email") or "").lower() == email.lower()]
         assert len(rows) == 1, f"expected single subscriber row after upsert, got {len(rows)}"

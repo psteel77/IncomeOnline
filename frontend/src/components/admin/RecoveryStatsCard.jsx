@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { LifeBuoy, Loader2, RefreshCw, Clock, MailCheck, CheckCircle2, DollarSign, AlertCircle, Play, FlaskConical } from 'lucide-react';
+import { LifeBuoy, Loader2, RefreshCw, Clock, MailCheck, CheckCircle2, PoundSterling, AlertCircle, Play, FlaskConical } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -89,7 +89,7 @@ const RecoveryStatsCard = () => {
               <StatTile testid="recovery-stat-pending" icon={Clock} color="text-amber-500" label="Pending" value={stats.pending} sub="awaiting recovery" />
               <StatTile testid="recovery-stat-sent" icon={MailCheck} color="text-blue-500" label="Emails Sent" value={stats.recovery_sent} sub="awaiting conversion" />
               <StatTile testid="recovery-stat-rescued" icon={CheckCircle2} color="text-emerald-600" label="Rescued" value={stats.converted_after_recovery} sub={`${stats.recovery_conversion_rate}% of emailed`} />
-              <StatTile testid="recovery-stat-revenue" icon={DollarSign} color="text-emerald-600" label="Revenue Rescued" value={`£${stats.revenue_rescued_usd.toFixed(2)}`} sub={`@ £${stats.price_usd.toFixed(2)} each`} />
+              <StatTile testid="recovery-stat-revenue" icon={PoundSterling} color="text-emerald-600" label="Revenue Rescued" value={`£${stats.revenue_rescued_usd.toFixed(2)}`} sub={`@ £${stats.price_usd.toFixed(2)} each`} />
             </div>
 
             <div className="flex items-center justify-between text-xs text-slate-500 flex-wrap gap-2 border-t pt-3">
