@@ -45,6 +45,24 @@ function setOrUpdateLink({ rel, href }) {
   return el;
 }
 
+function setOrUpdateAlternate(hreflang, href) {
+  if (!href) return null;
+  const selector = `link[rel="alternate"][hreflang="${hreflang}"]`;
+  let el = document.head.querySelector(selector);
+  if (!el) {
+    el = document.createElement('link');
+    el.setAttribute('rel', 'alternate');
+    el.setAttribute('hreflang', hreflang);
+    el.setAttribute(CLEANUP_ATTR, 'true');
+    document.head.appendChild(el);
+  } else if (!el.hasAttribute(CLEANUP_ATTR)) {
+    el.setAttribute('data-seo-original', el.getAttribute('href') || '');
+    el.setAttribute(CLEANUP_ATTR, 'update');
+  }
+  el.setAttribute('href', href);
+  return el;
+}
+
 function setOrUpdateJsonLd(id, data) {
   if (!data) return null;
   const selector = `script[type="application/ld+json"][data-seo-id="${id}"]`;
@@ -81,6 +99,9 @@ export default function useSEO({ title, description, canonical, ogImage, jsonLd,
     }
 
     setOrUpdateLink({ rel: 'canonical', href: canonical });
+    // UK locale targeting — tell search engines this content is for en-GB
+    setOrUpdateAlternate('en-gb', canonical);
+    setOrUpdateAlternate('x-default', canonical);
     setOrUpdateJsonLd('page-jsonld', jsonLd);
 
     // Cleanup: restore original tags when navigating away

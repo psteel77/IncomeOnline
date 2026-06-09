@@ -283,6 +283,9 @@ def _render_platform_html(p: dict, related: list) -> str:
 <meta name="description" content="{meta_desc}"/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="{canonical}"/>
+<link rel="alternate" hreflang="en-gb" href="{canonical}"/>
+<link rel="alternate" hreflang="x-default" href="{canonical}"/>
+<meta property="og:locale" content="en_GB"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{title}"/>
 <meta property="og:description" content="{meta_desc}"/>
@@ -412,6 +415,9 @@ def _doc(title: str, meta_desc: str, canonical: str, body: str, json_ld: dict | 
 <meta name="description" content="{meta_desc}"/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="{canonical}"/>
+<link rel="alternate" hreflang="en-gb" href="{canonical}"/>
+<link rel="alternate" hreflang="x-default" href="{canonical}"/>
+<meta property="og:locale" content="en_GB"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="{title}"/>
 <meta property="og:description" content="{meta_desc}"/>
