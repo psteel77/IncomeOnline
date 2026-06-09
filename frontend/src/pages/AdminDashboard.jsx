@@ -505,7 +505,7 @@ const AdminDashboard = () => {
                   value={content.library_banner?.description || ''}
                   onChange={(e) => updateSectionField('library_banner', 'description', e.target.value)}
                   rows={2}
-                  placeholder="Download print-ready Word documents..."
+                  placeholder="Download print-ready PDF guides..."
                 />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -564,7 +564,7 @@ const AdminDashboard = () => {
                   data-testid="free-resources-subtitle-input"
                   value={content.free_resources?.subtitle || ''}
                   onChange={(e) => updateSectionField('free_resources', 'subtitle', e.target.value)}
-                  placeholder="Professional Word documents you can download, edit and print"
+                  placeholder="Professional PDF guides you can download, print and keep"
                 />
               </div>
               <Button data-testid="save-free-resources-btn" onClick={() => saveSection('free_resources')} disabled={saving} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">

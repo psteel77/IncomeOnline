@@ -9,7 +9,7 @@ import { Download, Loader2, Mail, CheckCircle2, Send } from 'lucide-react';
  * Email-capture gateway shown before a Free Resource download starts.
  * On submit, POSTs to /api/pdf/resources/request-download. Supports two delivery modes:
  *   - Instant download in a new tab (default)
- *   - Email the guide as a .docx attachment via Mailgun
+ *   - Email the guide as a PDF attachment
  */
 const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, description, onSuccess }) => {
   const [email, setEmail] = useState(() => {
@@ -145,7 +145,7 @@ const ResourceDownloadDialog = ({ open, onOpenChange, resource, title, descripti
                 className="mt-0.5"
               />
               <span className="text-xs text-slate-700 leading-relaxed">
-                <span className="font-semibold">Email me the guide</span> as a Word document attachment instead of downloading it now.
+                <span className="font-semibold">Email me the guide</span> as a PDF attachment instead of downloading it now.
               </span>
             </label>
 

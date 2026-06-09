@@ -401,9 +401,9 @@ def _readme_docx():
         tagline='Thank you for supporting Income Online!\nHere\'s what\'s inside and how to use it.')
 
     add_styled_heading(doc, 'What\'s Inside', level=1)
-    add_body_text(doc, 'This premium pack contains 12 Word guides, 5 editable Excel spreadsheets, and this welcome letter. All files are yours to keep, print, edit, share with family, and refer back to as your financial journey evolves.')
+    add_body_text(doc, 'This premium pack contains 12 print-ready PDF guides, 5 editable Excel spreadsheets, and this welcome letter. The guides are yours to keep, print, and refer back to as your financial journey evolves — and the spreadsheets are fully editable so you can plug in your own numbers.')
 
-    add_styled_heading(doc, 'Word Guides (Editable .docx)', level=2)
+    add_styled_heading(doc, 'Guides (Print-ready PDF)', level=2)
     add_branded_table(doc,
         headers=['#', 'Title'],
         data=[
@@ -433,7 +433,7 @@ def _readme_docx():
         ])
 
     add_styled_heading(doc, 'How to Use', level=1)
-    add_body_text(doc, 'Start with the WELCOME LETTER (this file), then pick ONE Word guide that speaks most to your current challenge — budget, debt, tax, investing. Read it, act on its 1-week action plan, then move to the next.')
+    add_body_text(doc, 'Start with the WELCOME LETTER (this file), then pick ONE PDF guide that speaks most to your current challenge — budget, debt, tax, investing. Read it, act on its 1-week action plan, then move to the next.')
     add_body_text(doc, 'Open the Excel templates in Microsoft Excel, Google Sheets, or Numbers. All formulas are live and editable.')
     add_highlight_box(doc, 'Your financial transformation is a marathon, not a sprint.\nOne guide per month = a complete overhaul in a year.')
 
@@ -448,40 +448,47 @@ def _readme_docx():
 # ---------------------------------------------------------------
 
 def build_premium_pack():
-    """Build the ZIP and write to /app/backend/static/MoneyRules_Premium_Pack.zip"""
+    """
+    Build the Premium Pack ZIP into /static.
+
+    Guides are bundled as print-ready PDFs (built by build_guide_pdfs.py and
+    committed to /static). Spreadsheets are generated fresh via openpyxl, so
+    this function is runtime-safe (no LibreOffice needed in production). If a
+    required PDF is missing, this raises so the build fails loudly rather than
+    shipping an incomplete pack.
+    """
     os.makedirs(STATIC_DIR, exist_ok=True)
+    premium_dir = os.path.join(STATIC_DIR, 'premium')
+
+    # archive name -> source PDF path
+    pdf_members = [
+        ('00_WELCOME_START_HERE.pdf',                 os.path.join(premium_dir, '00_WELCOME_START_HERE.pdf')),
+        ('01_Rule_of_72.pdf',                          os.path.join(STATIC_DIR, 'The_Rule_of_72_Guide.pdf')),
+        ('02_50-30-20_Budget.pdf',                     os.path.join(STATIC_DIR, 'The_50_30_20_Budget_Rule.pdf')),
+        ('03_Passive_Income.pdf',                      os.path.join(STATIC_DIR, 'Passive_Income_Beginners_Guide.pdf')),
+        ('04_Debt_Snowball.pdf',                       os.path.join(STATIC_DIR, 'The_Debt_Snowball_Method.pdf')),
+        ('05_Emergency_Fund.pdf',                      os.path.join(STATIC_DIR, 'The_Emergency_Fund_Guide.pdf')),
+        ('06_Compound_Interest.pdf',                   os.path.join(STATIC_DIR, 'Compound_Interest_Handbook.pdf')),
+        ('07_UK_Tax_Basics.pdf',                       os.path.join(STATIC_DIR, 'UK_Tax_Basics_Freelancers.pdf')),
+        ('08_UK_Credit_Score.pdf',                     os.path.join(STATIC_DIR, 'UK_Credit_Score_Masterclass.pdf')),
+        ('09_ISA_vs_SIPP.pdf',                         os.path.join(STATIC_DIR, 'ISA_vs_SIPP_Complete_Guide.pdf')),
+        ('10_Side_Hustle_Quick_Start.pdf',             os.path.join(STATIC_DIR, 'Side_Hustle_Quick_Start_Guide.pdf')),
+        ('11_Wealth_Building_Roadmap_PREMIUM.pdf',     os.path.join(premium_dir, '11_Wealth_Building_Roadmap_PREMIUM.pdf')),
+        ('12_The_FIRE_Playbook_PREMIUM.pdf',           os.path.join(premium_dir, '12_The_FIRE_Playbook_PREMIUM.pdf')),
+    ]
 
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as zf:
-        # 00 — welcome
-        zf.writestr('00_WELCOME_START_HERE.docx', _readme_docx().read())
+        for archive_name, src_path in pdf_members:
+            if not os.path.exists(src_path):
+                raise FileNotFoundError(
+                    f"Premium pack source PDF missing: {src_path}. "
+                    f"Run `python build_guide_pdfs.py` first."
+                )
+            with open(src_path, 'rb') as f:
+                zf.writestr(archive_name, f.read())
 
-        # 01-10 — all free guides (copy from static if present)
-        free_guides = [
-            ('01_Rule_of_72.docx',                 'The_Rule_of_72_Guide.docx'),
-            ('02_50-30-20_Budget.docx',           'The_50_30_20_Budget_Rule.docx'),
-            ('03_Passive_Income.docx',             'Passive_Income_Beginners_Guide.docx'),
-            ('04_Debt_Snowball.docx',              'The_Debt_Snowball_Method.docx'),
-            ('05_Emergency_Fund.docx',             'The_Emergency_Fund_Guide.docx'),
-            ('06_Compound_Interest.docx',          'Compound_Interest_Handbook.docx'),
-            ('07_UK_Tax_Basics.docx',              'UK_Tax_Basics_Freelancers.docx'),
-            ('08_UK_Credit_Score.docx',            'UK_Credit_Score_Masterclass.docx'),
-            ('09_ISA_vs_SIPP.docx',                'ISA_vs_SIPP_Complete_Guide.docx'),
-            ('10_Side_Hustle_Quick_Start.docx',    'Side_Hustle_Quick_Start_Guide.docx'),
-        ]
-        for archive_name, static_file in free_guides:
-            src_path = os.path.join(STATIC_DIR, static_file)
-            if os.path.exists(src_path):
-                with open(src_path, 'rb') as f:
-                    zf.writestr(archive_name, f.read())
-            else:
-                print(f'WARNING: {static_file} not found, skipping {archive_name}')
-
-        # 11-12 — Premium-exclusive guides
-        zf.writestr('11_Wealth_Building_Roadmap_PREMIUM.docx', _premium_guide_wealth_roadmap().read())
-        zf.writestr('12_The_FIRE_Playbook_PREMIUM.docx',       _premium_guide_fire_playbook().read())
-
-        # Spreadsheets
+        # Spreadsheets — generated fresh (openpyxl works at runtime).
         zf.writestr('Spreadsheets/50-30-20_Budget_Tracker.xlsx',        _spreadsheet_budget_tracker().read())
         zf.writestr('Spreadsheets/Debt_Snowball_Tracker.xlsx',          _spreadsheet_debt_snowball().read())
         zf.writestr('Spreadsheets/Compound_Interest_Calculator.xlsx',    _spreadsheet_compound_calc().read())

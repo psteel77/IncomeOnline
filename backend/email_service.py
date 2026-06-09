@@ -525,7 +525,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         '<p style="margin:0 0 16px 0; font-size:17px; line-height:1.6; color:#1f2937;">'
         f'Your guide <strong style="color:#4c1d95;">{safe_title}</strong> is attached &mdash; thank you for grabbing it!</p>'
         '<p style="margin:0 0 4px 0; font-size:16px; line-height:1.6; color:#374151;">'
-        'It\'s a print-ready Word document you can edit, annotate and keep forever.</p>'
+        'It\'s a print-ready PDF you can save, print and keep forever.</p>'
         + _callout_band(
             'Ready to go deeper? The <strong>$12.99 Premium Pack</strong> bundles all 10 free guides + '
             '2 exclusive premium guides + 5 editable spreadsheets.',
@@ -542,7 +542,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
     text = (
         f"Your MoneyRules guide is attached\n\n"
         f"Thank you for downloading '{resource_title}' from Income Online.\n"
-        f"It's a print-ready Word document you can edit, annotate, and keep forever.\n\n"
+        f"It's a print-ready PDF you can save, print, and keep forever.\n\n"
         f"Want to go deeper? Upgrade to the $12.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
         f"- Income Online | https://www.incomeonline.info\n"
     )

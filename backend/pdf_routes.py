@@ -284,56 +284,14 @@ async def get_pdf_preview():
 
 @router.get("/rule-of-72")
 async def download_rule_of_72():
-    """Download The Rule of 72 Word document"""
-    try:
-        doc_path = os.path.join(os.path.dirname(__file__), 'static', 'The_Rule_of_72_Guide.docx')
-
-        if not os.path.exists(doc_path):
-            # Generate on first request
-            from generate_rule72_doc import generate_rule72_document
-            buffer = generate_rule72_document()
-            os.makedirs(os.path.dirname(doc_path), exist_ok=True)
-            with open(doc_path, 'wb') as f:
-                f.write(buffer.read())
-
-        return FileResponse(
-            path=doc_path,
-            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            filename='The_Rule_of_72_Complete_Guide.docx',
-            headers={
-                'Content-Disposition': 'attachment; filename="The_Rule_of_72_Complete_Guide.docx"'
-            }
-        )
-    except Exception as e:
-        logging.error(f"Error serving Rule of 72 document: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Download The Rule of 72 guide (PDF)."""
+    return _serve_pdf('The_Rule_of_72_Guide.pdf', 'The_Rule_of_72_Complete_Guide.pdf')
 
 
 @router.get("/budget-503020")
 async def download_budget_503020():
-    """Download The 50/30/20 Budget Rule Word document"""
-    try:
-        doc_path = os.path.join(os.path.dirname(__file__), 'static', 'The_50_30_20_Budget_Rule.docx')
-
-        if not os.path.exists(doc_path):
-            # Generate on first request
-            from generate_503020_doc import generate_503020_document
-            buffer = generate_503020_document()
-            os.makedirs(os.path.dirname(doc_path), exist_ok=True)
-            with open(doc_path, 'wb') as f:
-                f.write(buffer.read())
-
-        return FileResponse(
-            path=doc_path,
-            media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            filename='The_50_30_20_Budget_Rule_Complete_Guide.docx',
-            headers={
-                'Content-Disposition': 'attachment; filename="The_50_30_20_Budget_Rule_Complete_Guide.docx"'
-            }
-        )
-    except Exception as e:
-        logging.error(f"Error serving 50/30/20 document: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    """Download The 50/30/20 Budget Rule guide (PDF)."""
+    return _serve_pdf('The_50_30_20_Budget_Rule.pdf', 'The_50_30_20_Budget_Rule_Complete_Guide.pdf')
 
 
 # ---------------------------------------------------------------
@@ -341,21 +299,17 @@ async def download_budget_503020():
 # ---------------------------------------------------------------
 
 DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+PDF_MIME = 'application/pdf'
 
 
-def _serve_docx(filename: str, download_name: str, generator_fn=None):
-    """Serve a .docx from /static; optionally generate it on first request."""
+def _serve_pdf(filename: str, download_name: str):
+    """Serve a pre-built PDF guide from /static (built by build_guide_pdfs.py)."""
     doc_path = os.path.join(os.path.dirname(__file__), 'static', filename)
-    if not os.path.exists(doc_path) and generator_fn is not None:
-        buffer = generator_fn()
-        os.makedirs(os.path.dirname(doc_path), exist_ok=True)
-        with open(doc_path, 'wb') as f:
-            f.write(buffer.read())
     if not os.path.exists(doc_path):
         raise HTTPException(status_code=404, detail="Guide not found")
     return FileResponse(
         path=doc_path,
-        media_type=DOCX_MIME,
+        media_type=PDF_MIME,
         filename=download_name,
         headers={'Content-Disposition': f'attachment; filename="{download_name}"'},
     )
@@ -363,87 +317,50 @@ def _serve_docx(filename: str, download_name: str, generator_fn=None):
 
 @router.get("/passive-income")
 async def download_passive_income():
-    """Beginner's Guide to Passive Income."""
-    from generate_passive_income_doc import generate_passive_income_document
-    return _serve_docx(
-        'Passive_Income_Beginners_Guide.docx',
-        'Beginners_Guide_to_Passive_Income.docx',
-        generate_passive_income_document,
-    )
+    """Beginner's Guide to Passive Income (PDF)."""
+    return _serve_pdf('Passive_Income_Beginners_Guide.pdf', 'Beginners_Guide_to_Passive_Income.pdf')
 
 
 @router.get("/debt-snowball")
 async def download_debt_snowball():
-    """The Debt Snowball Method guide."""
-    from generate_debt_snowball_doc import generate_debt_snowball_document
-    return _serve_docx(
-        'The_Debt_Snowball_Method.docx',
-        'The_Debt_Snowball_Method.docx',
-        generate_debt_snowball_document,
-    )
+    """The Debt Snowball Method guide (PDF)."""
+    return _serve_pdf('The_Debt_Snowball_Method.pdf', 'The_Debt_Snowball_Method.pdf')
 
 
 @router.get("/emergency-fund")
 async def download_emergency_fund():
-    """Build a 3-Month Emergency Fund guide."""
-    from generate_emergency_fund_doc import generate_emergency_fund_document
-    return _serve_docx(
-        'The_Emergency_Fund_Guide.docx',
-        'Build_a_3_Month_Emergency_Fund.docx',
-        generate_emergency_fund_document,
-    )
+    """Build a 3-Month Emergency Fund guide (PDF)."""
+    return _serve_pdf('The_Emergency_Fund_Guide.pdf', 'Build_a_3_Month_Emergency_Fund.pdf')
 
 
 @router.get("/compound-interest")
 async def download_compound_interest():
-    """The Compound Interest Handbook."""
-    from generate_compound_interest_doc import generate_compound_interest_document
-    return _serve_docx(
-        'Compound_Interest_Handbook.docx',
-        'The_Compound_Interest_Handbook.docx',
-        generate_compound_interest_document,
-    )
+    """The Compound Interest Handbook (PDF)."""
+    return _serve_pdf('Compound_Interest_Handbook.pdf', 'The_Compound_Interest_Handbook.pdf')
 
 
 @router.get("/uk-tax-basics")
 async def download_uk_tax_basics():
-    """UK Tax Basics for Freelancers."""
-    from generate_uk_tax_basics_doc import generate_uk_tax_basics_document
-    return _serve_docx(
-        'UK_Tax_Basics_Freelancers.docx',
-        'UK_Tax_Basics_for_Freelancers.docx',
-        generate_uk_tax_basics_document,
-    )
+    """UK Tax Basics for Freelancers (PDF)."""
+    return _serve_pdf('UK_Tax_Basics_Freelancers.pdf', 'UK_Tax_Basics_for_Freelancers.pdf')
 
 
 @router.get("/credit-score")
 async def download_credit_score():
-    from generate_additional_guides import generate_credit_score_document
-    return _serve_docx(
-        'UK_Credit_Score_Masterclass.docx',
-        'UK_Credit_Score_Masterclass.docx',
-        generate_credit_score_document,
-    )
+    """UK Credit Score Masterclass (PDF)."""
+    return _serve_pdf('UK_Credit_Score_Masterclass.pdf', 'UK_Credit_Score_Masterclass.pdf')
 
 
 @router.get("/isa-vs-sipp")
 async def download_isa_vs_sipp():
-    from generate_additional_guides import generate_isa_vs_sipp_document
-    return _serve_docx(
-        'ISA_vs_SIPP_Complete_Guide.docx',
-        'ISA_vs_SIPP_Complete_Guide.docx',
-        generate_isa_vs_sipp_document,
-    )
+    """ISA vs SIPP — Tax-Efficient Investing (PDF)."""
+    return _serve_pdf('ISA_vs_SIPP_Complete_Guide.pdf', 'ISA_vs_SIPP_Complete_Guide.pdf')
 
 
 @router.get("/side-hustle-quickstart")
 async def download_side_hustle():
-    from generate_additional_guides import generate_side_hustle_document
-    return _serve_docx(
-        'Side_Hustle_Quick_Start_Guide.docx',
-        'Side_Hustle_Quick_Start_Guide.docx',
-        generate_side_hustle_document,
-    )
+    """The Side-Hustle Quick-Start Guide (PDF)."""
+    return _serve_pdf('Side_Hustle_Quick_Start_Guide.pdf', 'Side_Hustle_Quick_Start_Guide.pdf')
 
 
 # ---------------------------------------------------------------
@@ -566,62 +483,62 @@ RESOURCE_MAP = {
     'rule-of-72': {
         'title': 'The Rule of 72 — Complete Investment Guide',
         'download_path': '/api/pdf/rule-of-72',
-        'file': 'The_Rule_of_72_Guide.docx',
-        'download_name': 'The_Rule_of_72_Complete_Guide.docx',
+        'file': 'The_Rule_of_72_Guide.pdf',
+        'download_name': 'The_Rule_of_72_Complete_Guide.pdf',
     },
     'budget-503020': {
         'title': 'The 50/30/20 Rule — Budget Guide',
         'download_path': '/api/pdf/budget-503020',
-        'file': 'The_50_30_20_Budget_Rule.docx',
-        'download_name': 'The_50_30_20_Budget_Rule_Complete_Guide.docx',
+        'file': 'The_50_30_20_Budget_Rule.pdf',
+        'download_name': 'The_50_30_20_Budget_Rule_Complete_Guide.pdf',
     },
     'passive-income': {
         'title': "Beginner's Guide to Passive Income",
         'download_path': '/api/pdf/passive-income',
-        'file': 'Passive_Income_Beginners_Guide.docx',
-        'download_name': 'Beginners_Guide_to_Passive_Income.docx',
+        'file': 'Passive_Income_Beginners_Guide.pdf',
+        'download_name': 'Beginners_Guide_to_Passive_Income.pdf',
     },
     'debt-snowball': {
         'title': 'The Debt Snowball Method',
         'download_path': '/api/pdf/debt-snowball',
-        'file': 'The_Debt_Snowball_Method.docx',
-        'download_name': 'The_Debt_Snowball_Method.docx',
+        'file': 'The_Debt_Snowball_Method.pdf',
+        'download_name': 'The_Debt_Snowball_Method.pdf',
     },
     'emergency-fund': {
         'title': 'Build a 3-Month Emergency Fund',
         'download_path': '/api/pdf/emergency-fund',
-        'file': 'The_Emergency_Fund_Guide.docx',
-        'download_name': 'Build_a_3_Month_Emergency_Fund.docx',
+        'file': 'The_Emergency_Fund_Guide.pdf',
+        'download_name': 'Build_a_3_Month_Emergency_Fund.pdf',
     },
     'compound-interest': {
         'title': 'The Compound Interest Handbook',
         'download_path': '/api/pdf/compound-interest',
-        'file': 'Compound_Interest_Handbook.docx',
-        'download_name': 'The_Compound_Interest_Handbook.docx',
+        'file': 'Compound_Interest_Handbook.pdf',
+        'download_name': 'The_Compound_Interest_Handbook.pdf',
     },
     'uk-tax-basics': {
         'title': 'UK Tax Basics for Freelancers & Side-Hustlers',
         'download_path': '/api/pdf/uk-tax-basics',
-        'file': 'UK_Tax_Basics_Freelancers.docx',
-        'download_name': 'UK_Tax_Basics_for_Freelancers.docx',
+        'file': 'UK_Tax_Basics_Freelancers.pdf',
+        'download_name': 'UK_Tax_Basics_for_Freelancers.pdf',
     },
     'credit-score': {
         'title': 'UK Credit Score Masterclass',
         'download_path': '/api/pdf/credit-score',
-        'file': 'UK_Credit_Score_Masterclass.docx',
-        'download_name': 'UK_Credit_Score_Masterclass.docx',
+        'file': 'UK_Credit_Score_Masterclass.pdf',
+        'download_name': 'UK_Credit_Score_Masterclass.pdf',
     },
     'isa-vs-sipp': {
         'title': 'ISA vs SIPP — Tax-Efficient Investing',
         'download_path': '/api/pdf/isa-vs-sipp',
-        'file': 'ISA_vs_SIPP_Complete_Guide.docx',
-        'download_name': 'ISA_vs_SIPP_Complete_Guide.docx',
+        'file': 'ISA_vs_SIPP_Complete_Guide.pdf',
+        'download_name': 'ISA_vs_SIPP_Complete_Guide.pdf',
     },
     'side-hustle-quickstart': {
         'title': 'The Side-Hustle Quick-Start Guide',
         'download_path': '/api/pdf/side-hustle-quickstart',
-        'file': 'Side_Hustle_Quick_Start_Guide.docx',
-        'download_name': 'Side_Hustle_Quick_Start_Guide.docx',
+        'file': 'Side_Hustle_Quick_Start_Guide.pdf',
+        'download_name': 'Side_Hustle_Quick_Start_Guide.pdf',
     },
 }
 

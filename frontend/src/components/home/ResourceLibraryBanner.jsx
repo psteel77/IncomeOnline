@@ -13,7 +13,7 @@ const ResourceLibraryBanner = ({ count = 10, content }) => {
   const badge = cms.badge || '100% Free · MoneyRules Library';
   // Headline supports a {count} placeholder for the number of guides.
   const rawHeadline = cms.headline || '{count} FREE Financial Guides, Yours to Keep';
-  const description = cms.description || 'Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.';
+  const description = cms.description || 'Download print-ready PDF guides on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.';
   const ctaPrimary = cms.cta_primary || 'Get My Free Guides';
   const ctaSecondary = cms.cta_secondary || 'or grab the $12.99 Premium Pack →';
 

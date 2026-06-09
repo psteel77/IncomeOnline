@@ -30,7 +30,7 @@ content_sections = [
         "content": {
             "badge": "100% Free · MoneyRules Library",
             "headline": "10 FREE Financial Guides, Yours to Keep",
-            "description": "Download print-ready Word documents on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.",
+            "description": "Download print-ready PDF guides on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.",
             "cta_primary": "Get My Free Guides",
             "cta_secondary": "or grab the $12.99 Premium Pack →",
         }
@@ -39,7 +39,7 @@ content_sections = [
         "section_id": "free_resources",
         "content": {
             "title": "MoneyRules Library — 10 Free Guides",
-            "subtitle": "Professional Word documents you can download, edit and print",
+            "subtitle": "Professional PDF guides you can download, print and keep",
         }
     },
     {

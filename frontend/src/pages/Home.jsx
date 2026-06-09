@@ -677,7 +677,7 @@ const Home = () => {
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3" data-testid="free-resources-title">
               {content.free_resources?.title || 'MoneyRules Library — 10 Free Guides'}
             </h2>
-            <p className="text-base sm:text-lg text-slate-600 mb-5" data-testid="free-resources-subtitle">{content.free_resources?.subtitle || 'Professional Word documents you can download, edit and print'}</p>
+            <p className="text-base sm:text-lg text-slate-600 mb-5" data-testid="free-resources-subtitle">{content.free_resources?.subtitle || 'Professional PDF guides you can download, print and keep'}</p>
 
             {/* Progress tracker (only visible once the user has downloaded at least one) */}
             {libProgress.downloadedCount > 0 && (
@@ -847,7 +847,7 @@ const Home = () => {
                       <Download className="mr-1.5 h-3.5 w-3.5" />
                       {isDone ? 'Download again' : 'Download'}
                     </Button>
-                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">.docx · 10 pages</span>
+                    <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">.pdf · 10 pages</span>
                   </div>
                 </CardContent>
               </Card>
