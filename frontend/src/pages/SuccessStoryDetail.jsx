@@ -210,7 +210,7 @@ const SuccessStoryDetail = () => {
             <Sparkles className="h-10 w-10 mx-auto mb-3 opacity-90" />
             <h2 className="text-2xl sm:text-3xl font-bold mb-3">Write your own success story</h2>
             <p className="text-base sm:text-lg opacity-95 mb-6 max-w-2xl mx-auto">
-              Unlock the same 199+ verified platforms these earners used — one-time $9.99 yearly contribution.
+              Unlock the same 199+ verified platforms these earners used — one-time £9.99 yearly contribution.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Button asChild size="lg" className="bg-white text-purple-700 hover:bg-purple-50 font-bold">

@@ -1,0 +1,42 @@
+{
+  "summary": "Iteration 7: GBP currency sweep & UK locale validation. Backend: 35/35 pytest pass (15 new GBP/UK tests + 20 regression premium pack tests). Frontend: home page has ZERO '$<digit>' occurrences; DonationSection shows £9.99 and links to Premium £14.99; PremiumPackSection shows premium-price=£14.99 with copy 'the £9.99 plan' and 'Just £5 more'; PayPal not-configured fallback renders as expected. Admin dashboard logs in with admin/Gulluk*9 — Premium Purchases card shows £0.00 @ £14.99 each (no $ in body); Conversion tile shows BASIC £9.99 / PREMIUM £14.99 / TOTAL REV £19.98 all in £. Subscribers card loads (now auth-gated). Server-rendered SEO route /api/seo/render/platform/<slug> returns lang=\"en-GB\" and Product schema priceCurrency=GBP. Public index.html has lang=en-GB + geo.region GB + og:locale en_GB. Platforms DB has 199+ entries with NO $ in earningsPotential/minPayout structured fields. PayPal register-premium/register-donor correctly reject empty (400) and fake (502) orders and NEVER return a token/download_url. Admin-gated /api/pdf/premium-pack/purchases and /api/pdf/resources/subscribers both 401 without auth, 200 with admin token. All conversion-stats and recovery-stats return GBP amounts (9.99 / 14.99) under _usd-suffixed keys as documented.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin > Premium Pack Purchases & Donation Recovery cards", "issues": ["Lucide DollarSign ($) icon is used next to 'REVENUE' / 'TOTAL REV' / 'REVENUE RESCUED' labels even though the actual amounts are in £. Non-blocking — the visible currency text is all £ — but consider swapping for PoundSterling icon for stricter UK consistency."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_gbp_currency_sweep.py",
+    "/app/backend/tests/test_premium_pack_flow.py",
+    "/app/test_reports/pytest/iteration_7.xml",
+    "/app/test_reports/pytest/iteration_7_gbp.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "backend/server.py:38-43 — Constants still named EXPECTED_DONATION_USD / PREMIUM_PACK_USD but hold GBP values. Comments explicitly say this is intentional for stability; OK for now but consider renaming to *_PRICE_GBP in a follow-up to avoid future confusion.",
+    "backend/server.py:737 — Currency check now strictly requires paid_currency == 'GBP'. Good — this is the core defence against a USD/EUR-paying browser-spoofed order being accepted.",
+    "backend/seo_routes.py — All three server-rendered surfaces (render/platform, render/home, render/success-story) hardcode lang=\"en-GB\" and Product schema priceCurrency=\"GBP\". Sitemap & 404 fallback also UK-localised. Note the seo_router is mounted under /api/seo/* (not /api/render/*), so any external docs referencing '/api/render/...' should be updated.",
+    "backend/admin/conversion-stats: response keys still end in _usd (basic_price_usd, premium_price_usd, revenue_usd if any). Per problem statement this is expected for backwards compat but it WILL confuse the next engineer — suggest a low-priority rename pass.",
+    "frontend admin DollarSign icons (PremiumPurchasesCard / RecoveryStatsCard): cosmetic, swap for lucide PoundSterling to be fully UK-consistent.",
+    "Platforms DB: confirmed 199 entries, structured earnings/minPayout all in £. Per agent-to-agent note, platform DESCRIPTION text may still contain factual third-party $ figures (e.g. '$80 million paid'), which is intentional and not flagged."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_gbp_currency_sweep.py (new — 15 tests)"
+  ],
+  "success_rate": {
+    "backend": "100% (35/35)",
+    "frontend": "100% (all assertions passed)"
+  },
+  "test_credentials": "Admin login admin/Gulluk*9 verified working via POST /api/cms/login and admin UI at /admin.",
+  "seed_data_creation": "None this iteration. Previous TEST_premium_* rows from iteration 6 already cleaned up by test_premium_pack_flow.py mongo fixture teardown.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "GBP/UK sweep is fully verified. Key endpoints: GET /api/admin/conversion-stats (admin) -> {basic_price_usd:9.99, premium_price_usd:14.99} (values are GBP, keys retain _usd by design); GET /api/paypal/recovery-stats (admin) -> {price_usd:9.99}; POST /api/paypal/register-premium & /api/paypal/register-donor strictly require GBP currency match. Server-rendered SEO lives under /api/seo/render/platform/{slug} (NOT /api/render/...), returns lang=en-GB + priceCurrency=GBP. Frontend admin dashboard testids: premium-purchases-card, premium-conversion, resources-subscribers-card. Home testids: donation-section (#support), premium-pack-section, premium-price, premium-pack-contents, premium-paypal-config-missing, premium-upsell-link. New regression test file: /app/backend/tests/test_gbp_currency_sweep.py.",
+  "rca_of_the_issue": "No bugs. One cosmetic observation: admin cards still use a $ lucide icon next to revenue labels even though amounts render in £. Non-blocking; swap to PoundSterling icon when convenient."
+}

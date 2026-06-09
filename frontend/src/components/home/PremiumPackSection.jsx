@@ -6,7 +6,7 @@ import {
 import PayPalPremiumButton from '../PayPalPremiumButton';
 
 const PACK_CONTENTS = [
-  { icon: Unlock,        text: 'Full access to all 199+ verified platforms for 12 months (the $9.99 plan — included)' },
+  { icon: Unlock,        text: 'Full access to all 199+ verified platforms for 12 months (the £9.99 plan — included)' },
   { icon: BookOpenCheck, text: 'All 10 MoneyRules guides as print-ready PDFs (100+ pages)' },
   { icon: FileText,      text: '4 premium-only Strategy documents: Investor\u2019s Starter Kit, Buy-to-Let Profit, Tax-Efficiency Masterclass & 12-Month Money Makeover' },
   { icon: Calculator,    text: '6 interactive Excel calculators with live charts \u2014 type your numbers in, watch the graphs redraw' },
@@ -14,7 +14,7 @@ const PACK_CONTENTS = [
 ];
 
 /**
- * Premium Pack = a SUPERSET of the $9.99 basic plan. Buying Premium ($14.99)
+ * Premium Pack = a SUPERSET of the £9.99 basic plan. Buying Premium (£14.99)
  * grants the same 12-month platform access PLUS the Wealth Generator bundle.
  * Payment is server-verified via the PayPal SDK (see PayPalPremiumButton):
  * on success the backend activates access, issues a one-time download token,
@@ -41,7 +41,7 @@ const PremiumPackSection = () => {
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-pink-400">Wealth Generator</span> Pack
           </h2>
           <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">
-            Everything in the $9.99 plan <span className="font-semibold text-amber-200">plus</span> our complete toolkit — guides, premium strategies and interactive calculators.
+            Everything in the £9.99 plan <span className="font-semibold text-amber-200">plus</span> our complete toolkit — guides, premium strategies and interactive calculators.
           </p>
         </div>
 
@@ -76,13 +76,13 @@ const PremiumPackSection = () => {
               <div className="text-center mb-6">
                 <p className="text-sm font-semibold text-purple-700 uppercase tracking-wider mb-2">Best value · One-off payment</p>
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-5xl sm:text-6xl font-extrabold text-slate-900" data-testid="premium-price">$14.99</span>
+                  <span className="text-5xl sm:text-6xl font-extrabold text-slate-900" data-testid="premium-price">£14.99</span>
                 </div>
                 <p className="text-sm text-slate-500 mt-2">
                   12-month access + the full Wealth Generator bundle
                 </p>
                 <p className="text-xs text-emerald-700 font-semibold mt-1">
-                  Just $5 more than basic access — for 20 guides &amp; tools
+                  Just £5 more than basic access — for 20 guides &amp; tools
                 </p>
               </div>
 

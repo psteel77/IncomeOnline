@@ -27,7 +27,7 @@ const fmtDate = (iso) => {
 };
 
 /**
- * Admin card: Premium Pack ($14.99) purchases — revenue, count, downloads + recent buyers table.
+ * Admin card: Premium Pack (£14.99) purchases — revenue, count, downloads + recent buyers table.
  * Reads the admin-protected GET /api/pdf/premium-pack/purchases endpoint.
  */
 const PremiumPurchasesCard = () => {
@@ -74,7 +74,7 @@ const PremiumPurchasesCard = () => {
               <Crown className="h-5 w-5 text-amber-500" /> Premium Pack Purchases
             </CardTitle>
             <CardDescription>
-              The $14.99 Wealth Generator pack — revenue, buyers and downloads.
+              The £14.99 Wealth Generator pack — revenue, buyers and downloads.
             </CardDescription>
           </div>
           <Button variant="outline" size="sm" onClick={load} disabled={loading} data-testid="premium-purchases-refresh-btn">
@@ -93,7 +93,7 @@ const PremiumPurchasesCard = () => {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <StatTile testid="premium-stat-count" icon={ShoppingBag} color="text-purple-600" label="Purchases" value={total} sub="verified PayPal buyers" />
-              <StatTile testid="premium-stat-revenue" icon={DollarSign} color="text-emerald-600" label="Revenue" value={`$${revenue.toFixed(2)}`} sub={`@ $${PREMIUM_PRICE.toFixed(2)} each`} />
+              <StatTile testid="premium-stat-revenue" icon={DollarSign} color="text-emerald-600" label="Revenue" value={`£${revenue.toFixed(2)}`} sub={`@ £${PREMIUM_PRICE.toFixed(2)} each`} />
               <StatTile testid="premium-stat-downloads" icon={Download} color="text-blue-500" label="Downloads" value={downloads} sub="total pack downloads" />
             </div>
 
@@ -110,16 +110,16 @@ const PremiumPurchasesCard = () => {
                     </div>
                     <div className="flex gap-4 text-sm">
                       <div className="text-center" data-testid="conv-basic">
-                        <div className="flex items-center gap-1 text-slate-500 text-xs uppercase tracking-wide"><Users className="h-3.5 w-3.5" /> Basic $9.99</div>
+                        <div className="flex items-center gap-1 text-slate-500 text-xs uppercase tracking-wide"><Users className="h-3.5 w-3.5" /> Basic £9.99</div>
                         <div className="text-xl font-bold text-slate-800">{conv.basic_only}</div>
                       </div>
                       <div className="text-center" data-testid="conv-premium">
-                        <div className="flex items-center gap-1 text-purple-600 text-xs uppercase tracking-wide"><Crown className="h-3.5 w-3.5" /> Premium $14.99</div>
+                        <div className="flex items-center gap-1 text-purple-600 text-xs uppercase tracking-wide"><Crown className="h-3.5 w-3.5" /> Premium £14.99</div>
                         <div className="text-xl font-bold text-purple-700">{conv.premium_buyers}</div>
                       </div>
                       <div className="text-center" data-testid="conv-total-revenue">
                         <div className="flex items-center gap-1 text-emerald-600 text-xs uppercase tracking-wide"><DollarSign className="h-3.5 w-3.5" /> Total rev</div>
-                        <div className="text-xl font-bold text-emerald-700">${conv.total_revenue_usd.toFixed(2)}</div>
+                        <div className="text-xl font-bold text-emerald-700">£{conv.total_revenue_usd.toFixed(2)}</div>
                       </div>
                     </div>
                   </div>
@@ -149,7 +149,7 @@ const PremiumPurchasesCard = () => {
                     {purchases.map((p) => (
                       <tr key={p.id || p.token} className="border-t border-slate-100" data-testid={`premium-purchase-row-${p.id || p.token}`}>
                         <td className="py-2 pr-4 text-slate-800 break-all">{p.email}</td>
-                        <td className="py-2 pr-4 text-slate-600">{p.currency || 'USD'} {p.amount || PREMIUM_PRICE.toFixed(2)}</td>
+                        <td className="py-2 pr-4 text-slate-600">{p.currency || 'GBP'} {p.amount || PREMIUM_PRICE.toFixed(2)}</td>
                         <td className="py-2 pr-4 text-slate-500">{fmtDate(p.created_at)}</td>
                         <td className="py-2 pr-4 text-right text-slate-600">{p.download_count || 0}</td>
                       </tr>

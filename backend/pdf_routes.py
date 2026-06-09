@@ -365,7 +365,7 @@ async def download_side_hustle():
 
 
 # ---------------------------------------------------------------
-# Premium Pack ($14.99) — superset of the $9.99 basic plan.
+# Premium Pack (£14.99) — superset of the £9.99 basic plan.
 # Tokens are ONLY issued by the PayPal-verified flow in
 # server.py (POST /api/paypal/register-premium). There is no
 # public token-issuer endpoint (that would let anyone download
@@ -377,7 +377,7 @@ async def download_premium_pack(token: str = ""):
     """
     Download the MoneyRules Premium Pack ZIP.
     Requires a valid purchase token (issued only after a server-verified
-    $14.99 PayPal payment via /api/paypal/register-premium).
+    £14.99 PayPal payment via /api/paypal/register-premium).
     """
     from server import db
     token_clean = (token or '').strip()

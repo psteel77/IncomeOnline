@@ -7,7 +7,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const DONATION_AMOUNT = '9.99';
-const DONATION_CURRENCY = 'USD';
+const DONATION_CURRENCY = 'GBP';
 
 // Simple RFC 5322-lite check — good enough to avoid sending recovery emails
 // to garbage strings. Backend re-validates via Pydantic EmailStr.

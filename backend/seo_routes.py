@@ -275,7 +275,7 @@ def _render_platform_html(p: dict, related: list) -> str:
     json_ld_str = _json.dumps(json_ld)
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -331,7 +331,7 @@ async def render_platform(slug: str):
 
     if not match:
         notfound = (
-            '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
+            '<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"/>'
             '<title>Platform not found | Income Online</title>'
             '<meta name="robots" content="noindex, follow"/>'
             f'<link rel="canonical" href="{SITE_URL}/"/></head>'
@@ -404,7 +404,7 @@ def _doc(title: str, meta_desc: str, canonical: str, body: str, json_ld: dict | 
     import json as _json
     ld = f'<script type="application/ld+json">{_json.dumps(json_ld)}</script>' if json_ld else ""
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -425,7 +425,7 @@ def _doc(title: str, meta_desc: str, canonical: str, body: str, json_ld: dict | 
 <body>
 <header><a href="{SITE_URL}/">Income Online</a></header>
 {body}
-<footer><a href="{SITE_URL}/">Browse all 199+ verified earning platforms</a> &middot; <a href="{SITE_URL}/donate">Unlock full access ($9.99/yr)</a> &middot; <a href="{SITE_URL}/success-stories">Success stories</a></footer>
+<footer><a href="{SITE_URL}/">Browse all 199+ verified earning platforms</a> &middot; <a href="{SITE_URL}/donate">Unlock full access (£9.99/yr)</a> &middot; <a href="{SITE_URL}/success-stories">Success stories</a></footer>
 </body>
 </html>"""
 
@@ -476,7 +476,7 @@ async def render_home():
         f"{len(by_cat)} categories. Every listing includes earnings potential, difficulty, minimum "
         "payout, payment methods and UK availability. We don't take platform commissions, so our "
         "reviews stay unbiased.</p>"
-        '<p><a href="' + SITE_URL + '/donate">Unlock the full directory for a one-time $9.99 yearly contribution</a>, '
+        '<p><a href="' + SITE_URL + '/donate">Unlock the full directory for a one-time £9.99 yearly contribution</a>, '
         'or <a href="' + SITE_URL + '/success-stories">read real success stories</a>.</p>'
         + "".join(sections) + "</main>"
     )
@@ -487,9 +487,9 @@ async def render_home():
 @router.get("/render/donate")
 async def render_donate():
     """Crawler-facing server-rendered /donate page."""
-    title = "Support Income Online — Unlock 199+ Earning Platforms for $9.99/yr"
+    title = "Support Income Online — Unlock 199+ Earning Platforms for £9.99/yr"
     meta_desc = (
-        "Make a one-time $9.99 yearly contribution to unlock full access to 199+ verified "
+        "Make a one-time £9.99 yearly contribution to unlock full access to 199+ verified "
         "online earning platforms — detailed reviews, payment info and real success stories. "
         "Secure payment via PayPal."
     )[:300]
@@ -503,14 +503,14 @@ async def render_donate():
         "offers": {
             "@type": "Offer",
             "price": "9.99",
-            "priceCurrency": "USD",
+            "priceCurrency": "GBP",
             "availability": "https://schema.org/InStock",
             "url": canonical,
         },
     }
     body = (
         "<main><h1>Support Income Online</h1>"
-        "<p>Your one-time <strong>$9.99</strong> contribution unlocks 12 months of full access to our "
+        "<p>Your one-time <strong>£9.99</strong> contribution unlocks 12 months of full access to our "
         "directory of 199+ verified online earning platforms, and keeps the directory free, live and "
         "up to date for everyone.</p>"
         "<h2>What you get</h2><ul>"
@@ -521,7 +521,7 @@ async def render_donate():
         "</ul>"
         "<h2>Secure payment</h2><p>Payments are processed securely by PayPal. We never see or store "
         "your payment information.</p>"
-        f'<p><a href="{canonical}">Make your $9.99 contribution</a> or '
+        f'<p><a href="{canonical}">Make your £9.99 contribution</a> or '
         f'<a href="{SITE_URL}/">browse the directory first</a>.</p></main>'
     )
     return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
@@ -554,7 +554,7 @@ async def render_success_story(slug: str):
     story = _story_by_slug(slug)
     if not story:
         notfound = (
-            '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>'
+            '<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"/>'
             '<title>Success story not found | Income Online</title>'
             '<meta name="robots" content="noindex, follow"/>'
             f'<link rel="canonical" href="{SITE_URL}/success-stories"/></head>'
@@ -605,7 +605,7 @@ async def render_success_story(slug: str):
         f"<p><strong>Source:</strong> {_esc(story['source'])} — "
         f"<a href=\"{_esc(story['sourceUrl'])}\" rel=\"nofollow noopener\">view original source</a></p>"
         f'<p><a href="{SITE_URL}/platforms/{slugify(story["platform"])}">See the {platform} platform details</a> '
-        f'or <a href="{SITE_URL}/donate">unlock the full directory for $9.99/yr</a>.</p>'
+        f'or <a href="{SITE_URL}/donate">unlock the full directory for £9.99/yr</a>.</p>'
         f"<h2>More success stories</h2><ul>{related_html}</ul>"
         "</article></main>"
     )
@@ -656,7 +656,7 @@ async def render_success_stories():
         "their income. Individual results vary; past performance doesn't guarantee future results.</p>"
         + cards +
         f'<p><a href="{SITE_URL}/">Browse the platforms these earners used</a> or '
-        f'<a href="{SITE_URL}/donate">unlock full access for $9.99/yr</a>.</p></main>'
+        f'<a href="{SITE_URL}/donate">unlock full access for £9.99/yr</a>.</p></main>'
     )
     json_ld = {
         "@context": "https://schema.org",

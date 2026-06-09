@@ -85,8 +85,8 @@ const DonationSection = () => {
                   {/* Visible price — set so visitors know exactly what they're paying before opening PayPal */}
                   <div className="inline-flex items-baseline gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 via-pink-100 to-amber-100 border border-purple-200">
                     <span className="text-xs font-semibold text-purple-700 uppercase tracking-wider">One-time</span>
-                    <span className="text-3xl font-extrabold text-purple-700">$9.99</span>
-                    <span className="text-sm font-semibold text-purple-700">USD</span>
+                    <span className="text-3xl font-extrabold text-purple-700">£9.99</span>
+                    <span className="text-sm font-semibold text-purple-700">GBP</span>
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
                     Recover the cost on day one — every job after that is profit.
@@ -109,7 +109,7 @@ const DonationSection = () => {
                   <Sparkles className="h-6 w-6 text-amber-400 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-white font-bold text-sm sm:text-base">
-                      Want the full toolkit? Upgrade to <span className="text-amber-300">Premium — $14.99</span>
+                      Want the full toolkit? Upgrade to <span className="text-amber-300">Premium — £14.99</span>
                     </p>
                     <p className="text-white/75 text-xs sm:text-sm mt-1 leading-relaxed">
                       Includes <span className="font-semibold text-white">everything above</span> plus the Wealth Generator bundle:

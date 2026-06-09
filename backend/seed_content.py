@@ -32,7 +32,7 @@ content_sections = [
             "headline": "10 FREE Financial Guides, Yours to Keep",
             "description": "Download print-ready PDF guides on investing, budgeting, debt, tax, passive income, credit, ISAs and more — no payment, no catch.",
             "cta_primary": "Get My Free Guides",
-            "cta_secondary": "or grab the $12.99 Premium Pack →",
+            "cta_secondary": "or grab the £14.99 Premium Pack →",
         }
     },
     {
@@ -135,7 +135,7 @@ content_sections = [
             "subtitle": "Real people earning real money online",
             "stories": [
                 {
-                    "quote": "I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!",
+                    "quote": "I went from struggling to find work to earning £5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!",
                     "author": "Freelance Designer",
                     "category": "Freelancing",
                     "image": "https://images.unsplash.com/photo-1758518731027-78a22c8852ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxzdWNjZXNzJTIwY2VsZWJyYXRpb258ZW58MHx8fHwxNzY0MDczMTg4fDA&ixlib=rb-4.1.0&q=85"

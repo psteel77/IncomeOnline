@@ -32,10 +32,10 @@ const AdminDashboard = () => {
     category: '',
     description: '',
     link: '',
-    earningsPotential: '$100-500/month',
+    earningsPotential: '£100-500/month',
     difficulty: 'Medium',
     rating: 4.0,
-    minPayout: '$10',
+    minPayout: '£10',
     featured: false
   });
   const navigate = useNavigate();
@@ -188,8 +188,8 @@ const AdminDashboard = () => {
         setShowAddPlatform(false);
         setNewPlatform({
           name: '', category: '', description: '', link: '',
-          earningsPotential: '$100-500/month', difficulty: 'Medium',
-          rating: 4.0, minPayout: '$10', featured: false
+          earningsPotential: '£100-500/month', difficulty: 'Medium',
+          rating: 4.0, minPayout: '£10', featured: false
         });
         fetchData();
         setTimeout(() => setSaveStatus({ show: false, success: false, message: '' }), 3000);
@@ -317,7 +317,7 @@ const AdminDashboard = () => {
         {/* Abandoned-donation recovery funnel stats + manual run */}
         <RecoveryStatsCard />
 
-        {/* Premium Pack ($14.99) purchases — revenue, buyers, downloads */}
+        {/* Premium Pack (£14.99) purchases — revenue, buyers, downloads */}
         <PremiumPurchasesCard />
 
         {/* Broadcast a one-time email to subscribers + hero-pill leads */}
@@ -528,7 +528,7 @@ const AdminDashboard = () => {
                     data-testid="banner-cta-secondary-input"
                     value={content.library_banner?.cta_secondary || ''}
                     onChange={(e) => updateSectionField('library_banner', 'cta_secondary', e.target.value)}
-                    placeholder="or grab the $12.99 Premium Pack →"
+                    placeholder="or grab the £14.99 Premium Pack →"
                   />
                 </div>
               </div>
@@ -1123,7 +1123,7 @@ const AdminDashboard = () => {
                           <Input
                             value={newPlatform.earningsPotential}
                             onChange={(e) => setNewPlatform({...newPlatform, earningsPotential: e.target.value})}
-                            placeholder="$100-500/month"
+                            placeholder="£100-500/month"
                           />
                         </div>
                         <div>
@@ -1156,7 +1156,7 @@ const AdminDashboard = () => {
                           <Input
                             value={newPlatform.minPayout}
                             onChange={(e) => setNewPlatform({...newPlatform, minPayout: e.target.value})}
-                            placeholder="$10"
+                            placeholder="£10"
                           />
                         </div>
                       </div>

@@ -71,6 +71,7 @@ export default function useSEO({ title, description, canonical, ogImage, jsonLd,
     setOrUpdateMeta({ key: 'og:url', keyAttr: 'property', content: canonical });
     setOrUpdateMeta({ key: 'og:image', keyAttr: 'property', content: ogImage });
     setOrUpdateMeta({ key: 'og:type', keyAttr: 'property', content: 'article' });
+    setOrUpdateMeta({ key: 'og:locale', keyAttr: 'property', content: 'en_GB' });
     setOrUpdateMeta({ key: 'twitter:title', content: title });
     setOrUpdateMeta({ key: 'twitter:description', content: description });
     setOrUpdateMeta({ key: 'twitter:image', content: ogImage });

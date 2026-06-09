@@ -7,10 +7,10 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const PREMIUM_AMOUNT = '14.99';
-const PREMIUM_CURRENCY = 'USD';
+const PREMIUM_CURRENCY = 'GBP';
 
 /**
- * Premium Pack purchase — server-verified PayPal SDK flow ($14.99).
+ * Premium Pack purchase — server-verified PayPal SDK flow (£14.99).
  * On approval the backend re-fetches the order from PayPal, confirms the amount,
  * grants 12-month platform access AND issues a one-time download token for the
  * Wealth Generator bundle ZIP, which we trigger immediately.

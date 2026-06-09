@@ -640,7 +640,7 @@ const Home = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {(content.success_stories?.stories || [
-              { quote: "I went from struggling to find work to earning $5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!", author: "Freelance Designer", category: "Freelancing", image: "https://images.unsplash.com/photo-1758518731027-78a22c8852ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxzdWNjZXNzJTIwY2VsZWJyYXRpb258ZW58MHx8fHwxNzY0MDczMTg4fDA&ixlib=rb-4.1.0&q=85" },
+              { quote: "I went from struggling to find work to earning £5,000+ monthly through freelancing platforms. This directory helped me discover legitimate opportunities I never knew existed!", author: "Freelance Designer", category: "Freelancing", image: "https://images.unsplash.com/photo-1758518731027-78a22c8852ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwzfHxzdWNjZXNzJTIwY2VsZWJyYXRpb258ZW58MHx8fHwxNzY0MDczMTg4fDA&ixlib=rb-4.1.0&q=85" },
               { quote: "Teaching online changed my life! I now reach students worldwide and earn consistently while working from home. The flexibility is incredible!", author: "Online Educator", category: "Teaching & Tutoring", image: "https://images.unsplash.com/photo-1758519290801-c07424a5142a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHw0fHxhY2hpZXZlbWVudCUyMGJ1c2luZXNzfGVufDB8fHx8MTc2NDA3MzE5NHww&ixlib=rb-4.1.0&q=85" }
             ]).map((story, index) => (
               <Card key={index} className="overflow-hidden hover:shadow-xl transition-shadow">
@@ -897,7 +897,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Premium Pack Section — $12.99 upgrade (placed after main CTA) */}
+      {/* Premium Pack Section — £14.99 upgrade (placed after main CTA) */}
       <PremiumPackSection />
 
       {/* Footer */}

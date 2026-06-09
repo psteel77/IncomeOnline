@@ -33,11 +33,11 @@ RECOVERY_MAX_EMAILS = int(os.environ.get('RECOVERY_MAX_EMAILS', '50'))
 # Subscription duration in days
 SUBSCRIPTION_DURATION_DAYS = 365
 
-# Expected donation amount (USD) — used to verify PayPal orders match what we charge.
-# This is the BASIC PLATFORM ACCESS plan.
+# Expected donation amount (GBP) — used to verify PayPal orders match what we charge.
+# This is the BASIC PLATFORM ACCESS plan. (Constant name kept for stability; value is GBP.)
 EXPECTED_DONATION_USD = "9.99"
 
-# Premium Pack price (USD). A SUPERSET of the basic plan: buying Premium grants
+# Premium Pack price (GBP). A SUPERSET of the basic plan: buying Premium grants
 # the same 12-month platform access PLUS the Wealth Generator bundle (10 guides,
 # 4 premium Strategy docs, 6 interactive calculators). Verified server-side.
 PREMIUM_PACK_USD = "14.99"
@@ -159,15 +159,15 @@ async def add_uk_platforms():
     # Additional platforms including UK-specific ones
     additional_platforms = [
         # More Gig Economy
-        {"name": "DoorDash", "category": "Gig Economy", "description": "Food delivery platform popular in the US, Canada, and Australia. Flexible hours with competitive earnings.", "earningsPotential": "$500 - $2,500/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.doordash.com", "ukAvailable": False},
-        {"name": "Lyft", "category": "Gig Economy", "description": "Rideshare platform operating in the United States. Earn by driving passengers.", "earningsPotential": "$1,000 - $4,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.lyft.com", "ukAvailable": False},
+        {"name": "DoorDash", "category": "Gig Economy", "description": "Food delivery platform popular in the US, Canada, and Australia. Flexible hours with competitive earnings.", "earningsPotential": "£500 - £2,500/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.doordash.com", "ukAvailable": False},
+        {"name": "Lyft", "category": "Gig Economy", "description": "Rideshare platform operating in the United States. Earn by driving passengers.", "earningsPotential": "£1,000 - £4,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.lyft.com", "ukAvailable": False},
         {"name": "Uber", "category": "Gig Economy", "description": "Global rideshare and delivery platform. Drive passengers or deliver food with Uber Eats.", "earningsPotential": "£500 - £3,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "Weekly", "paymentMethods": ["Bank Transfer"], "featured": True, "link": "https://www.uber.com", "ukAvailable": True},
         {"name": "Deliveroo", "category": "Gig Economy", "description": "UK-based food delivery platform. Become a rider and earn flexible income delivering food from restaurants to customers.", "earningsPotential": "£10-20/hour", "difficulty": "Easy", "rating": 4.2, "minPayout": "Weekly", "paymentMethods": ["Bank Transfer"], "featured": True, "link": "https://deliveroo.co.uk/apply", "ukAvailable": True},
         {"name": "Just Eat", "category": "Gig Economy", "description": "One of the UK's largest food delivery platforms. Deliver food from local restaurants with flexible hours.", "earningsPotential": "£8-15/hour", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://www.just-eat.co.uk/", "ukAvailable": True},
-        {"name": "Shipt", "category": "Gig Economy", "description": "Grocery delivery service operating in the United States. Shop and deliver groceries.", "earningsPotential": "$500 - $2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.shipt.com", "ukAvailable": False},
-        {"name": "Favor", "category": "Gig Economy", "description": "Texas-based delivery platform. Deliver anything from restaurants to retail stores.", "earningsPotential": "$500 - $1,500/month", "difficulty": "Easy", "rating": 3.9, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.favordelivery.com", "ukAvailable": False},
-        {"name": "Bellhop", "category": "Gig Economy", "description": "Moving labor platform in the US. Help people move furniture and belongings.", "earningsPotential": "$15 - $25/hour", "difficulty": "Medium", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.getbellhops.com", "ukAvailable": False},
-        {"name": "Wonolo", "category": "Gig Economy", "description": "On-demand staffing platform in the US. Find warehouse, retail, and event jobs.", "earningsPotential": "$500 - $2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.wonolo.com", "ukAvailable": False},
+        {"name": "Shipt", "category": "Gig Economy", "description": "Grocery delivery service operating in the United States. Shop and deliver groceries.", "earningsPotential": "£500 - £2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.shipt.com", "ukAvailable": False},
+        {"name": "Favor", "category": "Gig Economy", "description": "Texas-based delivery platform. Deliver anything from restaurants to retail stores.", "earningsPotential": "£500 - £1,500/month", "difficulty": "Easy", "rating": 3.9, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.favordelivery.com", "ukAvailable": False},
+        {"name": "Bellhop", "category": "Gig Economy", "description": "Moving labor platform in the US. Help people move furniture and belongings.", "earningsPotential": "£15 - £25/hour", "difficulty": "Medium", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.getbellhops.com", "ukAvailable": False},
+        {"name": "Wonolo", "category": "Gig Economy", "description": "On-demand staffing platform in the US. Find warehouse, retail, and event jobs.", "earningsPotential": "£500 - £2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.wonolo.com", "ukAvailable": False},
         {"name": "Rover", "category": "Gig Economy", "description": "Pet sitting and dog walking platform. Care for pets in your area and earn.", "earningsPotential": "£300 - £1,500/month", "difficulty": "Easy", "rating": 4.4, "minPayout": "2 days after service", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.rover.com", "ukAvailable": True},
         {"name": "Thumbtack", "category": "Gig Economy", "description": "Local services marketplace. Offer your skills in home improvement, events, and more.", "earningsPotential": "£500 - £3,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "Varies", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://www.thumbtack.com", "ukAvailable": True},
         {"name": "Airtasker", "category": "Gig Economy", "description": "Task marketplace connecting people who need jobs done with local taskers.", "earningsPotential": "£10-30/hour", "difficulty": "Easy", "rating": 4.2, "minPayout": "£10", "paymentMethods": ["Bank Transfer", "PayPal"], "featured": False, "link": "https://www.airtasker.com/uk/", "ukAvailable": True},
@@ -179,29 +179,29 @@ async def add_uk_platforms():
         # More E-commerce
         {"name": "Vinted", "category": "E-commerce", "description": "Popular UK marketplace for buying and selling pre-loved fashion. Zero selling fees.", "earningsPotential": "£50-500+/month", "difficulty": "Easy", "rating": 4.5, "minPayout": "£0.50", "paymentMethods": ["Bank Transfer", "PayPal"], "featured": True, "link": "https://www.vinted.co.uk/", "ukAvailable": True},
         {"name": "Depop", "category": "E-commerce", "description": "Fashion marketplace popular with Gen Z. Sell vintage and unique clothing items.", "earningsPotential": "£100 - £2,000/month", "difficulty": "Easy", "rating": 4.3, "minPayout": "£0", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.depop.com", "ukAvailable": True},
-        {"name": "Poshmark", "category": "E-commerce", "description": "Social commerce marketplace for fashion. Closed UK operations in 2023.", "earningsPotential": "$100 - $2,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "$15", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://poshmark.com", "ukAvailable": False},
-        {"name": "Mercari", "category": "E-commerce", "description": "Selling app for almost anything. Closed UK operations, US and Japan only.", "earningsPotential": "$100 - $1,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "$10", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.mercari.com", "ukAvailable": False},
+        {"name": "Poshmark", "category": "E-commerce", "description": "Social commerce marketplace for fashion. Closed UK operations in 2023.", "earningsPotential": "£100 - £2,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "£15", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://poshmark.com", "ukAvailable": False},
+        {"name": "Mercari", "category": "E-commerce", "description": "Selling app for almost anything. Closed UK operations, US and Japan only.", "earningsPotential": "£100 - £1,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "£10", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.mercari.com", "ukAvailable": False},
         {"name": "eBay", "category": "E-commerce", "description": "Global marketplace for buying and selling new and used items. Strong UK presence.", "earningsPotential": "£200 - £5,000+/month", "difficulty": "Easy", "rating": 4.4, "minPayout": "Varies", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": True, "link": "https://www.ebay.co.uk", "ukAvailable": True},
         {"name": "Facebook Marketplace", "category": "E-commerce", "description": "Buy and sell locally through Facebook. No selling fees for local pickup.", "earningsPotential": "£100 - £1,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "N/A", "paymentMethods": ["Cash", "PayPal"], "featured": False, "link": "https://www.facebook.com/marketplace", "ukAvailable": True},
         {"name": "Printful", "category": "E-commerce", "description": "Print-on-demand dropshipping. Create custom products without inventory.", "earningsPotential": "£200 - £5,000/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "Varies", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.printful.com", "ukAvailable": True},
         {"name": "Shopify", "category": "E-commerce", "description": "Build your own online store. Comprehensive e-commerce platform.", "earningsPotential": "£500 - £50,000/month", "difficulty": "Medium", "rating": 4.7, "minPayout": "2 days", "paymentMethods": ["Bank Transfer"], "featured": True, "link": "https://www.shopify.com", "ukAvailable": True},
-        {"name": "Teespring (Spring)", "category": "E-commerce", "description": "Design and sell custom merchandise. No upfront costs, print on demand.", "earningsPotential": "$100 - $5,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "$10", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.spri.ng", "ukAvailable": True},
-        {"name": "Redbubble", "category": "E-commerce", "description": "Sell your designs on products. Artists earn royalties on every sale.", "earningsPotential": "£50 - £2,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "$20", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.redbubble.com", "ukAvailable": True},
-        {"name": "Zazzle", "category": "E-commerce", "description": "Create and sell customized products. Design templates available.", "earningsPotential": "$50 - $1,500/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "$25", "paymentMethods": ["PayPal", "Check"], "featured": False, "link": "https://www.zazzle.com", "ukAvailable": True},
-        {"name": "Bonanza", "category": "E-commerce", "description": "Online marketplace for unique items. UK sellers can list with some limitations.", "earningsPotential": "$100 - $2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Varies", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.bonanza.com", "ukAvailable": True},
+        {"name": "Teespring (Spring)", "category": "E-commerce", "description": "Design and sell custom merchandise. No upfront costs, print on demand.", "earningsPotential": "£100 - £5,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "£10", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.spri.ng", "ukAvailable": True},
+        {"name": "Redbubble", "category": "E-commerce", "description": "Sell your designs on products. Artists earn royalties on every sale.", "earningsPotential": "£50 - £2,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "£20", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.redbubble.com", "ukAvailable": True},
+        {"name": "Zazzle", "category": "E-commerce", "description": "Create and sell customized products. Design templates available.", "earningsPotential": "£50 - £1,500/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "£25", "paymentMethods": ["PayPal", "Check"], "featured": False, "link": "https://www.zazzle.com", "ukAvailable": True},
+        {"name": "Bonanza", "category": "E-commerce", "description": "Online marketplace for unique items. UK sellers can list with some limitations.", "earningsPotential": "£100 - £2,000/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "Varies", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.bonanza.com", "ukAvailable": True},
         # More Teaching & Tutoring
         {"name": "MyTutor", "category": "Teaching & Tutoring", "description": "UK's leading online tutoring platform. Help students with GCSE/A-Level subjects.", "earningsPotential": "£500-2,000/month", "difficulty": "Medium", "rating": 4.5, "minPayout": "Monthly", "paymentMethods": ["Bank Transfer"], "featured": True, "link": "https://www.mytutor.co.uk/", "ukAvailable": True},
         {"name": "Tutorful", "category": "Teaching & Tutoring", "description": "UK tutoring platform for online and in-person lessons across various subjects.", "earningsPotential": "£400-1,500/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "Weekly", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://tutorful.co.uk/", "ukAvailable": True},
-        {"name": "Preply", "category": "Teaching & Tutoring", "description": "Global language tutoring platform. Set your own rates and schedule.", "earningsPotential": "£500 - £3,000/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "$5", "paymentMethods": ["PayPal", "Payoneer", "Skrill"], "featured": True, "link": "https://www.preply.com", "ukAvailable": True},
-        {"name": "Cambly", "category": "Teaching & Tutoring", "description": "Chat with English learners worldwide. No teaching experience required.", "earningsPotential": "£300 - £1,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "$20", "paymentMethods": ["PayPal"], "featured": False, "link": "https://www.cambly.com", "ukAvailable": True},
-        {"name": "Wyzant", "category": "Teaching & Tutoring", "description": "Connect with students for in-person or online tutoring. US-based platform.", "earningsPotential": "$500 - $2,500/month", "difficulty": "Medium", "rating": 4.2, "minPayout": "$25", "paymentMethods": ["Direct Deposit", "PayPal"], "featured": False, "link": "https://www.wyzant.com", "ukAvailable": False},
-        {"name": "Tutor.com", "category": "Teaching & Tutoring", "description": "Online tutoring platform requiring US residency and SSN.", "earningsPotential": "$500 - $2,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "Varies", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.tutor.com", "ukAvailable": False},
+        {"name": "Preply", "category": "Teaching & Tutoring", "description": "Global language tutoring platform. Set your own rates and schedule.", "earningsPotential": "£500 - £3,000/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "£5", "paymentMethods": ["PayPal", "Payoneer", "Skrill"], "featured": True, "link": "https://www.preply.com", "ukAvailable": True},
+        {"name": "Cambly", "category": "Teaching & Tutoring", "description": "Chat with English learners worldwide. No teaching experience required.", "earningsPotential": "£300 - £1,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "£20", "paymentMethods": ["PayPal"], "featured": False, "link": "https://www.cambly.com", "ukAvailable": True},
+        {"name": "Wyzant", "category": "Teaching & Tutoring", "description": "Connect with students for in-person or online tutoring. US-based platform.", "earningsPotential": "£500 - £2,500/month", "difficulty": "Medium", "rating": 4.2, "minPayout": "£25", "paymentMethods": ["Direct Deposit", "PayPal"], "featured": False, "link": "https://www.wyzant.com", "ukAvailable": False},
+        {"name": "Tutor.com", "category": "Teaching & Tutoring", "description": "Online tutoring platform requiring US residency and SSN.", "earningsPotential": "£500 - £2,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "Varies", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.tutor.com", "ukAvailable": False},
         {"name": "Outschool", "category": "Teaching & Tutoring", "description": "Teach live online classes to kids. UK teachers welcome.", "earningsPotential": "£500 - £3,000/month", "difficulty": "Medium", "rating": 4.4, "minPayout": "Weekly", "paymentMethods": ["PayPal"], "featured": False, "link": "https://outschool.com/teach", "ukAvailable": True},
         {"name": "Varsity Tutors", "category": "Teaching & Tutoring", "description": "Online tutoring platform with UK presence for GCSE and A-Level subjects.", "earningsPotential": "£500 - £2,500/month", "difficulty": "Medium", "rating": 4.2, "minPayout": "Weekly", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://www.varsitytutors.com", "ukAvailable": True},
         {"name": "Chegg Tutors", "category": "Teaching & Tutoring", "description": "Online tutoring and homework help platform with UK availability.", "earningsPotential": "£400 - £1,500/month", "difficulty": "Medium", "rating": 4.0, "minPayout": "Weekly", "paymentMethods": ["PayPal"], "featured": False, "link": "https://www.chegg.com", "ukAvailable": True},
-        {"name": "italki", "category": "Teaching & Tutoring", "description": "Language learning platform connecting teachers with students worldwide.", "earningsPotential": "£400 - £2,000/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "$20", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.italki.com", "ukAvailable": True},
+        {"name": "italki", "category": "Teaching & Tutoring", "description": "Language learning platform connecting teachers with students worldwide.", "earningsPotential": "£400 - £2,000/month", "difficulty": "Medium", "rating": 4.3, "minPayout": "£20", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.italki.com", "ukAvailable": True},
         # More Trading & Investing
-        {"name": "eToro", "category": "Trading & Investing", "description": "Social trading platform with copy trading feature. FCA regulated in UK.", "earningsPotential": "Variable", "difficulty": "Medium", "rating": 4.3, "minPayout": "$30", "paymentMethods": ["Bank Transfer", "PayPal"], "featured": True, "link": "https://www.etoro.com", "ukAvailable": True},
+        {"name": "eToro", "category": "Trading & Investing", "description": "Social trading platform with copy trading feature. FCA regulated in UK.", "earningsPotential": "Variable", "difficulty": "Medium", "rating": 4.3, "minPayout": "£30", "paymentMethods": ["Bank Transfer", "PayPal"], "featured": True, "link": "https://www.etoro.com", "ukAvailable": True},
         {"name": "Trading 212", "category": "Trading & Investing", "description": "Commission-free UK trading app for stocks, ETFs, and forex. FCA regulated.", "earningsPotential": "Variable", "difficulty": "Medium", "rating": 4.5, "minPayout": "£1", "paymentMethods": ["Bank Transfer"], "featured": True, "link": "https://www.trading212.com/", "ukAvailable": True},
         {"name": "Freetrade", "category": "Trading & Investing", "description": "UK-based commission-free investing app. Buy stocks and ETFs easily.", "earningsPotential": "Variable", "difficulty": "Medium", "rating": 4.3, "minPayout": "£2", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://freetrade.io/", "ukAvailable": True},
         {"name": "Robinhood", "category": "Trading & Investing", "description": "Commission-free trading app now available in UK with FCA regulation.", "earningsPotential": "Variable", "difficulty": "Medium", "rating": 4.2, "minPayout": "No minimum", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://robinhood.com/gb/", "ukAvailable": True},
@@ -216,7 +216,7 @@ async def add_uk_platforms():
         # More Surveys & Research
         {"name": "Freecash", "category": "Surveys & Research", "description": "GPT site offering surveys, offers, and tasks. Quick payouts in UK.", "earningsPotential": "£50-200/month", "difficulty": "Easy", "rating": 4.3, "minPayout": "£5", "paymentMethods": ["PayPal", "Bank Transfer", "Crypto"], "featured": False, "link": "https://freecash.com/", "ukAvailable": True},
         {"name": "Testable Minds", "category": "Surveys & Research", "description": "Academic research platform. Participate in psychology studies for pay.", "earningsPotential": "£30-100/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "£10", "paymentMethods": ["PayPal"], "featured": False, "link": "https://minds.testable.org/", "ukAvailable": True},
-        {"name": "Honeygain", "category": "Surveys & Research", "description": "Passive income app that pays for sharing unused internet bandwidth.", "earningsPotential": "£10-30/month", "difficulty": "Easy", "rating": 3.8, "minPayout": "$20", "paymentMethods": ["PayPal", "Crypto"], "featured": False, "link": "https://www.honeygain.com/", "ukAvailable": True},
+        {"name": "Honeygain", "category": "Surveys & Research", "description": "Passive income app that pays for sharing unused internet bandwidth.", "earningsPotential": "£10-30/month", "difficulty": "Easy", "rating": 3.8, "minPayout": "£20", "paymentMethods": ["PayPal", "Crypto"], "featured": False, "link": "https://www.honeygain.com/", "ukAvailable": True},
         {"name": "NewVista Live", "category": "Surveys & Research", "description": "UK-focused survey site paying around £1 per survey.", "earningsPotential": "£30-100/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "£50", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.newvistalive.com/", "ukAvailable": True},
         {"name": "Prime Opinion", "category": "Surveys & Research", "description": "Survey site with very low £1 payout threshold. Quick PayPal cashouts.", "earningsPotential": "£20-80/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "£1", "paymentMethods": ["PayPal"], "featured": False, "link": "https://primeopinion.com/", "ukAvailable": True},
         {"name": "MOBROG", "category": "Surveys & Research", "description": "Straightforward survey site paying £1-3 per survey. No points system.", "earningsPotential": "£20-60/month", "difficulty": "Easy", "rating": 4.0, "minPayout": "£5", "paymentMethods": ["PayPal"], "featured": False, "link": "https://www.mobrog.com/", "ukAvailable": True},
@@ -230,8 +230,8 @@ async def add_uk_platforms():
         {"name": "Authentic Jobs", "category": "Remote Jobs", "description": "Design and tech job board with remote opportunities.", "earningsPotential": "£2,500 - £10,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "Varies", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://authenticjobs.com", "ukAvailable": True},
         {"name": "LinkedIn Remote Jobs", "category": "Remote Jobs", "description": "Filter LinkedIn jobs for remote positions in your field.", "earningsPotential": "£2,000 - £15,000/month", "difficulty": "Medium", "rating": 4.5, "minPayout": "Varies", "paymentMethods": ["Direct Deposit"], "featured": True, "link": "https://www.linkedin.com/jobs", "ukAvailable": True},
         # More Freelancing
-        {"name": "Guru", "category": "Freelancing", "description": "Freelance marketplace with low fees and flexible payment options.", "earningsPotential": "£500 - £5,000/month", "difficulty": "Medium", "rating": 4.0, "minPayout": "$25", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.guru.com", "ukAvailable": True},
-        {"name": "99designs", "category": "Freelancing", "description": "Design-focused freelance platform. Compete in design contests.", "earningsPotential": "£500 - £5,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "$25", "paymentMethods": ["PayPal", "Payoneer"], "featured": False, "link": "https://99designs.com", "ukAvailable": True},
+        {"name": "Guru", "category": "Freelancing", "description": "Freelance marketplace with low fees and flexible payment options.", "earningsPotential": "£500 - £5,000/month", "difficulty": "Medium", "rating": 4.0, "minPayout": "£25", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.guru.com", "ukAvailable": True},
+        {"name": "99designs", "category": "Freelancing", "description": "Design-focused freelance platform. Compete in design contests.", "earningsPotential": "£500 - £5,000/month", "difficulty": "Medium", "rating": 4.1, "minPayout": "£25", "paymentMethods": ["PayPal", "Payoneer"], "featured": False, "link": "https://99designs.com", "ukAvailable": True},
         {"name": "Contra", "category": "Freelancing", "description": "Commission-free freelance platform. Keep 100% of your earnings.", "earningsPotential": "£500 - £8,000/month", "difficulty": "Medium", "rating": 4.2, "minPayout": "No minimum", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://contra.com", "ukAvailable": True},
         {"name": "Malt", "category": "Freelancing", "description": "European freelance platform with strong UK presence.", "earningsPotential": "£500-8,000/month", "difficulty": "Medium", "rating": 4.2, "minPayout": "Monthly", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://www.malt.co.uk/", "ukAvailable": True},
         {"name": "Bark", "category": "Freelancing", "description": "UK-based marketplace for service professionals and local customers.", "earningsPotential": "£500-5,000/month", "difficulty": "Medium", "rating": 4.0, "minPayout": "Varies", "paymentMethods": ["Bank Transfer"], "featured": False, "link": "https://www.bark.com/en/gb/", "ukAvailable": True},
@@ -734,14 +734,14 @@ async def register_donor_via_paypal(request: PayPalRegisterRequest):
     paid_value = str(amount.get("value", ""))
     paid_currency = (amount.get("currency_code") or "").upper()
 
-    if paid_currency != "USD" or paid_value != EXPECTED_DONATION_USD:
+    if paid_currency != "GBP" or paid_value != EXPECTED_DONATION_USD:
         logging.warning(
             f"PayPal order {order_id} amount mismatch: {paid_currency} {paid_value} "
-            f"(expected USD {EXPECTED_DONATION_USD})"
+            f"(expected GBP {EXPECTED_DONATION_USD})"
         )
         raise HTTPException(
             status_code=400,
-            detail=f"Donation amount {paid_currency} {paid_value} does not match expected {EXPECTED_DONATION_USD} USD",
+            detail=f"Donation amount {paid_currency} {paid_value} does not match expected {EXPECTED_DONATION_USD} GBP",
         )
 
     payer_email = (order.get("payer") or {}).get("email_address")
@@ -771,8 +771,8 @@ class PayPalPremiumRequest(BaseModel):
 async def register_premium_via_paypal(request: PayPalPremiumRequest):
     """
     Public endpoint called by the Premium PayPal SDK onApprove callback.
-    Verifies the $14.99 order with PayPal server-side, then:
-      - grants 12-month platform access (same as the $9.99 plan), AND
+    Verifies the £14.99 order with PayPal server-side, then:
+      - grants 12-month platform access (same as the £9.99 plan), AND
       - issues a one-time download token for the Wealth Generator bundle ZIP,
       - emails the buyer their download link.
     The browser cannot fake a purchase (the order is re-fetched from PayPal).
@@ -805,14 +805,14 @@ async def register_premium_via_paypal(request: PayPalPremiumRequest):
     paid_value = str(amount.get("value", ""))
     paid_currency = (amount.get("currency_code") or "").upper()
 
-    if paid_currency != "USD" or paid_value != PREMIUM_PACK_USD:
+    if paid_currency != "GBP" or paid_value != PREMIUM_PACK_USD:
         logging.warning(
             f"PayPal premium order {order_id} amount mismatch: {paid_currency} {paid_value} "
-            f"(expected USD {PREMIUM_PACK_USD})"
+            f"(expected GBP {PREMIUM_PACK_USD})"
         )
         raise HTTPException(
             status_code=400,
-            detail=f"Premium amount {paid_currency} {paid_value} does not match expected {PREMIUM_PACK_USD} USD",
+            detail=f"Premium amount {paid_currency} {paid_value} does not match expected {PREMIUM_PACK_USD} GBP",
         )
 
     payer_email = (order.get("payer") or {}).get("email_address")
@@ -841,7 +841,7 @@ async def register_premium_via_paypal(request: PayPalPremiumRequest):
         "email": payer_email,
         "paypal_order_id": order_id,
         "amount": PREMIUM_PACK_USD,
-        "currency": "USD",
+        "currency": "GBP",
         "created_at": now,
         "download_count": 0,
         "verified": True,
@@ -1037,7 +1037,7 @@ async def recovery_stats(admin_username: str = Depends(get_admin_user)):
 @api_router.get("/admin/conversion-stats")
 async def conversion_stats(admin_username: str = Depends(get_admin_user)):
     """
-    Admin-only — basic ($9.99) vs Premium ($14.99) breakdown + upgrade rate.
+    Admin-only — basic (£9.99) vs Premium (£14.99) breakdown + upgrade rate.
     Premium buyers are a subset of all paying accounts (Premium also grants
     platform access), so:
       total_paying = unique accounts that ever paid (active users + expired)

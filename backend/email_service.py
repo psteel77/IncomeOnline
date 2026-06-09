@@ -390,7 +390,7 @@ def send_returning_user_email(email, verification_token):
 
 
 def prepare_premium_pack_email(email, download_url):
-    """Prepare the Premium Pack delivery email (sent after a verified $14.99 purchase)."""
+    """Prepare the Premium Pack delivery email (sent after a verified £14.99 purchase)."""
     body = (
         f'<p style="margin:0 0 12px 0; font-size:17px; line-height:1.6; color:#1f2937;">{_greeting(email)}</p>'
         '<p style="margin:0 0 16px 0; font-size:17px; line-height:1.6; color:#1f2937;">'
@@ -465,7 +465,7 @@ def prepare_expired_email(email):
         '<p style="margin:0 0 4px 0; font-size:16px; line-height:1.6; color:#374151;">'
         'We hope the platforms helped you find real opportunities. If you\'d like to keep exploring '
         'what\'s new, you can renew for another 12 months:</p>'
-        + _cta_block('Renew for $9.99 &rarr;', renewal_link, 'One-time &middot; 12 months access')
+        + _cta_block('Renew for £9.99 &rarr;', renewal_link, 'One-time &middot; 12 months access')
         + _callout_band(
             'If you\'ve found your path and no longer need us, we wish you continued success &mdash; '
             'and you\'re welcome back anytime.',
@@ -486,7 +486,7 @@ def prepare_expired_email(email):
 
 Thank you for being part of Income Online. Your 12-month access has now ended.
 
-If you'd like to continue exploring new opportunities, you can renew for $9.99:
+If you'd like to continue exploring new opportunities, you can renew for £9.99:
 {renewal_link}
 
 We wish you continued success either way.
@@ -507,7 +507,7 @@ def prepare_expiry_warning_email(email, expiry_date):
         f'<strong style="color:#4c1d95;">{expiry_date_str}</strong>.</p>'
         '<p style="margin:0 0 4px 0; font-size:16px; line-height:1.6; color:#374151;">'
         'Renew now to keep uninterrupted access to everything:</p>'
-        + _cta_block('Renew now &rarr;', renewal_link, 'One-time $9.99 &middot; 12 more months')
+        + _cta_block('Renew now &rarr;', renewal_link, 'One-time £9.99 &middot; 12 more months')
         + _features_block('What you keep', [
             '<strong style="color:#111827;">199+ verified platforms</strong> &amp; earning guides',
             '<strong style="color:#111827;">Ratings, payouts &amp; filters</strong> for every platform',
@@ -532,7 +532,7 @@ def prepare_expiry_warning_email(email, expiry_date):
 
 This is a courtesy reminder that your access expires on {expiry_date_str}.
 
-Renew for $9.99 to keep 12 more months of access:
+Renew for £9.99 to keep 12 more months of access:
 {renewal_link}
 
 This is a one-time courtesy email — we won't contact you about this again unless you ask.
@@ -591,10 +591,10 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         '<p style="margin:0 0 4px 0; font-size:16px; line-height:1.6; color:#374151;">'
         'It\'s a print-ready PDF you can save, print and keep forever.</p>'
         + _callout_band(
-            'Ready to go deeper? The <strong>$12.99 Premium Pack</strong> bundles all 10 free guides + '
+            'Ready to go deeper? The <strong>£14.99 Premium Pack</strong> bundles all 10 free guides + '
             '2 exclusive premium guides + 5 editable spreadsheets.',
             bar="#6d28d9", bg="#f5f3ff", color="#4c1d95")
-        + _cta_block('Get the Premium Pack &rarr;', f"{frontend_url}/#premium-pack", 'One-time $12.99')
+        + _cta_block('Get the Premium Pack &rarr;', f"{frontend_url}/#premium-pack", 'One-time £14.99')
     )
     html = _premium_email(
         eyebrow="Your free guide",
@@ -607,7 +607,7 @@ def send_resource_email(email: str, resource_title: str, attachment_path: str, a
         f"Your MoneyRules guide is attached\n\n"
         f"Thank you for downloading '{resource_title}' from Income Online.\n"
         f"It's a print-ready PDF you can save, print, and keep forever.\n\n"
-        f"Want to go deeper? Upgrade to the $12.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
+        f"Want to go deeper? Upgrade to the £14.99 Premium Pack: {frontend_url}/#premium-pack\n\n"
         f"- Income Online | https://www.incomeonline.info\n"
     )
 
@@ -712,7 +712,7 @@ def send_abandoned_donation_email(email: str, subject: str = None) -> bool:
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f5f3ff" style="background-color:#f5f3ff; border-radius:14px;">
               <tr>
                 <td align="center" style="padding:26px 24px;">
-                  <div style="font-family:'Trebuchet MS',Arial,sans-serif; font-size:46px; line-height:1; color:#4c1d95; font-weight:bold;">$9.99</div>
+                  <div style="font-family:'Trebuchet MS',Arial,sans-serif; font-size:46px; line-height:1; color:#4c1d95; font-weight:bold;">£9.99</div>
                   <div style="font-family:Arial,Helvetica,sans-serif; font-size:14px; color:#6d28d9; padding-top:6px; font-weight:bold; letter-spacing:0.5px;">ONE-TIME &middot; 12 MONTHS FULL ACCESS</div>
                   <!-- CTA button -->
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:22px auto 0 auto;">
@@ -720,11 +720,11 @@ def send_abandoned_donation_email(email: str, subject: str = None) -> bool:
                       <!--[if mso]>
                       <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{resume_link}" style="height:52px;v-text-anchor:middle;width:300px;" arcsize="50%" stroke="f" fillcolor="#6d28d9">
                       <w:anchorlock/>
-                      <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Complete my $9.99 access &rarr;</center>
+                      <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Complete my £9.99 access &rarr;</center>
                       </v:roundrect>
                       <![endif]-->
                       <!--[if !mso]><!-- -->
-                      <a href="{resume_link}" target="_blank" style="display:inline-block; padding:16px 38px; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:bold; color:#ffffff; background-color:#6d28d9; border-radius:999px;">Complete my $9.99 access &rarr;</a>
+                      <a href="{resume_link}" target="_blank" style="display:inline-block; padding:16px 38px; font-family:Arial,Helvetica,sans-serif; font-size:16px; font-weight:bold; color:#ffffff; background-color:#6d28d9; border-radius:999px;">Complete my £9.99 access &rarr;</a>
                       <!--<![endif]-->
                     </td></tr>
                   </table>
@@ -769,7 +769,7 @@ def send_abandoned_donation_email(email: str, subject: str = None) -> bool:
               <tr>
                 <td width="6" bgcolor="#f59e0b" style="background-color:#f59e0b; font-size:0; line-height:0;">&nbsp;</td>
                 <td style="padding:16px 20px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:1.6; color:#92400e;">
-                  <strong>Worth it from day one.</strong> A single job from these platforms can more than cover the $9.99 &mdash; everything after that is profit.
+                  <strong>Worth it from day one.</strong> A single job from these platforms can more than cover the £9.99 &mdash; everything after that is profit.
                 </td>
               </tr>
             </table>
@@ -810,12 +810,12 @@ def send_abandoned_donation_email(email: str, subject: str = None) -> bool:
         f"{_greeting(email)}\n\n"
         "You started unlocking 199+ verified online earning platforms but didn't quite finish. "
         "Your spot is saved.\n\n"
-        "A one-time $9.99 contribution gives you 12 full months of:\n"
+        "A one-time £9.99 contribution gives you 12 full months of:\n"
         "  - 199+ verified online earning platforms\n"
         "  - Detailed ratings, payouts & category filters\n"
         "  - 10 free MoneyRules guides + 2 premium guides + 5 editable spreadsheets\n\n"
-        f"Complete your $9.99 access here: {resume_link}\n\n"
-        "Worth it from day one: a single job from these platforms can more than cover the $9.99.\n\n"
+        f"Complete your £9.99 access here: {resume_link}\n\n"
+        "Worth it from day one: a single job from these platforms can more than cover the £9.99.\n\n"
         "If you didn't start a donation, you can safely ignore this email.\n"
         f"- Income Online | {brand_url}\n"
     )

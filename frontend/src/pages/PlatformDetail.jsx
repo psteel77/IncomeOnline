@@ -73,7 +73,7 @@ const PlatformDetail = () => {
     offers: {
       '@type': 'Offer',
       url: platform.link,
-      priceCurrency: 'USD',
+      priceCurrency: 'GBP',
       price: '0',
       availability: 'https://schema.org/InStock',
     },
@@ -290,7 +290,7 @@ const PlatformDetail = () => {
               Discover 198 more verified platforms like {name}
             </h2>
             <p className="text-base sm:text-lg opacity-95 mb-6 max-w-2xl mx-auto">
-              Unlock our full directory of 199+ legitimate online earning opportunities with detailed reviews, payment info, and real success stories — all for a one-time $9.99 yearly contribution.
+              Unlock our full directory of 199+ legitimate online earning opportunities with detailed reviews, payment info, and real success stories — all for a one-time £9.99 yearly contribution.
             </p>
             <Button
               asChild

@@ -1,5 +1,5 @@
 """
-Premium Pack bundler — $14.99 product (superset of the $9.99 platform-access plan).
+Premium Pack bundler — £14.99 product (superset of the £9.99 platform-access plan).
 
 Bundle = the 10 free MoneyRules guides (print-ready PDF) PLUS 10 premium items:
   • 6 INTERACTIVE Excel calculators with live, auto-updating charts
