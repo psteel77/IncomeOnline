@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Crown, Loader2, RefreshCw, DollarSign, ShoppingBag, Download, AlertCircle } from 'lucide-react';
+import { Crown, Loader2, RefreshCw, DollarSign, ShoppingBag, Download, AlertCircle, TrendingUp, Users } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 const PREMIUM_PRICE = 14.99;
@@ -32,6 +32,7 @@ const fmtDate = (iso) => {
  */
 const PremiumPurchasesCard = () => {
   const [data, setData] = useState(null);
+  const [conv, setConv] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -39,11 +40,14 @@ const PremiumPurchasesCard = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_URL}/api/pdf/premium-pack/purchases`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setData(await res.json());
+      const headers = { Authorization: `Bearer ${localStorage.getItem('adminToken')}` };
+      const [pRes, cRes] = await Promise.all([
+        fetch(`${API_URL}/api/pdf/premium-pack/purchases`, { headers }),
+        fetch(`${API_URL}/api/admin/conversion-stats`, { headers }),
+      ]);
+      if (!pRes.ok) throw new Error(`HTTP ${pRes.status}`);
+      setData(await pRes.json());
+      if (cRes.ok) setConv(await cRes.json());
     } catch (e) {
       setError(e.message || 'Failed to load premium purchases');
     } finally {
@@ -92,6 +96,41 @@ const PremiumPurchasesCard = () => {
               <StatTile testid="premium-stat-revenue" icon={DollarSign} color="text-emerald-600" label="Revenue" value={`$${revenue.toFixed(2)}`} sub={`@ $${PREMIUM_PRICE.toFixed(2)} each`} />
               <StatTile testid="premium-stat-downloads" icon={Download} color="text-blue-500" label="Downloads" value={downloads} sub="total pack downloads" />
             </div>
+
+            {conv && (
+              <div className="border-t pt-3" data-testid="premium-conversion">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                  <TrendingUp className="h-4 w-4 text-amber-500" /> Basic → Premium upgrade rate
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                  <div className="flex items-end justify-between flex-wrap gap-3">
+                    <div>
+                      <div className="text-3xl font-extrabold text-amber-700" data-testid="premium-upgrade-rate">{conv.upgrade_rate}%</div>
+                      <div className="text-xs text-amber-700/80 mt-0.5">of paying members chose Premium</div>
+                    </div>
+                    <div className="flex gap-4 text-sm">
+                      <div className="text-center" data-testid="conv-basic">
+                        <div className="flex items-center gap-1 text-slate-500 text-xs uppercase tracking-wide"><Users className="h-3.5 w-3.5" /> Basic $9.99</div>
+                        <div className="text-xl font-bold text-slate-800">{conv.basic_only}</div>
+                      </div>
+                      <div className="text-center" data-testid="conv-premium">
+                        <div className="flex items-center gap-1 text-purple-600 text-xs uppercase tracking-wide"><Crown className="h-3.5 w-3.5" /> Premium $14.99</div>
+                        <div className="text-xl font-bold text-purple-700">{conv.premium_buyers}</div>
+                      </div>
+                      <div className="text-center" data-testid="conv-total-revenue">
+                        <div className="flex items-center gap-1 text-emerald-600 text-xs uppercase tracking-wide"><DollarSign className="h-3.5 w-3.5" /> Total rev</div>
+                        <div className="text-xl font-bold text-emerald-700">${conv.total_revenue_usd.toFixed(2)}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Stacked bar: basic vs premium share */}
+                  <div className="mt-3 h-2.5 w-full rounded-full overflow-hidden bg-slate-200 flex">
+                    <div className="bg-slate-400 h-full" style={{ width: `${conv.total_paying ? (conv.basic_only / conv.total_paying * 100) : 0}%` }} />
+                    <div className="bg-purple-600 h-full" style={{ width: `${conv.total_paying ? (conv.premium_buyers / conv.total_paying * 100) : 0}%` }} />
+                  </div>
+                </div>
+              </div>
+            )}
 
             {purchases.length === 0 ? (
               <p className="text-sm text-slate-400 py-2" data-testid="premium-purchases-empty">No premium purchases yet.</p>

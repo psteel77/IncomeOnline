@@ -1034,6 +1034,51 @@ async def recovery_stats(admin_username: str = Depends(get_admin_user)):
     }
 
 
+@api_router.get("/admin/conversion-stats")
+async def conversion_stats(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only — basic ($9.99) vs Premium ($14.99) breakdown + upgrade rate.
+    Premium buyers are a subset of all paying accounts (Premium also grants
+    platform access), so:
+      total_paying = unique accounts that ever paid (active users + expired)
+      premium_buyers = unique emails in premium_purchases
+      basic_only = total_paying - premium_buyers
+      upgrade_rate = premium_buyers / total_paying
+    """
+    basic_price = float(EXPECTED_DONATION_USD)
+    premium_price = float(PREMIUM_PACK_USD)
+
+    active_emails = await db.users.distinct("email")
+    expired_emails = await db.expired_users.distinct("email")
+    paying_emails = {(e or "").lower() for e in active_emails} | {(e or "").lower() for e in expired_emails}
+    paying_emails.discard("")
+    total_paying = len(paying_emails)
+
+    premium_emails = {(e or "").lower() for e in await db.premium_purchases.distinct("email")}
+    premium_emails.discard("")
+    premium_buyers = len(premium_emails)
+
+    # Premium buyers should be counted within the paying base
+    total_paying = max(total_paying, premium_buyers)
+    basic_only = max(total_paying - premium_buyers, 0)
+    upgrade_rate = round((premium_buyers / total_paying * 100), 1) if total_paying else 0.0
+
+    premium_revenue = round(premium_buyers * premium_price, 2)
+    basic_revenue = round(basic_only * basic_price, 2)
+
+    return {
+        "total_paying": total_paying,
+        "basic_only": basic_only,
+        "premium_buyers": premium_buyers,
+        "upgrade_rate": upgrade_rate,
+        "basic_price_usd": basic_price,
+        "premium_price_usd": premium_price,
+        "basic_revenue_usd": basic_revenue,
+        "premium_revenue_usd": premium_revenue,
+        "total_revenue_usd": round(basic_revenue + premium_revenue, 2),
+    }
+
+
 # -----------------------------------------------------------------------------
 # Hero-pill lead capture
 # -----------------------------------------------------------------------------
