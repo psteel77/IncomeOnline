@@ -133,16 +133,11 @@ def buffer_to_pdf(buffer, out_path):
 
 
 def build_premium_pdfs():
-    """Build the Premium Pack's welcome + 2 exclusive guide PDFs into static/premium/."""
-    from generate_premium_pack import (
-        _readme_docx, _premium_guide_wealth_roadmap, _premium_guide_fire_playbook,
-    )
+    """Build the Premium Pack's welcome + 4 premium Strategy guide PDFs into static/premium/."""
+    from generate_premium_pack import _readme_docx, PREMIUM_GUIDES
     premium_dir = os.path.join(STATIC_DIR, "premium")
-    targets = [
-        (_readme_docx, "00_WELCOME_START_HERE.pdf"),
-        (_premium_guide_wealth_roadmap, "11_Wealth_Building_Roadmap_PREMIUM.pdf"),
-        (_premium_guide_fire_playbook, "12_The_FIRE_Playbook_PREMIUM.pdf"),
-    ]
+    targets = [(_readme_docx, "00_WELCOME_START_HERE.pdf")]
+    targets += [(gen_fn, out_name) for out_name, gen_fn in PREMIUM_GUIDES]
     built = []
     for gen_fn, out_name in targets:
         out_path = buffer_to_pdf(gen_fn(), os.path.join(premium_dir, out_name))

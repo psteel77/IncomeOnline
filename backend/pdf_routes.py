@@ -407,7 +407,7 @@ async def download_premium_pack(token: str = ""):
 class PremiumPurchaseRequest(BaseModel):
     email: EmailStr
     paypal_order_id: str = ""
-    amount: str = "12.99"
+    amount: str = "14.99"
     currency: str = "USD"
 
 

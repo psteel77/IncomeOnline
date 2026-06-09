@@ -17,7 +17,7 @@ import uuid
 from datetime import datetime, timezone, timedelta
 import jwt as pyjwt
 from seed_data import categories_data, platforms_data
-from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email, send_abandoned_donation_email, pick_recovery_subject, RECOVERY_SUBJECT_VARIANTS
+from email_service import send_new_user_email, send_returning_user_email, send_expired_email, send_expiry_warning_email, send_abandoned_donation_email, send_premium_pack_email, pick_recovery_subject, RECOVERY_SUBJECT_VARIANTS
 from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
@@ -34,9 +34,17 @@ RECOVERY_MAX_EMAILS = int(os.environ.get('RECOVERY_MAX_EMAILS', '50'))
 SUBSCRIPTION_DURATION_DAYS = 365
 
 # Expected donation amount (USD) — used to verify PayPal orders match what we charge.
-# This is the PLATFORM ACCESS donation. The separate Premium Pack ($12.99) is
-# handled in pdf_routes.py.
+# This is the BASIC PLATFORM ACCESS plan.
 EXPECTED_DONATION_USD = "9.99"
+
+# Premium Pack price (USD). A SUPERSET of the basic plan: buying Premium grants
+# the same 12-month platform access PLUS the Wealth Generator bundle (10 guides,
+# 4 premium Strategy docs, 6 interactive calculators). Verified server-side.
+PREMIUM_PACK_USD = "14.99"
+
+# Public base URL of THIS backend (for absolute links in emails). Defaults to the
+# production Railway host; override in preview/staging via env.
+BACKEND_PUBLIC_URL = os.environ.get('BACKEND_PUBLIC_URL', 'https://incomeonline-production.up.railway.app').rstrip('/')
 
 # PayPal REST API base. Default = LIVE. Override to "https://api-m.sandbox.paypal.com"
 # in Railway env for sandbox testing.
@@ -753,6 +761,107 @@ async def register_donor_via_paypal(request: PayPalRegisterRequest):
         logging.warning(f"Could not mark donation intent converted for {payer_email}: {e}")
 
     return {**result, "email": payer_email.lower(), "order_id": order_id}
+
+
+class PayPalPremiumRequest(BaseModel):
+    order_id: str
+
+
+@api_router.post("/paypal/register-premium")
+async def register_premium_via_paypal(request: PayPalPremiumRequest):
+    """
+    Public endpoint called by the Premium PayPal SDK onApprove callback.
+    Verifies the $14.99 order with PayPal server-side, then:
+      - grants 12-month platform access (same as the $9.99 plan), AND
+      - issues a one-time download token for the Wealth Generator bundle ZIP,
+      - emails the buyer their download link.
+    The browser cannot fake a purchase (the order is re-fetched from PayPal).
+    """
+    order_id = (request.order_id or "").strip()
+    if not order_id:
+        raise HTTPException(status_code=400, detail="order_id is required")
+
+    order = _fetch_paypal_order(order_id)
+    if not order:
+        raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
+
+    status = (order.get("status") or "").upper()
+    if status != "COMPLETED":
+        raise HTTPException(
+            status_code=400,
+            detail=f"PayPal order is not in COMPLETED state (status={status})",
+        )
+
+    purchase_units = order.get("purchase_units") or []
+    if not purchase_units:
+        raise HTTPException(status_code=400, detail="PayPal order has no purchase units")
+
+    captures = (purchase_units[0].get("payments") or {}).get("captures") or []
+    if not captures:
+        raise HTTPException(status_code=400, detail="PayPal order has no captures")
+
+    capture = captures[0]
+    amount = capture.get("amount") or {}
+    paid_value = str(amount.get("value", ""))
+    paid_currency = (amount.get("currency_code") or "").upper()
+
+    if paid_currency != "USD" or paid_value != PREMIUM_PACK_USD:
+        logging.warning(
+            f"PayPal premium order {order_id} amount mismatch: {paid_currency} {paid_value} "
+            f"(expected USD {PREMIUM_PACK_USD})"
+        )
+        raise HTTPException(
+            status_code=400,
+            detail=f"Premium amount {paid_currency} {paid_value} does not match expected {PREMIUM_PACK_USD} USD",
+        )
+
+    payer_email = (order.get("payer") or {}).get("email_address")
+    if not payer_email:
+        raise HTTPException(status_code=400, detail="PayPal order has no payer email")
+    payer_email = payer_email.lower()
+
+    # Grant 12-month platform access (creates / renews the donor)
+    result = await _upsert_donor(payer_email)
+
+    # A completed purchaser must never get a recovery email
+    try:
+        await db.donation_intents.update_many(
+            {"email": payer_email, "status": {"$in": ["pending", "recovery_sent"]}},
+            {"$set": {"status": "converted", "converted_at": datetime.now(timezone.utc).isoformat()}},
+        )
+    except Exception as e:
+        logging.warning(f"Could not mark donation intent converted for {payer_email}: {e}")
+
+    # Issue a one-time download token for the Premium Pack ZIP
+    now = datetime.now(timezone.utc).isoformat()
+    token = str(uuid.uuid4())
+    await db.premium_purchases.insert_one({
+        "id": str(uuid.uuid4()),
+        "token": token,
+        "email": payer_email,
+        "paypal_order_id": order_id,
+        "amount": PREMIUM_PACK_USD,
+        "currency": "USD",
+        "created_at": now,
+        "download_count": 0,
+        "verified": True,
+    })
+    download_path = f"/api/pdf/premium-pack?token={token}"
+    download_url_abs = f"{BACKEND_PUBLIC_URL}{download_path}"
+
+    # Email the delivery link (best-effort)
+    try:
+        send_premium_pack_email(payer_email, download_url_abs)
+    except Exception as e:
+        logging.warning(f"Premium pack delivery email failed for {payer_email}: {e}")
+
+    return {
+        **result,
+        "email": payer_email,
+        "order_id": order_id,
+        "download_url": download_path,
+        "token": token,
+    }
 
 
 # -----------------------------------------------------------------------------

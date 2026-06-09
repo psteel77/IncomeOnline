@@ -389,6 +389,70 @@ def send_returning_user_email(email, verification_token):
     return ok
 
 
+def prepare_premium_pack_email(email, download_url):
+    """Prepare the Premium Pack delivery email (sent after a verified $14.99 purchase)."""
+    body = (
+        f'<p style="margin:0 0 12px 0; font-size:17px; line-height:1.6; color:#1f2937;">{_greeting(email)}</p>'
+        '<p style="margin:0 0 16px 0; font-size:17px; line-height:1.6; color:#1f2937;">'
+        'Thank you for upgrading to <strong style="color:#4c1d95;">Income Online Premium</strong>! '
+        'Your payment is confirmed &mdash; your account now has <strong>12 months of full platform access</strong> '
+        'plus the complete <strong>Wealth Generator</strong> bundle.</p>'
+        '<p style="margin:0 0 4px 0; font-size:16px; line-height:1.6; color:#374151;">'
+        'Download your Premium Pack (a single ZIP) here:</p>'
+        + _cta_block('Download my Premium Pack &darr;', download_url, 'Direct download &middot; yours to keep forever')
+        + _features_block("What's inside", [
+            '<strong style="color:#111827;">Full access to 199+ platforms</strong> for 12 months',
+            '<strong style="color:#111827;">10 MoneyRules guides</strong> (print-ready PDFs)',
+            '<strong style="color:#111827;">4 premium Strategy documents</strong>',
+            '<strong style="color:#111827;">6 interactive calculators</strong> with live, auto-updating charts',
+        ])
+        + _callout_band("<strong>Tip:</strong> open the calculators in Excel, Google Sheets or Numbers &mdash; type your numbers into the highlighted cells and the charts redraw instantly.")
+    )
+    html_content = _premium_email(
+        eyebrow="Premium unlocked",
+        title="Your Wealth Generator pack is ready",
+        body_html=body,
+        footer_note="You're receiving this because you purchased Income Online Premium. Questions? welcome@incomeonline.info.",
+        preheader="Download your Premium Pack and start using your interactive calculators.",
+    )
+    return {
+        'subject': 'Your Income Online Premium Pack is ready to download',
+        'html': html_content,
+        'text': f'''Thank you for upgrading to Income Online Premium!
+
+{_greeting(email)}
+
+Your payment is confirmed. You now have 12 months of full platform access PLUS the Wealth Generator bundle.
+
+Download your Premium Pack (ZIP):
+{download_url}
+
+Inside:
+- Full access to 199+ platforms for 12 months
+- 10 MoneyRules guides (PDF)
+- 4 premium Strategy documents
+- 6 interactive calculators with live charts
+
+Questions? welcome@incomeonline.info
+- Income Online | https://www.incomeonline.info
+'''
+    }
+
+
+def send_premium_pack_email(email, download_url):
+    """Send the Premium Pack delivery email with the one-time download link."""
+    data = prepare_premium_pack_email(email, download_url)
+    ok = _send_email(
+        to_email=email,
+        subject=data['subject'],
+        html=data['html'],
+        text=data['text'],
+    )
+    if ok:
+        logger.info(f"Premium pack delivery email sent to {email}")
+    return ok
+
+
 def prepare_expired_email(email):
     """Prepare the premium expired-subscription email."""
     frontend_url = os.environ.get('FRONTEND_URL', 'https://www.incomeonline.info')

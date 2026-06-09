@@ -99,6 +99,27 @@ const DonationSection = () => {
                 </div>
               </div>
 
+              {/* Premium upsell pointer */}
+              <a
+                href="#premium-pack"
+                data-testid="premium-upsell-link"
+                className="block bg-gradient-to-r from-purple-600/30 to-pink-600/30 hover:from-purple-600/40 hover:to-pink-600/40 backdrop-blur-sm rounded-2xl p-4 sm:p-5 mb-6 border border-amber-400/40 transition-colors duration-300 group"
+              >
+                <div className="flex items-start gap-3">
+                  <Sparkles className="h-6 w-6 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-white font-bold text-sm sm:text-base">
+                      Want the full toolkit? Upgrade to <span className="text-amber-300">Premium — $14.99</span>
+                    </p>
+                    <p className="text-white/75 text-xs sm:text-sm mt-1 leading-relaxed">
+                      Includes <span className="font-semibold text-white">everything above</span> plus the Wealth Generator bundle:
+                      10 guides, 4 premium Strategy docs &amp; 6 interactive calculators.
+                      <span className="ml-1 text-amber-300 font-semibold group-hover:underline">See what's inside &rarr;</span>
+                    </p>
+                  </div>
+                </div>
+              </a>
+
               {/* Security Badge */}
               <div className="flex items-center justify-center gap-2 text-white/60 text-sm">
                 <Lock className="h-4 w-4" />
