@@ -599,8 +599,8 @@ async def request_resource_download(payload: ResourceRequest):
 
 
 @router.get("/resources/subscribers")
-async def list_resource_subscribers(limit: int = 500):
-    """Admin-only list of captured subscriber emails (no auth for now — add later)."""
+async def list_resource_subscribers(limit: int = 500, admin=Depends(get_admin_user)):
+    """Admin-only list of captured subscriber emails."""
     from server import db
     subs = await db.resource_subscribers.find({}, {"_id": 0}).sort('last_seen_at', -1).to_list(limit)
     total = await db.resource_subscribers.count_documents({})

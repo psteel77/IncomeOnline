@@ -20,7 +20,9 @@ const SubscribersCard = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_URL}/api/pdf/resources/subscribers?limit=1000`);
+      const res = await fetch(`${API_URL}/api/pdf/resources/subscribers?limit=1000`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       setData(json);
