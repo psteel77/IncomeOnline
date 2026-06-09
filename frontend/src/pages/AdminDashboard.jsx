@@ -12,6 +12,7 @@ import SubscribersCard from '../components/admin/SubscribersCard';
 import BroadcastCard from '../components/admin/BroadcastCard';
 import RecoveryStatsCard from '../components/admin/RecoveryStatsCard';
 import LeadSourcesCard from '../components/admin/LeadSourcesCard';
+import PremiumPurchasesCard from '../components/admin/PremiumPurchasesCard';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -315,6 +316,9 @@ const AdminDashboard = () => {
 
         {/* Abandoned-donation recovery funnel stats + manual run */}
         <RecoveryStatsCard />
+
+        {/* Premium Pack ($14.99) purchases — revenue, buyers, downloads */}
+        <PremiumPurchasesCard />
 
         {/* Broadcast a one-time email to subscribers + hero-pill leads */}
         <BroadcastCard />
