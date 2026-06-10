@@ -87,6 +87,8 @@ class TestCMSAdminUpdates:
         assert r.status_code == 401, f"Expected 401 got {r.status_code}: {r.text}"
 
     def test_put_hero_content(self, session, auth_headers):
+        # Save original so the test never leaves the live content polluted
+        original = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("hero", {})
         payload = {
             "content": {
                 "badge": "TEST BADGE",
@@ -97,24 +99,27 @@ class TestCMSAdminUpdates:
                 "title": "legacy",
                 "subtitle": "legacy sub",
                 "cta_text": "Go",
-                # Preserve the hero pill_* CMS fields so we don't pollute them
-                # for other tests that read /api/content (test_iteration4_hero_pill).
                 "pill_enabled": True,
                 "pill_label": "FREE MONEYRULES GUIDES",
                 "pill_target": "free-resources",
                 "pill_capture_email": True,
             }
         }
-        r = requests.put(f"{API}/cms/content/hero", json=payload, headers=auth_headers, timeout=15)
-        assert r.status_code == 200, f"PUT hero failed: {r.status_code} {r.text}"
+        try:
+            r = requests.put(f"{API}/cms/content/hero", json=payload, headers=auth_headers, timeout=15)
+            assert r.status_code == 200, f"PUT hero failed: {r.status_code} {r.text}"
 
-        g = requests.get(f"{API}/content", timeout=15)
-        assert g.status_code == 200
-        hero = g.json().get("content", {}).get("hero", {})
-        for k, v in payload["content"].items():
-            assert hero.get(k) == v, f"hero.{k} expected {v!r} got {hero.get(k)!r}"
+            g = requests.get(f"{API}/content", timeout=15)
+            assert g.status_code == 200
+            hero = g.json().get("content", {}).get("hero", {})
+            for k, v in payload["content"].items():
+                assert hero.get(k) == v, f"hero.{k} expected {v!r} got {hero.get(k)!r}"
+        finally:
+            if original:
+                requests.put(f"{API}/cms/content/hero", json={"content": original}, headers=auth_headers, timeout=15)
 
     def test_put_library_banner(self, session, auth_headers):
+        original = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("library_banner", {})
         payload = {
             "content": {
                 "badge": "NEW",
@@ -124,21 +129,30 @@ class TestCMSAdminUpdates:
                 "cta_secondary": "or upgrade",
             }
         }
-        r = requests.put(f"{API}/cms/content/library_banner", json=payload, headers=auth_headers, timeout=15)
-        assert r.status_code == 200, f"PUT library_banner failed: {r.status_code} {r.text}"
+        try:
+            r = requests.put(f"{API}/cms/content/library_banner", json=payload, headers=auth_headers, timeout=15)
+            assert r.status_code == 200, f"PUT library_banner failed: {r.status_code} {r.text}"
 
-        g = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("library_banner", {})
-        for k, v in payload["content"].items():
-            assert g.get(k) == v, f"library_banner.{k}={g.get(k)!r} expected {v!r}"
+            g = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("library_banner", {})
+            for k, v in payload["content"].items():
+                assert g.get(k) == v, f"library_banner.{k}={g.get(k)!r} expected {v!r}"
+        finally:
+            if original:
+                requests.put(f"{API}/cms/content/library_banner", json={"content": original}, headers=auth_headers, timeout=15)
 
     def test_put_free_resources(self, session, auth_headers):
+        original = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("free_resources", {})
         payload = {"content": {"title": "Custom Title", "subtitle": "Custom Sub"}}
-        r = requests.put(f"{API}/cms/content/free_resources", json=payload, headers=auth_headers, timeout=15)
-        assert r.status_code == 200, f"PUT free_resources failed: {r.status_code} {r.text}"
+        try:
+            r = requests.put(f"{API}/cms/content/free_resources", json=payload, headers=auth_headers, timeout=15)
+            assert r.status_code == 200, f"PUT free_resources failed: {r.status_code} {r.text}"
 
-        g = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("free_resources", {})
-        assert g.get("title") == "Custom Title"
-        assert g.get("subtitle") == "Custom Sub"
+            g = requests.get(f"{API}/content", timeout=15).json().get("content", {}).get("free_resources", {})
+            assert g.get("title") == "Custom Title"
+            assert g.get("subtitle") == "Custom Sub"
+        finally:
+            if original:
+                requests.put(f"{API}/cms/content/free_resources", json={"content": original}, headers=auth_headers, timeout=15)
 
 
 # --------- (d) Mailgun resource email + (b) subscribers ---------
