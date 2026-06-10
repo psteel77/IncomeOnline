@@ -31,7 +31,7 @@ curl -s -X POST "$BACKEND/api/cms/get-verify-link" \
 Response includes `verify_url` — paste it into a browser to log in as that user.
 
 ## Preview environment (this container)
-- **Backend:** `https://paypal-test-1.preview.emergentagent.com/api`
+- **Backend:** `https://income-uk-checkout.preview.emergentagent.com/api`
 - **MongoDB:** local in-container Mongo, mostly empty test data.
 - Admin credentials in preview are the same (`admin` / `Gulluk*9`).
 

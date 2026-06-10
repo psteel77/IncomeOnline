@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 BACKEND_DIR = os.path.join(os.path.dirname(__file__), "..")
 load_dotenv(os.path.join(BACKEND_DIR, ".env"))
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://paypal-test-1.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://income-uk-checkout.preview.emergentagent.com").rstrip("/")
 API = f"{BASE_URL}/api"
 ADMIN_USER = "admin"
 ADMIN_PASS = "Gulluk*9"

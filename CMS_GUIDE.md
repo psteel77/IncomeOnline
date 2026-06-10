@@ -6,7 +6,7 @@ Your Income Online platform now includes a powerful Content Management System th
 ## Admin Access
 
 ### Login Credentials
-- **URL:** https://paypal-test-1.preview.emergentagent.com/admin/login
+- **URL:** https://income-uk-checkout.preview.emergentagent.com/admin/login
 - **Username:** `admin`
 - **Password:** `admin123`
 
