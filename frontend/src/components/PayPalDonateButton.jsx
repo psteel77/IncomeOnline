@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { PayPalScriptProvider, PayPalButtons, FUNDING } from '@paypal/react-paypal-js';
 import { CheckCircle, AlertCircle, Mail } from 'lucide-react';
 import axios from 'axios';
 
@@ -105,14 +105,15 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           'client-id': PAYPAL_CLIENT_ID,
           currency: DONATION_CURRENCY,
           intent: 'capture',
+          components: 'buttons',
           // Apple Pay isn't registered for this domain and throws
           // ELIGIBLE_PAYMENT_METHOD_ERROR (GetApplepayConfig) which bubbles up
-          // to onError. Disable it (+ venmo) so only PayPal + card render.
+          // to onError. Disable Apple Pay + Venmo so the SDK doesn't probe them.
           'disable-funding': 'venmo,applepay',
-          'enable-funding': 'card',
         }}
       >
         <PayPalButtons
+          fundingSource={FUNDING.PAYPAL}
           style={{ layout: 'vertical', shape: 'rect', label: 'donate' }}
           disabled={status === 'processing'}
           forceReRender={[amount]}
