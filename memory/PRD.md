@@ -24,6 +24,14 @@ A comprehensive website for discovering online earning opportunities. Features i
 - hreflang en-gb + x-default added site-wide (index.html, useSEO hook, seo_routes renders) + og:locale en_GB; UK-targeted homepage title/description.
 - Added a one-click **"Convert to £" button** in the admin Premium Pack Purchases card (calls POST /api/admin/migrate-currency-gbp) so the non-technical owner can convert live Atlas platform earnings $→£ after deploy without any API/command. Idempotent.
 
+### Completed (June 2026 — Wealth Generator Guides (blog) for SEO/organic traffic) [PENDING DEPLOY]
+- New **blog/articles system** at `/guides` ("Wealth Generator Guides") to win UK organic search & build linkable content.
+- **Backend** (`guides_routes.py`, `guides_seed.py`): Markdown-based `guides` collection; public list/detail; admin CRUD (`POST/PUT/DELETE`), `PATCH /{id}/status` (publish toggle that never blanks content), `GET /admin/get/{id}` (full draft for editor), and **AI draft** `POST /generate-draft` using emergentintegrations **claude-sonnet-4-6** (British English, £, UK context). 3 UK starter articles seeded idempotently on startup (ISA vs SIPP, 11 Side Hustles, Freelancing in the UK).
+- **SEO** (`seo_routes.py`): crawler-rendered `/api/seo/render/guides` + `/render/guide/{slug}` (BlogPosting JSON-LD, lang en-GB, hreflang) and `/api/seo/guides-sitemap.xml`. Added `guides-sitemap.xml` to the sitemap index + Vercel bot rewrites for `/guides` & `/guides/:slug`.
+- **Frontend**: `Guides.jsx` (listing + category filter), `GuideDetail.jsx` (react-markdown article + useSEO BlogPosting), `GuidesManager.jsx` admin card (list/editor/AI button/publish toggle/delete). "Guides" added to desktop+mobile nav. Routes in App.js.
+- **Deps**: emergentintegrations, python `markdown`, `react-markdown`, `remark-gfm`. `EMERGENT_LLM_KEY` added to backend/.env.
+- **Tested**: 89/89 pytest (test_guides.py 12) + testing agent iteration_8 = 100% backend & frontend (incl. AI draft, draft privacy, publish-toggle content preservation), zero bugs.
+
 ## What's Been Implemented
 
 ### Completed (June 2026 — UK repositioning: USD → GBP + UK SEO) [PENDING DEPLOY]

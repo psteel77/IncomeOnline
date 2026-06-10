@@ -291,6 +291,31 @@ async def update_guide(guide_id: str, payload: GuideIn, admin: str = Depends(get
     return {"success": True, "id": guide_id, "slug": slug, "status": new_status}
 
 
+class StatusUpdate(BaseModel):
+    status: str
+
+
+@router.patch("/{guide_id}/status")
+async def set_guide_status(guide_id: str, payload: StatusUpdate, admin: str = Depends(get_admin_user)):
+    """Flip publish status only — never touches the article content."""
+    from server import db
+    existing = await db.guides.find_one({"id": guide_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Guide not found")
+    new_status = "published" if payload.status == "published" else "draft"
+    now = _now()
+    published_at = existing.get("published_at")
+    if new_status == "published" and not published_at:
+        published_at = now
+    if new_status == "draft":
+        published_at = None
+    await db.guides.update_one(
+        {"id": guide_id},
+        {"$set": {"status": new_status, "published_at": published_at, "updated_at": now}},
+    )
+    return {"success": True, "id": guide_id, "status": new_status}
+
+
 @router.delete("/{guide_id}")
 async def delete_guide(guide_id: str, admin: str = Depends(get_admin_user)):
     from server import db

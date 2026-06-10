@@ -101,6 +101,16 @@ class TestAdminCrud:
         assert pub.status_code == 200
         assert pub.json()["guide"]["status"] == "published"
 
+        # PATCH status to draft must NOT blank content
+        p = session.patch(f"{API}/guides/{gid}/status", headers=auth, json={"status": "draft"})
+        assert p.status_code == 200, p.text
+        admin_doc = session.get(f"{API}/guides/admin/get/{gid}", headers=auth).json()["guide"]
+        assert admin_doc["status"] == "draft"
+        assert "Updated body." in admin_doc["content"], "content was blanked by status toggle"
+        # and back to published
+        p2 = session.patch(f"{API}/guides/{gid}/status", headers=auth, json={"status": "published"})
+        assert p2.status_code == 200
+
         # delete
         d = session.delete(f"{API}/guides/{gid}", headers=auth)
         assert d.status_code == 200

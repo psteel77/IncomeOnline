@@ -124,16 +124,9 @@ const GuidesManager = () => {
   };
 
   const setStatus = async (g, newStatus) => {
-    // Safe publish toggle: fetch full guide, resend with new status to avoid blanking content.
+    // Dedicated status endpoint — never blanks content.
     try {
-      const res = await axios.get(`${API}/guides/admin/get/${g.id}`, { headers: authHeaders() });
-      const base = res.data?.guide || g;
-      await axios.put(`${API}/guides/${g.id}`, {
-        title: base.title, category: base.category, excerpt: base.excerpt || '',
-        meta_description: base.meta_description || '', tags: base.tags || [],
-        hero_image: base.hero_image || '', content: base.content || '',
-        author: base.author || 'Income Online', status: newStatus,
-      }, { headers: authHeaders() });
+      await axios.patch(`${API}/guides/${g.id}/status`, { status: newStatus }, { headers: authHeaders() });
       toast.success(newStatus === 'published' ? 'Published' : 'Unpublished');
       load();
     } catch (e) {
