@@ -35,6 +35,30 @@ const PremiumPurchasesCard = () => {
   const [conv, setConv] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [migrating, setMigrating] = useState(false);
+  const [migrateMsg, setMigrateMsg] = useState('');
+
+  const runCurrencyMigration = useCallback(async () => {
+    setMigrating(true);
+    setMigrateMsg('');
+    try {
+      const res = await fetch(`${API_URL}/api/admin/migrate-currency-gbp`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const d = await res.json();
+      setMigrateMsg(
+        d.updated > 0
+          ? `Done — converted ${d.updated} of ${d.total_platforms} platforms to £.`
+          : `All ${d.total_platforms} platforms already in £. Nothing to change.`
+      );
+    } catch (e) {
+      setMigrateMsg(`Failed: ${e.message}`);
+    } finally {
+      setMigrating(false);
+    }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -160,6 +184,32 @@ const PremiumPurchasesCard = () => {
             )}
           </>
         )}
+
+        {/* One-time production setup: convert live platform earnings $ -> £ */}
+        <div className="border-t pt-4 mt-1" data-testid="currency-migration">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 flex items-start justify-between gap-3 flex-wrap">
+            <div className="flex-1 min-w-[180px]">
+              <p className="text-sm font-semibold text-slate-700">Convert platform prices to £ (GBP)</p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Run this once after going live to switch all platform earnings figures from $ to £. Safe to click again — it skips anything already in £.
+              </p>
+              {migrateMsg && (
+                <p className="text-xs font-medium text-emerald-700 mt-1.5" data-testid="currency-migration-result">{migrateMsg}</p>
+              )}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={runCurrencyMigration}
+              disabled={migrating}
+              data-testid="currency-migration-btn"
+              className="border-purple-300 text-purple-700 hover:bg-purple-50"
+            >
+              {migrating ? <Loader2 className="h-4 w-4 animate-spin" /> : <PoundSterling className="h-4 w-4" />}
+              <span className="ml-1.5">{migrating ? 'Converting…' : 'Convert to £'}</span>
+            </Button>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

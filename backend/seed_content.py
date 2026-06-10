@@ -8,13 +8,13 @@ content_sections = [
         "section_id": "hero",
         "content": {
             # Legacy fields (kept for back-compat with older CMS payloads)
-            "title": "Discover the Best Ways to Earn Money Online",
+            "title": "Discover the Best UK Ways to Make Money Online",
             "subtitle": "Your comprehensive directory of legitimate online earning opportunities. From freelancing to passive income, find the perfect way to make money online.",
             "cta_text": "Get Started",
             # New granular fields (editable via admin)
             "badge": "199+ Verified Earning Platforms",
-            "headline_line1": "Discover the Best Ways to",
-            "headline_line2": "Earn Money Online",
+            "headline_line1": "Discover the Best UK Ways to",
+            "headline_line2": "Make Money Online",
             "subtitle_line1": "Your comprehensive directory of legitimate online earning opportunities",
             "subtitle_line2": "From Freelancing to Passive Income • One Time to Full Time",
             # Hero "Free MoneyRules Guides" pill (CMS-editable)

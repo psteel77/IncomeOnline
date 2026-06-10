@@ -19,6 +19,11 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Database**: MongoDB Atlas
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
+### Completed (June 2026 — UK headline + one-click currency migration) [PENDING DEPLOY]
+- Hero headline now UK-branded: "Discover the Best UK Ways to / Make Money Online" (HeroSection.jsx defaults + seed_content.py + live DB).
+- hreflang en-gb + x-default added site-wide (index.html, useSEO hook, seo_routes renders) + og:locale en_GB; UK-targeted homepage title/description.
+- Added a one-click **"Convert to £" button** in the admin Premium Pack Purchases card (calls POST /api/admin/migrate-currency-gbp) so the non-technical owner can convert live Atlas platform earnings $→£ after deploy without any API/command. Idempotent.
+
 ## What's Been Implemented
 
 ### Completed (June 2026 — UK repositioning: USD → GBP + UK SEO) [PENDING DEPLOY]
