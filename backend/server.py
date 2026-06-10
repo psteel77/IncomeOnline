@@ -651,13 +651,14 @@ async def _upsert_donor(email: str) -> dict:
     return {"success": True, "message": "Donor added with 12-month subscription"}
 
 
-def _get_paypal_access_token() -> Optional[str]:
-    """Fetch an OAuth2 access token for the PayPal REST API."""
+def _paypal_token_with_error() -> tuple:
+    """Returns (access_token, error_detail). error_detail is None on success.
+    Used to surface the real reason auth fails (missing creds, bad creds /
+    sandbox-vs-live mismatch, network) instead of a silent None."""
     client_id = os.environ.get("PAYPAL_CLIENT_ID")
     client_secret = os.environ.get("PAYPAL_CLIENT_SECRET")
     if not client_id or not client_secret:
-        logging.error("PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET not set; cannot verify orders")
-        return None
+        return None, "PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET not set on the server"
     try:
         resp = requests.post(
             f"{PAYPAL_API_BASE}/v1/oauth2/token",
@@ -666,11 +667,23 @@ def _get_paypal_access_token() -> Optional[str]:
             headers={"Accept": "application/json", "Accept-Language": "en_US"},
             timeout=15,
         )
-        resp.raise_for_status()
-        return resp.json().get("access_token")
+        if resp.status_code != 200:
+            return None, (
+                f"OAuth failed ({resp.status_code}) at {PAYPAL_API_BASE}: "
+                f"{resp.text[:300]} — likely a client-id/secret mismatch or "
+                f"sandbox credentials used against the live API (or vice-versa)."
+            )
+        return resp.json().get("access_token"), None
     except Exception as e:
-        logging.error(f"PayPal token request failed: {e}")
-        return None
+        return None, f"OAuth request error at {PAYPAL_API_BASE}: {e}"
+
+
+def _get_paypal_access_token() -> Optional[str]:
+    """Fetch an OAuth2 access token for the PayPal REST API."""
+    token, err = _paypal_token_with_error()
+    if err:
+        logging.error(err)
+    return token
 
 
 def _fetch_paypal_order(order_id: str) -> Optional[dict]:
@@ -691,13 +704,15 @@ def _fetch_paypal_order(order_id: str) -> Optional[dict]:
         return None
 
 
-def _create_paypal_order(amount_value: str, description: str) -> Optional[dict]:
+def _create_paypal_order(amount_value: str, description: str) -> dict:
     """Create a PayPal order server-side using full API credentials (client_id +
     secret OAuth). Client-side actions.order.create() is deprecated and returns
-    403 NOT_AUTHORIZED on some live accounts, so we create the order here."""
-    token = _get_paypal_access_token()
+    403 NOT_AUTHORIZED on some live accounts, so we create the order here.
+    Raises HTTPException(502, detail=<real PayPal error>) on failure so the
+    actual cause is visible instead of an opaque error."""
+    token, auth_err = _paypal_token_with_error()
     if not token:
-        return None
+        raise HTTPException(status_code=502, detail=f"PayPal auth error: {auth_err}")
     try:
         resp = requests.post(
             f"{PAYPAL_API_BASE}/v2/checkout/orders",
@@ -719,12 +734,17 @@ def _create_paypal_order(amount_value: str, description: str) -> Optional[dict]:
             },
             timeout=20,
         )
-        resp.raise_for_status()
-        return resp.json()
     except Exception as e:
-        body = getattr(getattr(e, "response", None), "text", "")
-        logging.error(f"PayPal create order failed: {e} {body}")
-        return None
+        logging.error(f"PayPal create order request error: {e}")
+        raise HTTPException(status_code=502, detail=f"PayPal create-order request error: {e}")
+
+    if resp.status_code not in (200, 201):
+        logging.error(f"PayPal create order failed: {resp.status_code} {resp.text}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"PayPal create-order failed ({resp.status_code}): {resp.text[:400]}",
+        )
+    return resp.json()
 
 
 def _capture_paypal_order(order_id: str) -> Optional[dict]:
@@ -774,7 +794,7 @@ async def create_paypal_order(request: CreateOrderRequest):
 
     order = _create_paypal_order(amount, description)
     if not order or not order.get("id"):
-        raise HTTPException(status_code=502, detail="Could not create PayPal order")
+        raise HTTPException(status_code=502, detail="PayPal returned no order id")
     return {"id": order["id"]}
 
 

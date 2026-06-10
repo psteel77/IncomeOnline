@@ -127,10 +127,20 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           createOrder={async () => {
             // Create the order SERVER-SIDE (client-side actions.order.create()
             // returns 403 NOT_AUTHORIZED on this live account).
-            const resp = await axios.post(`${API}/paypal/create-order`, {
-              kind: 'donation',
-            });
-            return resp.data.id;
+            try {
+              const resp = await axios.post(`${API}/paypal/create-order`, {
+                kind: 'donation',
+              });
+              return resp.data.id;
+            } catch (err) {
+              const detail =
+                err?.response?.data?.detail ||
+                'Could not start the PayPal checkout. Please try again.';
+              console.error('create-order failed:', detail);
+              setErrorMsg(detail);
+              setStatus('error');
+              throw err;
+            }
           }}
           onApprove={async (data) => {
             setStatus('processing');
