@@ -78,7 +78,11 @@ const PayPalPremiumButton = () => {
           'client-id': PAYPAL_CLIENT_ID,
           currency: PREMIUM_CURRENCY,
           intent: 'capture',
-          'disable-funding': 'venmo',
+          // Apple Pay isn't registered for this domain and throws
+          // ELIGIBLE_PAYMENT_METHOD_ERROR (GetApplepayConfig) which bubbles up
+          // to onError. Disable it (+ venmo) so only PayPal + card render.
+          'disable-funding': 'venmo,applepay',
+          'enable-funding': 'card',
         }}
       >
         <PayPalButtons
