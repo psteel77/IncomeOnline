@@ -1183,6 +1183,7 @@ async def leads_by_source(admin_username: str = Depends(get_admin_user)):
         "hero_pill": "Hero Pill",
         "success_story": "Success Story",
         "free-guide": "Free Guide Download",
+        "guide": "Wealth Generator Guide",
     }
     sources = [
         {

@@ -19,6 +19,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Database**: MongoDB Atlas
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
+### Completed (10 June 2026 — PayPal Apple Pay onError fix + guide email-capture + CMS pollution fix) [PENDING DEPLOY]
+- **Fixed live "PayPal encountered an error"** on both the £14.99 Premium and £9.99 donation buttons. Root cause (from browser console): PayPal SDK marked Apple Pay eligible and the `GetApplepayConfig` GraphQL call failed with `ELIGIBLE_PAYMENT_METHOD_ERROR` (domain not registered for Apple Pay; user on Firefox) → bubbled to `onError`. Fix: added `'disable-funding': 'venmo,applepay'` + `'enable-funding': 'card'` to `PayPalScriptProvider` in `PayPalPremiumButton.jsx` and `PayPalDonateButton.jsx`. NOT a currency/account issue. **Needs deploy + live retest (preview has no PAYPAL_CLIENT_ID).**
+- **Email-capture box at bottom of every Wealth Generator Guide** (`frontend/src/components/guides/GuideLeadCapture.jsx`, in `GuideDetail.jsx` after tags / before toolkit CTA): "Get our 10 free MoneyRules guides" → `POST /api/leads/capture` `source: 'guide'`, upserts into `resource_subscribers`. Added friendly label "Wealth Generator Guide" to `GET /api/leads/by-source`. Tested end-to-end in preview (renders, submits, lead stored, surfaces in Lead Sources card; test record cleaned).
+- **Fixed CMS test pollution (P0)**: restored polluted preview hero ("TEST BADGE"/"X/Y") to correct UK copy; `test_iteration3.py` now self-restores CMS state in `finally` blocks (16/16 pass, DB clean after run).
+
+
 ### Completed (June 2026 — UK headline + one-click currency migration) [PENDING DEPLOY]
 - Hero headline now UK-branded: "Discover the Best UK Ways to / Make Money Online" (HeroSection.jsx defaults + seed_content.py + live DB).
 - hreflang en-gb + x-default added site-wide (index.html, useSEO hook, seo_routes renders) + og:locale en_GB; UK-targeted homepage title/description.

@@ -7,6 +7,7 @@ import useSEO from '../hooks/useSEO';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { ArrowLeft, Clock, Loader2, ArrowRight } from 'lucide-react';
+import GuideLeadCapture from '../components/guides/GuideLeadCapture';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -135,6 +136,9 @@ const GuideDetail = () => {
             ))}
           </div>
         )}
+
+        {/* Email lead-magnet — funnels guide readers into the newsletter */}
+        <GuideLeadCapture />
 
         {/* CTA */}
         <div className="mt-10 rounded-2xl bg-gradient-to-r from-purple-700 to-pink-600 p-6 sm:p-8 text-white text-center" data-testid="guide-cta">
