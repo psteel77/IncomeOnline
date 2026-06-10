@@ -1,0 +1,30 @@
+{
+  "summary": "Iteration 8 — Wealth Generator Guides feature end-to-end validation. Backend: 11/11 pytest pass (test_guides.py). All Guides endpoints + SEO endpoints + admin auth-gating verified. Frontend: Public /guides page renders 3 seeded UK cards with category chips (4 categories incl. 'All'); filter by 'Freelancing' narrows to 1 card; detail page loads with title, markdown content (H2 etc.) and related guides. Top-nav 'Guides' link on homepage routes correctly to /guides. Admin dashboard at /admin/dashboard shows the 'Wealth Generator Guides' manager card listing all guides with Published/Draft badges. Full admin CRUD lifecycle tested: New-guide button opens the editor; Save-draft creates a DRAFT; publish-toggle FLIPS status WITHOUT blanking the content (verified by re-opening the editor — content+title intact in BOTH directions draft→published and back); edit loads full markdown content; delete (with confirm dialog) removes the row. DRAFT PRIVACY: a draft guide returned 404 on GET /api/guides/{slug} AND was absent from public /guides cards, yet remained editable in admin. AI DRAFT: empty topic correctly blocked with error toast (no LLM call, fields untouched); ONE real LLM call for 'Best UK cashback apps 2026' populated title='Best UK Cashback Apps 2026: Get Paid to Shop', excerpt, meta_description, tags=[cashback, saving money, apps, shopping, beginners], category, and 5,799 chars of Markdown body containing £ and UK terms (HMRC/UK/ISA/etc.). SEO endpoints all green: /api/seo/guides-sitemap.xml -> 200 application/xml; /api/seo/render/guides -> contains 'Wealth Generator Guides' + lang='en-GB' + hreflang; /api/seo/render/guide/{slug} -> contains BlogPosting JSON-LD + lang='en-GB' + hreflang='en-gb'. Auth gating confirmed (admin/all -> 401 without token). Regression: homepage 200, donate £9.99, premium £14.99 cards still load, existing 3 seeded guide slugs intact.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_guides.py",
+    "/app/test_reports/pytest/iteration_8_guides.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "guides_routes.py — clean. The 'safe publish toggle' (GuidesManager.setStatus) correctly fetches the full guide via /admin/get/{id} before re-sending the PUT, so content is preserved. Backend-side, PUT always reads payload.content directly without merging from existing — meaning if a future caller sends an incomplete PUT (e.g. only {status}) content WOULD be blanked. Current frontend protects against this, but a defensive merge-from-existing on the backend (or a dedicated PATCH /status endpoint) would be more robust.",
+    "guides_seed.py — idempotent on startup via slug existence check (good); seeded 3 UK starters present (count=3 verified).",
+    "GuidesManager.jsx — tags input is a comma-separated string converted to array on save; works but could be a tag chip UI for better UX. Non-blocking.",
+    "GuideDetail.jsx and Guides.jsx loading-state spinner is shown on the public listing; verified loaded correctly (cards render).",
+    "AI generate-draft returns Markdown body that begins directly with '## …' (no H1) — exactly as instructed in the prompt, matching how GuideDetail.jsx renders content. ",
+    "All endpoints prefixed /api as required; frontend uses process.env.REACT_APP_BACKEND_URL throughout."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (11/11 pytest + all SEO + auth-gate curls)", "frontend": "100% (public listing, detail, nav link, full admin CRUD, draft privacy, AI draft both empty & real)"},
+  "test_credentials": "Admin admin/Gulluk*9 verified via POST /api/cms/login and admin UI login.",
+  "seed_data_creation": "Created and then deleted one TEST QA draft guide (slug test-qa-guide-1781088885) during admin lifecycle testing. No residual TEST_ rows left after delete step.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Wealth Generator Guides feature is fully working end-to-end. Key testids: guides-page, guide-card-{slug}, guides-categories, guide-detail-page, guide-title, guide-content, guides-manager, guide-new-btn, guides-editor, guide-field-title/category/excerpt/meta/tags/content/image, guide-ai-topic, guide-ai-generate, guide-save-draft, guide-publish, guide-toggle-{slug}, guide-edit-{slug}, guide-delete-{slug}, guide-editor-close. Admin URL is /admin/login then /admin/dashboard (NOT /admin). 3 seeded slugs: isa-vs-sipp-where-should-uk-savers-put-their-money, 11-realistic-side-hustles-to-make-money-online-in-the-uk, how-to-start-freelancing-in-the-uk-with-no-experience. AI draft uses claude-sonnet-4-6 via EMERGENT_LLM_KEY (configured in preview); the empty-topic 400 path is cheap and safe to re-test, real calls cost money. SEO endpoints under /api/seo/* return UK-localised content. The 'safe publish toggle' relies on the frontend always re-sending full content with the new status — backend PUT does NOT merge with existing, so any future caller must send all fields.",
+  "rca_of_the_issue": "No bugs found. One pre-emptive note: backend PUT /api/guides/{id} requires the caller to send all GuideIn fields (it overwrites unconditionally). The admin UI handles this correctly by pre-fetching the full guide before any status toggle. Recommend a defensive backend change later: either merge incoming payload with existing doc, or add a dedicated PATCH /api/guides/{id}/status endpoint to remove the foot-gun."
+}

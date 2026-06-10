@@ -11,6 +11,8 @@ import SuccessStories from "./pages/SuccessStories";
 import SuccessStoryDetail from "./pages/SuccessStoryDetail";
 import PDFView from "./pages/PDFView";
 import PlatformDetail from "./pages/PlatformDetail";
+import Guides from "./pages/Guides";
+import GuideDetail from "./pages/GuideDetail";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/success-stories/:slug" element={<SuccessStoryDetail />} />
               <Route path="/platforms/:slug" element={<PlatformDetail />} />
+              <Route path="/guides" element={<Guides />} />
+              <Route path="/guides/:slug" element={<GuideDetail />} />
               <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />

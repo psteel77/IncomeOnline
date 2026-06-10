@@ -673,3 +673,139 @@ async def render_success_stories():
     }
     return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
                         headers={"Cache-Control": "public, max-age=3600"})
+
+
+# =============================================================================
+# Wealth Generator Guides — crawler-facing rendered HTML + sitemap
+# =============================================================================
+def _md_to_html(md_text: str) -> str:
+    try:
+        import markdown as _md
+        return _md.markdown(md_text or "", extensions=["extra", "sane_lists"])
+    except Exception:
+        return "".join(f"<p>{_esc(p)}</p>" for p in (md_text or "").split("\n\n"))
+
+
+@router.get("/guides-sitemap.xml")
+async def guides_sitemap():
+    """XML sitemap of all published guide landing pages."""
+    from server import db
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    guides = await db.guides.find({"status": "published"}, {"_id": 0, "slug": 1}).to_list(2000)
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        '  <url>',
+        f'    <loc>{SITE_URL}/guides</loc>',
+        f'    <lastmod>{today}</lastmod>',
+        '    <changefreq>weekly</changefreq>',
+        '    <priority>0.7</priority>',
+        '  </url>',
+    ]
+    for g in guides:
+        lines.append('  <url>')
+        lines.append(f'    <loc>{SITE_URL}/guides/{g["slug"]}</loc>')
+        lines.append(f'    <lastmod>{today}</lastmod>')
+        lines.append('    <changefreq>monthly</changefreq>')
+        lines.append('    <priority>0.7</priority>')
+        lines.append('  </url>')
+    lines.append('</urlset>')
+    return Response(content="\n".join(lines), media_type="application/xml",
+                    headers={"Cache-Control": "public, max-age=3600"})
+
+
+@router.get("/render/guides")
+async def render_guides():
+    """Crawler-facing server-rendered Wealth Generator Guides index page."""
+    from server import db
+    guides = await db.guides.find({"status": "published"}, {"_id": 0}).sort("published_at", -1).to_list(500)
+    title = "Wealth Generator Guides | Make Money & Manage Money in the UK | Income Online"
+    meta_desc = (
+        "Free UK money guides — side hustles, freelancing, passive income, budgeting, "
+        "ISAs, SIPPs and tax. Practical, British-English advice from Income Online."
+    )[:300]
+    canonical = f"{SITE_URL}/guides"
+
+    cards = "".join(
+        f'<article><h2><a href="{SITE_URL}/guides/{_esc(g["slug"])}">{_esc(g["title"])}</a></h2>'
+        f'<p>{_esc(g.get("excerpt"))}</p>'
+        f'<p><em>{_esc(g.get("category"))} &middot; {_esc(g.get("read_minutes"))} min read</em></p></article>'
+        for g in guides
+    )
+    body = (
+        "<main><h1>Wealth Generator Guides</h1>"
+        "<p>Free, practical guides for UK readers on making money online, side hustles, "
+        "freelancing, budgeting, ISAs, SIPPs and tax. Written in plain British English.</p>"
+        + (cards or "<p>New guides are on the way.</p>") +
+        f'<p><a href="{SITE_URL}/">Browse 199+ verified earning platforms</a> or '
+        f'<a href="{SITE_URL}/donate">unlock full access for £9.99/yr</a>.</p></main>'
+    )
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Wealth Generator Guides",
+        "url": canonical,
+        "description": meta_desc,
+        "inLanguage": "en-GB",
+    }
+    return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})
+
+
+@router.get("/render/guide/{slug}")
+async def render_guide(slug: str):
+    """Crawler-facing server-rendered HTML for a single guide article."""
+    from server import db
+    g = await db.guides.find_one({"slug": slug, "status": "published"}, {"_id": 0})
+    if not g:
+        notfound = (
+            '<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"/>'
+            '<title>Guide not found | Income Online</title>'
+            '<meta name="robots" content="noindex, follow"/>'
+            f'<link rel="canonical" href="{SITE_URL}/guides"/></head>'
+            '<body><h1>Guide not found</h1>'
+            f'<p><a href="{SITE_URL}/guides">Read all guides</a></p></body></html>'
+        )
+        return HTMLResponse(content=notfound, status_code=404)
+
+    canonical = f"{SITE_URL}/guides/{g['slug']}"
+    title = f"{_esc(g['title'])} | Wealth Generator Guides | Income Online"
+    meta_desc = (g.get("meta_description") or g.get("excerpt") or "")[:300]
+
+    related = await db.guides.find(
+        {"status": "published", "slug": {"$ne": slug}}, {"_id": 0, "slug": 1, "title": 1},
+    ).sort("published_at", -1).to_list(4)
+    related_html = "".join(
+        f'<li><a href="{SITE_URL}/guides/{_esc(r["slug"])}">{_esc(r["title"])}</a></li>' for r in related
+    )
+
+    json_ld = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": g["title"],
+        "description": meta_desc,
+        "url": canonical,
+        "articleSection": g.get("category"),
+        "datePublished": g.get("published_at"),
+        "dateModified": g.get("updated_at"),
+        "author": {"@type": "Organization", "name": g.get("author") or "Income Online"},
+        "publisher": {"@type": "Organization", "name": "Income Online", "url": SITE_URL},
+        "mainEntityOfPage": canonical,
+        "inLanguage": "en-GB",
+    }
+    if g.get("hero_image"):
+        json_ld["image"] = g["hero_image"]
+
+    body = (
+        '<nav aria-label="Breadcrumb">'
+        f'<a href="{SITE_URL}/">Home</a> &rsaquo; '
+        f'<a href="{SITE_URL}/guides">Wealth Generator Guides</a> &rsaquo; {_esc(g["title"])}</nav>'
+        f"<main><article><h1>{_esc(g['title'])}</h1>"
+        f"<p><em>{_esc(g.get('category'))} &middot; {_esc(g.get('read_minutes'))} min read</em></p>"
+        + _md_to_html(g.get("content")) +
+        f'<p><a href="{SITE_URL}/donate">Unlock the full directory of 199+ earning platforms for £9.99/yr</a>.</p>'
+        f"<h2>More guides</h2><ul>{related_html}</ul>"
+        "</article></main>"
+    )
+    return HTMLResponse(_doc(title, meta_desc, canonical, body, json_ld),
+                        headers={"Cache-Control": "public, max-age=3600"})

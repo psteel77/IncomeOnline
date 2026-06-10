@@ -181,6 +181,12 @@ const Home = () => {
                 Success Stories
               </a>
               <a 
+                href="/guides"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+              >
+                Guides
+              </a>
+              <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
                 className="px-5 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold rounded-full hover:from-pink-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-pink-500/30 cursor-pointer no-underline"
@@ -252,6 +258,12 @@ const Home = () => {
                 className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
               >
                 Success Stories
+              </a>
+              <a 
+                href="/guides"
+                className="block text-white hover:text-yellow-300 transition-colors font-medium py-2"
+              >
+                Guides
               </a>
               <a 
                 href="#support" 

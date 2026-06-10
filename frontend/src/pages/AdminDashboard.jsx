@@ -13,6 +13,7 @@ import BroadcastCard from '../components/admin/BroadcastCard';
 import RecoveryStatsCard from '../components/admin/RecoveryStatsCard';
 import LeadSourcesCard from '../components/admin/LeadSourcesCard';
 import PremiumPurchasesCard from '../components/admin/PremiumPurchasesCard';
+import GuidesManager from '../components/admin/GuidesManager';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -307,6 +308,9 @@ const AdminDashboard = () => {
 
         {/* SEO / Sitemap Ping */}
         <SitemapPingCard />
+
+        {/* Wealth Generator Guides — blog manager (write/AI-draft/publish) */}
+        <GuidesManager />
 
         {/* Subscribers (captured emails from Free Resources gateway) */}
         <SubscribersCard />

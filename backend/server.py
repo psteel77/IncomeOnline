@@ -21,6 +21,7 @@ from email_service import send_new_user_email, send_returning_user_email, send_e
 from cms_routes import router as cms_router, get_admin_user
 from pdf_routes import router as pdf_router
 from seo_routes import router as seo_router
+from guides_routes import router as guides_router
 from seed_content import content_sections
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -1407,6 +1408,7 @@ app.include_router(api_router)
 app.include_router(cms_router, prefix="/api")
 app.include_router(pdf_router, prefix="/api")
 app.include_router(seo_router, prefix="/api")
+app.include_router(guides_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
@@ -1453,6 +1455,18 @@ async def _recovery_job():
             )
     except Exception as e:
         logger.error(f"[recovery-cron] error: {e}")
+
+
+@app.on_event("startup")
+async def seed_starter_guides():
+    """Seed UK starter guides on boot (idempotent — never overwrites existing slugs)."""
+    try:
+        from guides_seed import seed_guides
+        n = await seed_guides(db)
+        if n:
+            logger.info(f"[guides] seeded {n} starter guide(s)")
+    except Exception as e:
+        logger.error(f"[guides] seed error: {e}")
 
 
 @app.on_event("startup")
