@@ -114,6 +114,7 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
       >
         <PayPalButtons
           fundingSource={FUNDING.PAYPAL}
+          fundingSource={FUNDING.PAYPAL}
           style={{ layout: 'vertical', shape: 'rect', label: 'donate' }}
           disabled={status === 'processing'}
           forceReRender={[amount]}
@@ -123,48 +124,37 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
             captureIntent();
             return actions.resolve();
           }}
-          createOrder={(data, actions) =>
-            actions.order.create({
-              intent: 'CAPTURE',
-              purchase_units: [
-                {
-                  description: 'IncomeOnline — 12 months unlimited access',
-                  amount: { currency_code: DONATION_CURRENCY, value: amount },
-                },
-              ],
-              application_context: {
-                shipping_preference: 'NO_SHIPPING',
-                user_action: 'PAY_NOW',
-              },
-            })
-          }
-          onApprove={async (data, actions) => {
+          createOrder={async () => {
+            // Create the order SERVER-SIDE (client-side actions.order.create()
+            // returns 403 NOT_AUTHORIZED on this live account).
+            const resp = await axios.post(`${API}/paypal/create-order`, {
+              kind: 'donation',
+            });
+            return resp.data.id;
+          }}
+          onApprove={async (data) => {
             setStatus('processing');
             setErrorMsg('');
             try {
-              const details = await actions.order.capture();
               const orderID = data.orderID;
 
               if (!orderID) {
                 throw new Error('PayPal did not return an order ID. Please contact support.');
               }
 
-              // Register / renew the donor by sending only the order ID.
-              // Backend re-fetches the order from PayPal server-side, verifies
-              // status + amount, extracts payer email from PayPal's response.
+              // Backend captures the order server-side, verifies status +
+              // amount, extracts payer email from PayPal's response, then
+              // registers / renews the donor.
               const resp = await axios.post(`${API}/paypal/register-donor`, {
                 order_id: orderID,
               });
 
-              const verifiedEmail =
-                resp?.data?.email ||
-                details?.payer?.email_address?.toLowerCase() ||
-                '';
+              const verifiedEmail = resp?.data?.email || '';
 
               setDonorEmail(verifiedEmail);
               setStatus('success');
               if (typeof onSuccess === 'function') {
-                onSuccess({ email: verifiedEmail, orderId: orderID, details });
+                onSuccess({ email: verifiedEmail, orderId: orderID });
               }
             } catch (err) {
               console.error('Donation completion failed:', err);

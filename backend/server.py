@@ -691,6 +691,94 @@ def _fetch_paypal_order(order_id: str) -> Optional[dict]:
         return None
 
 
+def _create_paypal_order(amount_value: str, description: str) -> Optional[dict]:
+    """Create a PayPal order server-side using full API credentials (client_id +
+    secret OAuth). Client-side actions.order.create() is deprecated and returns
+    403 NOT_AUTHORIZED on some live accounts, so we create the order here."""
+    token = _get_paypal_access_token()
+    if not token:
+        return None
+    try:
+        resp = requests.post(
+            f"{PAYPAL_API_BASE}/v2/checkout/orders",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "PayPal-Request-Id": str(uuid.uuid4()),
+            },
+            json={
+                "intent": "CAPTURE",
+                "purchase_units": [{
+                    "description": description,
+                    "amount": {"currency_code": "GBP", "value": amount_value},
+                }],
+                "application_context": {
+                    "shipping_preference": "NO_SHIPPING",
+                    "user_action": "PAY_NOW",
+                },
+            },
+            timeout=20,
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        body = getattr(getattr(e, "response", None), "text", "")
+        logging.error(f"PayPal create order failed: {e} {body}")
+        return None
+
+
+def _capture_paypal_order(order_id: str) -> Optional[dict]:
+    """Capture an approved PayPal order server-side and return the completed
+    order dict. If it was already captured (422), fall back to fetching it."""
+    token = _get_paypal_access_token()
+    if not token:
+        return None
+    try:
+        resp = requests.post(
+            f"{PAYPAL_API_BASE}/v2/checkout/orders/{order_id}/capture",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "PayPal-Request-Id": str(uuid.uuid4()),
+            },
+            timeout=20,
+        )
+        if resp.status_code == 422:
+            # Usually ORDER_ALREADY_CAPTURED — return the existing order instead.
+            logging.info(f"PayPal capture 422 for {order_id}; fetching existing order")
+            return _fetch_paypal_order(order_id)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        body = getattr(getattr(e, "response", None), "text", "")
+        logging.error(f"PayPal capture failed for {order_id}: {e} {body}")
+        # Last resort: it may already be captured.
+        return _fetch_paypal_order(order_id)
+
+
+class CreateOrderRequest(BaseModel):
+    kind: str = "donation"  # 'donation' (£9.99 access) | 'premium' (£14.99 bundle)
+
+
+@api_router.post("/paypal/create-order")
+async def create_paypal_order(request: CreateOrderRequest):
+    """Create the PayPal order server-side and return its id to the SDK's
+    createOrder callback. Avoids the client-side 403 NOT_AUTHORIZED."""
+    kind = (request.kind or "donation").lower()
+    if kind == "premium":
+        amount = PREMIUM_PACK_USD
+        description = "IncomeOnline Premium — 12mo access + Wealth Generator bundle"
+    else:
+        amount = EXPECTED_DONATION_USD
+        description = "IncomeOnline — 12 months unlimited access"
+
+    order = _create_paypal_order(amount, description)
+    if not order or not order.get("id"):
+        raise HTTPException(status_code=502, detail="Could not create PayPal order")
+    return {"id": order["id"]}
+
+
+
 class PayPalRegisterRequest(BaseModel):
     order_id: str
 
@@ -711,7 +799,7 @@ async def register_donor_via_paypal(request: PayPalRegisterRequest):
     if not order_id:
         raise HTTPException(status_code=400, detail="order_id is required")
 
-    order = _fetch_paypal_order(order_id)
+    order = _capture_paypal_order(order_id)
     if not order:
         raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
 
@@ -782,7 +870,7 @@ async def register_premium_via_paypal(request: PayPalPremiumRequest):
     if not order_id:
         raise HTTPException(status_code=400, detail="order_id is required")
 
-    order = _fetch_paypal_order(order_id)
+    order = _capture_paypal_order(order_id)
     if not order:
         raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
 

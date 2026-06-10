@@ -87,42 +87,34 @@ const PayPalPremiumButton = () => {
       >
         <PayPalButtons
           fundingSource={FUNDING.PAYPAL}
+          fundingSource={FUNDING.PAYPAL}
           style={{ layout: 'vertical', shape: 'rect', label: 'pay' }}
           disabled={status === 'processing'}
           forceReRender={[PREMIUM_AMOUNT]}
-          createOrder={(data, actions) =>
-            actions.order.create({
-              intent: 'CAPTURE',
-              purchase_units: [
-                {
-                  description: 'IncomeOnline Premium — 12mo access + Wealth Generator bundle',
-                  amount: { currency_code: PREMIUM_CURRENCY, value: PREMIUM_AMOUNT },
-                },
-              ],
-              application_context: {
-                shipping_preference: 'NO_SHIPPING',
-                user_action: 'PAY_NOW',
-              },
-            })
-          }
-          onApprove={async (data, actions) => {
+          createOrder={async () => {
+            // Create the order SERVER-SIDE (client-side actions.order.create()
+            // returns 403 NOT_AUTHORIZED on this live account).
+            const resp = await axios.post(`${API}/paypal/create-order`, {
+              kind: 'premium',
+            });
+            return resp.data.id;
+          }}
+          onApprove={async (data) => {
             setStatus('processing');
             setErrorMsg('');
             try {
-              const details = await actions.order.capture();
               const orderID = data.orderID;
               if (!orderID) {
                 throw new Error('PayPal did not return an order ID. Please contact support.');
               }
 
+              // Backend captures the order server-side, verifies amount + payer,
+              // grants access and issues the download token.
               const resp = await axios.post(`${API}/paypal/register-premium`, {
                 order_id: orderID,
               });
 
-              const verifiedEmail =
-                resp?.data?.email ||
-                details?.payer?.email_address?.toLowerCase() ||
-                '';
+              const verifiedEmail = resp?.data?.email || '';
               const dl = resp?.data?.download_url
                 ? `${BACKEND_URL}${resp.data.download_url}`
                 : '';
