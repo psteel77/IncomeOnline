@@ -1090,10 +1090,11 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
 
 
 @api_router.get("/admin/email-diagnostics")
-async def email_diagnostics(admin_username: str = Depends(get_admin_user)):
+async def email_diagnostics(to: Optional[str] = None, admin_username: str = Depends(get_admin_user)):
     """Admin-only — report Postmark config + send a live API validation request
     (validates token + sender signature) returning the exact error. Never returns
-    the token value."""
+    the token value. Pass ?to=<email> to send a real (no-attachment) test email to
+    that address and surface Postmark's exact ErrorCode/Message."""
     token = os.environ.get("POSTMARK_SERVER_TOKEN")
     from_addr = os.environ.get("POSTMARK_FROM") or "Income Online <welcome@incomeonline.info>"
     stream = os.environ.get("POSTMARK_MESSAGE_STREAM", "outbound")
@@ -1109,16 +1110,18 @@ async def email_diagnostics(admin_username: str = Depends(get_admin_user)):
     if not token:
         return {"ok": False, "stage": "config", "detail": "POSTMARK_SERVER_TOKEN not set on the server", "presence": presence}
 
-    # Use Postmark's deliverability test address; it validates token + sender
-    # signature without sending a real email to anyone.
+    # Default: Postmark's deliverability test address (always accepted, validates
+    # token + sender). Pass ?to= to test delivery to a real external address.
+    recipient = to or "test@blackhole.postmarkapp.com"
     try:
         resp = requests.post(
             "https://api.postmarkapp.com/email",
             json={
                 "From": from_addr,
-                "To": "test@blackhole.postmarkapp.com",
+                "To": recipient,
                 "Subject": "IncomeOnline Postmark connectivity test",
-                "TextBody": "Connectivity test — no real recipient.",
+                "TextBody": "Connectivity test from IncomeOnline.",
+                "HtmlBody": "<p>Connectivity test from IncomeOnline.</p>",
                 "MessageStream": stream,
             },
             headers={
@@ -1130,12 +1133,13 @@ async def email_diagnostics(admin_username: str = Depends(get_admin_user)):
         )
         data = resp.json() if resp.content else {}
         if resp.status_code == 200 and data.get("ErrorCode", 0) == 0:
-            return {"ok": True, "stage": "send", "detail": f"Postmark OK — token valid and sender '{from_addr}' accepted.", "presence": presence}
+            return {"ok": True, "stage": "send", "detail": f"Postmark OK — sent to '{recipient}' (token valid, sender '{from_addr}' accepted).", "message_id": data.get("MessageID"), "presence": presence}
         return {
             "ok": False,
             "stage": "send",
             "detail": f"Postmark error {data.get('ErrorCode')}: {data.get('Message')}",
             "http_status": resp.status_code,
+            "recipient": recipient,
             "presence": presence,
         }
     except Exception as e:
