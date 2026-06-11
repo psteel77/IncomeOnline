@@ -3,10 +3,36 @@ import re
 import hashlib
 import logging
 import smtplib
+import socket
+import contextlib
 from pathlib import Path
 from email.message import EmailMessage
 
 logger = logging.getLogger(__name__)
+
+
+@contextlib.contextmanager
+def _force_ipv4():
+    """Temporarily make socket.getaddrinfo return IPv4 addresses only.
+
+    Railway containers have no working IPv6 egress, so connecting to
+    smtp.gmail.com (which resolves to IPv6 first) fails with
+    '[Errno 101] Network is unreachable'. Forcing IPv4 fixes delivery.
+    The hostname is still passed to smtplib, so TLS SNI / cert validation
+    against 'smtp.gmail.com' is unaffected.
+    """
+    _orig = socket.getaddrinfo
+
+    def _ipv4_only(host, *args, **kwargs):
+        results = _orig(host, *args, **kwargs)
+        ipv4 = [r for r in results if r[0] == socket.AF_INET]
+        return ipv4 or results
+
+    socket.getaddrinfo = _ipv4_only
+    try:
+        yield
+    finally:
+        socket.getaddrinfo = _orig
 
 
 def _friendly_name(email: str) -> str:
@@ -115,12 +141,13 @@ def _send_email(to_email, subject, html, text, attachments=None, extra_headers=N
             )
 
     try:
-        with smtplib.SMTP(host, port, timeout=30) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(username, password)
-            server.send_message(msg)
+        with _force_ipv4():
+            with smtplib.SMTP(host, port, timeout=30) as server:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login(username, password)
+                server.send_message(msg)
         logger.info(f"✅ SMTP delivered to {to_email} · subject='{subject}'")
         print("[SMTP] SUCCESS", flush=True)
         return True

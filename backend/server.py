@@ -1117,9 +1117,11 @@ async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
         return {"ok": False, "stage": "config", "detail": "SMTP_USERNAME/SMTP_PASSWORD missing on the server", "presence": presence}
 
     try:
-        with _smtplib.SMTP(host, port, timeout=20) as server:
-            server.starttls()
-            server.login(username, password)
+        from email_service import _force_ipv4
+        with _force_ipv4():
+            with _smtplib.SMTP(host, port, timeout=20) as server:
+                server.starttls()
+                server.login(username, password)
         return {"ok": True, "stage": "login", "detail": "SMTP login succeeded — email should work.", "presence": presence}
     except Exception as e:
         return {"ok": False, "stage": "login", "detail": f"{type(e).__name__}: {e}", "presence": presence}
