@@ -1091,8 +1091,9 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
 
 @api_router.get("/admin/smtp-diagnostics")
 async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
-    """Admin-only — report SMTP config presence + attempt a real login so we can
-    see the EXACT Gmail error. Never returns the password value itself."""
+    """Admin-only — report email transport config + run live credential checks
+    for BOTH the Gmail API (preferred on Railway) and SMTP, returning the exact
+    error for each. Never returns secret values."""
     import smtplib as _smtplib
     host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
     port = int(os.environ.get("SMTP_PORT", "587"))
@@ -1100,31 +1101,54 @@ async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
     password = os.environ.get("SMTP_PASSWORD")
     from_addr = os.environ.get("SMTP_FROM")
     frontend_url = os.environ.get("FRONTEND_URL")
+    sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
+    gmail_sender = os.environ.get("GMAIL_SENDER") or username
 
     presence = {
+        "GMAIL_SA_KEY_B64_set": bool(sa_b64),
+        "GMAIL_SA_KEY_B64_length": len(sa_b64) if sa_b64 else 0,
+        "GMAIL_SENDER": gmail_sender,
         "SMTP_HOST": host,
         "SMTP_PORT": port,
         "SMTP_USERNAME_set": bool(username),
-        "SMTP_USERNAME_value": username,  # not secret
+        "SMTP_USERNAME_value": username,
         "SMTP_PASSWORD_set": bool(password),
         "SMTP_PASSWORD_length": len(password) if password else 0,
-        "SMTP_PASSWORD_has_spaces": (" " in password) if password else False,
         "SMTP_FROM_set": bool(from_addr),
         "FRONTEND_URL": frontend_url,
+        "active_transport": "gmail_api" if sa_b64 else "smtp",
     }
 
-    if not username or not password:
-        return {"ok": False, "stage": "config", "detail": "SMTP_USERNAME/SMTP_PASSWORD missing on the server", "presence": presence}
+    # --- Gmail API check: load service account + obtain an impersonated token ---
+    gmail_result = {"configured": bool(sa_b64)}
+    if sa_b64:
+        try:
+            from email_service import _gmail_credentials
+            from google.auth.transport.requests import Request as _GReq
+            creds, err = _gmail_credentials()
+            if not creds:
+                gmail_result.update(ok=False, detail=f"credential load failed: {err}")
+            else:
+                creds.refresh(_GReq())  # exercises domain-wide delegation
+                gmail_result.update(ok=True, detail=f"Gmail API auth OK — can send as {gmail_sender}")
+        except Exception as e:
+            gmail_result.update(ok=False, detail=f"{type(e).__name__}: {e}")
 
-    try:
-        from email_service import _force_ipv4
-        with _force_ipv4():
-            with _smtplib.SMTP(host, port, timeout=20) as server:
-                server.starttls()
-                server.login(username, password)
-        return {"ok": True, "stage": "login", "detail": "SMTP login succeeded — email should work.", "presence": presence}
-    except Exception as e:
-        return {"ok": False, "stage": "login", "detail": f"{type(e).__name__}: {e}", "presence": presence}
+    # --- SMTP check (fallback transport) ---
+    smtp_result = {"configured": bool(username and password)}
+    if username and password:
+        try:
+            from email_service import _force_ipv4
+            with _force_ipv4():
+                with _smtplib.SMTP(host, port, timeout=15) as server:
+                    server.starttls()
+                    server.login(username, password)
+            smtp_result.update(ok=True, detail="SMTP login succeeded")
+        except Exception as e:
+            smtp_result.update(ok=False, detail=f"{type(e).__name__}: {e}")
+
+    overall_ok = bool(gmail_result.get("ok")) or bool(smtp_result.get("ok"))
+    return {"ok": overall_ok, "gmail_api": gmail_result, "smtp": smtp_result, "presence": presence}
 
 
 

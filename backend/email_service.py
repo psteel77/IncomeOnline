@@ -98,27 +98,99 @@ def pick_recovery_subject(email: str):
 SMTP_FROM_DEFAULT = "Income Online <welcome@incomeonline.info>"
 
 
+# Gmail API (HTTPS) — primary transport on hosts that block SMTP (e.g. Railway).
+# Uses a Google Cloud service account with domain-wide delegation to send AS the
+# Workspace mailbox (welcome@incomeonline.info) via users.messages.send.
+GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send"
+
+
+def _gmail_credentials():
+    """Build impersonated service-account credentials for the Gmail API.
+
+    Returns (credentials, None) on success or (None, error_string) on failure.
+    The service-account JSON key is provided base64-encoded in GMAIL_SA_KEY_B64
+    (base64 avoids newline/quoting problems in env vars). The sender mailbox to
+    impersonate comes from GMAIL_SENDER (defaults to SMTP_USERNAME).
+    """
+    sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
+    sender = os.environ.get("GMAIL_SENDER") or os.environ.get("SMTP_USERNAME") or "welcome@incomeonline.info"
+    if not sa_b64:
+        return None, "GMAIL_SA_KEY_B64 not set"
+    try:
+        import base64 as _b64
+        import json as _json
+        from google.oauth2 import service_account
+        info = _json.loads(_b64.b64decode(sa_b64))
+        creds = service_account.Credentials.from_service_account_info(
+            info, scopes=[GMAIL_SEND_SCOPE]
+        ).with_subject(sender)
+        return creds, None
+    except Exception as e:
+        return None, f"{type(e).__name__}: {e}"
+
+
+def _gmail_api_send(msg, to_email, subject):
+    """Send a prepared EmailMessage via the Gmail API over HTTPS."""
+    import base64 as _b64
+    creds, err = _gmail_credentials()
+    if not creds:
+        logger.error(f"Gmail API not configured: {err}")
+        print(f"[GMAIL_API] config error: {err}", flush=True)
+        return False
+    try:
+        from googleapiclient.discovery import build
+        service = build("gmail", "v1", credentials=creds, cache_discovery=False)
+        raw = _b64.urlsafe_b64encode(msg.as_bytes()).decode()
+        service.users().messages().send(userId="me", body={"raw": raw}).execute()
+        logger.info(f"✅ Gmail API delivered to {to_email} · subject='{subject}'")
+        print("[GMAIL_API] SUCCESS", flush=True)
+        return True
+    except Exception as e:
+        logger.error(f"❌ Gmail API send failed for {to_email}: {e}")
+        print(f"[GMAIL_API] EXCEPTION: {type(e).__name__}: {e}", flush=True)
+        return False
+
+
+def _smtp_send(msg, to_email, subject):
+    """Send a prepared EmailMessage via Google Workspace SMTP (STARTTLS, IPv4)."""
+    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+    port = int(os.environ.get("SMTP_PORT", "587"))
+    username = os.environ.get("SMTP_USERNAME")
+    password = os.environ.get("SMTP_PASSWORD")
+    if not username or not password:
+        logger.error("SMTP_USERNAME/SMTP_PASSWORD not set in environment; email not sent")
+        print("[SMTP] ABORT: SMTP credentials missing", flush=True)
+        return False
+    try:
+        with _force_ipv4():
+            with smtplib.SMTP(host, port, timeout=30) as server:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login(username, password)
+                server.send_message(msg)
+        logger.info(f"✅ SMTP delivered to {to_email} · subject='{subject}'")
+        print("[SMTP] SUCCESS", flush=True)
+        return True
+    except Exception as e:
+        logger.error(f"❌ SMTP send failed for {to_email}: {e}")
+        print(f"[SMTP] EXCEPTION: {type(e).__name__}: {e}", flush=True)
+        return False
+
+
 def _send_email(to_email, subject, html, text, attachments=None, extra_headers=None):
     """
-    Send an email via Google Workspace SMTP.
+    Send an email. Prefers the Gmail API (HTTPS) when GMAIL_SA_KEY_B64 is set
+    (required on Railway, which blocks outbound SMTP); otherwise falls back to
+    direct SMTP (used in preview / hosts that allow SMTP).
 
     Returns True on success, False (with logged error) on any failure.
     `attachments` is an optional list of dicts: [{"filename": str, "content_bytes": bytes}]
     `extra_headers` is an optional dict of additional headers (e.g. List-Unsubscribe).
     """
-    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-    port = int(os.environ.get("SMTP_PORT", "587"))
-    username = os.environ.get("SMTP_USERNAME")
-    password = os.environ.get("SMTP_PASSWORD")
-    from_addr = os.environ.get("SMTP_FROM") or username or SMTP_FROM_DEFAULT
+    from_addr = os.environ.get("SMTP_FROM") or os.environ.get("SMTP_USERNAME") or SMTP_FROM_DEFAULT
 
-    print(f"[SMTP] _send_email called: to={to_email} subject={subject!r}", flush=True)
-    print(f"[SMTP] host={host}:{port} user set? {bool(username)} from={from_addr!r}", flush=True)
-
-    if not username or not password:
-        logger.error("SMTP_USERNAME/SMTP_PASSWORD not set in environment; email not sent")
-        print("[SMTP] ABORT: SMTP credentials missing", flush=True)
-        return False
+    print(f"[EMAIL] _send_email called: to={to_email} subject={subject!r} from={from_addr!r}", flush=True)
 
     msg = EmailMessage()
     msg["Subject"] = subject
@@ -140,21 +212,12 @@ def _send_email(to_email, subject, html, text, attachments=None, extra_headers=N
                 filename=a["filename"],
             )
 
-    try:
-        with _force_ipv4():
-            with smtplib.SMTP(host, port, timeout=30) as server:
-                server.ehlo()
-                server.starttls()
-                server.ehlo()
-                server.login(username, password)
-                server.send_message(msg)
-        logger.info(f"✅ SMTP delivered to {to_email} · subject='{subject}'")
-        print("[SMTP] SUCCESS", flush=True)
-        return True
-    except Exception as e:
-        logger.error(f"❌ SMTP send failed for {to_email}: {e}")
-        print(f"[SMTP] EXCEPTION: {type(e).__name__}: {e}", flush=True)
-        return False
+    # Primary transport: Gmail API over HTTPS (works on Railway).
+    if os.environ.get("GMAIL_SA_KEY_B64"):
+        return _gmail_api_send(msg, to_email, subject)
+
+    # Fallback: direct SMTP (preview / non-blocking hosts).
+    return _smtp_send(msg, to_email, subject)
 
 
 def load_email_template(template_name):
