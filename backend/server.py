@@ -1103,10 +1103,18 @@ async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
     frontend_url = os.environ.get("FRONTEND_URL")
     sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
     gmail_sender = os.environ.get("GMAIL_SENDER") or username
+    g_client_id = os.environ.get("GOOGLE_CLIENT_ID")
+    g_client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+    g_refresh = os.environ.get("GMAIL_REFRESH_TOKEN")
+    gmail_oauth_set = bool(g_client_id and g_client_secret and g_refresh)
+    gmail_configured = gmail_oauth_set or bool(sa_b64)
 
     presence = {
+        "gmail_oauth_set": gmail_oauth_set,
+        "GOOGLE_CLIENT_ID_set": bool(g_client_id),
+        "GOOGLE_CLIENT_SECRET_set": bool(g_client_secret),
+        "GMAIL_REFRESH_TOKEN_set": bool(g_refresh),
         "GMAIL_SA_KEY_B64_set": bool(sa_b64),
-        "GMAIL_SA_KEY_B64_length": len(sa_b64) if sa_b64 else 0,
         "GMAIL_SENDER": gmail_sender,
         "SMTP_HOST": host,
         "SMTP_PORT": port,
@@ -1116,12 +1124,12 @@ async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
         "SMTP_PASSWORD_length": len(password) if password else 0,
         "SMTP_FROM_set": bool(from_addr),
         "FRONTEND_URL": frontend_url,
-        "active_transport": "gmail_api" if sa_b64 else "smtp",
+        "active_transport": "gmail_api" if gmail_configured else "smtp",
     }
 
-    # --- Gmail API check: load service account + obtain an impersonated token ---
-    gmail_result = {"configured": bool(sa_b64)}
-    if sa_b64:
+    # --- Gmail API check: load credentials + obtain a live access token ---
+    gmail_result = {"configured": gmail_configured}
+    if gmail_configured:
         try:
             from email_service import _gmail_credentials
             from google.auth.transport.requests import Request as _GReq

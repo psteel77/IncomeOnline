@@ -105,28 +105,53 @@ GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send"
 
 
 def _gmail_credentials():
-    """Build impersonated service-account credentials for the Gmail API.
+    """Build Gmail API credentials. Returns (credentials, None) or (None, error).
 
-    Returns (credentials, None) on success or (None, error_string) on failure.
-    The service-account JSON key is provided base64-encoded in GMAIL_SA_KEY_B64
-    (base64 avoids newline/quoting problems in env vars). The sender mailbox to
-    impersonate comes from GMAIL_SENDER (defaults to SMTP_USERNAME).
+    Preferred: OAuth refresh token (GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET +
+    GMAIL_REFRESH_TOKEN) — works even when org policy blocks service-account keys.
+    Fallback: service account with domain-wide delegation (GMAIL_SA_KEY_B64).
     """
+    client_id = os.environ.get("GOOGLE_CLIENT_ID")
+    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+    refresh_token = os.environ.get("GMAIL_REFRESH_TOKEN")
+    if client_id and client_secret and refresh_token:
+        try:
+            from google.oauth2.credentials import Credentials
+            creds = Credentials(
+                token=None,
+                refresh_token=refresh_token,
+                client_id=client_id,
+                client_secret=client_secret,
+                token_uri="https://oauth2.googleapis.com/token",
+                scopes=[GMAIL_SEND_SCOPE],
+            )
+            return creds, None
+        except Exception as e:
+            return None, f"OAuth credential error: {type(e).__name__}: {e}"
+
     sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
-    sender = os.environ.get("GMAIL_SENDER") or os.environ.get("SMTP_USERNAME") or "welcome@incomeonline.info"
-    if not sa_b64:
-        return None, "GMAIL_SA_KEY_B64 not set"
-    try:
-        import base64 as _b64
-        import json as _json
-        from google.oauth2 import service_account
-        info = _json.loads(_b64.b64decode(sa_b64))
-        creds = service_account.Credentials.from_service_account_info(
-            info, scopes=[GMAIL_SEND_SCOPE]
-        ).with_subject(sender)
-        return creds, None
-    except Exception as e:
-        return None, f"{type(e).__name__}: {e}"
+    if sa_b64:
+        try:
+            import base64 as _b64
+            import json as _json
+            from google.oauth2 import service_account
+            info = _json.loads(_b64.b64decode(sa_b64))
+            sender = os.environ.get("GMAIL_SENDER") or os.environ.get("SMTP_USERNAME") or "welcome@incomeonline.info"
+            creds = service_account.Credentials.from_service_account_info(
+                info, scopes=[GMAIL_SEND_SCOPE]
+            ).with_subject(sender)
+            return creds, None
+        except Exception as e:
+            return None, f"Service-account credential error: {type(e).__name__}: {e}"
+
+    return None, "No Gmail API credentials set (need GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GMAIL_REFRESH_TOKEN)"
+
+
+def _gmail_configured():
+    return bool(
+        (os.environ.get("GOOGLE_CLIENT_ID") and os.environ.get("GOOGLE_CLIENT_SECRET") and os.environ.get("GMAIL_REFRESH_TOKEN"))
+        or os.environ.get("GMAIL_SA_KEY_B64")
+    )
 
 
 def _gmail_api_send(msg, to_email, subject):
@@ -213,7 +238,7 @@ def _send_email(to_email, subject, html, text, attachments=None, extra_headers=N
             )
 
     # Primary transport: Gmail API over HTTPS (works on Railway).
-    if os.environ.get("GMAIL_SA_KEY_B64"):
+    if _gmail_configured():
         return _gmail_api_send(msg, to_email, subject)
 
     # Fallback: direct SMTP (preview / non-blocking hosts).
