@@ -1089,6 +1089,44 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
     return {"count": len(intents), "intents": intents}
 
 
+@api_router.get("/admin/smtp-diagnostics")
+async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
+    """Admin-only — report SMTP config presence + attempt a real login so we can
+    see the EXACT Gmail error. Never returns the password value itself."""
+    import smtplib as _smtplib
+    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+    port = int(os.environ.get("SMTP_PORT", "587"))
+    username = os.environ.get("SMTP_USERNAME")
+    password = os.environ.get("SMTP_PASSWORD")
+    from_addr = os.environ.get("SMTP_FROM")
+    frontend_url = os.environ.get("FRONTEND_URL")
+
+    presence = {
+        "SMTP_HOST": host,
+        "SMTP_PORT": port,
+        "SMTP_USERNAME_set": bool(username),
+        "SMTP_USERNAME_value": username,  # not secret
+        "SMTP_PASSWORD_set": bool(password),
+        "SMTP_PASSWORD_length": len(password) if password else 0,
+        "SMTP_PASSWORD_has_spaces": (" " in password) if password else False,
+        "SMTP_FROM_set": bool(from_addr),
+        "FRONTEND_URL": frontend_url,
+    }
+
+    if not username or not password:
+        return {"ok": False, "stage": "config", "detail": "SMTP_USERNAME/SMTP_PASSWORD missing on the server", "presence": presence}
+
+    try:
+        with _smtplib.SMTP(host, port, timeout=20) as server:
+            server.starttls()
+            server.login(username, password)
+        return {"ok": True, "stage": "login", "detail": "SMTP login succeeded — email should work.", "presence": presence}
+    except Exception as e:
+        return {"ok": False, "stage": "login", "detail": f"{type(e).__name__}: {e}", "presence": presence}
+
+
+
+
 @api_router.get("/paypal/recovery-stats")
 async def recovery_stats(admin_username: str = Depends(get_admin_user)):
     """Admin-only — aggregate stats for the abandoned-donation recovery funnel."""
