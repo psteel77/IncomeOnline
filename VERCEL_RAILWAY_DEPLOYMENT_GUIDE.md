@@ -88,13 +88,25 @@ MONGO_URL=mongodb+srv://incomeonline:YOUR_PASSWORD@income-online.xxxxx.mongodb.n
 DB_NAME=income_online
 CORS_ORIGINS=https://your-app.vercel.app,https://www.incomeonline.info
 FRONTEND_URL=https://www.incomeonline.info
-MAILGUN_API_KEY=6c956bc08cf876056b04d0b49067f764-67edcffb-4f54a2ac
-MAILGUN_DOMAIN=sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org
-MAILGUN_SENDER_EMAIL=noreply@sandboxf3d94eabdd05440a9c13e182e7fc8a9c.mailgun.org
+POSTMARK_SERVER_TOKEN=your-postmark-server-api-token
+POSTMARK_FROM=Income Online <welcome@incomeonline.info>
+POSTMARK_MESSAGE_STREAM=outbound
+PAYPAL_CLIENT_ID=your-live-paypal-client-id
+PAYPAL_CLIENT_SECRET=your-live-paypal-client-secret
 JWT_SECRET_KEY=ksGZbi67-ZXRunBb88v37bWDtShwJ2gAFSogizO3o_E
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD_HASH=$2b$12$fmR3qimgLkI.zxs.aDSaIuXRjTcLuNwplwiuoGSdd7ibWS0xUb/Ia
 ```
+
+> **Email (Postmark):** Email is sent via the Postmark HTTPS API (`api.postmarkapp.com`)
+> because Railway blocks outbound SMTP. Get the **Server API Token** from
+> Postmark → Servers → [your server] → API Tokens, and set it as
+> `POSTMARK_SERVER_TOKEN`. The sender `welcome@incomeonline.info` must be a
+> **confirmed Sender Signature** (or the `incomeonline.info` domain verified) in
+> Postmark. `POSTMARK_FROM` and `POSTMARK_MESSAGE_STREAM` are optional (defaults
+> shown). The old `SMTP_*` / `MAILGUN_*` / `GMAIL_*` variables are no longer used
+> and can be removed. Verify config any time via the admin endpoint
+> `GET /api/admin/email-diagnostics`.
 
 ### 2.5 Deploy
 1. Railway will auto-deploy when you add variables

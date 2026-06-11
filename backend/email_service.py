@@ -1,38 +1,12 @@
 import os
 import re
+import base64
 import hashlib
 import logging
-import smtplib
-import socket
-import contextlib
+import requests
 from pathlib import Path
-from email.message import EmailMessage
 
 logger = logging.getLogger(__name__)
-
-
-@contextlib.contextmanager
-def _force_ipv4():
-    """Temporarily make socket.getaddrinfo return IPv4 addresses only.
-
-    Railway containers have no working IPv6 egress, so connecting to
-    smtp.gmail.com (which resolves to IPv6 first) fails with
-    '[Errno 101] Network is unreachable'. Forcing IPv4 fixes delivery.
-    The hostname is still passed to smtplib, so TLS SNI / cert validation
-    against 'smtp.gmail.com' is unaffected.
-    """
-    _orig = socket.getaddrinfo
-
-    def _ipv4_only(host, *args, **kwargs):
-        results = _orig(host, *args, **kwargs)
-        ipv4 = [r for r in results if r[0] == socket.AF_INET]
-        return ipv4 or results
-
-    socket.getaddrinfo = _ipv4_only
-    try:
-        yield
-    finally:
-        socket.getaddrinfo = _orig
 
 
 def _friendly_name(email: str) -> str:
@@ -81,168 +55,88 @@ def pick_recovery_subject(email: str):
     return key, RECOVERY_SUBJECT_VARIANTS[key]
 
 # -----------------------------------------------------------------------------
-# Email delivery via Google Workspace SMTP (smtp.gmail.com)
+# Email delivery via the Postmark HTTPS API (api.postmarkapp.com)
 # -----------------------------------------------------------------------------
-# The sending domain (incomeonline.info) is already on Google Workspace with
-# Google MX + SPF (include:_spf.google.com) and Google-managed DKIM, so mail
-# sent through Gmail's authenticated SMTP passes SPF/DKIM/DMARC with NO extra
-# DNS records. This replaces the previous Resend integration which required a
-# subdomain MX record that the Wix registrar would not allow.
+# Railway blocks outbound SMTP, so we send through Postmark's HTTPS API instead.
+# The sender address (welcome@incomeonline.info) must be a CONFIRMED Postmark
+# sender signature, or the domain incomeonline.info must be verified in Postmark.
 #
-# Required env vars:
-#   SMTP_HOST      (default smtp.gmail.com)
-#   SMTP_PORT      (default 587, STARTTLS)
-#   SMTP_USERNAME  full Workspace address, e.g. welcome@incomeonline.info
-#   SMTP_PASSWORD  16-char Google App Password (NOT the normal password)
-#   SMTP_FROM      "Display Name <welcome@incomeonline.info>" (defaults to username)
-SMTP_FROM_DEFAULT = "Income Online <welcome@incomeonline.info>"
-
-
-# Gmail API (HTTPS) — primary transport on hosts that block SMTP (e.g. Railway).
-# Uses a Google Cloud service account with domain-wide delegation to send AS the
-# Workspace mailbox (welcome@incomeonline.info) via users.messages.send.
-GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send"
-
-
-def _gmail_credentials():
-    """Build Gmail API credentials. Returns (credentials, None) or (None, error).
-
-    Preferred: OAuth refresh token (GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET +
-    GMAIL_REFRESH_TOKEN) — works even when org policy blocks service-account keys.
-    Fallback: service account with domain-wide delegation (GMAIL_SA_KEY_B64).
-    """
-    client_id = os.environ.get("GOOGLE_CLIENT_ID")
-    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
-    refresh_token = os.environ.get("GMAIL_REFRESH_TOKEN")
-    if client_id and client_secret and refresh_token:
-        try:
-            from google.oauth2.credentials import Credentials
-            creds = Credentials(
-                token=None,
-                refresh_token=refresh_token,
-                client_id=client_id,
-                client_secret=client_secret,
-                token_uri="https://oauth2.googleapis.com/token",
-                scopes=[GMAIL_SEND_SCOPE],
-            )
-            return creds, None
-        except Exception as e:
-            return None, f"OAuth credential error: {type(e).__name__}: {e}"
-
-    sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
-    if sa_b64:
-        try:
-            import base64 as _b64
-            import json as _json
-            from google.oauth2 import service_account
-            info = _json.loads(_b64.b64decode(sa_b64))
-            sender = os.environ.get("GMAIL_SENDER") or os.environ.get("SMTP_USERNAME") or "welcome@incomeonline.info"
-            creds = service_account.Credentials.from_service_account_info(
-                info, scopes=[GMAIL_SEND_SCOPE]
-            ).with_subject(sender)
-            return creds, None
-        except Exception as e:
-            return None, f"Service-account credential error: {type(e).__name__}: {e}"
-
-    return None, "No Gmail API credentials set (need GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GMAIL_REFRESH_TOKEN)"
-
-
-def _gmail_configured():
-    return bool(
-        (os.environ.get("GOOGLE_CLIENT_ID") and os.environ.get("GOOGLE_CLIENT_SECRET") and os.environ.get("GMAIL_REFRESH_TOKEN"))
-        or os.environ.get("GMAIL_SA_KEY_B64")
-    )
-
-
-def _gmail_api_send(msg, to_email, subject):
-    """Send a prepared EmailMessage via the Gmail API over HTTPS."""
-    import base64 as _b64
-    creds, err = _gmail_credentials()
-    if not creds:
-        logger.error(f"Gmail API not configured: {err}")
-        print(f"[GMAIL_API] config error: {err}", flush=True)
-        return False
-    try:
-        from googleapiclient.discovery import build
-        service = build("gmail", "v1", credentials=creds, cache_discovery=False)
-        raw = _b64.urlsafe_b64encode(msg.as_bytes()).decode()
-        service.users().messages().send(userId="me", body={"raw": raw}).execute()
-        logger.info(f"✅ Gmail API delivered to {to_email} · subject='{subject}'")
-        print("[GMAIL_API] SUCCESS", flush=True)
-        return True
-    except Exception as e:
-        logger.error(f"❌ Gmail API send failed for {to_email}: {e}")
-        print(f"[GMAIL_API] EXCEPTION: {type(e).__name__}: {e}", flush=True)
-        return False
-
-
-def _smtp_send(msg, to_email, subject):
-    """Send a prepared EmailMessage via Google Workspace SMTP (STARTTLS, IPv4)."""
-    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-    port = int(os.environ.get("SMTP_PORT", "587"))
-    username = os.environ.get("SMTP_USERNAME")
-    password = os.environ.get("SMTP_PASSWORD")
-    if not username or not password:
-        logger.error("SMTP_USERNAME/SMTP_PASSWORD not set in environment; email not sent")
-        print("[SMTP] ABORT: SMTP credentials missing", flush=True)
-        return False
-    try:
-        with _force_ipv4():
-            with smtplib.SMTP(host, port, timeout=30) as server:
-                server.ehlo()
-                server.starttls()
-                server.ehlo()
-                server.login(username, password)
-                server.send_message(msg)
-        logger.info(f"✅ SMTP delivered to {to_email} · subject='{subject}'")
-        print("[SMTP] SUCCESS", flush=True)
-        return True
-    except Exception as e:
-        logger.error(f"❌ SMTP send failed for {to_email}: {e}")
-        print(f"[SMTP] EXCEPTION: {type(e).__name__}: {e}", flush=True)
-        return False
+# Required env var:
+#   POSTMARK_SERVER_TOKEN    Postmark *Server* API Token
+#                            (Postmark > Servers > [your server] > API Tokens).
+#                            NOT the Account-level token.
+# Optional env vars:
+#   POSTMARK_FROM            "Display Name <welcome@incomeonline.info>" (defaults below)
+#   POSTMARK_MESSAGE_STREAM  transactional stream id (default "outbound")
+POSTMARK_API_URL = "https://api.postmarkapp.com/email"
+EMAIL_FROM_DEFAULT = "Income Online <welcome@incomeonline.info>"
 
 
 def _send_email(to_email, subject, html, text, attachments=None, extra_headers=None):
     """
-    Send an email. Prefers the Gmail API (HTTPS) when GMAIL_SA_KEY_B64 is set
-    (required on Railway, which blocks outbound SMTP); otherwise falls back to
-    direct SMTP (used in preview / hosts that allow SMTP).
+    Send an email via the Postmark HTTPS API (works on Railway, which blocks SMTP).
 
     Returns True on success, False (with logged error) on any failure.
     `attachments` is an optional list of dicts: [{"filename": str, "content_bytes": bytes}]
     `extra_headers` is an optional dict of additional headers (e.g. List-Unsubscribe).
     """
-    from_addr = os.environ.get("SMTP_FROM") or os.environ.get("SMTP_USERNAME") or SMTP_FROM_DEFAULT
+    token = os.environ.get("POSTMARK_SERVER_TOKEN")
+    from_addr = os.environ.get("POSTMARK_FROM") or EMAIL_FROM_DEFAULT
+    stream = os.environ.get("POSTMARK_MESSAGE_STREAM", "outbound")
 
     print(f"[EMAIL] _send_email called: to={to_email} subject={subject!r} from={from_addr!r}", flush=True)
 
-    msg = EmailMessage()
-    msg["Subject"] = subject
-    msg["From"] = from_addr
-    msg["To"] = to_email
-    msg["Reply-To"] = from_addr
+    if not token:
+        logger.error("POSTMARK_SERVER_TOKEN not set in environment; email not sent")
+        print("[POSTMARK] ABORT: POSTMARK_SERVER_TOKEN missing", flush=True)
+        return False
+
+    payload = {
+        "From": from_addr,
+        "To": to_email,
+        "ReplyTo": from_addr,
+        "Subject": subject,
+        "HtmlBody": html,
+        "TextBody": text or "",
+        "MessageStream": stream,
+    }
+
     if extra_headers:
-        for key, value in extra_headers.items():
-            msg[key] = value
-    msg.set_content(text or "")
-    msg.add_alternative(html, subtype="html")
+        payload["Headers"] = [{"Name": k, "Value": v} for k, v in extra_headers.items()]
 
     if attachments:
-        for a in attachments:
-            msg.add_attachment(
-                a["content_bytes"],
-                maintype="application",
-                subtype="octet-stream",
-                filename=a["filename"],
-            )
+        payload["Attachments"] = [
+            {
+                "Name": a["filename"],
+                "Content": base64.b64encode(a["content_bytes"]).decode("ascii"),
+                "ContentType": "application/octet-stream",
+            }
+            for a in attachments
+        ]
 
-    # Primary transport: Gmail API over HTTPS (works on Railway).
-    if _gmail_configured():
-        return _gmail_api_send(msg, to_email, subject)
-
-    # Fallback: direct SMTP (preview / non-blocking hosts).
-    return _smtp_send(msg, to_email, subject)
+    try:
+        resp = requests.post(
+            POSTMARK_API_URL,
+            json=payload,
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Postmark-Server-Token": token,
+            },
+            timeout=20,
+        )
+        data = resp.json() if resp.content else {}
+        if resp.status_code == 200 and data.get("ErrorCode", 0) == 0:
+            logger.info(f"✅ Postmark delivered to {to_email} · subject='{subject}' · id={data.get('MessageID')}")
+            print("[POSTMARK] SUCCESS", flush=True)
+            return True
+        logger.error(f"❌ Postmark send failed for {to_email}: HTTP {resp.status_code} {data}")
+        print(f"[POSTMARK] ERROR {resp.status_code} code={data.get('ErrorCode')}: {data.get('Message')}", flush=True)
+        return False
+    except Exception as e:
+        logger.error(f"❌ Postmark request error for {to_email}: {e}")
+        print(f"[POSTMARK] EXCEPTION: {type(e).__name__}: {e}", flush=True)
+        return False
 
 
 def load_email_template(template_name):

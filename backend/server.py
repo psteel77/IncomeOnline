@@ -1089,74 +1089,57 @@ async def list_donation_intents(admin_username: str = Depends(get_admin_user)):
     return {"count": len(intents), "intents": intents}
 
 
-@api_router.get("/admin/smtp-diagnostics")
-async def smtp_diagnostics(admin_username: str = Depends(get_admin_user)):
-    """Admin-only — report email transport config + run live credential checks
-    for BOTH the Gmail API (preferred on Railway) and SMTP, returning the exact
-    error for each. Never returns secret values."""
-    import smtplib as _smtplib
-    host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-    port = int(os.environ.get("SMTP_PORT", "587"))
-    username = os.environ.get("SMTP_USERNAME")
-    password = os.environ.get("SMTP_PASSWORD")
-    from_addr = os.environ.get("SMTP_FROM")
-    frontend_url = os.environ.get("FRONTEND_URL")
-    sa_b64 = os.environ.get("GMAIL_SA_KEY_B64")
-    gmail_sender = os.environ.get("GMAIL_SENDER") or username
-    g_client_id = os.environ.get("GOOGLE_CLIENT_ID")
-    g_client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
-    g_refresh = os.environ.get("GMAIL_REFRESH_TOKEN")
-    gmail_oauth_set = bool(g_client_id and g_client_secret and g_refresh)
-    gmail_configured = gmail_oauth_set or bool(sa_b64)
+@api_router.get("/admin/email-diagnostics")
+async def email_diagnostics(admin_username: str = Depends(get_admin_user)):
+    """Admin-only — report Postmark config + send a live API validation request
+    (validates token + sender signature) returning the exact error. Never returns
+    the token value."""
+    token = os.environ.get("POSTMARK_SERVER_TOKEN")
+    from_addr = os.environ.get("POSTMARK_FROM") or "Income Online <welcome@incomeonline.info>"
+    stream = os.environ.get("POSTMARK_MESSAGE_STREAM", "outbound")
 
     presence = {
-        "gmail_oauth_set": gmail_oauth_set,
-        "GOOGLE_CLIENT_ID_set": bool(g_client_id),
-        "GOOGLE_CLIENT_SECRET_set": bool(g_client_secret),
-        "GMAIL_REFRESH_TOKEN_set": bool(g_refresh),
-        "GMAIL_SA_KEY_B64_set": bool(sa_b64),
-        "GMAIL_SENDER": gmail_sender,
-        "SMTP_HOST": host,
-        "SMTP_PORT": port,
-        "SMTP_USERNAME_set": bool(username),
-        "SMTP_USERNAME_value": username,
-        "SMTP_PASSWORD_set": bool(password),
-        "SMTP_PASSWORD_length": len(password) if password else 0,
-        "SMTP_FROM_set": bool(from_addr),
-        "FRONTEND_URL": frontend_url,
-        "active_transport": "gmail_api" if gmail_configured else "smtp",
+        "POSTMARK_SERVER_TOKEN_set": bool(token),
+        "POSTMARK_SERVER_TOKEN_length": len(token) if token else 0,
+        "POSTMARK_FROM": from_addr,
+        "POSTMARK_MESSAGE_STREAM": stream,
+        "FRONTEND_URL": os.environ.get("FRONTEND_URL"),
     }
 
-    # --- Gmail API check: load credentials + obtain a live access token ---
-    gmail_result = {"configured": gmail_configured}
-    if gmail_configured:
-        try:
-            from email_service import _gmail_credentials
-            from google.auth.transport.requests import Request as _GReq
-            creds, err = _gmail_credentials()
-            if not creds:
-                gmail_result.update(ok=False, detail=f"credential load failed: {err}")
-            else:
-                creds.refresh(_GReq())  # exercises domain-wide delegation
-                gmail_result.update(ok=True, detail=f"Gmail API auth OK — can send as {gmail_sender}")
-        except Exception as e:
-            gmail_result.update(ok=False, detail=f"{type(e).__name__}: {e}")
+    if not token:
+        return {"ok": False, "stage": "config", "detail": "POSTMARK_SERVER_TOKEN not set on the server", "presence": presence}
 
-    # --- SMTP check (fallback transport) ---
-    smtp_result = {"configured": bool(username and password)}
-    if username and password:
-        try:
-            from email_service import _force_ipv4
-            with _force_ipv4():
-                with _smtplib.SMTP(host, port, timeout=15) as server:
-                    server.starttls()
-                    server.login(username, password)
-            smtp_result.update(ok=True, detail="SMTP login succeeded")
-        except Exception as e:
-            smtp_result.update(ok=False, detail=f"{type(e).__name__}: {e}")
-
-    overall_ok = bool(gmail_result.get("ok")) or bool(smtp_result.get("ok"))
-    return {"ok": overall_ok, "gmail_api": gmail_result, "smtp": smtp_result, "presence": presence}
+    # Use Postmark's deliverability test address; it validates token + sender
+    # signature without sending a real email to anyone.
+    try:
+        resp = requests.post(
+            "https://api.postmarkapp.com/email",
+            json={
+                "From": from_addr,
+                "To": "test@blackhole.postmarkapp.com",
+                "Subject": "IncomeOnline Postmark connectivity test",
+                "TextBody": "Connectivity test — no real recipient.",
+                "MessageStream": stream,
+            },
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "X-Postmark-Server-Token": token,
+            },
+            timeout=20,
+        )
+        data = resp.json() if resp.content else {}
+        if resp.status_code == 200 and data.get("ErrorCode", 0) == 0:
+            return {"ok": True, "stage": "send", "detail": f"Postmark OK — token valid and sender '{from_addr}' accepted.", "presence": presence}
+        return {
+            "ok": False,
+            "stage": "send",
+            "detail": f"Postmark error {data.get('ErrorCode')}: {data.get('Message')}",
+            "http_status": resp.status_code,
+            "presence": presence,
+        }
+    except Exception as e:
+        return {"ok": False, "stage": "request", "detail": f"{type(e).__name__}: {e}", "presence": presence}
 
 
 
