@@ -38,7 +38,7 @@ const CategoryPreview = () => {
       bgGradient: 'from-amber-50 to-orange-100',
       description: 'Sell products online through various platforms',
       subtitle: 'Start your business:',
-      platforms: ['Poshmark', 'Vinted', 'Zazzle', 'And 12 more...']
+      platforms: ['Vinted', 'Depop', 'Etsy', 'And 12 more...']
     },
     {
       title: 'Teaching & Tutoring',
@@ -56,7 +56,7 @@ const CategoryPreview = () => {
       bgGradient: 'from-indigo-50 to-blue-100',
       description: 'Invest in stocks, crypto, and other assets',
       subtitle: 'Build wealth:',
-      platforms: ['Coinbase', 'eToro', 'Robinhood', 'And 8 more...']
+      platforms: ['Coinbase', 'Trading 212', 'Robinhood', 'And 8 more...']
     },
     {
       title: 'Remote Jobs',
