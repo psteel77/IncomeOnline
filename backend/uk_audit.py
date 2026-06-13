@@ -32,6 +32,8 @@ NON_UK_REMOVE = {
     "Justworks", "Speakwrite", "Zirtual", "Lensa",
     # Freelancing
     "CloudPeeps",
+    # Removed at owner's request (13 June 2026)
+    "Deliveroo", "Just Eat Couriers",
 }
 
 
@@ -63,9 +65,7 @@ UK_REPLACEMENTS = [
     _p("Designhill", "Freelancing", "Design marketplace for logos, websites and branding via contests and direct projects. Open to UK designers.", "£300 - £3,000/month", "Medium", 4.0, "Varies", ["PayPal", "Payoneer"], "https://www.designhill.com/"),
 
     # ---------------- Gig Economy ----------------
-    _p("Deliveroo", "Gig Economy", "UK food-delivery platform. Become a self-employed rider and earn flexible income delivering from local restaurants.", "£10 - £20/hour", "Easy", 4.2, "Weekly", ["Bank Transfer"], "https://riders.deliveroo.co.uk/", True),
-    _p("Just Eat Couriers", "Gig Economy", "Deliver takeaways across the UK as a Just Eat courier with flexible shifts and weekly pay.", "£9 - £15/hour", "Easy", 4.0, "Weekly", ["Bank Transfer"], "https://couriers.just-eat.co.uk/"),
-    _p("Stuart", "Gig Economy", "On-demand delivery network operating across UK cities. Deliver food and parcels by bike, scooter or car.", "£10 - £18/hour", "Easy", 4.1, "Weekly", ["Bank Transfer"], "https://stuart.com/"),
+    _p("Stuart", "Gig Economy", "On-demand delivery network operating across UK cities. Deliver food and parcels by bike, scooter or car.", "£10 - £18/hour", "Easy", 4.1, "Weekly", ["Bank Transfer"], "https://stuart.com/", True),
     _p("Gophr", "Gig Economy", "UK courier platform for same-day deliveries. Choose jobs that suit your vehicle and schedule.", "£10 - £20/hour", "Easy", 4.0, "Weekly", ["Bank Transfer"], "https://gophr.com/couriers/"),
     _p("Evri Courier", "Gig Economy", "Deliver parcels on a self-employed round near you for one of the UK's largest delivery networks.", "£10 - £16/hour", "Easy", 3.8, "Weekly", ["Bank Transfer"], "https://www.evri.com/work-with-us/courier"),
     _p("Bolt", "Gig Economy", "Ride-hailing platform operating in London and other UK cities. Earn driving passengers with low commission.", "£12 - £25/hour", "Easy", 4.1, "Weekly", ["Bank Transfer"], "https://bolt.eu/en-gb/driver/"),
