@@ -122,6 +122,7 @@ const PlatformDetail = () => {
   const {
     name, category, description, earningsPotential, difficulty,
     rating, minPayout, paymentMethods = [], link, ukAvailable,
+    longDescription,
   } = platform;
 
   return (
@@ -222,6 +223,21 @@ const PlatformDetail = () => {
             valueIconColor={ukAvailable ? 'text-green-600' : 'text-rose-500'}
           />
         </div>
+
+        {/* About — ~100-word UK precis */}
+        {longDescription && (
+          <Card className="border-0 shadow-lg mb-8" data-testid="platform-about">
+            <CardContent className="p-6 sm:p-8">
+              <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <Globe2 className="h-5 w-5 text-purple-600" />
+                About {name}
+              </h2>
+              <p className="text-base text-slate-700 leading-relaxed" data-testid="platform-long-description">
+                {longDescription}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Payment methods */}
         {paymentMethods.length > 0 && (

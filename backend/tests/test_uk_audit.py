@@ -70,3 +70,21 @@ def test_uk_replacements_present():
             assert tpl["name"].strip().lower() in names, f"missing {tpl['name']}"
 
     asyncio.run(run())
+
+
+def test_long_descriptions_present():
+    """Every UK replacement has a ~100-word longDescription on its detail page."""
+    async def run():
+        db = _db()
+        await reconcile_uk_platforms(db)
+        for tpl in UK_REPLACEMENTS:
+            doc = await db.platforms.find_one(
+                {"name": tpl["name"]}, {"longDescription": 1}
+            )
+            ld = (doc or {}).get("longDescription")
+            assert ld, f"missing longDescription for {tpl['name']}"
+            assert 60 <= len(ld.split()) <= 140, (
+                f"{tpl['name']} precis is {len(ld.split())} words"
+            )
+
+    asyncio.run(run())

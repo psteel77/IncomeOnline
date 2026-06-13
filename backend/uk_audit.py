@@ -138,6 +138,12 @@ UK_REPLACEMENTS = [
 ]
 
 
+try:
+    from uk_long_descriptions import LONG_DESCRIPTIONS
+except Exception:  # pragma: no cover
+    LONG_DESCRIPTIONS = {}
+
+
 def _norm(name: str) -> str:
     return (name or "").strip().lower()
 
@@ -189,6 +195,14 @@ async def reconcile_uk_platforms(db):
         next_id += 1
         added += 1
 
+    # 3b) Backfill ~100-word UK precis (longDescription) for UK platforms.
+    long_set = 0
+    for name, precis in LONG_DESCRIPTIONS.items():
+        r = await db.platforms.update_one(
+            {"name": name}, {"$set": {"longDescription": precis}}
+        )
+        long_set += r.modified_count
+
     # 4) Recompute category counts.
     categories = await db.categories.find({}).to_list(100)
     for cat in categories:
@@ -204,6 +218,7 @@ async def reconcile_uk_platforms(db):
         "removed_non_uk": removed_non_uk,
         "removed_duplicates": removed_dupes,
         "added_uk_platforms": added,
+        "long_descriptions_set": long_set,
         "total_platforms": total,
         "non_uk_remaining": non_uk_left,
     }

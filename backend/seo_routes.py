@@ -234,6 +234,7 @@ def _render_platform_html(p: dict, related: list) -> str:
     name = _esc(p.get("name"))
     category = _esc(p.get("category"))
     description = _esc(p.get("description"))
+    long_desc = _esc(p.get("longDescription"))
     earnings = _esc(p.get("earningsPotential"))
     difficulty = _esc(p.get("difficulty"))
     rating = p.get("rating")
@@ -260,7 +261,7 @@ def _render_platform_html(p: dict, related: list) -> str:
         "@context": "https://schema.org",
         "@type": "Product",
         "name": p.get("name"),
-        "description": p.get("description"),
+        "description": p.get("longDescription") or p.get("description"),
         "category": p.get("category"),
         "url": canonical,
     }
@@ -301,6 +302,7 @@ def _render_platform_html(p: dict, related: list) -> str:
 <h1>{name}</h1>
 <p><strong>Category:</strong> {category}</p>
 <p>{description}</p>
+{f"<h2>About {name}</h2><p>{long_desc}</p>" if long_desc else ""}
 <ul>
 <li><strong>Earnings potential:</strong> {earnings}</li>
 <li><strong>Difficulty:</strong> {difficulty}</li>
