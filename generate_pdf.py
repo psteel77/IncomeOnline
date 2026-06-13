@@ -2,7 +2,7 @@ import asyncio
 from playwright.async_api import async_playwright
 import os
 
-BASE_URL = "https://income-uk-checkout.preview.emergentagent.com"
+BASE_URL = "https://moneytools-uk.preview.emergentagent.com"
 
 # Main pages to capture (excluding admin and verify which need auth)
 # Note: Donate section is now integrated into the Home page
