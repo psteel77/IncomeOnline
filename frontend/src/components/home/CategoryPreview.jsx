@@ -74,7 +74,7 @@ const CategoryPreview = () => {
       bgGradient: 'from-purple-50 to-indigo-100',
       description: 'Take on flexible gigs and side hustles',
       subtitle: 'Extra income:',
-      platforms: ['TaskRabbit', 'Deliveroo', 'Just Eat', 'And 13 more...']
+      platforms: ['Bolt', 'Stuart', 'Airtasker', 'And 14 more...']
     }
   ];
 
