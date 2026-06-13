@@ -1,0 +1,110 @@
+==========================================================
+  INCOMEONLINE — UK BACKLINKS & DIRECTORY SUBMISSION LIST
+  Goal: earn high-quality UK backlinks to www.incomeonline.info
+  How to use: work top-down. Submit your homepage URL +
+  a short description (paste the one below). Tick each off.
+==========================================================
+
+YOUR SUBMISSION DETAILS (copy/paste these everywhere)
+----------------------------------------------------------
+Site name:   Income Online
+URL:         https://www.incomeonline.info
+Category:    Make Money Online / Side Hustles / Personal Finance (UK)
+Short (155 chars):
+  Discover 200+ UK ways to make money online — vetted side
+  hustles, freelancing, cashback & investing platforms, plus
+  free MoneyRules guides. UK-focused.
+Long (1 paragraph):
+  Income Online is a UK-focused directory of 200+ vetted
+  online earning platforms — from delivery and freelancing to
+  cashback, surveys, tutoring and investing. We also publish
+  free "Wealth Generator" guides covering ISAs, SIPPs, HMRC
+  self-assessment and side-hustle tax basics for UK earners.
+Keywords: make money online UK, side hustles UK, earn money
+  online UK, UK cashback sites, UK freelancing platforms.
+
+==========================================================
+TIER 1 — FREE GENERAL UK BUSINESS DIRECTORIES (do these first)
+==========================================================
+[ ] FreeIndex UK ............ https://www.freeindex.co.uk/  (free, strong UK signal)
+[ ] Yell.com ................ https://www.yell.com/  (free basic listing)
+[ ] Scoot ................... https://www.scoot.co.uk/
+[ ] Cylex UK ................ https://www.cylex-uk.co.uk/
+[ ] Brownbook .............. https://www.brownbook.net/
+[ ] Hotfrog UK ............. https://www.hotfrog.co.uk/
+[ ] The Sunday Times / Touch Local
+[ ] UK Small Business Directory .. https://www.uksmallbusinessdirectory.co.uk/
+[ ] 192.com business ........ https://www.192.com/
+[ ] Thomson Local ........... https://www.thomsonlocal.com/
+[ ] BizWiki UK .............. https://www.bizwiki.co.uk/
+[ ] UKwebdir ................ general UK web directory
+
+==========================================================
+TIER 2 — GLOBAL HIGH-AUTHORITY (free, big domain authority)
+==========================================================
+[ ] Google Business Profile . https://business.google.com/  (set country = UK)
+[ ] Bing Places ............. https://www.bingplaces.com/
+[ ] Crunchbase .............. https://www.crunchbase.com/  (add company)
+[ ] Product Hunt ............ https://www.producthunt.com/  (launch the directory)
+[ ] AlternativeTo ........... list as alternative to other earning sites
+[ ] Trustpilot .............. https://www.trustpilot.com/  (claim profile = review backlink)
+[ ] F6S ..................... https://www.f6s.com/
+[ ] Owler ................... https://www.owler.com/
+
+==========================================================
+TIER 3 — NICHE: MONEY / SIDE-HUSTLE / FINANCE (most relevant)
+==========================================================
+These give the strongest topical relevance for "make money UK".
+[ ] MoneySavingExpert forum . https://forums.moneysavingexpert.com/  (helpful, non-spammy posts w/ link in profile)
+[ ] Reddit r/UKPersonalFinance + r/beermoneyuk  (answer questions, link where genuinely useful)
+[ ] Quora UK ................ answer "side hustle UK" / "make money online UK" questions
+[ ] Side Hustle directories & blogs (guest post pitch — see Tier 5)
+[ ] MoneyMagpie ............. pitch a guest article / resource mention
+[ ] Savvy / UK money blogger roundups ("best side hustle resources")
+
+==========================================================
+TIER 4 — FREE PROFILE / WEB 2.0 BACKLINKS (do-follow or brand signal)
+==========================================================
+[ ] Medium .................. republish 1 guide w/ canonical + link back
+[ ] Tumblr blog ............. short posts linking to guides
+[ ] Gravatar ................ profile w/ site link
+[ ] About.me ................ profile page
+[ ] Mix.com ................. submit guide URLs
+[ ] Flipboard ............... create a "UK Side Hustles" magazine
+[ ] LinkedIn company page ... + post guides
+[ ] Pinterest ............... pin guide graphics (drives referral + link)
+
+==========================================================
+TIER 5 — OUTREACH (highest value, needs an email pitch)
+==========================================================
+Find UK money/side-hustle bloggers and pitch a free guest post or
+ask them to add you to their "useful resources" page.
+Search Google for these footprints (UK):
+[ ] "side hustle" + "write for us"
+[ ] "make money online" + "guest post"
+[ ] "personal finance UK" + "resources" + inurl:links
+[ ] "best side hustle apps UK" (reach out to each ranking blog)
+Pitch template:
+  Subject: Free UK side-hustle resource for your readers
+  Hi [name], I run Income Online — a free UK directory of 200+
+  vetted ways to make money online, plus free ISA/SIPP/tax
+  guides. Would a short guest post or a mention on your
+  resources page be useful for your readers? Happy to write
+  something original. — [you]
+
+==========================================================
+TIER 6 — ON-SITE (already building authority that ATTRACTS links)
+==========================================================
+These live on your own site and are what make people LINK to you:
+[x] 200+ platform pages, each with unique SEO + 100-word precis
+[x] Wealth Generator Guides (ISA vs SIPP, side hustles, freelancing)
+[x] 60 success-story SEO pages
+[x] Internal linking (related platforms) + sitemaps in GSC
+[ ] Add a shareable stat/badge ("Featured on Income Online")
+[ ] Publish 1 link-worthy data piece (e.g. "UK Side Hustle Earnings Report")
+
+==========================================================
+PRIORITY ORDER: Tier 1 → Tier 2 → Tier 3 → Tier 5 outreach.
+Aim for 3–5 quality submissions per week (Google dislikes sudden
+bulk link spikes). Track which ones get indexed in GSC.
+==========================================================
