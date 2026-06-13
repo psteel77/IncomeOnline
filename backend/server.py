@@ -1225,6 +1225,18 @@ async def migrate_currency_gbp(admin_username: str = Depends(get_admin_user)):
     return {"updated": updated, "total_platforms": total, "currency": "GBP"}
 
 
+@api_router.post("/admin/audit-uk-platforms")
+async def audit_uk_platforms(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only, idempotent UK directory clean-up. Removes platforms that UK
+    residents genuinely cannot use, collapses duplicate listings, and backfills
+    hand-curated UK-available platforms so the directory stays at 199+.
+    Safe to run multiple times. Run once on production after deploy.
+    """
+    from uk_audit import reconcile_uk_platforms
+    return await reconcile_uk_platforms(db)
+
+
 @api_router.get("/admin/conversion-stats")
 async def conversion_stats(admin_username: str = Depends(get_admin_user)):
     """
