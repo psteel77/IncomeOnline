@@ -25,7 +25,9 @@
         <!-- hreflang: this site targets UK English -->
         <link rel="alternate" hreflang="en-gb" href="https://www.incomeonline.info/" />
         <link rel="alternate" hreflang="x-default" href="https://www.incomeonline.info/" />
-        <!-- Canonical is set dynamically per page via React Helmet -->
+        <!-- Default canonical (homepage). useSEO updates this per-route in the SPA;
+             crawlers get per-page canonicals via the SSR bot-render routes. -->
+        <link rel="canonical" href="https://www.incomeonline.info/" />
         
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
@@ -60,19 +62,14 @@
         }
         </script>
         
-        <!-- Structured Data - WebSite with SearchAction -->
+        <!-- Structured Data - WebSite -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "Income Online",
             "url": "https://www.incomeonline.info",
-            "description": "Discover 199+ legitimate ways to earn money online",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://www.incomeonline.info/?search={search_term_string}",
-                "query-input": "required name=search_term_string"
-            }
+            "description": "Discover 199+ legitimate ways to earn money online"
         }
         </script>
         
