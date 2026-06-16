@@ -3,6 +3,9 @@
 
 User-agent: *
 Allow: /
+# Belt-and-braces: keep internal search/query-param URLs out of the index
+Disallow: /*?search=
+Disallow: /*&search=
 
 # Allow all major search engines
 User-agent: Googlebot
