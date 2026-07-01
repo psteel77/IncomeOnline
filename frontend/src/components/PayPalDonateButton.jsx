@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { PayPalScriptProvider, PayPalButtons, FUNDING } from '@paypal/react-paypal-js';
-import { CheckCircle, AlertCircle, Mail } from 'lucide-react';
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  FUNDING,
+  usePayPalScriptReducer,
+} from '@paypal/react-paypal-js';
+import { CheckCircle, AlertCircle, Mail, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -13,11 +18,56 @@ const DONATION_CURRENCY = 'GBP';
 // to garbage strings. Backend re-validates via Pydantic EmailStr.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Renders the PayPal button plus loading / failure states so the checkout
+ * area is never a silent blank (ad-blockers / popup-blockers frequently stop
+ * the PayPal SDK from rendering — we surface a clear fallback in that case).
+ */
+const PayPalButtonsWithState = (props) => {
+  const [{ isPending, isRejected }] = usePayPalScriptReducer();
+
+  if (isRejected) {
+    return (
+      <div
+        className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-amber-800 text-sm text-left"
+        data-testid="paypal-sdk-failed"
+      >
+        <p className="font-semibold mb-1">The PayPal button couldn't load.</p>
+        <p>
+          This is usually caused by an ad-blocker or privacy extension blocking
+          PayPal. Please disable it for this site (or try a different browser),
+          then refresh. Need help?{' '}
+          <a href="mailto:welcome@incomeonline.info" className="underline font-medium">
+            Email us
+          </a>{' '}
+          and we'll send you a payment link.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      {isPending && (
+        <div
+          className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm"
+          data-testid="paypal-loading"
+        >
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Loading secure PayPal checkout…
+        </div>
+      )}
+      <PayPalButtons {...props} />
+    </div>
+  );
+};
+
 const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
   const [status, setStatus] = useState('idle'); // idle | processing | success | error
   const [donorEmail, setDonorEmail] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [savedMsg, setSavedMsg] = useState('');
 
   // If the donor lands here from an abandoned-donation recovery email, the
   // URL fragment looks like `#support?resume=foo@bar.com`. Pre-fill so they
@@ -35,11 +85,15 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
     }
   }, []);
 
-  const captureIntent = async () => {
+  // Save the visitor's place. Called both when they finish typing their email
+  // (onBlur) AND when they open the PayPal popup — so "we'll save your place"
+  // works even if they never open PayPal.
+  const saveIntent = async () => {
     const email = recoveryEmail.trim().toLowerCase();
     if (!EMAIL_RE.test(email)) return;
     try {
       await axios.post(`${API}/paypal/intent`, { email });
+      setSavedMsg("Saved — if you don't finish, we'll email you a link to complete.");
     } catch (err) {
       // Non-blocking; the donation flow proceeds even if intent capture fails.
       console.warn('Donation intent capture failed:', err?.message || err);
@@ -91,7 +145,11 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
         <input
           type="email"
           value={recoveryEmail}
-          onChange={(e) => setRecoveryEmail(e.target.value)}
+          onChange={(e) => {
+            setRecoveryEmail(e.target.value);
+            if (savedMsg) setSavedMsg('');
+          }}
+          onBlur={saveIntent}
           placeholder="you@example.com"
           autoComplete="email"
           inputMode="email"
@@ -99,6 +157,16 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500"
         />
       </label>
+
+      {savedMsg && (
+        <p
+          className="flex items-center gap-1.5 text-emerald-700 text-xs -mt-1"
+          data-testid="donation-intent-saved"
+        >
+          <CheckCircle className="h-3.5 w-3.5" />
+          {savedMsg}
+        </p>
+      )}
 
       <PayPalScriptProvider
         options={{
@@ -112,8 +180,7 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           'disable-funding': 'venmo,applepay',
         }}
       >
-        <PayPalButtons
-          fundingSource={FUNDING.PAYPAL}
+        <PayPalButtonsWithState
           fundingSource={FUNDING.PAYPAL}
           style={{ layout: 'vertical', shape: 'rect', label: 'donate' }}
           disabled={status === 'processing'}
@@ -121,7 +188,7 @@ const PayPalDonateButton = ({ amount = DONATION_AMOUNT, onSuccess }) => {
           onClick={(data, actions) => {
             // Fire-and-forget: record the intent the moment they open the
             // PayPal popup. We don't block opening if it fails.
-            captureIntent();
+            saveIntent();
             return actions.resolve();
           }}
           createOrder={async () => {
