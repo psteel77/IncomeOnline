@@ -1282,6 +1282,68 @@ async def conversion_stats(admin_username: str = Depends(get_admin_user)):
     }
 
 
+@api_router.get("/admin/donors")
+async def list_donors(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only — list every PAYING member (the `users` collection plus
+    `expired_users`). These are people who completed a £9.99 / £14.99 PayPal
+    payment, which is distinct from the free-guide/newsletter "subscribers"
+    (`resource_subscribers`). Flags Premium buyers and computes live active /
+    expired status from `expires_at`.
+    """
+    now = datetime.now(timezone.utc)
+
+    premium_emails = {(e or "").lower() for e in await db.premium_purchases.distinct("email")}
+    premium_emails.discard("")
+
+    def _status(expires_at: str) -> str:
+        if not expires_at:
+            return "unknown"
+        try:
+            exp = datetime.fromisoformat(expires_at)
+            if exp.tzinfo is None:
+                exp = exp.replace(tzinfo=timezone.utc)
+            return "active" if exp > now else "expired"
+        except Exception:
+            return "unknown"
+
+    donors = []
+    async for u in db.users.find({}, {"_id": 0, "verification_token": 0}):
+        email = (u.get("email") or "").lower()
+        donors.append({
+            "email": email,
+            "donated_at": u.get("donated_at"),
+            "expires_at": u.get("expires_at"),
+            "last_login": u.get("last_login"),
+            "status": _status(u.get("expires_at")),
+            "is_premium": email in premium_emails,
+        })
+
+    async for u in db.expired_users.find({}, {"_id": 0, "verification_token": 0}):
+        email = (u.get("email") or "").lower()
+        donors.append({
+            "email": email,
+            "donated_at": u.get("original_donated_at") or u.get("donated_at"),
+            "expires_at": u.get("expired_at") or u.get("expires_at"),
+            "last_login": u.get("last_login"),
+            "status": "expired",
+            "is_premium": email in premium_emails,
+        })
+
+    # Newest first (donated_at is an ISO string, so string sort works).
+    donors.sort(key=lambda d: d.get("donated_at") or "", reverse=True)
+
+    active_count = sum(1 for d in donors if d["status"] == "active")
+    return {
+        "total": len(donors),
+        "active": active_count,
+        "expired": len(donors) - active_count,
+        "premium": sum(1 for d in donors if d["is_premium"]),
+        "donors": donors,
+    }
+
+
+
 # -----------------------------------------------------------------------------
 # Hero-pill lead capture
 # -----------------------------------------------------------------------------
@@ -1380,6 +1442,9 @@ async def leads_by_source(admin_username: str = Depends(get_admin_user)):
         "newsletter_opt_in_count": opted_in,
         "sources": sources,
     }
+
+
+@api_router.post("/auth/add-donor")
 async def add_donor(
     request: LoginRequest,
     admin_username: str = Depends(get_admin_user),

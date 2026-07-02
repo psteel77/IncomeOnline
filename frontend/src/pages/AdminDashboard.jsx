@@ -13,6 +13,7 @@ import BroadcastCard from '../components/admin/BroadcastCard';
 import RecoveryStatsCard from '../components/admin/RecoveryStatsCard';
 import LeadSourcesCard from '../components/admin/LeadSourcesCard';
 import PremiumPurchasesCard from '../components/admin/PremiumPurchasesCard';
+import DonorsCard from '../components/admin/DonorsCard';
 import GuidesManager from '../components/admin/GuidesManager';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -311,6 +312,9 @@ const AdminDashboard = () => {
 
         {/* Wealth Generator Guides — blog manager (write/AI-draft/publish) */}
         <GuidesManager />
+
+        {/* Paying members (donors) — everyone who paid £9.99/£14.99 via PayPal */}
+        <DonorsCard />
 
         {/* Subscribers (captured emails from Free Resources gateway) */}
         <SubscribersCard />
