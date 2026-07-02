@@ -780,6 +780,108 @@ class CreateOrderRequest(BaseModel):
     kind: str = "donation"  # 'donation' (£9.99 access) | 'premium' (£14.99 bundle)
 
 
+# -----------------------------------------------------------------------------
+# PayPal payment hardening — durable capture ledger + idempotent fulfillment
+# -----------------------------------------------------------------------------
+# Every server-side capture is written to `db.paypal_payments` (keyed by the
+# unique PayPal order_id) BEFORE any step that can fail. This guarantees a
+# captured payment is never lost: if account-creation throws, the record
+# survives with fulfillment_status != 'fulfilled' and can be reconciled from
+# the admin dashboard. Re-calling a register endpoint for an already-fulfilled
+# order is a no-op (idempotent) so no double-grant / double-charge occurs.
+
+def _parse_paypal_capture(order_id: str, kind: str, order: dict) -> dict:
+    """Extract the money/payer fields from a captured PayPal order dict."""
+    status = (order.get("status") or "").upper()
+    pu = (order.get("purchase_units") or [{}])[0] or {}
+    caps = (pu.get("payments") or {}).get("captures") or [{}]
+    cap = caps[0] or {}
+    amt = cap.get("amount") or {}
+    return {
+        "order_id": order_id,
+        "kind": kind,
+        "capture_id": cap.get("id"),
+        "amount": str(amt.get("value", "")),
+        "currency": (amt.get("currency_code") or "").upper(),
+        "payer_email": ((order.get("payer") or {}).get("email_address") or "").lower(),
+        "paypal_status": status,
+    }
+
+
+async def _record_capture(rec: dict) -> None:
+    """Upsert the durable capture record. Sets fulfillment_status='captured'
+    only on first insert so we never regress a later status."""
+    now = datetime.now(timezone.utc).isoformat()
+    await db.paypal_payments.update_one(
+        {"order_id": rec["order_id"]},
+        {
+            "$set": {**rec, "recorded_at": now},
+            "$setOnInsert": {"fulfillment_status": "captured", "created_at": now},
+        },
+        upsert=True,
+    )
+
+
+async def _set_fulfillment_status(order_id: str, status: str, **extra) -> None:
+    payload = {"fulfillment_status": status, **extra}
+    if status == "fulfilled":
+        payload["fulfilled_at"] = datetime.now(timezone.utc).isoformat()
+    await db.paypal_payments.update_one({"order_id": order_id}, {"$set": payload})
+
+
+async def _mark_intents_converted(email: str) -> None:
+    """A completed purchaser must never get an abandoned-donation recovery email."""
+    if not email:
+        return
+    try:
+        await db.donation_intents.update_many(
+            {"email": email.lower(), "status": {"$in": ["pending", "recovery_sent"]}},
+            {"$set": {"status": "converted", "converted_at": datetime.now(timezone.utc).isoformat()}},
+        )
+    except Exception as e:
+        logging.warning(f"Could not mark donation intent converted for {email}: {e}")
+
+
+async def _verify_and_capture(order_id: str, kind: str, expected_amount: str) -> Optional[dict]:
+    """
+    Shared front half of both register endpoints. Returns:
+      - {"already_fulfilled": True, ...record...} if this order is already done (idempotent)
+      - {"already_fulfilled": False, ...parsed capture...} once captured + verified OK
+    Raises HTTPException on any hard failure, AFTER durably recording the capture
+    and flagging it for admin review so money is never silently discarded.
+    """
+    order_id = (order_id or "").strip()
+    if not order_id:
+        raise HTTPException(status_code=400, detail="order_id is required")
+
+    # Idempotency: already fully processed → do not re-capture or re-grant.
+    existing = await db.paypal_payments.find_one({"order_id": order_id})
+    if existing and existing.get("fulfillment_status") == "fulfilled":
+        return {"already_fulfilled": True, **{k: existing.get(k) for k in ("payer_email", "kind", "amount", "currency")}}
+
+    order = _capture_paypal_order(order_id)
+    if not order:
+        raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
+
+    rec = _parse_paypal_capture(order_id, kind, order)
+    # Persist BEFORE any verification/fulfillment so the payment is never lost.
+    await _record_capture(rec)
+
+    if rec["paypal_status"] != "COMPLETED":
+        await _set_fulfillment_status(order_id, "needs_review", review_reason=f"status={rec['paypal_status']}")
+        raise HTTPException(status_code=400, detail=f"PayPal order is not in COMPLETED state (status={rec['paypal_status']})")
+
+    if rec["currency"] != "GBP" or rec["amount"] != expected_amount:
+        await _set_fulfillment_status(order_id, "needs_review", review_reason=f"amount {rec['currency']} {rec['amount']} != GBP {expected_amount}")
+        raise HTTPException(status_code=400, detail=f"Amount {rec['currency']} {rec['amount']} does not match expected {expected_amount} GBP")
+
+    if not rec["payer_email"]:
+        await _set_fulfillment_status(order_id, "needs_review", review_reason="no payer email on order")
+        raise HTTPException(status_code=400, detail="PayPal order has no payer email")
+
+    return {"already_fulfilled": False, **rec}
+
+
 @api_router.post("/paypal/create-order")
 async def create_paypal_order(request: CreateOrderRequest):
     """Create the PayPal order server-side and return its id to the SDK's
@@ -806,70 +908,34 @@ class PayPalRegisterRequest(BaseModel):
 @api_router.post("/paypal/register-donor")
 async def register_donor_via_paypal(request: PayPalRegisterRequest):
     """
-    Public endpoint called by the PayPal SDK onApprove callback. We re-fetch
-    the order from PayPal server-side (so we trust PayPal's response, not
-    whatever the browser sent) to confirm:
-      - the order was actually completed
-      - the captured amount matches what we charge
-      - the payer email comes from PayPal directly
-
-    Only then do we create / renew the donor record.
+    Public endpoint called by the PayPal SDK onApprove callback. Captures +
+    verifies the order server-side (durably recording the capture first), then
+    grants access. Idempotent and crash-safe: a captured payment is never lost
+    even if account-creation fails (it surfaces in Admin → needs-attention).
     """
+    verified = await _verify_and_capture(
+        request.order_id, "donation", EXPECTED_DONATION_USD
+    )
     order_id = (request.order_id or "").strip()
-    if not order_id:
-        raise HTTPException(status_code=400, detail="order_id is required")
+    payer_email = verified["payer_email"]
 
-    order = _capture_paypal_order(order_id)
-    if not order:
-        raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
+    if verified["already_fulfilled"]:
+        return {"success": True, "message": "Access already active for this payment", "email": payer_email, "order_id": order_id}
 
-    status = (order.get("status") or "").upper()
-    if status != "COMPLETED":
-        raise HTTPException(
-            status_code=400,
-            detail=f"PayPal order is not in COMPLETED state (status={status})",
-        )
-
-    purchase_units = order.get("purchase_units") or []
-    if not purchase_units:
-        raise HTTPException(status_code=400, detail="PayPal order has no purchase units")
-
-    captures = (purchase_units[0].get("payments") or {}).get("captures") or []
-    if not captures:
-        raise HTTPException(status_code=400, detail="PayPal order has no captures")
-
-    capture = captures[0]
-    amount = capture.get("amount") or {}
-    paid_value = str(amount.get("value", ""))
-    paid_currency = (amount.get("currency_code") or "").upper()
-
-    if paid_currency != "GBP" or paid_value != EXPECTED_DONATION_USD:
-        logging.warning(
-            f"PayPal order {order_id} amount mismatch: {paid_currency} {paid_value} "
-            f"(expected GBP {EXPECTED_DONATION_USD})"
-        )
-        raise HTTPException(
-            status_code=400,
-            detail=f"Donation amount {paid_currency} {paid_value} does not match expected {EXPECTED_DONATION_USD} GBP",
-        )
-
-    payer_email = (order.get("payer") or {}).get("email_address")
-    if not payer_email:
-        raise HTTPException(status_code=400, detail="PayPal order has no payer email")
-
-    result = await _upsert_donor(payer_email)
-
-    # Mark any matching donation intent as converted so we never send a
-    # recovery email to someone who actually completed the donation.
+    # Fulfillment — wrapped so a failure never loses the (already captured) money.
     try:
-        await db.donation_intents.update_many(
-            {"email": payer_email.lower(), "status": {"$in": ["pending", "recovery_sent"]}},
-            {"$set": {"status": "converted", "converted_at": datetime.now(timezone.utc).isoformat()}},
-        )
+        result = await _upsert_donor(payer_email)
+        await _mark_intents_converted(payer_email)
+        await _set_fulfillment_status(order_id, "fulfilled")
     except Exception as e:
-        logging.warning(f"Could not mark donation intent converted for {payer_email}: {e}")
+        logging.exception(f"Fulfillment failed for captured donation {order_id}")
+        await _set_fulfillment_status(order_id, "fulfillment_failed", fulfillment_error=str(e)[:500])
+        raise HTTPException(
+            status_code=500,
+            detail="We received your payment but hit a snag activating your access. Our team has been notified and will activate it shortly — please contact support if you don't get your welcome email.",
+        )
 
-    return {**result, "email": payer_email.lower(), "order_id": order_id}
+    return {**result, "email": payer_email, "order_id": order_id}
 
 
 class PayPalPremiumRequest(BaseModel):
@@ -880,85 +946,60 @@ class PayPalPremiumRequest(BaseModel):
 async def register_premium_via_paypal(request: PayPalPremiumRequest):
     """
     Public endpoint called by the Premium PayPal SDK onApprove callback.
-    Verifies the £14.99 order with PayPal server-side, then:
-      - grants 12-month platform access (same as the £9.99 plan), AND
-      - issues a one-time download token for the Wealth Generator bundle ZIP,
-      - emails the buyer their download link.
-    The browser cannot fake a purchase (the order is re-fetched from PayPal).
+    Captures + verifies the £14.99 order server-side (durably recorded first),
+    grants 12-month access, issues a one-time bundle download token and emails
+    it. Idempotent and crash-safe (see /register-donor).
     """
+    verified = await _verify_and_capture(
+        request.order_id, "premium", PREMIUM_PACK_USD
+    )
     order_id = (request.order_id or "").strip()
-    if not order_id:
-        raise HTTPException(status_code=400, detail="order_id is required")
+    payer_email = verified["payer_email"]
 
-    order = _capture_paypal_order(order_id)
-    if not order:
-        raise HTTPException(status_code=502, detail="Could not verify order with PayPal")
+    # Idempotent replay — return the existing download token instead of issuing
+    # a second one / granting twice.
+    if verified["already_fulfilled"]:
+        existing = await db.premium_purchases.find_one({"paypal_order_id": order_id})
+        token = existing.get("token") if existing else None
+        resp = {"success": True, "message": "Premium already active for this payment", "email": payer_email, "order_id": order_id}
+        if token:
+            resp.update({"download_url": f"/api/pdf/premium-pack?token={token}", "token": token})
+        return resp
 
-    status = (order.get("status") or "").upper()
-    if status != "COMPLETED":
-        raise HTTPException(
-            status_code=400,
-            detail=f"PayPal order is not in COMPLETED state (status={status})",
-        )
-
-    purchase_units = order.get("purchase_units") or []
-    if not purchase_units:
-        raise HTTPException(status_code=400, detail="PayPal order has no purchase units")
-
-    captures = (purchase_units[0].get("payments") or {}).get("captures") or []
-    if not captures:
-        raise HTTPException(status_code=400, detail="PayPal order has no captures")
-
-    capture = captures[0]
-    amount = capture.get("amount") or {}
-    paid_value = str(amount.get("value", ""))
-    paid_currency = (amount.get("currency_code") or "").upper()
-
-    if paid_currency != "GBP" or paid_value != PREMIUM_PACK_USD:
-        logging.warning(
-            f"PayPal premium order {order_id} amount mismatch: {paid_currency} {paid_value} "
-            f"(expected GBP {PREMIUM_PACK_USD})"
-        )
-        raise HTTPException(
-            status_code=400,
-            detail=f"Premium amount {paid_currency} {paid_value} does not match expected {PREMIUM_PACK_USD} GBP",
-        )
-
-    payer_email = (order.get("payer") or {}).get("email_address")
-    if not payer_email:
-        raise HTTPException(status_code=400, detail="PayPal order has no payer email")
-    payer_email = payer_email.lower()
-
-    # Grant 12-month platform access (creates / renews the donor)
-    result = await _upsert_donor(payer_email)
-
-    # A completed purchaser must never get a recovery email
     try:
-        await db.donation_intents.update_many(
-            {"email": payer_email, "status": {"$in": ["pending", "recovery_sent"]}},
-            {"$set": {"status": "converted", "converted_at": datetime.now(timezone.utc).isoformat()}},
-        )
-    except Exception as e:
-        logging.warning(f"Could not mark donation intent converted for {payer_email}: {e}")
+        result = await _upsert_donor(payer_email)
+        await _mark_intents_converted(payer_email)
 
-    # Issue a one-time download token for the Premium Pack ZIP
-    now = datetime.now(timezone.utc).isoformat()
-    token = str(uuid.uuid4())
-    await db.premium_purchases.insert_one({
-        "id": str(uuid.uuid4()),
-        "token": token,
-        "email": payer_email,
-        "paypal_order_id": order_id,
-        "amount": PREMIUM_PACK_USD,
-        "currency": "GBP",
-        "created_at": now,
-        "download_count": 0,
-        "verified": True,
-    })
+        # Issue a one-time download token (only if we haven't already for this order).
+        existing = await db.premium_purchases.find_one({"paypal_order_id": order_id})
+        if existing and existing.get("token"):
+            token = existing["token"]
+        else:
+            token = str(uuid.uuid4())
+            await db.premium_purchases.insert_one({
+                "id": str(uuid.uuid4()),
+                "token": token,
+                "email": payer_email,
+                "paypal_order_id": order_id,
+                "amount": PREMIUM_PACK_USD,
+                "currency": "GBP",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "download_count": 0,
+                "verified": True,
+            })
+        await _set_fulfillment_status(order_id, "fulfilled")
+    except Exception as e:
+        logging.exception(f"Fulfillment failed for captured premium {order_id}")
+        await _set_fulfillment_status(order_id, "fulfillment_failed", fulfillment_error=str(e)[:500])
+        raise HTTPException(
+            status_code=500,
+            detail="We received your payment but hit a snag activating your Premium access. Our team has been notified and will activate it shortly — please contact support if you don't get your email.",
+        )
+
     download_path = f"/api/pdf/premium-pack?token={token}"
     download_url_abs = f"{BACKEND_PUBLIC_URL}{download_path}"
 
-    # Email the delivery link (best-effort)
+    # Email the delivery link (best-effort — never fail the request over email).
     try:
         send_premium_pack_email(payer_email, download_url_abs)
     except Exception as e:
@@ -1341,6 +1382,70 @@ async def list_donors(admin_username: str = Depends(get_admin_user)):
         "premium": sum(1 for d in donors if d["is_premium"]),
         "donors": donors,
     }
+
+
+@api_router.get("/admin/paypal-payments")
+async def list_paypal_payments(admin_username: str = Depends(get_admin_user)):
+    """
+    Admin-only — the durable PayPal capture ledger. Surfaces payments that were
+    captured (money taken) but NOT successfully fulfilled, so a "paid but no
+    access" case can never go unnoticed and can be reconciled in one click.
+    """
+    ATTENTION = ["captured", "needs_review", "fulfillment_failed"]
+    payments = []
+    async for p in db.paypal_payments.find({}, {"_id": 0}).sort("recorded_at", -1):
+        payments.append(p)
+    needs_attention = [p for p in payments if p.get("fulfillment_status") in ATTENTION]
+    return {
+        "total": len(payments),
+        "fulfilled": sum(1 for p in payments if p.get("fulfillment_status") == "fulfilled"),
+        "needs_attention_count": len(needs_attention),
+        "needs_attention": needs_attention,
+        "payments": payments,
+    }
+
+
+class FulfillRequest(BaseModel):
+    email: Optional[EmailStr] = None  # override if the payer email is wrong/missing
+
+
+@api_router.post("/admin/paypal-payments/{order_id}/fulfill")
+async def fulfill_paypal_payment(
+    order_id: str,
+    request: FulfillRequest = FulfillRequest(),
+    admin_username: str = Depends(get_admin_user),
+):
+    """
+    Admin-only — reconcile a captured-but-unfulfilled payment: grant the buyer
+    12-month access (using the recorded payer email, or an override) and mark
+    the ledger record fulfilled. Idempotent.
+    """
+    rec = await db.paypal_payments.find_one({"order_id": order_id}, {"_id": 0})
+    if not rec:
+        raise HTTPException(status_code=404, detail="No captured payment found for that order id")
+
+    email = (request.email or rec.get("payer_email") or "").strip().lower()
+    if not email:
+        raise HTTPException(status_code=400, detail="No email on record — provide one to grant access")
+
+    result = await _upsert_donor(email)
+    await _mark_intents_converted(email)
+
+    # Premium buyers also need their bundle token if it was never issued.
+    if rec.get("kind") == "premium" and not await db.premium_purchases.find_one({"paypal_order_id": order_id}):
+        token = str(uuid.uuid4())
+        await db.premium_purchases.insert_one({
+            "id": str(uuid.uuid4()), "token": token, "email": email,
+            "paypal_order_id": order_id, "amount": PREMIUM_PACK_USD, "currency": "GBP",
+            "created_at": datetime.now(timezone.utc).isoformat(), "download_count": 0, "verified": True,
+        })
+        try:
+            send_premium_pack_email(email, f"{BACKEND_PUBLIC_URL}/api/pdf/premium-pack?token={token}")
+        except Exception as e:
+            logging.warning(f"Premium delivery email failed during reconcile for {email}: {e}")
+
+    await _set_fulfillment_status(order_id, "fulfilled", reconciled_by=admin_username, reconciled_email=email)
+    return {"success": True, "message": f"Access granted to {email}", "email": email, "order_id": order_id, "detail": result}
 
 
 

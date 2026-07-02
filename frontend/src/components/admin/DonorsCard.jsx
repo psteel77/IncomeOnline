@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Download, Loader2, RefreshCw, CreditCard, Search, UserPlus, CheckCircle2, AlertCircle, Crown } from 'lucide-react';
+import { Download, Loader2, RefreshCw, CreditCard, Search, UserPlus, CheckCircle2, AlertCircle, Crown, AlertTriangle } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -16,20 +16,29 @@ const DonorsCard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [data, setData] = useState({ total: 0, active: 0, expired: 0, premium: 0, donors: [] });
+  const [attention, setAttention] = useState([]); // captured-but-unfulfilled payments
+  const [fulfilling, setFulfilling] = useState('');
   const [filter, setFilter] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [adding, setAdding] = useState(false);
   const [addMsg, setAddMsg] = useState(null); // { ok: bool, text: string }
 
+  const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem('adminToken')}` });
+
   const load = async () => {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch(`${API_URL}/api/admin/donors`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` },
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setData(await res.json());
+      const [dRes, pRes] = await Promise.all([
+        fetch(`${API_URL}/api/admin/donors`, { headers: authHeaders() }),
+        fetch(`${API_URL}/api/admin/paypal-payments`, { headers: authHeaders() }),
+      ]);
+      if (!dRes.ok) throw new Error(`HTTP ${dRes.status}`);
+      setData(await dRes.json());
+      if (pRes.ok) {
+        const pj = await pRes.json();
+        setAttention(pj.needs_attention || []);
+      }
     } catch (e) {
       setError(e.message || 'Failed to load donors');
     } finally {
@@ -38,6 +47,25 @@ const DonorsCard = () => {
   };
 
   useEffect(() => { load(); }, []);
+
+  const fulfill = async (orderId) => {
+    setFulfilling(orderId);
+    try {
+      const res = await fetch(`${API_URL}/api/admin/paypal-payments/${orderId}/fulfill`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        body: JSON.stringify({}),
+      });
+      const json = await res.json();
+      if (!res.ok || json.success === false) throw new Error(json.detail || json.message || `HTTP ${res.status}`);
+      setAddMsg({ ok: true, text: json.message || 'Access granted.' });
+      load();
+    } catch (e) {
+      setAddMsg({ ok: false, text: e.message || 'Fulfil failed' });
+    } finally {
+      setFulfilling('');
+    }
+  };
 
   const addDonor = async () => {
     const email = newEmail.trim().toLowerCase();
@@ -126,6 +154,34 @@ const DonorsCard = () => {
         </div>
       </CardHeader>
       <CardContent className="space-y-4 border-t pt-4">
+        {attention.length > 0 && (
+          <div className="bg-rose-50 border-2 border-rose-300 rounded-lg p-3" data-testid="payments-needing-attention">
+            <p className="text-sm font-bold text-rose-800 flex items-center gap-1.5 mb-2">
+              <AlertTriangle className="h-4 w-4" /> {attention.length} payment{attention.length > 1 ? 's' : ''} captured on PayPal but not activated
+            </p>
+            <div className="space-y-2">
+              {attention.map((p) => (
+                <div key={p.order_id} className="flex flex-wrap items-center justify-between gap-2 bg-white rounded-md border border-rose-200 px-3 py-2" data-testid="attention-row">
+                  <div className="text-xs text-slate-700 min-w-0">
+                    <span className="font-semibold break-all">{p.payer_email || '(no email on order)'}</span>
+                    <span className="text-slate-400"> · {p.kind === 'premium' ? '£14.99 Premium' : '£9.99'} · {p.currency} {p.amount} · {(p.review_reason || p.fulfillment_status)}</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => fulfill(p.order_id)}
+                    disabled={!p.payer_email || fulfilling === p.order_id}
+                    data-testid="fulfill-payment-btn"
+                    className="bg-rose-600 hover:bg-rose-700"
+                  >
+                    {fulfilling === p.order_id ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-1" />}
+                    Grant &amp; activate
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-6 text-sm">
           <div><span className="font-medium">Total:</span> <span data-testid="donors-total">{data.total || 0}</span></div>
           <div className="text-emerald-700"><span className="font-medium">Active:</span> <span data-testid="donors-active">{data.active || 0}</span></div>
