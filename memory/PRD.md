@@ -19,6 +19,16 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Database**: MongoDB Atlas
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
+### Completed (3 Jul 2026 — paid members no longer shown payment demands) [PENDING DEPLOY]
+- **Bug (user report):** a logged-in / already-paid member still saw "Get full access" (guide pages) and the "Make a Donation" PayPal card (`/donate` + homepage), i.e. a demand for money after they'd paid. Root cause: those CTAs didn't check `isAuthenticated`.
+- **Fixes (all auth-gated via `useAuth`):**
+  - `components/home/DonationSection.jsx` (homepage `#support`) → renders a green **"You have full access"** card for members instead of the PayPal payment card.
+  - `pages/Donate.jsx` (`/donate` — the page "Get full access" links to) → members see **"You already have full access"** (signed-in email + "Browse all 199+ platforms"), non-members see the normal donation card.
+  - `pages/GuideDetail.jsx` → the "Want the full toolkit? £9.99" band becomes a member "You have full access" band for logged-in users.
+  - Confirmed `CategoryPreview` + `PlatformPreview` locks are already gated to non-members in `Home.jsx` (lines 634/639).
+- Verified in preview with a real member JWT: `/donate` shows the member card (no "Make a Donation"), guide page shows member CTA (no paywall). Non-members unaffected.
+
+
 ### Completed (1 Jul 2026 — PayPal register flow HARDENED: crash-safe + idempotent) [PENDING DEPLOY]
 - **Root problem solved:** a PayPal payment could be *captured* (money moved) but the account-creation step could fail → "paid but no access". Rebuilt `register-donor` + `register-premium` around a durable ledger so a captured payment is NEVER silently lost.
 - **New durable ledger** `db.paypal_payments` (keyed by unique `order_id`). Shared helper `_verify_and_capture(order_id, kind, expected_amount)`: (1) idempotency — if the order is already `fulfilled`, returns immediately WITHOUT re-capturing/re-granting; (2) captures server-side; (3) **records the capture (`_record_capture`) BEFORE any verification/fulfillment**; (4) verifies COMPLETED + GBP + exact amount + payer email — on any failure it flags the ledger row `needs_review` (money preserved) instead of discarding. Fulfillment (`_upsert_donor` + `_mark_intents_converted`, premium adds bundle token/email) is wrapped so a throw sets `fulfillment_failed` and returns a graceful "payment received, activating shortly" message rather than 500-and-lose-money. Premium replays are idempotent (reuse existing token, no duplicate `premium_purchases`).

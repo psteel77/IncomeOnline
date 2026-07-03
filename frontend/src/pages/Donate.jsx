@@ -1,10 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Heart, Gift, Star } from 'lucide-react';
+import { Heart, Gift, Star, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import PayPalDonateButton from '../components/PayPalDonateButton';
 
 const Donate = () => {
+  const { isAuthenticated, userEmail, loading: authLoading } = useAuth();
+  const isMember = !authLoading && isAuthenticated;
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-purple-50/30 to-white">
       <Helmet>
@@ -92,44 +95,71 @@ const Donate = () => {
           </Card>
         </div>
 
-        {/* PayPal Button Section */}
+        {/* PayPal Button Section — members already have access, so show a
+            confirmation instead of a payment demand */}
         <div className="max-w-3xl mx-auto">
-          <Card className="bg-gradient-to-br from-white to-purple-50 shadow-xl border-2 border-purple-300">
-            <CardHeader className="text-center px-8 py-8">
-              <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
-                Make a Donation
-              </CardTitle>
-              <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
-                Every contribution helps us grow and improve
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-8 py-8">
-              <div className="bg-white rounded-xl p-8 border-2 border-purple-200">
-                <div className="text-center mb-6">
-                  <p className="text-slate-700 font-medium text-lg leading-relaxed">
-                    Click the button below to donate securely via PayPal
-                  </p>
+          {isMember ? (
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 shadow-xl border-2 border-emerald-300" data-testid="donate-member-card">
+              <CardHeader className="text-center px-8 py-8">
+                <div className="mx-auto w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                  <CheckCircle2 className="h-8 w-8 text-emerald-600" />
                 </div>
-                
-                {/* PayPal Button (JS SDK + onApprove → auto-registers donor) */}
-                <div className="flex justify-center items-center min-h-[60px]">
-                  <div className="w-full max-w-md">
-                    <PayPalDonateButton />
+                <CardTitle className="text-3xl md:text-4xl text-emerald-700 mb-3">
+                  You already have full access
+                </CardTitle>
+                <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
+                  {userEmail ? <>Signed in as <span className="font-semibold">{userEmail}</span>. </> : null}
+                  Your 12-month membership is active — no further payment needed.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-8 pb-8 text-center">
+                <a
+                  href="/#platforms"
+                  data-testid="donate-member-browse-btn"
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-full transition-colors shadow-lg"
+                >
+                  Browse all 199+ platforms <ArrowRight className="h-4 w-4" />
+                </a>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="bg-gradient-to-br from-white to-purple-50 shadow-xl border-2 border-purple-300">
+              <CardHeader className="text-center px-8 py-8">
+                <CardTitle className="text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-amber-500 mb-4">
+                  Make a Donation
+                </CardTitle>
+                <CardDescription className="text-lg md:text-xl text-slate-700 leading-relaxed">
+                  Every contribution helps us grow and improve
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="px-8 py-8">
+                <div className="bg-white rounded-xl p-8 border-2 border-purple-200">
+                  <div className="text-center mb-6">
+                    <p className="text-slate-700 font-medium text-lg leading-relaxed">
+                      Click the button below to donate securely via PayPal
+                    </p>
+                  </div>
+
+                  {/* PayPal Button (JS SDK + onApprove → auto-registers donor) */}
+                  <div className="flex justify-center items-center min-h-[60px]">
+                    <div className="w-full max-w-md">
+                      <PayPalDonateButton />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Security Notice */}
-              <div className="mt-6 text-center px-4">
-                <p className="text-base text-slate-600 mb-2">
-                  🔒 Secure payment processing by PayPal
-                </p>
-                <p className="text-sm text-slate-500">
-                  We never see or store your payment information
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                {/* Security Notice */}
+                <div className="mt-6 text-center px-4">
+                  <p className="text-base text-slate-600 mb-2">
+                    🔒 Secure payment processing by PayPal
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    We never see or store your payment information
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Thank You Message */}

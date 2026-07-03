@@ -6,7 +6,8 @@ import remarkGfm from 'remark-gfm';
 import useSEO from '../hooks/useSEO';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { ArrowLeft, Clock, Loader2, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Clock, Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import GuideLeadCapture from '../components/guides/GuideLeadCapture';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -33,6 +34,7 @@ const mdComponents = {
 const GuideDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [guide, setGuide] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,14 +142,26 @@ const GuideDetail = () => {
         {/* Email lead-magnet — funnels guide readers into the newsletter */}
         <GuideLeadCapture />
 
-        {/* CTA */}
-        <div className="mt-10 rounded-2xl bg-gradient-to-r from-purple-700 to-pink-600 p-6 sm:p-8 text-white text-center" data-testid="guide-cta">
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">Want the full toolkit?</h2>
-          <p className="opacity-90 mb-5">Unlock 199+ verified UK earning platforms for a one-time £9.99/year.</p>
-          <Button size="lg" className="bg-white hover:bg-gray-100 text-purple-700 font-bold px-8" onClick={() => navigate('/donate')}>
-            Get full access
-          </Button>
-        </div>
+        {/* CTA — members already have access, so never show them a paywall */}
+        {!authLoading && isAuthenticated ? (
+          <div className="mt-10 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-6 sm:p-8 text-white text-center" data-testid="guide-cta-member">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2 flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-6 w-6" /> You have full access
+            </h2>
+            <p className="opacity-90 mb-5">Your membership is active — explore all 199+ verified UK earning platforms.</p>
+            <Button size="lg" className="bg-white hover:bg-gray-100 text-emerald-700 font-bold px-8" onClick={() => navigate('/#platforms')}>
+              Browse all platforms
+            </Button>
+          </div>
+        ) : (
+          <div className="mt-10 rounded-2xl bg-gradient-to-r from-purple-700 to-pink-600 p-6 sm:p-8 text-white text-center" data-testid="guide-cta">
+            <h2 className="text-xl sm:text-2xl font-bold mb-2">Want the full toolkit?</h2>
+            <p className="opacity-90 mb-5">Unlock 199+ verified UK earning platforms for a one-time £9.99/year.</p>
+            <Button size="lg" className="bg-white hover:bg-gray-100 text-purple-700 font-bold px-8" onClick={() => navigate('/donate')}>
+              Get full access
+            </Button>
+          </div>
+        )}
       </article>
 
       {related.length > 0 && (

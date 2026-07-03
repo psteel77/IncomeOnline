@@ -1,9 +1,41 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Shield, Heart, Lock, Sparkles } from 'lucide-react';
+import { Shield, Heart, Lock, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import PayPalDonateButton from '../PayPalDonateButton';
 
 const DonationSection = () => {
+  const { isAuthenticated, userEmail, loading } = useAuth();
+
+  // Existing members have already paid — never show them a payment demand.
+  if (!loading && isAuthenticated) {
+    return (
+      <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full" data-testid="member-access-section">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-teal-900 to-emerald-900"></div>
+        <div className="max-w-3xl mx-auto relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
+            <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+            <span className="text-sm font-medium text-white/90">You're a member</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            You have <span className="gradient-text-warm">full access</span>
+          </h2>
+          <p className="text-lg text-white/80 max-w-2xl mx-auto mb-8">
+            {userEmail ? <>Signed in as <span className="font-semibold text-white">{userEmail}</span>. </> : null}
+            Your 12-month access is active — all 199+ verified UK earning platforms are unlocked. No further payment needed.
+          </p>
+          <a
+            href="#platforms"
+            data-testid="member-browse-platforms-btn"
+            className="inline-flex items-center gap-2 bg-white text-emerald-800 font-bold px-6 py-3 rounded-full hover:bg-emerald-50 transition-colors shadow-lg"
+          >
+            Browse all platforms <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full">
       {/* Background */}
