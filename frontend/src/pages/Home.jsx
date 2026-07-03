@@ -140,7 +140,7 @@ const Home = () => {
               <a 
                 href="#how-it-works" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline nav-3d"
               >
                 How It Works
               </a>
@@ -151,7 +151,7 @@ const Home = () => {
                   const target = document.getElementById('categories-preview') || document.getElementById('categories');
                   target?.scrollIntoView({ behavior: 'smooth' }); 
                 }}
-                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline nav-3d"
               >
                 Categories
               </a>
@@ -162,7 +162,7 @@ const Home = () => {
                   const target = document.getElementById('platforms-preview') || document.getElementById('platforms');
                   target?.scrollIntoView({ behavior: 'smooth' }); 
                 }}
-                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline nav-3d"
               >
                 Platforms
               </a>
@@ -177,17 +177,17 @@ const Home = () => {
                     window.location.href = '/success-stories';
                   }
                 }}
-                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline nav-3d"
               >
                 Success Stories
               </a>
               <a 
                 href="/guides"
-                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline animated-underline"
+                className="text-white hover:text-pink-300 transition-all duration-300 font-medium cursor-pointer no-underline nav-3d"
               >
                 Guides
               </a>
-              <LoginButton className="animated-underline" />
+              <LoginButton className="nav-3d" />
               <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}

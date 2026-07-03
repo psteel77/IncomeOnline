@@ -19,7 +19,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  *   onNavigate - optional callback (e.g. close a mobile menu) fired on action
  */
 export const LoginButton = ({ className = '', onNavigate }) => {
-  const { isAuthenticated, logout, loading } = useAuth();
+  const { isAuthenticated, userEmail, logout, loading } = useAuth();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
@@ -31,14 +31,23 @@ export const LoginButton = ({ className = '', onNavigate }) => {
 
   if (isAuthenticated) {
     return (
-      <button
-        type="button"
-        data-testid="logout-btn"
-        onClick={() => { logout(); onNavigate?.(); }}
-        className={`${base} ${className} inline-flex items-center gap-1.5`}
-      >
-        <LogOut className="h-4 w-4" /> Log out
-      </button>
+      <span className={`inline-flex items-center gap-2 ${className}`} data-testid="signed-in-indicator">
+        <span
+          className="inline-flex items-center gap-1.5 text-emerald-300 font-medium text-sm max-w-[200px]"
+          title={userEmail || ''}
+        >
+          <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+          <span className="truncate">Signed in{userEmail ? ` as ${userEmail}` : ''}</span>
+        </span>
+        <button
+          type="button"
+          data-testid="logout-btn"
+          onClick={() => { logout(); onNavigate?.(); }}
+          className="text-white/70 hover:text-white text-sm inline-flex items-center gap-1 cursor-pointer"
+        >
+          <LogOut className="h-3.5 w-3.5" /> Log out
+        </button>
+      </span>
     );
   }
 

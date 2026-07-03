@@ -20,9 +20,9 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
 ### Completed (3 Jul 2026 — header "Log in" link for returning members) [PENDING DEPLOY]
-- New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors, and **"Log out"** when authenticated (`useAuth`). Modal reuses the returning-user flow (handles success / expired / not-found).
-- Wired into headers: `Home.jsx` (desktop nav + mobile menu), `Donate.jsx` nav, `GuideDetail.jsx` header. Lets a paid member sign in from any page instead of hunting for their email — which then unlocks the "you have full access" states added earlier.
-- Verified in preview: link renders for signed-out users, modal opens, submitting a member email returns "Access link sent!".
+- New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors. When authenticated it shows a green **"✓ Signed in as {email}"** indicator + a subtle **"Log out"** (added 3 Jul).
+- Wired into headers: `Home.jsx` (desktop nav + mobile menu), `Donate.jsx` nav, `GuideDetail.jsx` header.
+- **Banner nav restyle (3 Jul):** replaced the hover `animated-underline` on the Home header links with a new `.nav-3d` class (App.css) — no underline, layered `text-shadow` for raised depth, and a `translateY(-2px)` lift on hover for perspective. Verified: `text-decoration:none` + text-shadow applied; signed-in indicator renders.
 
 
 ### Completed (3 Jul 2026 — paid members no longer shown payment demands) [PENDING DEPLOY]

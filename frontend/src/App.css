@@ -424,6 +424,20 @@
     width: 100%;
 }
 
+/* Banner nav links — no underline, raised 3D depth for a sense of perspective */
+.nav-3d {
+    display: inline-block;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 2px 5px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease, text-shadow 0.2s ease, color 0.3s ease;
+    will-change: transform;
+}
+
+.nav-3d:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.4), 0 6px 14px rgba(0, 0, 0, 0.55);
+}
+
 /* Counter Animation */
 @keyframes countUp {
     from { opacity: 0; transform: translateY(20px); }
