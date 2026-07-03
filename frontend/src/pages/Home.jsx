@@ -11,6 +11,7 @@ import HeroSection from '../components/home/HeroSection';
 import CategoryPreview from '../components/home/CategoryPreview';
 import PlatformPreview from '../components/home/PlatformPreview';
 import DonationSection from '../components/home/DonationSection';
+import LoginButton from '../components/LoginButton';
 import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
 import ResourceLibraryBanner from '../components/home/ResourceLibraryBanner';
 import PremiumPackSection from '../components/home/PremiumPackSection';
@@ -186,6 +187,7 @@ const Home = () => {
               >
                 Guides
               </a>
+              <LoginButton className="animated-underline" />
               <a 
                 href="#support" 
                 onClick={(e) => { e.preventDefault(); document.getElementById('support')?.scrollIntoView({ behavior: 'smooth' }); }}
@@ -265,6 +267,7 @@ const Home = () => {
               >
                 Guides
               </a>
+              <LoginButton className="py-2" onNavigate={() => setMobileMenuOpen(false)} />
               <a 
                 href="#support" 
                 onClick={(e) => { 

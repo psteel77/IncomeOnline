@@ -8,6 +8,7 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { ArrowLeft, Clock, Loader2, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import LoginButton from '../components/LoginButton';
 import GuideLeadCapture from '../components/guides/GuideLeadCapture';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -97,10 +98,11 @@ const GuideDetail = () => {
   return (
     <div className="min-h-screen bg-white" data-testid="guide-detail-page">
       <header className="sticky top-0 z-50 shadow-md bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Button variant="ghost" onClick={() => navigate('/guides')} className="flex items-center gap-2 text-white hover:bg-white/10" data-testid="guide-back-link">
             <ArrowLeft className="h-5 w-5" /> All guides
           </Button>
+          <LoginButton />
         </div>
       </header>
 

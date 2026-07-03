@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Heart, Gift, Star, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import LoginButton from '../components/LoginButton';
 import PayPalDonateButton from '../components/PayPalDonateButton';
 
 const Donate = () => {
@@ -35,6 +36,7 @@ const Donate = () => {
               <a href="/" className="text-white hover:text-pink-300 transition-colors font-medium">Home</a>
               <a href="/#categories" className="text-white hover:text-pink-300 transition-colors font-medium">Categories</a>
               <a href="/#platforms" className="text-white hover:text-pink-300 transition-colors font-medium">Platforms</a>
+              <LoginButton />
               <a href="/donate" className="px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white font-bold rounded-full">Support Us</a>
             </nav>
           </div>

@@ -19,6 +19,12 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Database**: MongoDB Atlas
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
+### Completed (3 Jul 2026 — header "Log in" link for returning members) [PENDING DEPLOY]
+- New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors, and **"Log out"** when authenticated (`useAuth`). Modal reuses the returning-user flow (handles success / expired / not-found).
+- Wired into headers: `Home.jsx` (desktop nav + mobile menu), `Donate.jsx` nav, `GuideDetail.jsx` header. Lets a paid member sign in from any page instead of hunting for their email — which then unlocks the "you have full access" states added earlier.
+- Verified in preview: link renders for signed-out users, modal opens, submitting a member email returns "Access link sent!".
+
+
 ### Completed (3 Jul 2026 — paid members no longer shown payment demands) [PENDING DEPLOY]
 - **Bug (user report):** a logged-in / already-paid member still saw "Get full access" (guide pages) and the "Make a Donation" PayPal card (`/donate` + homepage), i.e. a demand for money after they'd paid. Root cause: those CTAs didn't check `isAuthenticated`.
 - **Fixes (all auth-gated via `useAuth`):**
