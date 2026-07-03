@@ -30,22 +30,26 @@ export const LoginButton = ({ className = '', onNavigate }) => {
   if (loading) return null;
 
   if (isAuthenticated) {
+    const local = (userEmail || '').split('@')[0];
+    const initials = (local.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2) || '?').toUpperCase();
     return (
-      <span className={`inline-flex items-center gap-2 ${className}`} data-testid="signed-in-indicator">
+      <span className={`inline-flex items-center gap-2.5 ${className}`} data-testid="signed-in-indicator">
         <span
-          className="inline-flex items-center gap-1.5 text-emerald-300 font-medium text-sm max-w-[200px]"
-          title={userEmail || ''}
+          data-testid="user-avatar"
+          title={userEmail ? `Signed in as ${userEmail}` : 'Signed in'}
+          className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-bold text-xs ring-2 ring-white/40 shadow-md cursor-default select-none"
         >
-          <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
-          <span className="truncate">Signed in{userEmail ? ` as ${userEmail}` : ''}</span>
+          {initials}
         </span>
         <button
           type="button"
           data-testid="logout-btn"
           onClick={() => { logout(); onNavigate?.(); }}
+          title="Log out"
           className="text-white/70 hover:text-white text-sm inline-flex items-center gap-1 cursor-pointer"
         >
-          <LogOut className="h-3.5 w-3.5" /> Log out
+          <LogOut className="h-4 w-4" />
+          <span className="sr-only sm:not-sr-only">Log out</span>
         </button>
       </span>
     );
