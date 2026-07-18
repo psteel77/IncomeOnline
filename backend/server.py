@@ -31,6 +31,10 @@ RECOVERY_INTERVAL_HOURS = int(os.environ.get('RECOVERY_INTERVAL_HOURS', '1'))
 RECOVERY_DELAY_HOURS = int(os.environ.get('RECOVERY_DELAY_HOURS', '2'))
 RECOVERY_MAX_EMAILS = int(os.environ.get('RECOVERY_MAX_EMAILS', '50'))
 
+# Subscription-expiry (7-day "renew" warning) scheduler config (env-overridable)
+EXPIRY_SCHEDULER_ENABLED = os.environ.get('EXPIRY_SCHEDULER_ENABLED', 'true').lower() == 'true'
+EXPIRY_INTERVAL_HOURS = int(os.environ.get('EXPIRY_INTERVAL_HOURS', '24'))
+
 # Subscription duration in days
 SUBSCRIPTION_DURATION_DAYS = 365
 
@@ -1829,6 +1833,21 @@ async def _recovery_job():
         logger.error(f"[recovery-cron] error: {e}")
 
 
+async def _expiry_job():
+    """Daily: send 7-day 'your access expires — renew' emails and process
+    lapsed subscriptions (runs the same logic as POST /subscription/process-expirations)."""
+    try:
+        result = await process_subscription_expirations()
+        if result.get("warnings_sent") or result.get("expired_processed"):
+            logger.info(
+                f"[expiry-cron] warnings_sent={result.get('warnings_sent')} "
+                f"expired_processed={result.get('expired_processed')} "
+                f"errors={len(result.get('errors', []))}"
+            )
+    except Exception as e:
+        logger.error(f"[expiry-cron] error: {e}")
+
+
 @app.on_event("startup")
 async def seed_starter_guides():
     """Seed UK starter guides on boot (idempotent — never overwrites existing slugs)."""
@@ -1843,24 +1862,45 @@ async def seed_starter_guides():
 
 @app.on_event("startup")
 async def start_recovery_scheduler():
-    if not RECOVERY_SCHEDULER_ENABLED:
+    started = False
+
+    if RECOVERY_SCHEDULER_ENABLED:
+        recovery_scheduler.add_job(
+            _recovery_job,
+            "interval",
+            hours=RECOVERY_INTERVAL_HOURS,
+            id="abandoned_donation_recovery",
+            replace_existing=True,
+            coalesce=True,
+            max_instances=1,
+            misfire_grace_time=300,
+        )
+        started = True
+        logger.info(
+            f"[recovery-cron] scheduled · every {RECOVERY_INTERVAL_HOURS}h · "
+            f"delay={RECOVERY_DELAY_HOURS}h · max={RECOVERY_MAX_EMAILS}/run"
+        )
+    else:
         logger.info("[recovery-cron] disabled via RECOVERY_SCHEDULER_ENABLED=false")
-        return
-    recovery_scheduler.add_job(
-        _recovery_job,
-        "interval",
-        hours=RECOVERY_INTERVAL_HOURS,
-        id="abandoned_donation_recovery",
-        replace_existing=True,
-        coalesce=True,
-        max_instances=1,
-        misfire_grace_time=300,
-    )
-    recovery_scheduler.start()
-    logger.info(
-        f"[recovery-cron] started · every {RECOVERY_INTERVAL_HOURS}h · "
-        f"delay={RECOVERY_DELAY_HOURS}h · max={RECOVERY_MAX_EMAILS}/run"
-    )
+
+    if EXPIRY_SCHEDULER_ENABLED:
+        recovery_scheduler.add_job(
+            _expiry_job,
+            "interval",
+            hours=EXPIRY_INTERVAL_HOURS,
+            id="subscription_expiry_warnings",
+            replace_existing=True,
+            coalesce=True,
+            max_instances=1,
+            misfire_grace_time=600,
+        )
+        started = True
+        logger.info(f"[expiry-cron] scheduled · every {EXPIRY_INTERVAL_HOURS}h (7-day renew warnings)")
+    else:
+        logger.info("[expiry-cron] disabled via EXPIRY_SCHEDULER_ENABLED=false")
+
+    if started:
+        recovery_scheduler.start()
 
 
 @app.on_event("shutdown")
