@@ -371,6 +371,24 @@ async def download_pillar_1():
                       'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf')
 
 
+@router.get("/branded-template")
+async def download_branded_template():
+    """Blank branded MoneyRules template — editable Word (.docx)."""
+    doc_path = os.path.join(os.path.dirname(__file__), 'static', 'MoneyRules_Branded_Template.docx')
+    if not os.path.exists(doc_path):
+        raise HTTPException(status_code=404, detail="Template not found")
+    return FileResponse(
+        path=doc_path, media_type=DOCX_MIME, filename='MoneyRules_Branded_Template.docx',
+        headers={'Content-Disposition': 'attachment; filename="MoneyRules_Branded_Template.docx"'},
+    )
+
+
+@router.get("/branded-template-pdf")
+async def download_branded_template_pdf():
+    """Blank branded MoneyRules template — PDF preview."""
+    return _serve_pdf('MoneyRules_Branded_Template.pdf', 'MoneyRules_Branded_Template.pdf')
+
+
 # ---------------------------------------------------------------
 # Premium Pack (£14.99) — superset of the £9.99 basic plan.
 # Tokens are ONLY issued by the PayPal-verified flow in
