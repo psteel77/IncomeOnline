@@ -130,7 +130,7 @@ const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSea
                 'from-rose-500 to-pink-600',
                 'from-amber-500 to-orange-600'
               ];
-              const displayValue = stat.value.replace(/\$/g, '$');
+              const displayValue = String(stat.value ?? '').replace(/\$/g, '$');
               
               return (
                 <div 
