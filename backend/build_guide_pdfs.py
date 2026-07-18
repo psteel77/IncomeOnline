@@ -33,6 +33,7 @@ GUIDE_DOCX = [
     "UK_Credit_Score_Masterclass.docx",
     "ISA_vs_SIPP_Complete_Guide.docx",
     "Side_Hustle_Quick_Start_Guide.docx",
+    "Pillar_1_Making_Money_Online.docx",
 ]
 
 FONT = "Montserrat"

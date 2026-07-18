@@ -364,6 +364,13 @@ async def download_side_hustle():
     return _serve_pdf('Side_Hustle_Quick_Start_Guide.pdf', 'Side_Hustle_Quick_Start_Guide.pdf')
 
 
+@router.get("/pillar-1")
+async def download_pillar_1():
+    """Pillar 1 — The Complete Beginner's Guide to Making Money Online (PDF)."""
+    return _serve_pdf('Pillar_1_Making_Money_Online.pdf',
+                      'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf')
+
+
 # ---------------------------------------------------------------
 # Premium Pack (£14.99) — superset of the £9.99 basic plan.
 # Tokens are ONLY issued by the PayPal-verified flow in
@@ -511,6 +518,12 @@ RESOURCE_MAP = {
         'download_path': '/api/pdf/side-hustle-quickstart',
         'file': 'Side_Hustle_Quick_Start_Guide.pdf',
         'download_name': 'Side_Hustle_Quick_Start_Guide.pdf',
+    },
+    'pillar-1': {
+        'title': "Pillar 1 — The Complete Beginner's Guide to Making Money Online",
+        'download_path': '/api/pdf/pillar-1',
+        'file': 'Pillar_1_Making_Money_Online.pdf',
+        'download_name': 'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf',
     },
 }
 

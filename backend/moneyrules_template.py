@@ -442,11 +442,12 @@ def add_body_text(doc, text, bold=False, italic=False, size=None):
     return p
 
 
-def _callout(doc, title, body, accent_hex, tint_hex, title_color):
+def _callout(doc, title, body, accent_hex, tint_hex, title_color, bulleted=False):
     """
     Generic coloured callout: single-row table (cantSplit) so it never splits or
     orphans at the bottom of a page — the whole block moves to the next page.
-    Accepts `body` as a string or a list of bullet strings.
+    `body` may be a string or a list; list items become bullets when bulleted=True,
+    otherwise separate prose paragraphs.
     """
     table = doc.add_table(rows=1, cols=1)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -469,7 +470,7 @@ def _callout(doc, title, body, accent_hex, tint_hex, title_color):
     for i, item in enumerate(items):
         para = tp if (not title and i == 0) else cell.add_paragraph()
         para.paragraph_format.space_after = Pt(3)
-        prefix = '•  ' if isinstance(body, (list, tuple)) else ''
+        prefix = '•  ' if bulleted else ''
         r = para.add_run(f'{prefix}{item}')
         r.font.size = Pt(10.5); r.font.color.rgb = BODY_TEXT; _set_run_font(r)
 
@@ -487,7 +488,7 @@ def add_expert_tip(doc, text, title='IncomeOnline Expert Tip'):
 
 
 def add_action_checklist(doc, items, title='Action Checklist'):
-    return _callout(doc, title, list(items), PINK_HEX, TINT_PINK, PINK)
+    return _callout(doc, title, list(items), PINK_HEX, TINT_PINK, PINK, bulleted=True)
 
 
 def add_common_mistake(doc, text, title='Common Mistake'):
@@ -495,7 +496,7 @@ def add_common_mistake(doc, text, title='Common Mistake'):
 
 
 def add_example_box(doc, text, title='Example'):
-    return _callout(doc, title, text, MEDIUM_PURPLE, TINT_PURPLE, MEDIUM_PURPLE)
+    return _callout(doc, title, text, '7C3AED', TINT_PURPLE, MEDIUM_PURPLE)
 
 
 def add_case_study(doc, text, title='IncomeOnline Case Study'):

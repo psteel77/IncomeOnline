@@ -363,3 +363,8 @@ Build: `python build_guide_pdfs.py` (needs LibreOffice `soffice` + Montserrat fo
 
 ### Backlog note
 - Optional: author the uploaded "Pillar 1 — Complete Beginner's Guide to Making Money Online" (~20 chapters) as a code-generated branded guide and add a download route. Not built yet (existing PDF is already print-quality).
+
+## 2026-06 — Pillar 1 Guide Reformatted (DONE)
+Extracted the client's full "Pillar 1 — The Complete Beginner's Guide to Making Money Online" (Introduction + 20 chapters, verbatim) and regenerated it through the branded template as `backend/generate_pillar1_doc.py` → `static/Pillar_1_Making_Money_Online.docx/.pdf` (46 pages).
+All 8 rules verified on rendered pages: coloured panels never split/orphan (single-row cantSplit blocks move whole to next page — confirmed a Common Mistake block relocating from p5→p6); Expert Tip/Example/Action Checklist/Common Mistake/Case Study kept together; every chapter on a new page as a branded purple panel; purple/pink/orange scheme; Montserrat 11pt; page borders; running "INCOME ONLINE" header; clean cover.
+Served at `GET /api/pdf/pillar-1` (also in RESOURCE_MAP as `pillar-1`); added to `build_guide_pdfs.py` GUIDE_DOCX. Verified 200/application/pdf.
