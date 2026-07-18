@@ -34,7 +34,7 @@ PINK = RGBColor(0xDB, 0x27, 0x77)             # pink-600
 ROSE = RGBColor(0xEC, 0x48, 0x99)             # pink-500
 ORANGE = RGBColor(0xEA, 0x58, 0x0C)           # orange-600
 DARK_TEXT = RGBColor(0x1E, 0x1B, 0x4B)         # indigo-950
-BODY_TEXT = RGBColor(0x2A, 0x2A, 0x33)         # near-black
+BODY_TEXT = RGBColor(0x14, 0x14, 0x18)         # near-black (bold, high-contrast)
 GREY = RGBColor(0x64, 0x74, 0x8B)             # slate-500
 LIGHT_GREY = RGBColor(0x94, 0xA3, 0xB8)       # slate-400
 ACCENT_GOLD = RGBColor(0xB4, 0x5D, 0x09)      # amber-700 (kept for back-compat)
@@ -237,10 +237,11 @@ def _add_footer(section):
 def create_moneyrules_document(title='', subtitle=''):
     doc = Document()
 
-    # Normal style: Montserrat 11pt
+    # Normal style: Montserrat 11pt, bold for strong on-screen/print legibility
     normal = doc.styles['Normal']
     _set_style_font(normal, FONT)
     normal.font.size = Pt(11)
+    normal.font.bold = True
     normal.font.color.rgb = BODY_TEXT
     pf = normal.paragraph_format
     pf.space_after = Pt(6)
@@ -261,10 +262,11 @@ def create_moneyrules_document(title='', subtitle=''):
         hs.paragraph_format.space_after = Pt(6)
         hs.paragraph_format.keep_with_next = True
 
-    # List styles → Montserrat
+    # List styles → Montserrat, bold
     for sname in ('List Bullet', 'List Number'):
         try:
             _set_style_font(doc.styles[sname], FONT)
+            doc.styles[sname].font.bold = True
         except Exception:
             pass
 
@@ -436,7 +438,7 @@ def add_body_text(doc, text, bold=False, italic=False, size=None):
     r = p.add_run(text)
     r.font.size = size or Pt(11)
     r.font.color.rgb = BODY_TEXT
-    r.bold = bold
+    r.bold = True
     r.italic = italic
     _set_run_font(r)
     return p
@@ -472,7 +474,7 @@ def _callout(doc, title, body, accent_hex, tint_hex, title_color, bulleted=False
         para.paragraph_format.space_after = Pt(3)
         prefix = '•  ' if bulleted else ''
         r = para.add_run(f'{prefix}{item}')
-        r.font.size = Pt(10.5); r.font.color.rgb = BODY_TEXT; _set_run_font(r)
+        r.font.size = Pt(10.5); r.bold = True; r.font.color.rgb = BODY_TEXT; _set_run_font(r)
 
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
     return table
@@ -539,7 +541,7 @@ def add_branded_table(doc, headers, data, header_color='6D28D9'):
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             p.paragraph_format.space_before = Pt(4); p.paragraph_format.space_after = Pt(4)
             r = p.add_run(str(cell_text))
-            r.font.size = Pt(9); r.font.color.rgb = BODY_TEXT; _set_run_font(r)
+            r.font.size = Pt(9); r.bold = True; r.font.color.rgb = BODY_TEXT; _set_run_font(r)
 
     doc.add_paragraph()
     return table
