@@ -19,7 +19,14 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Database**: MongoDB Atlas
 - **Source Control**: GitHub (psteel77/IncomeOnline) — main branch → auto-deploy
 
-### Completed (3 Jul 2026 — header "Log in" link for returning members) [PENDING DEPLOY]
+### Completed (3 Jul 2026 — E-commerce catalogue: remove Poshmark dupes + add Amazon Associates/Etsy/Shopify) [PARTIAL LIVE / PENDING DEPLOY for full detail]
+- **Poshmark** appeared twice on production (ids 90 & 180) → **both deleted live** via CMS API. Prod total 199 → 198.
+- **Amazon Associates** did not exist → **created live** (id 200, basic fields via current API). **Etsy (id 87) & Shopify (id 89) already existed** on prod.
+- New idempotent module `backend/ecommerce_seed.py` + admin endpoint `POST /api/admin/apply-ecommerce-seed`: removes all Poshmark and upserts Amazon Associates/Etsy/Shopify by name with FULL fields (paymentMethods, ukAvailable:true, ~100-word UK longDescription) in the same schema as existing platforms. Ran on preview ✅ (Amazon Associates created, Etsy/Shopify enriched); detail page verified (UK-available: Yes, payment methods, About precis render).
+- Enhanced `cms_routes.PlatformCreate/PlatformUpdate` to accept `paymentMethods`, `ukAvailable` (default True), `longDescription` — so admin-added platforms are UK-available + full-detail by default.
+- **PRODUCTION TODO:** Save to Github → deploy → call `POST /api/admin/apply-ecommerce-seed` once (I can run it) to enrich Amazon Associates + Etsy + Shopify to full UK detail live. (Note: prod also has a duplicate **Printful** ×2 — not requested, left as-is.)
+
+
 - New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors. When authenticated it shows a green **"✓ Signed in as {email}"** indicator + a subtle **"Log out"** (added 3 Jul).
 - Wired into headers: `Home.jsx` (desktop nav + mobile menu), `Donate.jsx` nav, `GuideDetail.jsx` header.
 - **Banner nav restyle (3 Jul):** replaced the hover `animated-underline` on the Home header links with a new `.nav-3d` class (App.css) — no underline, layered `text-shadow` for raised depth, and a `translateY(-2px)` lift on hover for perspective. Verified: `text-decoration:none` + text-shadow applied.

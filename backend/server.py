@@ -1384,6 +1384,15 @@ async def list_donors(admin_username: str = Depends(get_admin_user)):
     }
 
 
+@api_router.post("/admin/apply-ecommerce-seed")
+async def apply_ecommerce_seed(admin_username: str = Depends(get_admin_user)):
+    """Idempotently remove Poshmark duplicates + add Amazon Associates, Etsy,
+    Shopify to E-commerce (full detail fields). Safe to re-run."""
+    from ecommerce_seed import apply as _apply_ecom
+    result = await _apply_ecom(db)
+    return {"success": True, **result}
+
+
 @api_router.get("/admin/paypal-payments")
 async def list_paypal_payments(admin_username: str = Depends(get_admin_user)):
     """

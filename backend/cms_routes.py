@@ -7,7 +7,7 @@ import jwt as pyjwt
 from datetime import datetime, timezone, timedelta
 import bcrypt
 from cms_models import AdminLogin, ContentSection, ContentUpdate
-from typing import Optional
+from typing import Optional, List
 
 router = APIRouter(prefix="/cms")
 
@@ -190,6 +190,9 @@ class PlatformCreate(BaseModel):
     rating: float = 4.0
     minPayout: str = "$10"
     featured: bool = False
+    paymentMethods: List[str] = []
+    ukAvailable: bool = True
+    longDescription: Optional[str] = None
 
 class PlatformUpdate(BaseModel):
     name: Optional[str] = None
@@ -201,6 +204,9 @@ class PlatformUpdate(BaseModel):
     rating: Optional[float] = None
     minPayout: Optional[str] = None
     featured: Optional[bool] = None
+    paymentMethods: Optional[List[str]] = None
+    ukAvailable: Optional[bool] = None
+    longDescription: Optional[str] = None
 
 @router.get("/platforms")
 async def get_all_platforms_admin(username: str = Depends(get_admin_user)):
