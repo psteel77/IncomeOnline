@@ -24,6 +24,7 @@ from openpyxl.chart import LineChart, BarChart, PieChart, Reference
 from moneyrules_template import (
     create_moneyrules_document, add_title_page, add_styled_heading,
     add_body_text, add_highlight_box, add_branded_table, add_closing_page,
+    add_action_checklist, add_common_mistake, add_case_study, add_expert_tip,
     save_to_buffer, BODY_TEXT,
 )
 from docx.shared import Pt
@@ -476,7 +477,8 @@ def _guide_investors_starter_kit():
     doc.add_page_break()
 
     add_styled_heading(doc, 'How To Actually Start (This Week)', level=1)
-    _steps(doc, [
+    add_common_mistake(doc, 'Waiting for the "perfect" moment to invest. Time in the market beats timing it — the best day to start was years ago; the second best is today.')
+    add_action_checklist(doc, [
         'Open a Stocks & Shares ISA with a low-cost platform.',
         'Choose ONE diversified global index fund or ETF to begin.',
         'Set up a monthly direct debit — even £25 builds the habit.',
@@ -531,7 +533,8 @@ def _guide_buy_to_let():
     doc.add_page_break()
 
     add_styled_heading(doc, 'Your First-Deal Checklist', level=1)
-    _steps(doc, [
+    add_case_study(doc, 'A Leeds terraced house bought for £120,000 lets for £825/month — a 8.25% gross yield. After mortgage interest, management, insurance and a void allowance, the net yield lands near 4.5%: a solid, real-world deal that stacks up on cash flow, not hope.')
+    add_action_checklist(doc, [
         'Set your strategy: cash flow, growth, or both.',
         'Pick an area with strong rental demand and realistic prices.',
         'Calculate gross AND net yield before viewing.',
@@ -580,13 +583,14 @@ def _guide_tax_efficiency():
     doc.add_page_break()
 
     add_styled_heading(doc, 'Quick Wins Most People Miss', level=1)
-    _bullets(doc, [
+    add_action_checklist(doc, [
         'Claim higher-rate pension tax relief through self-assessment — it is not always automatic.',
         'Marriage Allowance — transfer unused personal allowance between spouses.',
         'Salary sacrifice for pension — saves income tax AND National Insurance.',
         "Use both partners' ISA and CGT allowances to double your tax-free room.",
         'Hold investments inside an ISA/pension rather than a taxable account.',
     ])
+    add_common_mistake(doc, 'Assuming higher-rate pension relief is applied automatically. For most people it is NOT — you must claim the extra 20-25% back via self-assessment, or it is lost.')
     add_highlight_box(doc, 'A single afternoon setting these up can be worth more than a pay rise — and it repeats every single year.')
     add_body_text(doc, 'This guide is educational, not personal tax advice. For your own situation, check current HMRC limits or speak to a qualified adviser.')
     add_closing_page(doc)
@@ -637,12 +641,13 @@ def _guide_money_makeover():
     doc.add_page_break()
 
     add_styled_heading(doc, 'Make It Stick', level=1)
-    _bullets(doc, [
+    add_action_checklist(doc, [
         'Automate everything — pay yourself first on payday.',
         "Put this month's focus somewhere you see it daily.",
         'Track your net worth monthly (use the Net Worth Tracker).',
         "Celebrate each month's win — momentum is the secret ingredient.",
     ])
+    add_expert_tip(doc, 'Do not try to run two months at once to "catch up". One focus per month is the whole point — stacking tasks is how people burn out and quit by March.')
     add_highlight_box(doc, 'In 12 months: a budget, an emergency fund, a debt plan, investments started, and a will. That is a different life.')
     add_closing_page(doc)
     return save_to_buffer(doc)

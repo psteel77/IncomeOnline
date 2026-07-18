@@ -349,3 +349,17 @@ See `/app/memory/test_credentials.md`
 - Social sharing buttons for Free Resources (downloads are ready-made lead magnets)
 - Email capture on download (newsletter list)
 - Analytics dashboard (downloads per resource)
+
+## 2026-06 — Branded PDF Generator Overhaul (DONE)
+Rewrote `backend/moneyrules_template.py` so ALL 14 generated guides (10 free + 4 premium + welcome) match the client's "Pillar 1" print-quality reference. All generator scripts were unchanged (same function signatures) — the single template upgrade re-brands everything.
+Rules applied (per client brief):
+- Montserrat 11pt body throughout; purple/pink/orange scheme.
+- Level-1 chapter headings render as full-width purple branded panels; chapters start on new pages.
+- Coloured callouts are single-row tables with `w:cantSplit` → never split/orphan at page bottom; whole block moves to next page.
+- New callout helpers: `add_expert_tip`, `add_action_checklist` (pink), `add_common_mistake` (orange), `add_example_box`, `add_case_study`. `add_highlight_box` upgraded to branded purple panel.
+- Running "INCOME ONLINE" header + orange rule on every page (cover excluded); page-number footer; double-line purple page border.
+- Premium guides enriched with checklist/mistake/case-study callouts.
+Build: `python build_guide_pdfs.py` (needs LibreOffice `soffice` + Montserrat font — build-time only; committed PDFs served in prod). Verified by rendering pages + `GET /api/pdf/rule-of-72` (200, application/pdf).
+
+### Backlog note
+- Optional: author the uploaded "Pillar 1 — Complete Beginner's Guide to Making Money Online" (~20 chapters) as a code-generated branded guide and add a download route. Not built yet (existing PDF is already print-quality).
