@@ -17,6 +17,8 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
+  const [expiresAt, setExpiresAt] = useState(null);
+  const [daysRemaining, setDaysRemaining] = useState(null);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('auth_token'));
 
@@ -43,9 +45,15 @@ export const AuthProvider = ({ children }) => {
       if (response.data.authenticated) {
         setIsAuthenticated(true);
         setUserEmail(response.data.email);
+        setExpiresAt(response.data.expires_at || null);
+        setDaysRemaining(
+          typeof response.data.days_remaining === 'number' ? response.data.days_remaining : null
+        );
       } else {
         setIsAuthenticated(false);
         setUserEmail(null);
+        setExpiresAt(null);
+        setDaysRemaining(null);
         localStorage.removeItem('auth_token');
         setToken(null);
       }
@@ -53,6 +61,8 @@ export const AuthProvider = ({ children }) => {
       console.error('Auth check error:', error);
       setIsAuthenticated(false);
       setUserEmail(null);
+      setExpiresAt(null);
+      setDaysRemaining(null);
       localStorage.removeItem('auth_token');
       setToken(null);
     } finally {
@@ -71,11 +81,15 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setIsAuthenticated(false);
     setUserEmail(null);
+    setExpiresAt(null);
+    setDaysRemaining(null);
   };
 
   const value = {
     isAuthenticated,
     userEmail,
+    expiresAt,
+    daysRemaining,
     loading,
     login,
     logout,

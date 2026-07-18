@@ -27,6 +27,7 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **PRODUCTION TODO:** Save to Github → deploy → call `POST /api/admin/apply-ecommerce-seed` once (I can run it) to enrich Amazon Associates + Etsy + Shopify to full UK detail live.
 - **Printful duplicate (3 Jul):** removed live on prod (deleted id 168, kept 97; total 199→197 after Poshmark+Printful cleanup). Added Printful de-dup to `ecommerce_seed.apply()`.
 - **Hero text (3 Jul):** removed "UK" → "Discover the Best Ways to Make Money Online". Preview: updated `db.content` hero `title` + `headline_line1`. Production: hero content has no `headline_line1`, so corrected the code fallback in `HeroSection.jsx` (`'Discover the Best Ways to'`) — applies on deploy. Verified in preview.
+- **My Account menu (18 Jul) [PENDING DEPLOY]:** avatar now opens a "My Account" dropdown showing email, **membership expiry date + days remaining**, and a **"Renew for another year"** nudge (amber dot on avatar + gradient button) when ≤30 days remain, linking to `/donate`. Backend: `/api/auth/check` now returns `expires_at` + `days_remaining`; `AuthContext` exposes them. Verified in preview (9-days-left member shows nudge).
 
 
 - New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors. When authenticated it shows a green **"✓ Signed in as {email}"** indicator + a subtle **"Log out"** (added 3 Jul).

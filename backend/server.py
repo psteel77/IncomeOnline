@@ -568,15 +568,28 @@ async def check_auth(authorization: str = Header(None)):
         
         # Check subscription expiration
         expires_at = user.get('expires_at')
+        expires_iso = None
+        days_remaining = None
         if expires_at:
             if isinstance(expires_at, str):
-                expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
-            
+                expires_dt = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+            else:
+                expires_dt = expires_at
+            if expires_dt.tzinfo is None:
+                expires_dt = expires_dt.replace(tzinfo=timezone.utc)
+
             now = datetime.now(timezone.utc)
-            if expires_at < now:
+            if expires_dt < now:
                 return {"authenticated": False, "email": None, "expired": True}
-        
-        return {"authenticated": True, "email": email}
+            expires_iso = expires_dt.isoformat()
+            days_remaining = max(0, (expires_dt - now).days)
+
+        return {
+            "authenticated": True,
+            "email": email,
+            "expires_at": expires_iso,
+            "days_remaining": days_remaining,
+        }
         
     except Exception as e:
         logging.error(f"Error in check_auth: {str(e)}")

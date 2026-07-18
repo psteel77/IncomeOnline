@@ -1,25 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+} from './ui/dropdown-menu';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { LogIn, LogOut, Mail, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { LogIn, LogOut, Mail, CheckCircle2, AlertCircle, Loader2, CalendarClock, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RENEW_NUDGE_DAYS = 30; // show a renew nudge when this many days (or fewer) remain
+
+const fmtDate = (iso) => {
+  if (!iso) return null;
+  try {
+    return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch {
+    return null;
+  }
+};
 
 /**
- * Header Log in / Log out control. For returning members who haven't clicked
+ * Header Log in / My Account control. For returning members who haven't clicked
  * their "Access All Areas" email link yet — lets them request a fresh login
- * link from any page. When already authenticated, shows Log out instead.
- *
- * Props:
- *   className  - classes for the trigger link (defaults suit dark headers)
- *   onNavigate - optional callback (e.g. close a mobile menu) fired on action
+ * link from any page. When authenticated, shows an avatar that opens a
+ * "My Account" menu with membership expiry + a renew nudge before it lapses.
  */
 export const LoginButton = ({ className = '', onNavigate }) => {
-  const { isAuthenticated, userEmail, logout, loading } = useAuth();
+  const { isAuthenticated, userEmail, expiresAt, daysRemaining, logout, loading } = useAuth();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
@@ -32,25 +43,67 @@ export const LoginButton = ({ className = '', onNavigate }) => {
   if (isAuthenticated) {
     const local = (userEmail || '').split('@')[0];
     const initials = (local.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2) || '?').toUpperCase();
+    const expiryLabel = fmtDate(expiresAt);
+    const showRenew = typeof daysRemaining === 'number' && daysRemaining <= RENEW_NUDGE_DAYS;
+    const renew = () => { window.location.href = '/donate'; onNavigate?.(); };
+
     return (
-      <span className={`inline-flex items-center gap-2.5 ${className}`} data-testid="signed-in-indicator">
-        <span
-          data-testid="user-avatar"
-          title={userEmail ? `Signed in as ${userEmail}` : 'Signed in'}
-          className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-bold text-xs ring-2 ring-white/40 shadow-md cursor-default select-none"
-        >
-          {initials}
-        </span>
-        <button
-          type="button"
-          data-testid="logout-btn"
-          onClick={() => { logout(); onNavigate?.(); }}
-          title="Log out"
-          className="text-white/70 hover:text-white text-sm inline-flex items-center gap-1 cursor-pointer"
-        >
-          <LogOut className="h-4 w-4" />
-          <span className="sr-only sm:not-sr-only">Log out</span>
-        </button>
+      <span className={`inline-flex items-center ${className}`} data-testid="signed-in-indicator">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              data-testid="account-avatar"
+              title="My account"
+              className="relative flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white font-bold text-xs ring-2 ring-white/40 shadow-md cursor-pointer hover:ring-white/70 transition-all"
+            >
+              {initials}
+              {showRenew && (
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-amber-400 ring-2 ring-purple-900" data-testid="renew-dot" />
+              )}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64" data-testid="account-menu">
+            <DropdownMenuLabel className="flex flex-col gap-0.5">
+              <span className="text-xs font-normal text-slate-500">Signed in as</span>
+              <span className="truncate font-semibold text-slate-800">{userEmail}</span>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="px-2 py-1.5" data-testid="membership-status">
+              <div className="flex items-center gap-2 text-sm text-slate-700">
+                <CalendarClock className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                {expiryLabel ? (
+                  <span>Access until <span className="font-semibold">{expiryLabel}</span></span>
+                ) : (
+                  <span className="text-emerald-700 font-medium">Full access active</span>
+                )}
+              </div>
+              {typeof daysRemaining === 'number' && (
+                <p className={`text-xs mt-1 ml-6 ${showRenew ? 'text-amber-600 font-medium' : 'text-slate-400'}`}>
+                  {daysRemaining} day{daysRemaining === 1 ? '' : 's'} remaining
+                </p>
+              )}
+            </div>
+            {showRenew && (
+              <>
+                <div className="px-2 pb-1">
+                  <button
+                    type="button"
+                    onClick={renew}
+                    data-testid="renew-btn"
+                    className="w-full inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-sm font-semibold rounded-md px-3 py-2 transition-colors"
+                  >
+                    <Sparkles className="h-4 w-4" /> Renew for another year
+                  </button>
+                </div>
+                <DropdownMenuSeparator />
+              </>
+            )}
+            <DropdownMenuItem data-testid="logout-btn" onClick={() => { logout(); onNavigate?.(); }} className="cursor-pointer text-rose-600 focus:text-rose-700">
+              <LogOut className="h-4 w-4 mr-2" /> Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </span>
     );
   }
