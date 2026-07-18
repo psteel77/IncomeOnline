@@ -93,6 +93,16 @@ async def apply(db):
     # 1) Remove every Poshmark entry (there were duplicates).
     removed = await db.platforms.delete_many({"name": {"$regex": "^poshmark$", "$options": "i"}})
 
+    # 1b) De-duplicate Printful — keep the lowest id, remove the rest.
+    printfuls = await db.platforms.find({"name": {"$regex": "^printful$", "$options": "i"}}).to_list(50)
+    printful_removed = 0
+    if len(printfuls) > 1:
+        keep = min(printfuls, key=lambda d: d.get("id", 10**9))
+        for d in printfuls:
+            if d.get("id") != keep.get("id"):
+                await db.platforms.delete_one({"_id": d["_id"]})
+                printful_removed += 1
+
     # 2) Upsert the three new platforms by name (no duplicates on re-run).
     upserted = []
     for p in NEW_PLATFORMS:
@@ -113,6 +123,7 @@ async def apply(db):
 
     return {
         "poshmark_removed": removed.deleted_count,
+        "printful_duplicates_removed": printful_removed,
         "platforms": upserted,
         "ecommerce_count": count,
     }

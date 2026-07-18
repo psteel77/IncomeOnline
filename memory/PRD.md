@@ -24,7 +24,9 @@ A comprehensive website for discovering online earning opportunities. Features i
 - **Amazon Associates** did not exist → **created live** (id 200, basic fields via current API). **Etsy (id 87) & Shopify (id 89) already existed** on prod.
 - New idempotent module `backend/ecommerce_seed.py` + admin endpoint `POST /api/admin/apply-ecommerce-seed`: removes all Poshmark and upserts Amazon Associates/Etsy/Shopify by name with FULL fields (paymentMethods, ukAvailable:true, ~100-word UK longDescription) in the same schema as existing platforms. Ran on preview ✅ (Amazon Associates created, Etsy/Shopify enriched); detail page verified (UK-available: Yes, payment methods, About precis render).
 - Enhanced `cms_routes.PlatformCreate/PlatformUpdate` to accept `paymentMethods`, `ukAvailable` (default True), `longDescription` — so admin-added platforms are UK-available + full-detail by default.
-- **PRODUCTION TODO:** Save to Github → deploy → call `POST /api/admin/apply-ecommerce-seed` once (I can run it) to enrich Amazon Associates + Etsy + Shopify to full UK detail live. (Note: prod also has a duplicate **Printful** ×2 — not requested, left as-is.)
+- **PRODUCTION TODO:** Save to Github → deploy → call `POST /api/admin/apply-ecommerce-seed` once (I can run it) to enrich Amazon Associates + Etsy + Shopify to full UK detail live.
+- **Printful duplicate (3 Jul):** removed live on prod (deleted id 168, kept 97; total 199→197 after Poshmark+Printful cleanup). Added Printful de-dup to `ecommerce_seed.apply()`.
+- **Hero text (3 Jul):** removed "UK" → "Discover the Best Ways to Make Money Online". Preview: updated `db.content` hero `title` + `headline_line1`. Production: hero content has no `headline_line1`, so corrected the code fallback in `HeroSection.jsx` (`'Discover the Best Ways to'`) — applies on deploy. Verified in preview.
 
 
 - New reusable `components/LoginButton.jsx`: shows **"Log in"** (opens a modal to request a fresh "Access All Areas" magic link via `POST /api/auth/request-access`) for signed-out visitors. When authenticated it shows a green **"✓ Signed in as {email}"** indicator + a subtle **"Log out"** (added 3 Jul).

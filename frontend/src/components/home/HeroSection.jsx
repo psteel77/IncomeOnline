@@ -15,7 +15,7 @@ const scrollToTarget = (targetId) => {
 const HeroSection = ({ content, authLoading, isAuthenticated, searchTerm, setSearchTerm, stats }) => {
   const hero = content?.hero || {};
   const badgeText = hero.badge || '199+ Verified Earning Platforms';
-  const headlineLine1 = hero.headline_line1 || 'Discover the Best UK Ways to';
+  const headlineLine1 = hero.headline_line1 || 'Discover the Best Ways to';
   const headlineLine2 = hero.headline_line2 || 'Make Money Online';
   const subtitleLine1 = hero.subtitle_line1 || 'Your comprehensive directory of legitimate online earning opportunities';
   const subtitleLine2 = hero.subtitle_line2 || 'From Freelancing to Passive Income • One Time to Full Time';
