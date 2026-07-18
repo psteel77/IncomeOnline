@@ -34,6 +34,7 @@ GUIDE_DOCX = [
     "ISA_vs_SIPP_Complete_Guide.docx",
     "Side_Hustle_Quick_Start_Guide.docx",
     "Pillar_1_Making_Money_Online.docx",
+    "Pillar_2_Affiliate_Marketing.docx",
 ]
 
 FONT = "Montserrat"

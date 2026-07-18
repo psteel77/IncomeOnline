@@ -371,6 +371,13 @@ async def download_pillar_1():
                       'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf')
 
 
+@router.get("/pillar-2")
+async def download_pillar_2():
+    """Pillar 2 — Affiliate Marketing: Building Your First Passive Income Stream (PDF)."""
+    return _serve_pdf('Pillar_2_Affiliate_Marketing.pdf',
+                      'Pillar_2_Affiliate_Marketing_Building_Your_First_Passive_Income_Stream.pdf')
+
+
 @router.get("/branded-template")
 async def download_branded_template():
     """Blank branded MoneyRules template — editable Word (.docx)."""
