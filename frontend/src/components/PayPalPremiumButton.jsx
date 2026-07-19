@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PayPalScriptProvider, PayPalButtons, FUNDING } from '@paypal/react-paypal-js';
-import { CheckCircle, AlertCircle, Download, Mail } from 'lucide-react';
+import { PayPalScriptProvider, PayPalButtons, FUNDING, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { CheckCircle, AlertCircle, Download, Mail, Loader2 } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -8,6 +8,29 @@ const API = `${BACKEND_URL}/api`;
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 const PREMIUM_AMOUNT = '14.99';
 const PREMIUM_CURRENCY = 'GBP';
+
+/**
+ * Renders the PayPal buttons only once the SDK script has resolved. Without this
+ * guard the buttons can silently fail to render on slower (mobile) connections,
+ * because <PayPalButtons> mounts before window.paypal is ready.
+ */
+const PremiumButtonsWithState = (props) => {
+  const [{ isPending }] = usePayPalScriptReducer();
+  return (
+    <div className="w-full" style={{ minWidth: '200px' }}>
+      {isPending && (
+        <div
+          className="flex items-center justify-center gap-2 py-4 text-gray-500 text-sm"
+          data-testid="premium-paypal-loading"
+        >
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Loading secure PayPal checkout…
+        </div>
+      )}
+      <PayPalButtons {...props} />
+    </div>
+  );
+};
 
 /**
  * Premium Pack purchase — server-verified PayPal SDK flow (£14.99).
@@ -85,8 +108,7 @@ const PayPalPremiumButton = () => {
           'disable-funding': 'venmo,applepay',
         }}
       >
-        <PayPalButtons
-          fundingSource={FUNDING.PAYPAL}
+        <PremiumButtonsWithState
           fundingSource={FUNDING.PAYPAL}
           style={{ layout: 'vertical', shape: 'rect', label: 'pay' }}
           disabled={status === 'processing'}

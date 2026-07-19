@@ -1,0 +1,25 @@
+{
+  "summary": "Verified the PayPal Premium (£14.99) button rendering fix on mobile and desktop. Bug is RESOLVED: on mobile 390x844 the £14.99 PayPal button now renders as a zoid-paypal-buttons iframe of 302x45 inside the premium-pack-section. Regression check on the £9.99 member/donate button also passes on mobile (iframe 318x45 inside #support). Desktop 1280x900: premium button renders 444x45. No console/page errors related to PayPal. UI-test mode (client-id=test) as intended.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Home / DonationSection", "issues": ["The deployed build does not expose data-testid=\"member-access-section\" on the <section id=\"support\"> element even though the source file has it. Likely a stale build asset — the section, its inner donation-recovery-email input, and the PayPal iframe do render correctly on both mobile and desktop, so this is cosmetic only (may affect future automation using that testid). The premium-pack-section testid IS present."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: rebuild/redeploy frontend so the data-testid=\"member-access-section\" attribute (present in source) reaches the browser bundle. Functionality is unaffected."
+  ],
+  "critical_code_review_comments": [
+    "PayPalPremiumButton.jsx: fix looks correct — usePayPalScriptReducer + PremiumButtonsWithState guards the mount until the SDK script resolves, mirroring the working donate pattern. Consider also handling isRejected (as PayPalDonateButton does) so ad-block failures surface a message on the Premium button too."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Frontend only. PayPal is in UI-test mode via REACT_APP_PAYPAL_CLIENT_ID=test. Verify PayPal renders by checking for div[id^='zoid-paypal-buttons'] and its iframe with non-zero height inside each PayPal button container.",
+  "rca of the issue": "Original bug: PayPalPremiumButton rendered <PayPalButtons> unconditionally, so on slower mobile networks the SDK wasn't ready at mount and PayPal silently produced no iframe. Fix (verified): PremiumButtonsWithState now consumes usePayPalScriptReducer, shows a loading state while isPending, and mounts <PayPalButtons> in a min-width container. Result: iframe renders reliably on 390x844 (302x45) and on 1280x900 (444x45)."
+}
