@@ -31,6 +31,10 @@ def slugify(name: str) -> str:
     return s.strip("-")
 
 
+# Platforms to exclude from the sitemap (e.g. closed UK operations / removed).
+EXCLUDE_SLUGS = {"poshmark"}
+
+
 def write_file(path: str, content: str):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
@@ -70,7 +74,7 @@ def main():
         if not name:
             continue
         slug = slugify(name)
-        if not slug or slug in seen:
+        if not slug or slug in seen or slug in EXCLUDE_SLUGS:
             continue
         seen.add(slug)
         platforms_xml.append('  <url>')
