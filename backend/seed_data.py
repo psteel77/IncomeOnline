@@ -1249,19 +1249,6 @@ platforms_data = [
         "link": "https://shopify.com"
     },
     {
-        "id": 90,
-        "name": "Poshmark",
-        "category": "E-commerce",
-        "description": "Social marketplace for fashion. Sell clothes, shoes, and accessories from your closet.",
-        "earningsPotential": "£100 - £10,000+/month",
-        "difficulty": "Easy",
-        "rating": 4.1,
-        "minPayout": "£20",
-        "paymentMethods": ["Bank Transfer", "Check"],
-        "featured": False,
-        "link": "https://poshmark.com"
-    },
-    {
         "id": 91,
         "name": "Mercari",
         "category": "E-commerce",
@@ -2424,19 +2411,6 @@ platforms_data = [
         "paymentMethods": ["Direct Deposit"],
         "featured": False,
         "link": "https://zirtual.com"
-    },
-    {
-        "id": 180,
-        "name": "Poshmark",
-        "category": "E-commerce",
-        "description": "Social marketplace for selling new and used fashion. List clothing, shoes, and accessories with easy photo uploads. Strong community features help drive sales.",
-        "earningsPotential": "£100 - £3,000+/month",
-        "difficulty": "Easy",
-        "rating": 4.3,
-        "minPayout": "£20",
-        "paymentMethods": ["Direct Deposit", "Check"],
-        "featured": False,
-        "link": "https://poshmark.com"
     },
     {
         "id": 181,

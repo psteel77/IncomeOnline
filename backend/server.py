@@ -124,7 +124,7 @@ async def seed_database():
         # Platforms NOT available in UK
         NOT_UK_PLATFORMS = [
             'VIPKid', 'Instacart Shopper', 'DoorDash', 'Lyft', 'Shipt', 'Favor', 
-            'E*TRADE', 'Public.com', 'Poshmark', 'Mercari', 'Wyzant', 'Tutor.com', 
+            'E*TRADE', 'Public.com', 'Mercari', 'Wyzant', 'Tutor.com', 
             'InboxDollars', 'Crowdtap', 'Bellhop', 'Wonolo'
         ]
         
@@ -184,7 +184,6 @@ async def add_uk_platforms():
         # More E-commerce
         {"name": "Vinted", "category": "E-commerce", "description": "Popular UK marketplace for buying and selling pre-loved fashion. Zero selling fees.", "earningsPotential": "£50-500+/month", "difficulty": "Easy", "rating": 4.5, "minPayout": "£0.50", "paymentMethods": ["Bank Transfer", "PayPal"], "featured": True, "link": "https://www.vinted.co.uk/", "ukAvailable": True},
         {"name": "Depop", "category": "E-commerce", "description": "Fashion marketplace popular with Gen Z. Sell vintage and unique clothing items.", "earningsPotential": "£100 - £2,000/month", "difficulty": "Easy", "rating": 4.3, "minPayout": "£0", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": False, "link": "https://www.depop.com", "ukAvailable": True},
-        {"name": "Poshmark", "category": "E-commerce", "description": "Social commerce marketplace for fashion. Closed UK operations in 2023.", "earningsPotential": "£100 - £2,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "£15", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://poshmark.com", "ukAvailable": False},
         {"name": "Mercari", "category": "E-commerce", "description": "Selling app for almost anything. Closed UK operations, US and Japan only.", "earningsPotential": "£100 - £1,000/month", "difficulty": "Easy", "rating": 4.1, "minPayout": "£10", "paymentMethods": ["Direct Deposit"], "featured": False, "link": "https://www.mercari.com", "ukAvailable": False},
         {"name": "eBay", "category": "E-commerce", "description": "Global marketplace for buying and selling new and used items. Strong UK presence.", "earningsPotential": "£200 - £5,000+/month", "difficulty": "Easy", "rating": 4.4, "minPayout": "Varies", "paymentMethods": ["PayPal", "Bank Transfer"], "featured": True, "link": "https://www.ebay.co.uk", "ukAvailable": True},
         {"name": "Facebook Marketplace", "category": "E-commerce", "description": "Buy and sell locally through Facebook. No selling fees for local pickup.", "earningsPotential": "£100 - £1,000/month", "difficulty": "Easy", "rating": 4.2, "minPayout": "N/A", "paymentMethods": ["Cash", "PayPal"], "featured": False, "link": "https://www.facebook.com/marketplace", "ukAvailable": True},
