@@ -388,3 +388,9 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - moneyrules_template.create_moneyrules_document() now takes cover_image=; section 0 = borderless zero-margin full-page cover, section 1 = furnished content (borders/header/footer). Text title page removed for the two Pillars.
 - generate_pillar1_doc.py / generate_pillar2_doc.py generate their cover then build docx; rebuilt PDFs (Pillar 1 = 47pp, Pillar 2 = 11pp). Covers embedded in the committed docx (self-contained). Served /api/pdf/pillar-1, /api/pdf/pillar-2 (200). Verified visually.
 - Build note: rebuilding PDFs needs LibreOffice (soffice) + static Montserrat (Fontsource 400/600/700) — NOT persisted across container resets; reinstall each session. Do not use the variable Montserrat font (bold is lost).
+
+## 2026-07-19 — Fix: £14.99 Premium PayPal button missing on mobile (DONE)
+- Root cause: PayPalPremiumButton.jsx rendered <PayPalButtons> directly with NO SDK-loaded guard. On slower mobile networks window.paypal wasn't ready at mount, so PayPal produced no iframe (empty gap). The £9.99 donate button worked because it guards on usePayPalScriptReducer isPending.
+- Fix: added PremiumButtonsWithState (usePayPalScriptReducer) — shows a loading state while isPending, handles isRejected (ad-blocker message), and mounts <PayPalButtons> only once the script resolves; min-width container. Removed a duplicate fundingSource prop.
+- Verified by testing agent (iteration_11.json, frontend 100%): mobile 390x844 premium button renders (zoid iframe 302x45); £9.99 regression passes (318x45); desktop 444x45; no PayPal errors.
+- Testing note: REACT_APP_PAYPAL_CLIENT_ID is NOT in repo .env — production sets it via Vercel env. To render/test PayPal in preview, temporarily set REACT_APP_PAYPAL_CLIENT_ID=test in frontend/.env (UI-test buttons), then revert. (Was set for this test and reverted.)

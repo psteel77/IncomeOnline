@@ -15,7 +15,28 @@ const PREMIUM_CURRENCY = 'GBP';
  * because <PayPalButtons> mounts before window.paypal is ready.
  */
 const PremiumButtonsWithState = (props) => {
-  const [{ isPending }] = usePayPalScriptReducer();
+  const [{ isPending, isRejected }] = usePayPalScriptReducer();
+
+  if (isRejected) {
+    return (
+      <div
+        className="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 text-amber-800 text-sm text-left"
+        data-testid="premium-paypal-sdk-failed"
+      >
+        <p className="font-semibold mb-1">The PayPal button couldn't load.</p>
+        <p>
+          This is usually caused by an ad-blocker or privacy extension blocking
+          PayPal. Please disable it for this site (or try a different browser),
+          then refresh. Need help?{' '}
+          <a href="mailto:welcome@incomeonline.info" className="underline font-medium">
+            Email us
+          </a>{' '}
+          and we'll send you a payment link.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full" style={{ minWidth: '200px' }}>
       {isPending && (
