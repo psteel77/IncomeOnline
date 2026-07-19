@@ -382,3 +382,9 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Discovered & fixed a PRE-EXISTING corruption in server.py: a stray non-UTF-8 byte (bare 0xb7) from a bad merge produced a duplicated/corrupted @app.on_event('shutdown') stop_recovery_scheduler handler at EOF. This broke recompilation → uvicorn --reload was serving STALE code. Collapsed to one clean handler; server.py compiles; backend restarted clean.
 - Verified (testing agent iteration_10.json): 7/7 backend pytest pass on external URL; /api/platforms=202 with Poshmark absent; sitemaps have 0 poshmark; home/guides/guide-detail render fine.
 - NOTE: /api/platforms and /api/categories return WRAPPED objects: {platforms:[...], total} and {categories:[...]}.
+
+## 2026-07-19 — Branded cover page for Pillar 1 & 2 (DONE)
+- Recreated the client's reference cover as a full-bleed page-1 image generator: backend/pillar_cover.py (PIL) — deep-purple bleed bg, colour blobs (purple/orange/pink), white rounded card, INCOME ONLINE logo in purple/white framed square, pink "PILLAR N" label, bold dark title, orange rule. Letter aspect.
+- moneyrules_template.create_moneyrules_document() now takes cover_image=; section 0 = borderless zero-margin full-page cover, section 1 = furnished content (borders/header/footer). Text title page removed for the two Pillars.
+- generate_pillar1_doc.py / generate_pillar2_doc.py generate their cover then build docx; rebuilt PDFs (Pillar 1 = 47pp, Pillar 2 = 11pp). Covers embedded in the committed docx (self-contained). Served /api/pdf/pillar-1, /api/pdf/pillar-2 (200). Verified visually.
+- Build note: rebuilding PDFs needs LibreOffice (soffice) + static Montserrat (Fontsource 400/600/700) — NOT persisted across container resets; reinstall each session. Do not use the variable Montserrat font (bold is lost).

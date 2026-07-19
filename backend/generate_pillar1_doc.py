@@ -584,15 +584,16 @@ BLOCKS = [
 
 
 def generate_pillar1_document():
+    from pillar_cover import generate_cover
+    cover = generate_cover(
+        'Pillar 1',
+        ["The Complete Beginner's Guide", 'to Making Money Online'],
+        '/tmp/pillar1_cover.png',
+    )
     doc = create_moneyrules_document(
         title="The Complete Beginner's Guide to Making Money Online",
         subtitle='PILLAR 1',
-    )
-    add_title_page(
-        doc,
-        title="The Complete Beginner's Guide to Making Money Online",
-        subtitle='PILLAR 1',
-        tagline='Build an Income Stack that works — the honest,\npractical roadmap from Income Online.',
+        cover_image=cover,
     )
 
     first_chapter_done = False

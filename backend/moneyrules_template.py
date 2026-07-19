@@ -20,6 +20,7 @@ from docx import Document
 from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.section import WD_SECTION
 from docx.oxml.ns import qn
 from io import BytesIO
 
@@ -234,7 +235,37 @@ def _add_footer(section):
 # Document factory
 # ---------------------------------------------------------------
 
-def create_moneyrules_document(title='', subtitle=''):
+def _furnish_content_section(section, clean_first_page):
+    section.top_margin = Cm(2.6)
+    section.bottom_margin = Cm(2.3)
+    section.left_margin = Cm(2.6)
+    section.right_margin = Cm(2.6)
+    section.different_first_page_header_footer = clean_first_page
+    _add_page_borders(section)
+    _add_running_header(section)
+    _add_footer(section)
+
+
+def _add_full_page_cover(doc, section, image_path):
+    """Turn `section` into a borderless, zero-margin page filled by the cover image."""
+    section.top_margin = 0
+    section.bottom_margin = 0
+    section.left_margin = 0
+    section.right_margin = 0
+    section.header_distance = 0
+    section.footer_distance = 0
+    p = doc.paragraphs[0] if doc.paragraphs else doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    pf = p.paragraph_format
+    pf.space_before = Pt(0)
+    pf.space_after = Pt(0)
+    pf.line_spacing = 1.0
+    run = p.add_run()
+    run.add_picture(image_path, width=section.page_width,
+                    height=int(section.page_height * 0.997))
+
+
+def create_moneyrules_document(title='', subtitle='', cover_image=None):
     doc = Document()
 
     # Normal style: Montserrat 11pt, bold for strong on-screen/print legibility
@@ -270,15 +301,14 @@ def create_moneyrules_document(title='', subtitle=''):
         except Exception:
             pass
 
-    for section in doc.sections:
-        section.top_margin = Cm(2.6)
-        section.bottom_margin = Cm(2.3)
-        section.left_margin = Cm(2.6)
-        section.right_margin = Cm(2.6)
-        section.different_first_page_header_footer = True  # keep cover clean
-        _add_page_borders(section)
-        _add_running_header(section)
-        _add_footer(section)
+    if cover_image:
+        # Section 0 = full-bleed cover; section 1 = furnished content.
+        _add_full_page_cover(doc, doc.sections[0], cover_image)
+        doc.add_section(WD_SECTION.NEW_PAGE)
+        _furnish_content_section(doc.sections[-1], clean_first_page=False)
+    else:
+        for section in doc.sections:
+            _furnish_content_section(section, clean_first_page=True)
 
     return doc
 

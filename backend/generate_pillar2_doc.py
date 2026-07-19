@@ -72,15 +72,16 @@ BLOCKS = [
 
 
 def generate_pillar2_document():
+    from pillar_cover import generate_cover
+    cover = generate_cover(
+        'Pillar 2',
+        ['Affiliate Marketing', 'Building Your First', 'Passive Income Stream'],
+        '/tmp/pillar2_cover.png',
+    )
     doc = create_moneyrules_document(
         title='Affiliate Marketing',
         subtitle='PILLAR 2',
-    )
-    add_title_page(
-        doc,
-        title='Affiliate Marketing',
-        subtitle='PILLAR 2',
-        tagline='Building Your First Passive Income Stream\nIncomeOnline Learning Series — Guide 2 of 20',
+        cover_image=cover,
     )
 
     first_chapter_done = False
