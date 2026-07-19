@@ -376,3 +376,9 @@ Served at `GET /api/pdf/pillar-1` (also in RESOURCE_MAP as `pillar-1`); added to
 
 ## 2026-06 — Pillar 2 (DONE)
 Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (Intro + 8 chapters, verbatim from client .docx) rebuilt in the identical branded style via `backend/generate_pillar2_doc.py` → `static/Pillar_2_Affiliate_Marketing.docx/.pdf` (11 pages, bold Montserrat). Served at `GET /api/pdf/pillar-2`; added to build_guide_pdfs GUIDE_DOCX. Verified 200.
+
+## 2026-07-19 — Poshmark fully removed + server.py corruption fix (DONE)
+- Removed all Poshmark references: backend/seed_data.py (both platform dicts), backend/server.py (NOT_UK_PLATFORMS list; hardcoded dict already gone), and excluded 'poshmark' in backend/build_sitemaps.py (regenerated frontend/public/*.xml). Frontend had none.
+- Discovered & fixed a PRE-EXISTING corruption in server.py: a stray non-UTF-8 byte (bare 0xb7) from a bad merge produced a duplicated/corrupted @app.on_event('shutdown') stop_recovery_scheduler handler at EOF. This broke recompilation → uvicorn --reload was serving STALE code. Collapsed to one clean handler; server.py compiles; backend restarted clean.
+- Verified (testing agent iteration_10.json): 7/7 backend pytest pass on external URL; /api/platforms=202 with Poshmark absent; sitemaps have 0 poshmark; home/guides/guide-detail render fine.
+- NOTE: /api/platforms and /api/categories return WRAPPED objects: {platforms:[...], total} and {categories:[...]}.
