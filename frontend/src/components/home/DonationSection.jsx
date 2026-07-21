@@ -37,7 +37,7 @@ const DonationSection = () => {
   }
 
   return (
-    <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full">
+    <section id="support" className="py-20 px-3 sm:px-4 md:px-6 lg:px-8 relative overflow-hidden w-full max-w-full" data-testid="member-access-section">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900"></div>
       <div className="absolute top-0 left-0 w-full h-full">

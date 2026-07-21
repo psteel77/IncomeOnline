@@ -394,3 +394,9 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Fix: added PremiumButtonsWithState (usePayPalScriptReducer) — shows a loading state while isPending, handles isRejected (ad-blocker message), and mounts <PayPalButtons> only once the script resolves; min-width container. Removed a duplicate fundingSource prop.
 - Verified by testing agent (iteration_11.json, frontend 100%): mobile 390x844 premium button renders (zoid iframe 302x45); £9.99 regression passes (318x45); desktop 444x45; no PayPal errors.
 - Testing note: REACT_APP_PAYPAL_CLIENT_ID is NOT in repo .env — production sets it via Vercel env. To render/test PayPal in preview, temporarily set REACT_APP_PAYPAL_CLIENT_ID=test in frontend/.env (UI-test buttons), then revert. (Was set for this test and reverted.)
+
+## 2026-07-21 — Pillar Series feature built (DONE)
+- NEW on-site feature (never existed before — previously only PDFs + links). Added PillarSeriesSection.jsx to the home page above #free-resources: "The 20 Pillars of Online Income" with cards. Pillar 1 = FREE for everyone (window.open /api/pdf/pillar-1). Pillar 2 = MEMBERS ONLY (axios blob download with Bearer auth_token); logged-out shows "Join to Unlock" → smooth-scrolls to #support. Pillars 3–20 = "Coming soon" card.
+- Backend: /api/pdf/pillar-1 stays public; added require_member() dependency gating /api/pdf/pillar-2 (401 no/invalid/expired token, 403 non-member/expired, 200 valid member).
+- Fixed latent bug in server.py verify_token(): it referenced non-existent pyjwt.JWTError (PyJWT) → malformed tokens caused 500. Now catches Exception → returns None → 401. (Also hardens /auth/check.)
+- Verified by testing agent (iteration_12.json): 5/5 backend, 100% frontend. Logged-out gating, free download, member unlock+download all pass. Member test acct: pillartest@incomeonline.info (login via admin break-glass /api/cms/get-verify-link).
