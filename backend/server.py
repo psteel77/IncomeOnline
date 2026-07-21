@@ -406,7 +406,7 @@ def verify_token(token: str):
         return email
     except pyjwt.ExpiredSignatureError:
         return None
-    except pyjwt.JWTError:
+    except Exception:
         return None
 
 @api_router.post("/auth/request-access")

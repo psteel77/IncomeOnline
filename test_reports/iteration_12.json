@@ -1,0 +1,50 @@
+{
+  "summary": "Full backend + frontend validation of the new Pillar Series feature. 5/5 backend tests pass and the end-to-end UI flow (logged-out → members flow) works exactly as specified. Pillar 1 is public, Pillar 2 correctly gated with 401 on missing/bogus tokens (no 500s), and members get 200 application/pdf.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Support / Membership section", "issues": ["The membership section has id='support' (which scrollToJoin targets correctly) but no data-testid='member-access-section'. The spec references this selector; consider adding it for test stability."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_pillar_series.py", "/app/test_reports/pytest/iteration_12_pillar.xml"],
+  "action_items": [
+    "OPTIONAL: add data-testid='member-access-section' to the support/membership section wrapper (id='support') so external test specs can key off it. Functionally not required — the scroll-to-support behaviour already works."
+  ],
+  "critical_code_review_comments": [
+    "verify_token() correctly catches generic Exception, so malformed JWTs / bogus tokens return None → 401 (verified in test_pillar_2_bogus_bearer_returns_401_not_500).",
+    "require_member() dependency correctly returns 401 for missing/invalid/expired tokens and 403 for non-verified/expired subscriptions.",
+    "PillarSeriesSection.jsx: free download uses window.open (public URL, fine); member download uses axios blob + Authorization header from localStorage 'auth_token' — matches AuthContext storage key."
+  ],
+  "updated_files": ["/app/backend/tests/test_pillar_series.py"],
+  "success_rate": {"backend": "100% (5/5)", "frontend": "100% (all critical flows)"},
+  "test_credentials": "admin/Gulluk*9 for CMS; member pillartest@incomeonline.info via /api/cms/get-verify-link (initial verify token d4a35bb0... was already consumed; refreshed programmatically during test).",
+  "seed_data_creation": "None — used existing pillartest@incomeonline.info member. Fresh verify link generated via admin break-glass.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend tests live at /app/backend/tests/test_pillar_series.py and re-issue a fresh verify link on each run (idempotent). If member expires or user is deleted, tests will fail at fixture setup — recreate pillartest@incomeonline.info in db.users with verified=true and expires_at > now.",
+  "verified_flows": {
+    "logged_out": {
+      "pillar-series-section": "present",
+      "pillar-series-title": "'The 20 Pillars of Online Income'",
+      "pillar-card-1 + pillar-badge-free-1 + pillar-download-1": "present",
+      "pillar-card-2 + pillar-badge-members-2 + pillar-join-2": "present",
+      "pillar-download-2": "correctly absent",
+      "pillar-coming-soon": "present",
+      "join-to-unlock smooth-scroll to id='support'": "works"
+    },
+    "backend_direct": {
+      "GET /api/pdf/pillar-1 no auth": "200 application/pdf",
+      "GET /api/pdf/pillar-2 no auth": "401",
+      "GET /api/pdf/pillar-2 bogus Bearer": "401 (not 500)",
+      "GET /api/pdf/pillar-2 malformed Authorization header": "401",
+      "GET /api/pdf/pillar-2 valid member Bearer": "200 application/pdf"
+    },
+    "logged_in_member": {
+      "pillar-2 button state": "changed from 'Join to Unlock' to 'Download' (pillar-download-2 present, pillar-join-2 absent)",
+      "click pillar-download-2": "network GET /api/pdf/pillar-2 returned 200 application/pdf",
+      "error toast": "none"
+    }
+  }
+}

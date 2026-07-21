@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Header
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, EmailStr, Field
 import os
@@ -366,14 +366,39 @@ async def download_side_hustle():
 
 @router.get("/pillar-1")
 async def download_pillar_1():
-    """Pillar 1 — The Complete Beginner's Guide to Making Money Online (PDF)."""
+    """Pillar 1 — The Complete Beginner's Guide to Making Money Online (PDF). FREE for everyone."""
     return _serve_pdf('Pillar_1_Making_Money_Online.pdf',
                       'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf')
 
 
+async def require_member(authorization: str = Header(None)):
+    """Allow only signed-in members with an active (non-expired) subscription."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Membership required to access this guide.")
+    token = authorization.replace("Bearer ", "").strip()
+    from server import verify_token, db
+    email = verify_token(token)
+    if not email:
+        raise HTTPException(status_code=401, detail="Your session has expired. Please sign in again.")
+    user = await db.users.find_one({"email": email})
+    if not user or not user.get('verified'):
+        raise HTTPException(status_code=403, detail="Membership required to access this guide.")
+    expires_at = user.get('expires_at')
+    if expires_at:
+        if isinstance(expires_at, str):
+            expires_dt = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+        else:
+            expires_dt = expires_at
+        if expires_dt.tzinfo is None:
+            expires_dt = expires_dt.replace(tzinfo=timezone.utc)
+        if expires_dt < datetime.now(timezone.utc):
+            raise HTTPException(status_code=403, detail="Your membership has expired. Please renew to access this guide.")
+    return email
+
+
 @router.get("/pillar-2")
-async def download_pillar_2():
-    """Pillar 2 — Affiliate Marketing: Building Your First Passive Income Stream (PDF)."""
+async def download_pillar_2(member: str = Depends(require_member)):
+    """Pillar 2 — Affiliate Marketing (PDF). MEMBERS ONLY."""
     return _serve_pdf('Pillar_2_Affiliate_Marketing.pdf',
                       'Pillar_2_Affiliate_Marketing_Building_Your_First_Passive_Income_Stream.pdf')
 

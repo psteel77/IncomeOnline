@@ -14,6 +14,7 @@ import DonationSection from '../components/home/DonationSection';
 import LoginButton from '../components/LoginButton';
 import ResourceDownloadDialog from '../components/home/ResourceDownloadDialog';
 import ResourceLibraryBanner from '../components/home/ResourceLibraryBanner';
+import PillarSeriesSection from '../components/home/PillarSeriesSection';
 import PremiumPackSection from '../components/home/PremiumPackSection';
 import useSEO from '../hooks/useSEO';
 import useLibraryProgress from '../hooks/useLibraryProgress';
@@ -686,8 +687,9 @@ const Home = () => {
       )}
 
       {/* Free Resources Section - Always visible */}
-      <section id="free-resources" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
-        <div className="max-w-6xl mx-auto">
+      <PillarSeriesSection />
+
+      <section id="free-resources" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-pink-600 to-orange-500 mb-3" data-testid="free-resources-title">
               {content.free_resources?.title || 'MoneyRules Library — 10 Free Guides'}
