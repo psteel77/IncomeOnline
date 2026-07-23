@@ -400,3 +400,7 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Backend: /api/pdf/pillar-1 stays public; added require_member() dependency gating /api/pdf/pillar-2 (401 no/invalid/expired token, 403 non-member/expired, 200 valid member).
 - Fixed latent bug in server.py verify_token(): it referenced non-existent pyjwt.JWTError (PyJWT) → malformed tokens caused 500. Now catches Exception → returns None → 401. (Also hardens /auth/check.)
 - Verified by testing agent (iteration_12.json): 5/5 backend, 100% frontend. Logged-out gating, free download, member unlock+download all pass. Member test acct: pillartest@incomeonline.info (login via admin break-glass /api/cms/get-verify-link).
+
+## 2026-07-21 — Collapsible platform categories (DONE)
+- Members' platform directory (#platforms, Home.jsx) is now collapsible per category to avoid one long scroll. Added expandedCats state + toggleCategory(); category header is a <button data-testid='category-toggle-<id>'> showing name + 'N platforms' bubble with a ChevronDown that rotates 180deg when open. Grid (data-testid='category-grid-<id>') renders only when expanded. DEFAULT = all 8 categories collapsed. Quick-nav chips now set expandedCats[cat]=true then scroll to #cat-<slug>.
+- Verified by testing agent (iteration_13.json): frontend 100%. Default collapsed, toggle show/hide, chevron rotate, independent toggling, chip expand+scroll, logged-out locked card intact.
