@@ -19,7 +19,7 @@ const SuccessStories = () => {
 
   useSEO({
     title: 'Success Stories | Real People Earning Money Online | Income Online',
-    description: 'Read 60+ verified success stories from real people earning money online. From freelancing on Upwork to surveys on Prolific, see how others transformed their income.',
+    description: 'Read 60+ verified success stories from real people earning online — from Upwork freelancing to Prolific surveys. See how others grew their income.',
     canonical: 'https://www.incomeonline.info/success-stories',
     ogImage: 'https://www.incomeonline.info/earnhub-logo.png',
   });

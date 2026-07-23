@@ -37,7 +37,7 @@ const Home = () => {
 
   useSEO({
     title: 'Make Money Online UK — 199+ Verified Earning Platforms | Income Online',
-    description: "The UK directory of 199+ verified ways to make money online — side hustles, freelancing, surveys, remote jobs & passive income, plus free UK money guides (ISAs, SIPPs & tax).",
+    description: "The UK directory of 199+ verified ways to make money online — side hustles, freelancing, surveys, remote jobs, passive income & free UK money guides.",
     canonical: 'https://www.incomeonline.info/',
     ogImage: 'https://www.incomeonline.info/earnhub-logo.png',
   });
