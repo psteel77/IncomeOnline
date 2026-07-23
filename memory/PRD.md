@@ -404,3 +404,8 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 ## 2026-07-21 — Collapsible platform categories (DONE)
 - Members' platform directory (#platforms, Home.jsx) is now collapsible per category to avoid one long scroll. Added expandedCats state + toggleCategory(); category header is a <button data-testid='category-toggle-<id>'> showing name + 'N platforms' bubble with a ChevronDown that rotates 180deg when open. Grid (data-testid='category-grid-<id>') renders only when expanded. DEFAULT = all 8 categories collapsed. Quick-nav chips now set expandedCats[cat]=true then scroll to #cat-<slug>.
 - Verified by testing agent (iteration_13.json): frontend 100%. Default collapsed, toggle show/hide, chevron rotate, independent toggling, chip expand+scroll, logged-out locked card intact.
+
+## 2026-07-23 — SEO: Meta Description too long (homepage) (DONE)
+- Bing Webmaster URL Inspection on https://www.incomeonline.info/ flagged "Meta Description too long or too short" (1 instance). Root cause: Bing renders JS; the homepage description React sets via useSEO in Home.jsx was 174 chars (>160). (The "Print friendly guides…" snippet Bing displayed was incidental page-body content, not the meta tag — verified it exists in neither the live raw HTML nor the deployed JS bundle.)
+- Fixes (all now ≤150 chars): Home.jsx useSEO description 174→149; frontend/public/index.html static name/og/twitter description 160→150; SuccessStories.jsx description 164→146.
+- Verified: live-site curl (bingbot UA) confirmed current prod still serves old 160-char raw desc; preview screenshot + DOM read confirms rendered meta description is now 149 chars. NOTE: changes take effect on next Vercel deploy (Save to GitHub → redeploy), then Request Indexing in Bing.
