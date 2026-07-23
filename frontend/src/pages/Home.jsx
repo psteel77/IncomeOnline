@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X, Download, FileText, CheckCircle2, Sparkles } from 'lucide-react';
+import { Search, TrendingUp, Shield, Clock, Star, ExternalLink, Filter, Loader2, Lock, Menu, X, Download, FileText, CheckCircle2, Sparkles, ChevronDown } from 'lucide-react';
 import { categoriesAPI, platformsAPI, statsAPI, contentAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import AccessGate from '../components/AccessGate';
@@ -22,6 +22,8 @@ import useLibraryProgress from '../hooks/useLibraryProgress';
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [expandedCats, setExpandedCats] = useState({});
+  const toggleCategory = (name) => setExpandedCats((prev) => ({ ...prev, [name]: !prev[name] }));
   const [categories, setCategories] = useState([]);
   const [platforms, setPlatforms] = useState([]);
   const [stats, setStats] = useState([]);
@@ -462,13 +464,17 @@ const Home = () => {
                     <button
                       key={cat.id}
                       onClick={() => {
-                        const element = document.getElementById(`cat-${cat.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`);
-                        if (element) {
-                          const headerHeight = 80;
-                          const elementPosition = element.getBoundingClientRect().top;
-                          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-                          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                        }
+                        setExpandedCats((prev) => ({ ...prev, [cat.name]: true }));
+                        const targetId = `cat-${cat.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`;
+                        setTimeout(() => {
+                          const element = document.getElementById(targetId);
+                          if (element) {
+                            const headerHeight = 80;
+                            const elementPosition = element.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                          }
+                        }, 60);
                       }}
                       className="px-3 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
                       style={{ 
@@ -508,10 +514,17 @@ const Home = () => {
                   <div 
                     key={category.id} 
                     id={`cat-${category.name.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`}
-                    className="mb-12"
+                    className="mb-6"
                   >
-                    {/* Category Header */}
-                    <div className="flex items-center gap-4 mb-6 pb-3 border-b-4" style={{ borderColor: categoryColor }}>
+                    {/* Category Header — click to expand/collapse */}
+                    <button
+                      type="button"
+                      onClick={() => toggleCategory(category.name)}
+                      aria-expanded={!!expandedCats[category.name]}
+                      data-testid={`category-toggle-${category.id}`}
+                      className="w-full flex items-center gap-4 mb-6 pb-3 border-b-4 text-left transition-opacity hover:opacity-90"
+                      style={{ borderColor: categoryColor }}
+                    >
                       <h3 
                         className="text-2xl sm:text-3xl font-bold"
                         style={{ color: categoryColor }}
@@ -519,15 +532,22 @@ const Home = () => {
                         {category.name}
                       </h3>
                       <span 
-                        className="px-3 py-1 rounded-full text-sm font-semibold text-white"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold text-white"
                         style={{ backgroundColor: categoryColor }}
                       >
                         {categoryPlatforms.length} platforms
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform duration-300 ${expandedCats[category.name] ? 'rotate-180' : ''}`}
+                        />
                       </span>
-                    </div>
+                      <span className="ml-auto text-xs font-medium text-slate-400 hidden sm:block">
+                        {expandedCats[category.name] ? 'Click to hide' : 'Click to view'}
+                      </span>
+                    </button>
                     
                     {/* Category Platforms Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {expandedCats[category.name] && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid={`category-grid-${category.id}`}>
                       {categoryPlatforms.map((platform) => (
                         <Card key={platform.id} className="hover:shadow-lg transition-all duration-300 border border-slate-200">
                           <CardHeader>
@@ -580,6 +600,7 @@ const Home = () => {
                         </Card>
                       ))}
                     </div>
+                    )}
                   </div>
                 );
               })}

@@ -1,0 +1,33 @@
+{
+  "summary": "Frontend-only test of collapsible platform categories on Home page (#platforms) for logged-in members. All acceptance criteria met: 8 categories render, all collapsed by default, click header toggles grid visibility and rotates chevron 180deg, multiple categories toggle independently, quick-nav chips expand target category AND scroll into view, logged-out users still see the locked/donate card.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Quick-nav category chips have NO data-testid (e.g. data-testid='quicknav-chip-<id>'). Only the toggle buttons and grids are testable. Adding testids to chips would make future automation more robust.",
+    "Two buttons in #platforms contain identical text like 'Freelancing' (chip + toggle) with no testid on the chip — locator disambiguation currently relies on DOM order. Recommend testids on chips.",
+    "Card CTA reads 'Learn More', not 'Visit' as described in the review request — cosmetic mismatch with the spec's wording but existing behavior, unrelated to the collapsible feature."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped)", "frontend": "100%"},
+  "test_credentials": "Member verify URL was consumed during first run; regenerated via POST /api/cms/login (admin/Gulluk*9) + POST /api/cms/get-verify-link {email: pillartest@incomeonline.info}. New verify URL: /verify?token=a14df440-7bec-4b81-b828-c6d718b6f848 (also single-use; regenerate as needed).",
+  "seed_data_creation": "None.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "8 categories are toggle-1..toggle-8. Category slugs use lowercase + spaces->-, &->and (e.g. cat-e-commerce, cat-surveys-and-research). Quick-nav chips at top of #platforms are the FIRST 8 buttons; the next 8 buttons are the category-toggle-<id> headers. When testing chips, use `.first` on `#platforms button:has-text(...)` because both chip and toggle contain the same category label. Verify link is single-use — always regenerate via admin login before running new browser sessions.",
+  "verified_behaviors": [
+    "Default state: 8 category-toggle-* buttons rendered, 0 category-grid-* elements present (all collapsed).",
+    "Click toggle → grid appears, chevron gets 'rotate-180' class, label switches 'Click to view' → 'Click to hide'.",
+    "Click again → grid removed from DOM (collapsed).",
+    "Independent toggling: expanding cat 1 and cat 3 simultaneously — both grids visible.",
+    "Quick-nav chip 'Freelancing' → category-grid-1 becomes visible, cat-freelancing anchor scrolled to top:80px (in viewport).",
+    "Quick-nav chip 'E-commerce' → category-grid-5 becomes visible, cat-e-commerce scrolled to top:80px (in viewport).",
+    "Platform cards render name, star rating, Featured badge, description, earning range, difficulty, min payout, and a 'Learn More' CTA.",
+    "Logged-out home page: 0 category-toggle-* buttons, 'Donate to Unlock/Donate Now' locked card visible instead."
+  ]
+}
