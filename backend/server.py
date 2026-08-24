@@ -10,6 +10,7 @@ from fastapi import FastAPI, APIRouter, Request, Header, Depends, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import logging
+import re
 import requests
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
@@ -587,11 +588,17 @@ async def check_auth(authorization: str = Header(None)):
             expires_iso = expires_dt.isoformat()
             days_remaining = max(0, (expires_dt - now).days)
 
+        # £14.99 Premium status — does this member hold a premium purchase?
+        premium = await db.premium_purchases.find_one(
+            {"email": {"$regex": f"^{re.escape(email)}$", "$options": "i"}}
+        )
+
         return {
             "authenticated": True,
             "email": email,
             "expires_at": expires_iso,
             "days_remaining": days_remaining,
+            "is_premium": bool(premium),
         }
         
     except Exception as e:

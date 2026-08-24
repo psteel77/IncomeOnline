@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Header
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, EmailStr, Field
 import os
+import re
 import uuid
 import logging
 from datetime import datetime, timezone
@@ -364,11 +365,46 @@ async def download_side_hustle():
     return _serve_pdf('Side_Hustle_Quick_Start_Guide.pdf', 'Side_Hustle_Quick_Start_Guide.pdf')
 
 
-@router.get("/pillar-1")
-async def download_pillar_1():
-    """Pillar 1 — The Complete Beginner's Guide to Making Money Online (PDF). FREE for everyone."""
-    return _serve_pdf('Pillar_1_Making_Money_Online.pdf',
-                      'Pillar_1_The_Complete_Beginners_Guide_to_Making_Money_Online.pdf')
+# ---------------------------------------------------------------
+# The 20 Pillars of Online Income — 3-tier access model
+#   Pillar 1        → FREE for everyone
+#   Pillars 2–10    → £9.99 members (active subscription)
+#   Pillars 11–20   → £14.99 Premium members only
+# All 20 PDFs live in /static/pillars/Pillar_NN.pdf
+# ---------------------------------------------------------------
+
+PILLARS = [
+    {"n": 1,  "title": "The Complete Beginner’s Guide to Making Money Online", "tier": "free"},
+    {"n": 2,  "title": "75 Ways to Make Money Online",                          "tier": "basic"},
+    {"n": 3,  "title": "Best Side Hustles in the UK",                           "tier": "basic"},
+    {"n": 4,  "title": "Best Survey Sites Compared",                            "tier": "basic"},
+    {"n": 5,  "title": "Best Freelance Platforms",                              "tier": "basic"},
+    {"n": 6,  "title": "How to Earn £500 a Month from Home",                    "tier": "basic"},
+    {"n": 7,  "title": "How to Earn £1,000 a Month from Home",                  "tier": "basic"},
+    {"n": 8,  "title": "25 Best Online Jobs for Retirees",                      "tier": "basic"},
+    {"n": 9,  "title": "Best AI Side Hustles",                                  "tier": "basic"},
+    {"n": 10, "title": "Best Work-From-Home Jobs",                              "tier": "basic"},
+    {"n": 11, "title": "Best Online Jobs for Students",                         "tier": "premium"},
+    {"n": 12, "title": "Best Online Jobs for Parents",                          "tier": "premium"},
+    {"n": 13, "title": "Best Passive Income Ideas",                             "tier": "premium"},
+    {"n": 14, "title": "Best Cashback Websites",                                "tier": "premium"},
+    {"n": 15, "title": "Best User-Testing Websites",                            "tier": "premium"},
+    {"n": 16, "title": "Best GPT (Get-Paid-To) Sites",                          "tier": "premium"},
+    {"n": 17, "title": "Best Mystery Shopping Apps",                            "tier": "premium"},
+    {"n": 18, "title": "Build Multiple Income Streams",                         "tier": "premium"},
+    {"n": 19, "title": "Passive Income for Beginners",                          "tier": "premium"},
+    {"n": 20, "title": "Avoiding Online Money-Making Scams",                    "tier": "premium"},
+]
+PILLAR_BY_N = {p["n"]: p for p in PILLARS}
+
+
+def _pillar_download_name(p: dict) -> str:
+    slug = re.sub(r'[^A-Za-z0-9]+', '_', p["title"]).strip('_')
+    return f"Pillar_{p['n']}_{slug}.pdf"
+
+
+def _serve_pillar(p: dict):
+    return _serve_pdf(f"pillars/Pillar_{p['n']:02d}.pdf", _pillar_download_name(p))
 
 
 async def require_member(authorization: str = Header(None)):
@@ -396,11 +432,63 @@ async def require_member(authorization: str = Header(None)):
     return email
 
 
+async def is_premium_email(email: str) -> bool:
+    """True if this email has a verified £14.99 Premium purchase (case-insensitive)."""
+    from server import db
+    if not email:
+        return False
+    prem = await db.premium_purchases.find_one(
+        {"email": {"$regex": f"^{re.escape(email)}$", "$options": "i"}}
+    )
+    return bool(prem)
+
+
+async def require_premium(authorization: str = Header(None)):
+    """Allow only signed-in members who also hold a £14.99 Premium purchase."""
+    email = await require_member(authorization)
+    if not await is_premium_email(email):
+        raise HTTPException(
+            status_code=403,
+            detail="This Pillar is for Premium members. Upgrade to £14.99 to unlock Pillars 11–20.",
+        )
+    return email
+
+
+@router.get("/pillar/{n}")
+async def download_pillar(n: int, authorization: str = Header(None)):
+    """Download a Pillar PDF, gated by its tier (free / £9.99 basic / £14.99 premium)."""
+    p = PILLAR_BY_N.get(n)
+    if not p:
+        raise HTTPException(status_code=404, detail="Pillar not found")
+    if p["tier"] == "basic":
+        await require_member(authorization)
+    elif p["tier"] == "premium":
+        await require_premium(authorization)
+    return _serve_pillar(p)
+
+
+# Legacy routes kept for backward compatibility with older links / tests.
+@router.get("/pillar-1")
+async def download_pillar_1():
+    """Pillar 1 (PDF). FREE for everyone."""
+    return _serve_pillar(PILLAR_BY_N[1])
+
+
 @router.get("/pillar-2")
 async def download_pillar_2(member: str = Depends(require_member)):
-    """Pillar 2 — Affiliate Marketing (PDF). MEMBERS ONLY."""
-    return _serve_pdf('Pillar_2_Affiliate_Marketing.pdf',
-                      'Pillar_2_Affiliate_Marketing_Building_Your_First_Passive_Income_Stream.pdf')
+    """Pillar 2 (PDF). £9.99 members only."""
+    return _serve_pillar(PILLAR_BY_N[2])
+
+
+@router.get("/pillars")
+async def list_pillars():
+    """Public metadata for the Pillar Series (title + access tier per pillar)."""
+    return {
+        "pillars": [
+            {"n": p["n"], "title": p["title"], "tier": p["tier"]}
+            for p in PILLARS
+        ]
+    }
 
 
 @router.get("/branded-template")

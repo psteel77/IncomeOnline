@@ -15,6 +15,11 @@
 - **Subscription expires:** 2027-05-27 (12 months from registration)
 - **How they logged in:** Used the break-glass `POST /api/cms/get-verify-link` endpoint to obtain a one-time `verify?token=...` URL.
 
+## Pillar Series tier test users (preview DB — created 2026-08-24)
+- **£9.99 basic member:** `basic-test@incomeonline.info` — `users` record, active. Should access Pillars 1–10, blocked (403) from 11–20.
+- **£14.99 Premium member:** `premium-test@incomeonline.info` — `users` + `premium_purchases` record. Should access all 20 Pillars.
+- To get a login JWT for either: insert/ensure the user, set a `verification_token`, then `GET /api/auth/verify/{token}` returns `{token: <JWT>}`. `/api/auth/check` returns `is_premium` for tier detection.
+
 ## Break-glass URL generator (when email delivery is broken)
 ```bash
 BACKEND="https://incomeonline-production.up.railway.app"

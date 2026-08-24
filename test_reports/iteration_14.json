@@ -1,0 +1,31 @@
+{
+  "summary": "Tested the 20-Pillar 3-tier access model end-to-end. Backend: new pytest suite /app/backend/tests/test_pillar_tiers.py — 42/42 passed (metadata tiers, anonymous 200/401/404, bad token 401, basic member 1-10 = 200 & 11-20 = 403, premium member all 20 = 200, legacy /pdf/pillar-1 and /pdf/pillar-2 routes). Frontend: verified all three states on the homepage Pillar Series section via localStorage auth_token injection — logged-out (Pillar 1 'Download Free', 2-10 'Unlock — £9.99', 11-20 'Go Premium — £14.99', 3-tier legend, no member pill), basic member (pill 'Member — Pillars 1–10 unlocked', download buttons 1-10, 'Upgrade — £14.99' for 11-20, real blob download of Pillar 5 succeeded), premium member (pill 'Premium member — all 20 Pillars unlocked', 20 download buttons, 0 unlock buttons, bottom CTA hidden, real downloads of Pillar 12 & 20 succeeded). No console errors, no 500s.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Pillar Series cards (authenticated)", "issues": ["Tier badge still renders a padlock + '£9.99'/'£14.99' on pillars the signed-in member has already unlocked; a green 'UNLOCKED'/'INCLUDED' badge would read better and avoids implying another payment is due."]},
+      {"screen": "Pillar download filename", "issues": ["Gated downloads are saved as 'Pillar_5.pdf' because the frontend hardcodes a.download = `Pillar_${n}.pdf`, discarding the descriptive Content-Disposition filename the backend sends (e.g. Pillar_5_Best_Freelance_Platforms.pdf). Cosmetic only."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_pillar_tiers.py", "/app/test_reports/pytest/iteration_14_pillar_tiers.xml"],
+  "action_items": [
+    "Optional polish: swap the price badge for an 'Unlocked' badge on pillars the current member can access.",
+    "Optional polish: use the server-provided Content-Disposition filename for gated pillar downloads instead of Pillar_N.pdf.",
+    "Note: /app/backend/tests/test_pillar_series.py still targets the older 2-pillar model; it is superseded by test_pillar_tiers.py and could be deleted/updated."
+  ],
+  "critical_code_review_comments": [
+    "pdf_routes.py is ~790 lines and mixes reportlab PDF generation, static-file serving, tier gating, and the email-capture gateway — consider splitting (pillars/tiers vs resources) per the 700-line guideline.",
+    "require_member treats any users record with verified=true and a non-expired expires_at as a paid £9.99 member; there is no explicit plan/tier field on the user, so a free/comped users record would also unlock Pillars 2-10. Consider storing an explicit plan field.",
+    "FALLBACK_PILLARS in PillarSeriesSection.jsx duplicates the backend PILLARS table — drift risk if titles/tiers change on one side only."
+  ],
+  "updated_files": ["/app/backend/tests/test_pillar_tiers.py"],
+  "success_rate": { "backend": "100%", "frontend": "100%" },
+  "seed_data_creation": "No new users created. Rotated verification_token for basic-test@incomeonline.info and premium-test@incomeonline.info via /api/cms/get-verify-link to mint JWTs. Also removed leftover CMS test data from a previous iteration (content doc section_id=free_resources with title 'Custom Title' / subtitle 'Custom Sub') which was showing on the live preview homepage.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "admin/Gulluk*9 (POST /api/cms/login); members basic-test@incomeonline.info and premium-test@incomeonline.info (mint JWT via /api/cms/get-verify-link -> /api/auth/verify/{token})",
+  "context_for_next_testing_agent": "Use /app/backend/tests/test_pillar_tiers.py as the regression suite for the 3-tier Pillar model (42 tests, all passing). For frontend member states, mint a JWT with admin get-verify-link + /api/auth/verify and inject it into localStorage 'auth_token', then reload; AuthContext picks it up and /api/auth/check returns is_premium. PayPal purchase flow was NOT tested (SDK disabled in preview).",
+  "rca_of_the_issue": "N/A — no functional defects found."
+}

@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [expiresAt, setExpiresAt] = useState(null);
   const [daysRemaining, setDaysRemaining] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('auth_token'));
 
@@ -49,11 +50,13 @@ export const AuthProvider = ({ children }) => {
         setDaysRemaining(
           typeof response.data.days_remaining === 'number' ? response.data.days_remaining : null
         );
+        setIsPremium(Boolean(response.data.is_premium));
       } else {
         setIsAuthenticated(false);
         setUserEmail(null);
         setExpiresAt(null);
         setDaysRemaining(null);
+        setIsPremium(false);
         localStorage.removeItem('auth_token');
         setToken(null);
       }
@@ -63,6 +66,7 @@ export const AuthProvider = ({ children }) => {
       setUserEmail(null);
       setExpiresAt(null);
       setDaysRemaining(null);
+      setIsPremium(false);
       localStorage.removeItem('auth_token');
       setToken(null);
     } finally {
@@ -83,6 +87,7 @@ export const AuthProvider = ({ children }) => {
     setUserEmail(null);
     setExpiresAt(null);
     setDaysRemaining(null);
+    setIsPremium(false);
   };
 
   const value = {
@@ -90,6 +95,7 @@ export const AuthProvider = ({ children }) => {
     userEmail,
     expiresAt,
     daysRemaining,
+    isPremium,
     loading,
     login,
     logout,

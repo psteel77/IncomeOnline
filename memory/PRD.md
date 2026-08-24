@@ -409,3 +409,16 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Bing Webmaster URL Inspection on https://www.incomeonline.info/ flagged "Meta Description too long or too short" (1 instance). Root cause: Bing renders JS; the homepage description React sets via useSEO in Home.jsx was 174 chars (>160). (The "Print friendly guides…" snippet Bing displayed was incidental page-body content, not the meta tag — verified it exists in neither the live raw HTML nor the deployed JS bundle.)
 - Fixes (all now ≤150 chars): Home.jsx useSEO description 174→149; frontend/public/index.html static name/og/twitter description 160→150; SuccessStories.jsx description 164→146.
 - Verified: live-site curl (bingbot UA) confirmed current prod still serves old 160-char raw desc; preview screenshot + DOM read confirms rendered meta description is now 149 chars. NOTE: changes take effect on next Vercel deploy (Save to GitHub → redeploy), then Request Indexing in Bing.
+
+## 2026-08-24 — 20-Pillar Series with 3-tier paywall (DONE)
+- User uploaded all 20 Pillar PDFs. Implemented the requested 3-tier access model, clearly labelled on the homepage Pillar Series section:
+  - FREE → Pillar 1 (everyone)
+  - £9.99 basic member → Pillars 1–10
+  - £14.99 Premium member → all 20 Pillars
+- PDFs stored at /app/backend/static/pillars/Pillar_01..20.pdf.
+- Backend (pdf_routes.py): PILLARS metadata table + tiers; require_member (active £9.99 sub) and NEW require_premium (active sub AND email in premium_purchases, case-insensitive); parameterized GET /api/pdf/pillar/{n} gated by tier; public GET /api/pdf/pillars (title+tier metadata); legacy /pdf/pillar-1 & /pdf/pillar-2 kept.
+- Backend (server.py): /api/auth/check now returns is_premium (email present in premium_purchases). Added `import re`.
+- Frontend: AuthContext exposes isPremium; PillarSeriesSection.jsx rewritten — 20 cards + a 3-tier legend (who-gets-what), tier badges (FREE / £9.99 / £14.99 gold / UNLOCKED green once owned), tier-aware buttons (Download / Unlock £9.99 → hero / Go Premium £14.99 → #premium-pack), member-status pill, descriptive download filenames.
+- Verified: curl all tiers (free 200; basic 1-10=200, 11-20=403; premium all 200; /pdf/pillars=20). Testing agent iteration_14.json: backend 42/42 pytest (tests/test_pillar_tiers.py), frontend all 3 states (logged-out, basic, premium) incl. real blob downloads — no functional defects. Applied 2 cosmetic fixes from the report (UNLOCKED badge + descriptive filenames).
+- Test users (preview): basic-test@incomeonline.info (£9.99), premium-test@incomeonline.info (£14.99).
+- NOTE: takes effect on live site after next Vercel + Railway deploy (Save to GitHub → redeploy). The 20 PDFs must be deployed with the backend (they live in backend/static/pillars/).
