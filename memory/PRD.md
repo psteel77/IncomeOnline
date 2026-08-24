@@ -422,3 +422,9 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Verified: curl all tiers (free 200; basic 1-10=200, 11-20=403; premium all 200; /pdf/pillars=20). Testing agent iteration_14.json: backend 42/42 pytest (tests/test_pillar_tiers.py), frontend all 3 states (logged-out, basic, premium) incl. real blob downloads — no functional defects. Applied 2 cosmetic fixes from the report (UNLOCKED badge + descriptive filenames).
 - Test users (preview): basic-test@incomeonline.info (£9.99), premium-test@incomeonline.info (£14.99).
 - NOTE: takes effect on live site after next Vercel + Railway deploy (Save to GitHub → redeploy). The 20 PDFs must be deployed with the backend (they live in backend/static/pillars/).
+
+## 2026-08-24 — Pillar first-page preview (teaser) (DONE)
+- Every Pillar card now has a "Preview first page" link (data-testid=pillar-preview-N) opening a modal (data-testid=pillar-preview-modal) with the branded page-1 image (data-testid=pillar-preview-image) + a fade-out teaser gradient on locked pillars and a tier-appropriate CTA (Download / Unlock £9.99 / Go Premium £14.99).
+- Backend: NEW public GET /api/pdf/pillar/{n}/preview → PNG of page 1. Pre-rendered to static/pillars/previews/Pillar_NN.png; regenerates on demand from the PDF via PyMuPDF if missing (survives container resets). Added pymupdf==1.28.2 to requirements.txt.
+- Verified: curl (preview 5 & 15 = 200 image/png public, 99 = 404) + screenshot (modal opens, image loads, CTA shown). Download/gating flows unchanged (already validated iteration_14).
+- Deploy note: requirements.txt now includes pymupdf (Railway installs it). Previews auto-generate on first request on prod.

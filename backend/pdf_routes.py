@@ -491,6 +491,36 @@ async def list_pillars():
     }
 
 
+@router.get("/pillar/{n}/preview")
+async def pillar_preview(n: int):
+    """Public first-page preview image (PNG) for a Pillar — a free teaser so
+    visitors can see the quality before paying. Generated on demand and cached."""
+    if n not in PILLAR_BY_N:
+        raise HTTPException(status_code=404, detail="Pillar not found")
+    base = os.path.join(os.path.dirname(__file__), 'static', 'pillars')
+    png_path = os.path.join(base, 'previews', f"Pillar_{n:02d}.png")
+    if not os.path.exists(png_path):
+        # Regenerate from the source PDF (e.g. after a container reset).
+        pdf_path = os.path.join(base, f"Pillar_{n:02d}.pdf")
+        if not os.path.exists(pdf_path):
+            raise HTTPException(status_code=404, detail="Pillar file not found")
+        try:
+            import pymupdf
+            os.makedirs(os.path.dirname(png_path), exist_ok=True)
+            doc = pymupdf.open(pdf_path)
+            pix = doc[0].get_pixmap(matrix=pymupdf.Matrix(150 / 72, 150 / 72))
+            pix.save(png_path)
+            doc.close()
+        except Exception as e:
+            logging.error(f"Preview render failed for pillar {n}: {e}")
+            raise HTTPException(status_code=500, detail="Could not render preview")
+    return FileResponse(
+        path=png_path,
+        media_type='image/png',
+        headers={'Cache-Control': 'public, max-age=86400'},
+    )
+
+
 @router.get("/branded-template")
 async def download_branded_template():
     """Blank branded MoneyRules template — editable Word (.docx)."""

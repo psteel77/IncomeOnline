@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { Lock, Download, BookOpen, Sparkles, Crown, Check, Loader2, ArrowRight } from 'lucide-react';
+import { Lock, Download, BookOpen, Sparkles, Crown, Check, Loader2, ArrowRight, Eye } from 'lucide-react';
 import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { useAuth } from '../../contexts/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -81,6 +82,7 @@ const PillarSeriesSection = () => {
   const { isAuthenticated, isPremium } = useAuth();
   const [pillars, setPillars] = useState(FALLBACK_PILLARS);
   const [busy, setBusy] = useState(null);
+  const [preview, setPreview] = useState(null); // the pillar object being previewed
 
   useEffect(() => {
     let cancelled = false;
@@ -278,7 +280,16 @@ const PillarSeriesSection = () => {
 
                 <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-4 flex-1">{p.title}</h3>
 
-                {renderButton(p)}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setPreview(p)}
+                    data-testid={`pillar-preview-${p.n}`}
+                    className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors"
+                  >
+                    <Eye className="h-3.5 w-3.5" /> Preview first page
+                  </button>
+                  {renderButton(p)}
+                </div>
               </div>
             );
           })}
@@ -299,6 +310,85 @@ const PillarSeriesSection = () => {
           </div>
         )}
       </div>
+
+      {/* First-page preview modal */}
+      <Dialog open={!!preview} onOpenChange={(o) => !o && setPreview(null)}>
+        <DialogContent className="max-w-2xl max-h-[92vh] overflow-y-auto" data-testid="pillar-preview-modal">
+          {preview && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 text-left">
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-600">Pillar {preview.n} / 20</span>
+                </DialogTitle>
+                <p className="text-lg font-bold text-slate-900 text-left leading-snug">{preview.title}</p>
+              </DialogHeader>
+
+              <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                <img
+                  src={`${API}/pdf/pillar/${preview.n}/preview`}
+                  alt={`Pillar ${preview.n} first page preview`}
+                  className="w-full h-auto"
+                  data-testid="pillar-preview-image"
+                />
+                {!hasAccess(preview.tier) && (
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
+                )}
+              </div>
+
+              <p className="text-center text-sm text-slate-500">
+                {hasAccess(preview.tier)
+                  ? 'This Pillar is unlocked for you — download the full PDF below.'
+                  : preview.tier === 'basic'
+                    ? 'Preview of page 1. Unlock Pillars 1–10 with a one-off £9.99 membership.'
+                    : 'Preview of page 1. Get all 20 Pillars with £14.99 Premium.'}
+              </p>
+
+              <div className="flex justify-center">
+                {(() => {
+                  const p = preview;
+                  if (hasAccess(p.tier)) {
+                    return (
+                      <Button
+                        onClick={() => download(p)}
+                        disabled={busy === p.n}
+                        data-testid="pillar-preview-download"
+                        className={`font-bold text-white px-8 ${
+                          p.tier === 'premium'
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700'
+                            : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                        }`}
+                      >
+                        {busy === p.n ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Preparing…</> : <><Download className="mr-2 h-4 w-4" /> {p.tier === 'free' ? 'Download Free' : 'Download PDF'}</>}
+                      </Button>
+                    );
+                  }
+                  if (p.tier === 'basic') {
+                    return (
+                      <Button
+                        onClick={() => { setPreview(null); scrollToId('root'); }}
+                        data-testid="pillar-preview-unlock"
+                        variant="outline"
+                        className="border-2 border-purple-300 text-purple-700 hover:bg-purple-50 font-bold px-8"
+                      >
+                        <Lock className="mr-2 h-4 w-4" /> Unlock — £9.99
+                      </Button>
+                    );
+                  }
+                  return (
+                    <Button
+                      onClick={() => { setPreview(null); scrollToId('premium-pack'); }}
+                      data-testid="pillar-preview-unlock"
+                      className="font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8"
+                    >
+                      <Crown className="mr-2 h-4 w-4" /> {isAuthenticated ? 'Upgrade — £14.99' : 'Go Premium — £14.99'}
+                    </Button>
+                  );
+                })()}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
