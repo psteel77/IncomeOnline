@@ -286,7 +286,7 @@ const PillarSeriesSection = () => {
                     data-testid={`pillar-preview-${p.n}`}
                     className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors"
                   >
-                    <Eye className="h-3.5 w-3.5" /> Preview first page
+                    <Eye className="h-3.5 w-3.5" /> Preview first pages
                   </button>
                   {renderButton(p)}
                 </div>
@@ -323,24 +323,35 @@ const PillarSeriesSection = () => {
                 <p className="text-lg font-bold text-slate-900 text-left leading-snug">{preview.title}</p>
               </DialogHeader>
 
-              <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                <img
-                  src={`${API}/pdf/pillar/${preview.n}/preview`}
-                  alt={`Pillar ${preview.n} first page preview`}
-                  className="w-full h-auto"
-                  data-testid="pillar-preview-image"
-                />
-                {!hasAccess(preview.tier) && (
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
-                )}
+              <div className="space-y-3">
+                <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                  <img
+                    src={`${API}/pdf/pillar/${preview.n}/preview?page=1`}
+                    alt={`Pillar ${preview.n} cover preview`}
+                    className="w-full h-auto"
+                    data-testid="pillar-preview-image"
+                  />
+                </div>
+                <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                  <img
+                    src={`${API}/pdf/pillar/${preview.n}/preview?page=2`}
+                    alt={`Pillar ${preview.n} content preview`}
+                    className="w-full h-auto"
+                    data-testid="pillar-preview-image-2"
+                    onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                  />
+                  {!hasAccess(preview.tier) && (
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/85 to-transparent" />
+                  )}
+                </div>
               </div>
 
               <p className="text-center text-sm text-slate-500">
                 {hasAccess(preview.tier)
                   ? 'This Pillar is unlocked for you — download the full PDF below.'
                   : preview.tier === 'basic'
-                    ? 'Preview of page 1. Unlock Pillars 1–10 with a one-off £9.99 membership.'
-                    : 'Preview of page 1. Get all 20 Pillars with £14.99 Premium.'}
+                    ? 'Preview of the first two pages. Unlock Pillars 1–10 with a one-off £9.99 membership.'
+                    : 'Preview of the first two pages. Get all 20 Pillars with £14.99 Premium.'}
               </p>
 
               <div className="flex justify-center">

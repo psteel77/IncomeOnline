@@ -428,3 +428,7 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 - Backend: NEW public GET /api/pdf/pillar/{n}/preview → PNG of page 1. Pre-rendered to static/pillars/previews/Pillar_NN.png; regenerates on demand from the PDF via PyMuPDF if missing (survives container resets). Added pymupdf==1.28.2 to requirements.txt.
 - Verified: curl (preview 5 & 15 = 200 image/png public, 99 = 404) + screenshot (modal opens, image loads, CTA shown). Download/gating flows unchanged (already validated iteration_14).
 - Deploy note: requirements.txt now includes pymupdf (Railway installs it). Previews auto-generate on first request on prod.
+
+## 2026-08-24 — Pillar preview: two pages (cover + content) (DONE)
+- Preview now shows the first TWO pages (cover + first content page) so buyers see real content, not just the cover. Endpoint accepts ?page=1|2 (default 1); 400 for other pages. Cached as previews/Pillar_NN_p{1,2}.png, regenerated on demand via PyMuPDF. Modal stacks both images (data-testid pillar-preview-image + pillar-preview-image-2) with a fade-out gradient over page 2 for locked pillars; page-2 img hides gracefully onError. Card link relabelled "Preview first pages".
+- Verified: curl (page 1 & 2 = 200 png, page 3 = 400, default = 200) + screenshot (both pages render, content visible).
