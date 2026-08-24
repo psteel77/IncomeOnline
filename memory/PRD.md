@@ -436,3 +436,8 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 ## 2026-08-24 — Pillar preview modal: page pager (DONE)
 - Preview modal now shows ONE page at a time with ← / → arrow buttons (data-testid pillar-preview-prev / pillar-preview-next) + page dots (pillar-preview-dots). Arrows disable at boundaries; fade gradient shows only on page 2 for locked pillars; graceful fallback (hasPage2=false) if a PDF has no page 2. openPreview() resets to page 1. Frontend-only change; backend preview?page=1|2 unchanged.
 - Verified via screenshot: page 1 (cover, left arrow disabled) and page 2 (content, dots update) both navigate correctly.
+
+## 2026-08-24 — Fix: Railway build failure (requirements.txt) (DONE)
+- Root cause: the pip freeze used to add pymupdf overwrote the curated backend/requirements.txt with the whole env, changing `emergentintegrations @ <cloudfront URL>` → bare `emergentintegrations==0.2.0` (not on public PyPI) and appending `#sha256` to the litellm URL, causing Railway "No matching distribution" then a resolver conflict.
+- Fix: restored requirements.txt to last known-good commit 162caac (emergentintegrations + litellm both in URL form) and appended ONLY `pymupdf==1.28.2`. Verified locally: pymupdf imports, /api/pdf/pillars & preview return 200.
+- LESSON: never `pip freeze > requirements.txt` here — it clobbers the private-index URL lines. Add single deps with a targeted edit instead.
