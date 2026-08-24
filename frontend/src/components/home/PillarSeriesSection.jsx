@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import { Lock, Download, BookOpen, Sparkles, Crown, Check, Loader2, ArrowRight, Eye } from 'lucide-react';
+import { Lock, Download, BookOpen, Sparkles, Crown, Check, Loader2, ArrowRight, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { useAuth } from '../../contexts/AuthContext';
@@ -83,6 +83,14 @@ const PillarSeriesSection = () => {
   const [pillars, setPillars] = useState(FALLBACK_PILLARS);
   const [busy, setBusy] = useState(null);
   const [preview, setPreview] = useState(null); // the pillar object being previewed
+  const [previewPage, setPreviewPage] = useState(1);
+  const [hasPage2, setHasPage2] = useState(true);
+
+  const openPreview = (p) => {
+    setPreview(p);
+    setPreviewPage(1);
+    setHasPage2(true);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -282,7 +290,7 @@ const PillarSeriesSection = () => {
 
                 <div className="space-y-2">
                   <button
-                    onClick={() => setPreview(p)}
+                    onClick={() => openPreview(p)}
                     data-testid={`pillar-preview-${p.n}`}
                     className="w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-purple-700 transition-colors"
                   >
@@ -323,28 +331,59 @@ const PillarSeriesSection = () => {
                 <p className="text-lg font-bold text-slate-900 text-left leading-snug">{preview.title}</p>
               </DialogHeader>
 
-              <div className="space-y-3">
+              <div className="relative">
                 <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
                   <img
-                    src={`${API}/pdf/pillar/${preview.n}/preview?page=1`}
-                    alt={`Pillar ${preview.n} cover preview`}
-                    className="w-full h-auto"
+                    key={previewPage}
+                    src={`${API}/pdf/pillar/${preview.n}/preview?page=${previewPage}`}
+                    alt={`Pillar ${preview.n} preview page ${previewPage}`}
+                    className="w-full h-auto animate-in fade-in duration-200"
                     data-testid="pillar-preview-image"
+                    onError={() => { if (previewPage === 2) { setHasPage2(false); setPreviewPage(1); } }}
                   />
-                </div>
-                <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                  <img
-                    src={`${API}/pdf/pillar/${preview.n}/preview?page=2`}
-                    alt={`Pillar ${preview.n} content preview`}
-                    className="w-full h-auto"
-                    data-testid="pillar-preview-image-2"
-                    onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
-                  />
-                  {!hasAccess(preview.tier) && (
+                  {!hasAccess(preview.tier) && previewPage === 2 && (
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/85 to-transparent" />
                   )}
                 </div>
+
+                {/* Pager */}
+                {hasPage2 && (
+                  <>
+                    <button
+                      onClick={() => setPreviewPage(1)}
+                      disabled={previewPage === 1}
+                      data-testid="pillar-preview-prev"
+                      aria-label="Previous page"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-700 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => setPreviewPage(2)}
+                      disabled={previewPage === 2}
+                      data-testid="pillar-preview-next"
+                      aria-label="Next page"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-700 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
               </div>
+
+              {/* Page dots */}
+              {hasPage2 && (
+                <div className="flex items-center justify-center gap-2" data-testid="pillar-preview-dots">
+                  {[1, 2].map((pg) => (
+                    <button
+                      key={pg}
+                      onClick={() => setPreviewPage(pg)}
+                      aria-label={`Go to page ${pg}`}
+                      className={`h-2 rounded-full transition-all ${previewPage === pg ? 'w-6 bg-purple-600' : 'w-2 bg-slate-300 hover:bg-slate-400'}`}
+                    />
+                  ))}
+                </div>
+              )}
 
               <p className="text-center text-sm text-slate-500">
                 {hasAccess(preview.tier)

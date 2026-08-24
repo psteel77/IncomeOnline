@@ -432,3 +432,7 @@ Pillar 2 "Affiliate Marketing — Building Your First Passive Income Stream" (In
 ## 2026-08-24 — Pillar preview: two pages (cover + content) (DONE)
 - Preview now shows the first TWO pages (cover + first content page) so buyers see real content, not just the cover. Endpoint accepts ?page=1|2 (default 1); 400 for other pages. Cached as previews/Pillar_NN_p{1,2}.png, regenerated on demand via PyMuPDF. Modal stacks both images (data-testid pillar-preview-image + pillar-preview-image-2) with a fade-out gradient over page 2 for locked pillars; page-2 img hides gracefully onError. Card link relabelled "Preview first pages".
 - Verified: curl (page 1 & 2 = 200 png, page 3 = 400, default = 200) + screenshot (both pages render, content visible).
+
+## 2026-08-24 — Pillar preview modal: page pager (DONE)
+- Preview modal now shows ONE page at a time with ← / → arrow buttons (data-testid pillar-preview-prev / pillar-preview-next) + page dots (pillar-preview-dots). Arrows disable at boundaries; fade gradient shows only on page 2 for locked pillars; graceful fallback (hasPage2=false) if a PDF has no page 2. openPreview() resets to page 1. Frontend-only change; backend preview?page=1|2 unchanged.
+- Verified via screenshot: page 1 (cover, left arrow disabled) and page 2 (content, dots update) both navigate correctly.
